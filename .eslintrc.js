@@ -1,0 +1,53 @@
+module.exports = {
+  root: true,
+  env: {
+    es6: true,
+    node: true,
+    browser: true,
+    jest: true,
+  },
+  extends: ['airbnb', 'prettier', 'prettier/@typescript-eslint', 'plugin:prettier/recommended'],
+  parserOptions: {
+    ecmaVersion: 2018,
+    sourceType: 'module',
+    ecmaFeatures: {
+      impliedStrict: true,
+      jsx: true,
+    },
+  },
+  rules: {
+    'dot-notation': 'off',
+    'jsx-a11y/anchor-is-valid': 'off',
+    'react/jsx-closing-tag-location': 'off',
+    'react/jsx-curly-brace-presence': 'off',
+    'react/jsx-filename-extension': ['error', { extensions: ['.js', '.jsx', '.tsx'] }],
+    'react/jsx-one-expression-per-line': 'off',
+    'react/jsx-props-no-spreading': 'off',
+    'react/prop-types': 'error',
+    'jsx-a11y/label-has-associated-control': ['off'],
+    'jsx-a11y/click-events-have-key-events': 'off',
+    'import/no-named-as-default': 'off',
+    'import/prefer-default-export': 'off',
+    'jsx-a11y/no-static-element-interactions': 'off',
+    'react/no-array-index-key': 'off',
+    'jsx-a11y/control-has-associated-label': 'off',
+    'react/forbid-prop-types': 'off',
+    'no-useless-escape': 'off',
+    'jsx-a11y/no-noninteractive-element-interactions': 'off',
+    'consistent-return': 'off',
+    'func-names': 'off',
+    'no-console': 'off',
+    'no-nested-ternary': 'off',
+    'import/no-extraneous-dependencies': 'off',
+    'import/no-extraneous-dependencies': 'off',
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      },
+      typescript: {},
+    },
+    'import/extensions': ['.js', '.mjs', '.jsx', '.ts', '.tsx'],
+  },
+};

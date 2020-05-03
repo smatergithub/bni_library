@@ -1,0 +1,47 @@
+{
+  "name": "feed2me",
+  "version": "1.0.0",
+  "description": "Feed back to me ",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cd react && npm run start",
+    "lint:fix": "eslint react/src/ --fix"
+  },
+  "keywords": [
+    "feedback"
+  ],
+  "author": "nagacoder",
+  "license": "ISC",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "pretty-quick --staged",
+      "eslint react/src/ --fix",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-jsx-a11y": "^6.2.3",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.16.0",
+    "eslint-plugin-react-hooks": "1.7.0",
+    "express": "^4.17.1",
+    "husky": "2.2.0",
+    "lint-staged": "8.1.6",
+    "path": "^0.12.7",
+    "prettier": "1.19.1",
+    "pretty-quick": "^2.0.1",
+    "prop-types": "^15.7.2"
+  },
+  "devDependencies": {
+    "eslint-plugin-flowtype": "^4.7.0"
+  }
+}
