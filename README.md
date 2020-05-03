@@ -37,7 +37,15 @@ $ npm install
 
 ## Run Application
 
-From root project
 ```sh
 $ npm run dev
+```
+Backend Only
+```sh
+$ npm run dev-server
+```
+
+Frontend Only
+```sh
+$ npm run dev-react
 ```

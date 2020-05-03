@@ -1,14 +1,16 @@
 {
-  "name": "feed2me",
+  "name": "bni_library",
   "version": "1.0.0",
-  "description": "Feed back to me ",
+  "description": "E-Learning",
   "main": "index.js",
   "scripts": {
-    "dev": "cd react && npm run start",
+    "dev-react": "cd react && npm run start",
+    "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
+    "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
     "lint:fix": "eslint react/src/ --fix"
   },
   "keywords": [
-    "feedback"
+    "bni"
   ],
   "author": "nagacoder",
   "license": "ISC",
@@ -25,6 +27,9 @@
     ]
   },
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.2.0",
+    "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.10.0",
@@ -36,6 +41,8 @@
     "express": "^4.17.1",
     "husky": "2.2.0",
     "lint-staged": "8.1.6",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.3",
     "path": "^0.12.7",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.1",
