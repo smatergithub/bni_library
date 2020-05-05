@@ -15,8 +15,7 @@ module.exports = {
         type: Sequelize.DATE,
       },
       status: {
-        type: Sequelize.ENUM,
-        values: ['entry', 'booked', 'failed', 'done'],
+        type: Sequelize.STRING,
       },
       note: {
         type: Sequelize.STRING,

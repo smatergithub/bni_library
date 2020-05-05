@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       code: DataTypes.STRING,
       transactionDate: DataTypes.DATE,
-      status: DataTypes.ENUM,
+      status: DataTypes.STRING,
       note: DataTypes.STRING,
       userId: DataTypes.INTEGER,
       adminId: DataTypes.INTEGER,
