@@ -8,7 +8,6 @@ var indexRouter = require('./routes/index');
 var corsOptions = {
   origin: 'http://localhost:2001',
 };
-var db = require('./models');
 
 const app = express();
 app.use(cors(corsOptions));
@@ -27,8 +26,12 @@ app.use('/', indexRouter);
 //     )
 // );
 
+var db = require('./models');
+db.sequelize.sync().then(function() {
+  console.log('database connection success');
+});
+
 const PORT = process.env.PORT || 2000;
 app.listen(PORT, function() {
-  db.sequelize.sync();
   console.log(`Server running in PORT: ${PORT}`);
 });

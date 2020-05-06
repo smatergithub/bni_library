@@ -9,21 +9,31 @@ module.exports = (sequelize, DataTypes) => {
       image: DataTypes.STRING,
       author: DataTypes.STRING,
       transDate: DataTypes.DATE,
-      unitTypeId: DataTypes.INTEGER,
-      categoryId: DataTypes.INTEGER,
+      unitTypeId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      categoryId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {}
   );
   books.associate = function(models) {
     // associations can be defined here
-    books.belongsTo(models.unitType, {
+    books.belongsTo(models.unitTypes, {
       foreignKey: 'unitTypeId',
-      as: 'unitType',
+      onDelete: 'CASCADE',
     });
 
     books.belongsTo(models.categories, {
       foreignKey: 'categoryId',
-      as: 'categories',
+      onDelete: 'CASCADE',
+    });
+
+    books.hasMany(models.transactionDetails, {
+      foreignKey: 'bookId',
     });
   };
   return books;

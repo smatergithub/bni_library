@@ -12,7 +12,6 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     unitTypes.hasOne(models.books, {
       foreignKey: 'unitTypeId',
-      as: 'unitType',
     });
   };
   return unitTypes;

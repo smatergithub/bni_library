@@ -7,8 +7,14 @@ module.exports = (sequelize, DataTypes) => {
       transactionDate: DataTypes.DATE,
       status: DataTypes.STRING,
       note: DataTypes.STRING,
-      userId: DataTypes.INTEGER,
-      adminId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      adminId: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {}
   );
@@ -16,12 +22,16 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     transactions.belongsTo(models.users, {
       foreignKey: 'userId',
-      as: 'users',
+      onDelete: 'CASCADE',
     });
 
     transactions.belongsTo(models.admins, {
       foreignKey: 'adminId',
-      as: 'admins',
+      onDelete: 'CASCADE',
+    });
+
+    transactions.hasOne(models.transactionDetails, {
+      foreignKey: 'transactionId',
     });
   };
   return transactions;
