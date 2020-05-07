@@ -1,33 +1,33 @@
-const Categories = require('../models').categories;
+const UnitTypes = require('../models').unittypes;
 
 module.exports = {
   list(req, res) {
-    return Categories.findAll({
+    return UnitTypes.findAll({
       include: [],
       order: [['createdAt', 'DESC']],
     })
-      .then(category => res.status(200).send(category))
+      .then(response => res.status(200).send(response))
       .catch(error => {
         res.status(400).send(error);
       });
   },
   getById(req, res) {
-    return Categories.findByPk(req.params.id, {
+    return UnitTypes.findByPk(req.params.id, {
       include: [],
     })
-      .then(category => {
-        if (!category) {
+      .then(unittype => {
+        if (!unittype) {
           return res.status(404).send({
-            message: 'category Not Found',
+            message: 'Unit Types Not Found',
           });
         }
-        return res.status(200).send(project);
+        return res.status(200).send(unittype);
       })
       .catch(error => res.status(400).send(error));
   },
 
   add(req, res) {
-    return Categories.create({
+    return UnitTypes.create({
       code: req.body.code,
       displayName: req.body.displayName,
     })
@@ -36,35 +36,35 @@ module.exports = {
   },
 
   update(req, res) {
-    return Categories.findByPk(req.params.id)
-      .then(category => {
-        if (!category) {
+    return UnitTypes.findByPk(req.params.id)
+      .then(unittype => {
+        if (!unittype) {
           return res.status(404).send({
             message: 'Category Not Found',
           });
         }
-        return category
+        return unittype
           .update({
             code: req.body.code || category.code,
             displayName: req.body.displayName || category.displayName,
           })
-          .then(() => res.status(200).send(category))
+          .then(() => res.status(200).send(unittype))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));
   },
 
   delete(req, res) {
-    return Categories.findByPk(req.params.id)
-      .then(category => {
-        if (!category) {
+    return UnitTypes.findByPk(req.params.id)
+      .then(unittype => {
+        if (!unittype) {
           return res.status(400).send({
             message: 'Category Not Found',
           });
         }
-        return category
+        return unittype
           .destroy()
-          .then(() => res.status(200).send())
+          .then(() => res.status(200).send(unittype))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));

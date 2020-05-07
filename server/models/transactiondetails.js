@@ -3,6 +3,12 @@ module.exports = (sequelize, DataTypes) => {
   const transactionDetails = sequelize.define(
     'transactionDetails',
     {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+      },
       transactionId: {
         type: DataTypes.STRING,
         allowNull: false,

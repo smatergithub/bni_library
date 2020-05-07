@@ -1,11 +1,11 @@
-const Users = require('../models').users;
+const Admins = require('../models').admins;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config/auth-config');
 
 module.exports = {
   register(req, res) {
-    Users.create({
+    Admins.create({
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       username: req.body.username,
@@ -13,6 +13,7 @@ module.exports = {
       email: req.body.email,
       phoneNumber: req.body.phoneNumber,
       password: bcrypt.hashSync(req.body.password, 8),
+      isAdmin: true,
     })
       .then(response => {
         res.send({ message: 'User was registered successfully!' });
@@ -23,7 +24,7 @@ module.exports = {
   },
 
   login(req, res) {
-    Users.findOne({
+    Admins.findOne({
       where: {
         username: req.body.username,
       },
@@ -53,6 +54,7 @@ module.exports = {
           address: user.address,
           email: user.email,
           phoneNumber: user.phoneNumber,
+          isAdmin: user.isAdmin,
           accessToken: token,
         });
       })

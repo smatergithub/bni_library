@@ -1,5 +1,4 @@
 'use strict';
-const { v4: uuidv4 } = require('uuid');
 module.exports = (sequelize, DataTypes) => {
   const users = sequelize.define(
     'users',
@@ -8,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
         type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
       },
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
@@ -19,7 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  users.beforeCreate(users => (users.id = uuidv4()));
   users.associate = function(models) {
     // associations can be defined here
     users.hasMany(models.transactions, {
