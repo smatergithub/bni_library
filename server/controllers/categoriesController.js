@@ -12,16 +12,14 @@ module.exports = {
       });
   },
   getById(req, res) {
-    return Categories.findByPk(req.params.id, {
-      include: [],
-    })
+    return Categories.findByPk(req.params.id)
       .then(category => {
         if (!category) {
           return res.status(404).send({
             message: 'category Not Found',
           });
         }
-        return res.status(200).send(project);
+        return res.status(200).send(category);
       })
       .catch(error => res.status(400).send(error));
   },

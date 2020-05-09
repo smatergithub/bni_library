@@ -1,18 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('unitTypes', {
+    return queryInterface.createTable('transactiondetails', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      code: {
+      transactionId: {
         type: Sequelize.STRING,
       },
-      displayName: {
+      bookId: {
         type: Sequelize.STRING,
+      },
+      quantity: {
+        type: Sequelize.INTEGER,
       },
       createdAt: {
         allowNull: false,
@@ -25,6 +28,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('unitTypes');
+    return queryInterface.dropTable('transactiondetails');
   },
 };

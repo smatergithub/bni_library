@@ -16,7 +16,7 @@ module.exports = {
       isAdmin: true,
     })
       .then(response => {
-        res.send({ message: 'User was registered successfully!' });
+        res.send({ message: 'admin was registered successfully!' });
       })
       .catch(err => {
         res.status(500).send({ message: err.message });
@@ -61,5 +61,31 @@ module.exports = {
       .catch(err => {
         res.status(500).send({ message: err.message });
       });
+  },
+
+  profileAdmin(req, res) {
+    var adminId = req.adminId;
+    Admins.findOne({
+      where: {
+        id: adminId,
+      },
+    })
+      .then(admin => {
+        if (!admin) {
+          return res.status(404).send({ message: 'Admin Not found.' });
+        }
+        let dataAdmin = {
+          id: admin.id,
+          firstName: admin.firstName,
+          lastName: admin.lastName,
+          username: admin.username,
+          address: admin.address,
+          email: admin.email,
+          phoneNumber: admin.phoneNumber,
+          isAdmin: admin.isAdmin,
+        };
+        res.status(200).send(dataAdmin);
+      })
+      .catch(error => res.status(400).send(error));
   },
 };

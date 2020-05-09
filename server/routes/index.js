@@ -1,15 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var { verifySignUp, AuthJWT } = require('../middelwares');
-var { options } = require('../config/docSwagger');
-const swaggerUi = require('swagger-ui-express');
-const swaggerJsdoc = require('swagger-jsdoc');
-
-//document API
-
-const specs = swaggerJsdoc(options);
-router.use('/swagger', swaggerUi.serve);
-router.get('/swagger', swaggerUi.setup(specs, { explorer: true }));
 
 //controller
 const AuthenticationController = require('../controllers/authenticationController');
@@ -24,6 +15,7 @@ router.post(
   AuthenticationController.register
 );
 router.post('/api/auth/login', AuthenticationController.login);
+router.post('/api/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
 
 router.post(
   '/api/admin/register',
@@ -31,6 +23,7 @@ router.post(
   AuthenticationAdminController.register
 );
 router.post('/api/admin/login', AuthenticationAdminController.login);
+router.get('/api/admin/profile', [AuthJWT.isAdmin], AuthenticationAdminController.profileAdmin);
 
 router.get('/api/categories', [AuthJWT.isAdmin], CategoriesController.list);
 router.get('/api/categories/:id', [AuthJWT.isAdmin], CategoriesController.getById);

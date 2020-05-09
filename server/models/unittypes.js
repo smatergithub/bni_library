@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const unitTypes = sequelize.define(
-    'unitTypes',
+  const unittypes = sequelize.define(
+    'unittypes',
     {
       id: {
         allowNull: false,
@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  unitTypes.associate = function(models) {
+  unittypes.associate = function(models) {
     // associations can be defined here
-    unitTypes.hasOne(models.books, {
+    unittypes.hasOne(models.books, {
       foreignKey: 'unitTypeId',
     });
   };
-  return unitTypes;
+  return unittypes;
 };

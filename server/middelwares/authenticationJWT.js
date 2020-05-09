@@ -17,7 +17,7 @@ verifyToken = (req, res, next) => {
         message: 'Unauthorized!',
       });
     }
-    req.id = decoded.id;
+    req.userId = decoded.id;
     next();
   });
 };
@@ -29,29 +29,28 @@ isAdmin = (req, res, next) => {
     return res.status(403).send({
       message: 'No token provided!',
     });
-  } else {
+  }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: 'Unauthorized!',
+      });
+    }
     Admins.findOne({
       where: {
         isAdmin: true,
       },
     })
-      .then(req => {
-        jwt.verify(token, config.secret, (err, decoded) => {
-          if (err) {
-            return res.status(401).send({
-              message: 'Unauthorized Not Admin!',
-            });
-          }
-          req.id = decoded.id;
-          next();
-        });
+      .then(res => {
+        req.adminId = decoded.id;
+        next();
       })
       .catch(err => {
         return res.status(401).send({
-          message: 'Unauthorized!',
+          message: 'Unauthorized! Not Admin',
         });
       });
-  }
+  });
 };
 
 const authenticationJWT = {

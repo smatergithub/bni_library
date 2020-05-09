@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    transactions.hasOne(models.transactionDetails, {
+    transactions.hasOne(models.transactiondetails, {
       foreignKey: 'transactionId',
     });
   };

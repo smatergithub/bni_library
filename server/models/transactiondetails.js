@@ -1,7 +1,7 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const transactionDetails = sequelize.define(
-    'transactionDetails',
+  const transactiondetails = sequelize.define(
+    'transactiondetails',
     {
       id: {
         allowNull: false,
@@ -9,22 +9,23 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      transactionId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      transactionId: DataTypes.STRING,
       bookId: DataTypes.STRING,
       quantity: DataTypes.INTEGER,
     },
     {}
   );
-  transactionDetails.associate = function(models) {
+  transactiondetails.associate = function(models) {
     // associations can be defined here
-
-    transactionDetails.belongsTo(models.transactions, {
+    transactiondetails.belongsTo(models.transactions, {
       foreignKey: 'transactionId',
       onDelete: 'CASCADE',
     });
+
+    transactiondetails.belongsTo(models.books, {
+      foreignKey: 'bookId',
+      onDelete: 'CASCADE',
+    });
   };
-  return transactionDetails;
+  return transactiondetails;
 };

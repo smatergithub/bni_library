@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   books.associate = function(models) {
     // associations can be defined here
-    books.belongsTo(models.unitTypes, {
+    books.belongsTo(models.unittypes, {
       foreignKey: 'unitTypeId',
       onDelete: 'CASCADE',
     });
@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: 'CASCADE',
     });
 
-    books.hasMany(models.transactionDetails, {
+    books.hasMany(models.transactiondetails, {
       foreignKey: 'bookId',
     });
   };
