@@ -1,16 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Login from '../pages/login/login';
-import Detail from '../pages/detail';
-import Home from '../pages/home/index';
+import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+
+import Dashboard from '../screen/admin/pages'
 
 function Routes() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={Login} />
-        <Route exact path="/home" component={Home} />
-        <Route path="/detail" component={Detail} />
+        <Route exact path="/admin/:id" component={Dashboard} />
       </Switch>
     </Router>
   );
