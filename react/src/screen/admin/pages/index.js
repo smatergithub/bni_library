@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect, Link } from "react-ro
 import Sidebar from '../component/Sidebar'
 import Header from '../component/Header'
 import Dashboard from './dashboard'
+import CreateNewBook from './createNewBook'
 const routes = [
   {
     path: "/admin/dashboard",
@@ -12,7 +13,7 @@ const routes = [
   {
     path: "/admin/add-book",
     exact: false,
-    main: () => <Dashboard />
+    main: () => <CreateNewBook />
   },
   {
     path: "/admin/analytics",
