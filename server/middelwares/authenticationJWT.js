@@ -36,6 +36,7 @@ isAdmin = (req, res, next) => {
         message: 'Unauthorized!',
       });
     }
+    console.log('decoded data', decoded);
     Admins.findOne({
       where: {
         isAdmin: true,

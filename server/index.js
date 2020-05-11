@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // ======> do not remove <=======
 // app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
-app.use('/', indexRouter);
+app.use('/api/', indexRouter);
 // ======> do not remove <=======
 // app.get('*', (req, res) =>
 //   res

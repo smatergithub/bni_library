@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     unittypes.hasOne(models.books, {
       foreignKey: 'unitTypeId',
+      as: 'books',
+      onDelete: 'CASCADE',
     });
   };
   return unittypes;

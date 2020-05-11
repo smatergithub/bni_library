@@ -30,16 +30,18 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     books.belongsTo(models.unittypes, {
       foreignKey: 'unitTypeId',
-      onDelete: 'CASCADE',
+      as: 'unittypes',
     });
 
     books.belongsTo(models.categories, {
       foreignKey: 'categoryId',
-      onDelete: 'CASCADE',
+      as: 'categories',
     });
 
-    books.hasMany(models.transactiondetails, {
+    books.hasOne(models.transactiondetails, {
       foreignKey: 'bookId',
+      as: 'transactiondetails',
+      onDelete: 'CASCADE',
     });
   };
   return books;

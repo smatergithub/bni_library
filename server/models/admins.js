@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
     admins.hasMany(models.transactions, {
       foreignKey: 'adminId',
       as: 'admins',
+      onDelete: 'CASCADE',
     });
   };
   return admins;

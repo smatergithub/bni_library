@@ -19,12 +19,12 @@ module.exports = (sequelize, DataTypes) => {
     // associations can be defined here
     transactiondetails.belongsTo(models.transactions, {
       foreignKey: 'transactionId',
-      onDelete: 'CASCADE',
+      as: 'transactions',
     });
 
     transactiondetails.belongsTo(models.books, {
       foreignKey: 'bookId',
-      onDelete: 'CASCADE',
+      as: 'books',
     });
   };
   return transactiondetails;
