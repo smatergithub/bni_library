@@ -47,6 +47,7 @@ router.post('/books', [AuthJWT.isAdmin], BookController.add);
 router.put('/books/:id', [AuthJWT.isAdmin], BookController.update);
 router.delete('/books/:id', [AuthJWT.isAdmin], BookController.delete);
 
+//docs swagger
 const specs = swaggerJsdoc(options);
 router.use('/docs', swaggerUi.serve);
 router.get('/docs', swaggerUi.setup(specs, { explorer: true }));
