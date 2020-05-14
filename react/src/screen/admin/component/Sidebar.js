@@ -9,10 +9,16 @@ let routes = [
     params: 'dashboard'
   },
   {
-    path: '/admin/add-book',
+    path: '/admin/books',
     name: 'Daftar Buku',
     icon: 'fas fa-table',
-    params: 'add-book'
+    params: 'books'
+  },
+  {
+    path: '/admin/ebooks',
+    name: 'Daftar Ebook',
+    icon: 'fas fa-table',
+    params: 'ebooks'
   },
   {
     path: '/admin/analytics',
@@ -22,7 +28,7 @@ let routes = [
   },
 ]
 
-function Sidebar({ url }) {
+function Sidebar({ url, createNewBook }) {
 
   let [selectedMenu, setSelectedMenu] = useState(url)
 
@@ -30,7 +36,7 @@ function Sidebar({ url }) {
     <div class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
       <div class="p-6">
         <a class="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
-        <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
+        <button onClick={() => createNewBook()} class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
           <i class="fas fa-plus mr-3"></i> Buku baru
             </button>
       </div>
