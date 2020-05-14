@@ -53,7 +53,7 @@ let mockEbook = [
     author: 'Grennady'
   },
 ]
-function FavoriteBookAndEbookList() {
+function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
   return (
     <div className="flex flex-wrap mt-5 px-1">
       <div className="w-full xl:w-8/12 mb-12 xl:mb-0 ">
@@ -69,6 +69,7 @@ function FavoriteBookAndEbookList() {
                 <button
                   className="bg-gray-800 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
                   type="button"
+                  onClick={() => goToBookDetail()}
                   style={{
                     transition: 'all .15s ease'
                   }}
@@ -140,6 +141,7 @@ function FavoriteBookAndEbookList() {
                   style={{
                     transition: 'all .15s ease'
                   }}
+                  onClick={() => goToEBookDetail()}
                 >
                   See all
                       </button>
