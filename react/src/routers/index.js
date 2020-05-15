@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Dashboard from '../screen/admin/pages'
+import Dashboard from '../screen/admin/pages';
 
 function Routes() {
   return (
