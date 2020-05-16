@@ -11,7 +11,7 @@ import Ebooks from './ebooks';
 const routes = [
   {
     path: '/admin/dashboard',
-    exact: true,
+    exact: false,
     main: props => <Dashboard {...props} />,
   },
   {
