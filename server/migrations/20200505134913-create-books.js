@@ -14,7 +14,13 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
       },
+      statementResponsibility: {
+        type: Sequelize.STRING,
+      },
       description: {
+        type: Sequelize.STRING,
+      },
+      edition: {
         type: Sequelize.STRING,
       },
       image: {
@@ -26,9 +32,8 @@ module.exports = {
       transDate: {
         type: Sequelize.DATE,
       },
-      unitTypeId: {
-        allowNull: false,
-        type: Sequelize.STRING,
+      isPromotion: {
+        type: Sequelize.BOOLEAN,
       },
       categoryId: {
         allowNull: false,

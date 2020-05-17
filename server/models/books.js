@@ -11,14 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       code: DataTypes.STRING,
       title: DataTypes.STRING,
+      statementResponsibility: DataTypes.STRING,
       description: DataTypes.STRING,
+      edition: DataTypes.STRING,
       image: DataTypes.STRING,
       author: DataTypes.STRING,
       transDate: DataTypes.DATE,
-      unitTypeId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      isPromotion: DataTypes.BOOLEAN,
       categoryId: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -26,12 +25,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  books.associate = function(models) {
+  books.associate = function (models) {
     // associations can be defined here
-    books.belongsTo(models.unittypes, {
-      foreignKey: 'unitTypeId',
-      as: 'unittypes',
-    });
 
     books.belongsTo(models.categories, {
       foreignKey: 'categoryId',

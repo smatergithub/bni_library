@@ -9,7 +9,6 @@ var options = require('./configSwagger');
 const AuthenticationController = require('../controllers/authenticationController');
 const AuthenticationAdminController = require('../controllers/authenticationAdminController');
 const CategoriesController = require('../controllers/categoriesController');
-const UnitTypeController = require('../controllers/unitTypeController');
 const BookController = require('../controllers/bookController');
 
 //routing controller
@@ -35,11 +34,7 @@ router.post('/categories', [AuthJWT.isAdmin], CategoriesController.add);
 router.put('/categories/:id', [AuthJWT.isAdmin], CategoriesController.update);
 router.delete('/categories/:id', [AuthJWT.isAdmin], CategoriesController.delete);
 
-router.get('/unittypes', [AuthJWT.isAdmin], UnitTypeController.list);
-router.get('/unittypes/:id', [AuthJWT.isAdmin], UnitTypeController.getById);
-router.post('/unittypes', [AuthJWT.isAdmin], UnitTypeController.add);
-router.put('/unittypes/:id', [AuthJWT.isAdmin], UnitTypeController.update);
-router.delete('/unittypes/:id', [AuthJWT.isAdmin], UnitTypeController.delete);
+
 
 router.get('/books', [AuthJWT.isAdmin], BookController.list);
 router.get('/books/:id', [AuthJWT.isAdmin], BookController.getById);
@@ -53,14 +48,14 @@ router.use('/docs', swaggerUi.serve);
 router.get('/docs', swaggerUi.setup(specs, { explorer: true }));
 
 // catch 404 and forward to error handler
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // Error Handler
-router.use(function(err, req, res, next) {
+router.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({
     error: {
