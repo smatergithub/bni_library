@@ -60,4 +60,29 @@ module.exports = {
         res.status(500).send({ message: err.message });
       });
   },
+
+  profileUser(req, res) {
+    var userId = req.userId;
+    Users.findOne({
+      where: {
+        id: userId,
+      },
+    })
+      .then(user => {
+        if (!user) {
+          return res.status(404).send({ message: 'User Not found.' });
+        }
+        let dataUser = {
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          username: user.username,
+          address: user.address,
+          email: user.email,
+          phoneNumber: user.phoneNumber,
+        };
+        res.status(200).send(dataUser);
+      })
+      .catch(error => res.status(400).send(error));
+  },
 };

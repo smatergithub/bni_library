@@ -17,27 +17,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      adminId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {}
   );
-  transactions.associate = function(models) {
+  transactions.associate = function (models) {
     // associations can be defined here
     transactions.belongsTo(models.users, {
       foreignKey: 'userId',
-      onDelete: 'CASCADE',
+      as: 'users',
     });
 
-    transactions.belongsTo(models.admins, {
-      foreignKey: 'adminId',
-      onDelete: 'CASCADE',
-    });
-
-    transactions.hasOne(models.transactionDetails, {
+    transactions.hasOne(models.transactiondetails, {
       foreignKey: 'transactionId',
+      as: 'transactiondetails',
+      onDelete: 'CASCADE',
     });
   };
   return transactions;

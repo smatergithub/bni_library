@@ -16,13 +16,17 @@ module.exports = (sequelize, DataTypes) => {
       email: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
       password: DataTypes.STRING,
+      isAdmin: DataTypes.BOOLEAN,
+      superAdmin: DataTypes.BOOLEAN
     },
     {}
   );
-  users.associate = function(models) {
+  users.associate = function (models) {
     // associations can be defined here
     users.hasMany(models.transactions, {
       foreignKey: 'userId',
+      as: 'transactions',
+      onDelete: 'CASCADE',
     });
   };
   return users;

@@ -16,8 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   );
   categories.associate = function(models) {
     // associations can be defined here
-    categories.hasOne(models.books, {
+    categories.hasMany(models.books, {
       foreignKey: 'categoryId',
+      as: 'books',
+      onDelete: 'CASCADE',
     });
   };
   return categories;
