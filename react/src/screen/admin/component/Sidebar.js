@@ -22,10 +22,22 @@ const routes = [
     params: 'ebooks',
   },
   {
+    path: '/admin/users',
+    name: 'User',
+    icon: 'fas fa-table',
+    params: 'users',
+  },
+  {
     path: '/admin/analytics',
     name: 'Analytics',
     icon: 'fas fa-align-left',
     params: 'analytics',
+  },
+  {
+    path: '/admin/kategori',
+    name: 'Kategori Buku',
+    icon: 'fas fa-align-left',
+    params: 'kategori',
   },
 ];
 
