@@ -33,6 +33,12 @@ const routes = [
     icon: 'fas fa-align-left',
     params: 'analytics',
   },
+  {
+    path: '/admin/kategori',
+    name: 'Kategori Buku',
+    icon: 'fas fa-align-left',
+    params: 'kategori',
+  },
 ];
 
 function Sidebar({ url, createNewBook }) {

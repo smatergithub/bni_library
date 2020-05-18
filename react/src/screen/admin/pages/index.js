@@ -8,6 +8,7 @@ import CreateNewBook from './createNewBook';
 import Books from './books';
 import Ebooks from './ebooks';
 import User from './users';
+import Categories from './categories';
 
 const routes = [
   {
@@ -39,6 +40,11 @@ const routes = [
     path: '/admin/add-new-book',
     exact: false,
     main: props => <CreateNewBook {...props} />,
+  },
+  {
+    path: '/admin/kategori',
+    exact: false,
+    main: props => <Categories {...props} />,
   },
 ];
 
