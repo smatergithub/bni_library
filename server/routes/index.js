@@ -7,7 +7,6 @@ var options = require('./configSwagger');
 
 //controller
 const AuthenticationController = require('../controllers/authenticationController');
-const AuthenticationAdminController = require('../controllers/authenticationAdminController');
 const CategoriesController = require('../controllers/categoriesController');
 const BookController = require('../controllers/bookController');
 const UserController = require('../controllers/userController');
@@ -21,18 +20,8 @@ router.post(
 router.post('/auth/login', AuthenticationController.login);
 router.post('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
 
-router.post(
-  '/admin/register',
-  [verifySignUp.checkDuplicateUsernameOrEmail],
-  AuthenticationAdminController.register
-);
-router.post('/admin/login', AuthenticationAdminController.login);
-router.get('/admin/profile', [AuthJWT.isAdmin], AuthenticationAdminController.profileAdmin);
-
-
-
 router.get('/users', [AuthJWT.isAdmin], UserController.list);
-router.post('/users/:id', [AuthJWT.isAdmin], UserController.toggleUserIsAdmin);
+router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
 
 router.get('/categories', [AuthJWT.isAdmin], CategoriesController.list);
 router.get('/categories/:id', [AuthJWT.isAdmin], CategoriesController.getById);

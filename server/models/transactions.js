@@ -17,23 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      adminId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {}
   );
-  transactions.associate = function(models) {
+  transactions.associate = function (models) {
     // associations can be defined here
     transactions.belongsTo(models.users, {
       foreignKey: 'userId',
       as: 'users',
-    });
-
-    transactions.belongsTo(models.admins, {
-      foreignKey: 'adminId',
-      as: 'admins',
     });
 
     transactions.hasOne(models.transactiondetails, {
