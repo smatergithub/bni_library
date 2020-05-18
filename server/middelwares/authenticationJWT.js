@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/auth-config');
-const Admins = require('../models').admins;
 
 verifyToken = (req, res, next) => {
   let token = req.headers['x-access-token'];
@@ -17,7 +16,7 @@ verifyToken = (req, res, next) => {
         message: 'Unauthorized!',
       });
     }
-    req.id = decoded.id;
+    req.userId = decoded.id;
     next();
   });
 };
@@ -29,33 +28,46 @@ isAdmin = (req, res, next) => {
     return res.status(403).send({
       message: 'No token provided!',
     });
-  } else {
-    Admins.findOne({
-      where: {
-        isAdmin: true,
-      },
-    })
-      .then(req => {
-        jwt.verify(token, config.secret, (err, decoded) => {
-          if (err) {
-            return res.status(401).send({
-              message: 'Unauthorized Not Admin!',
-            });
-          }
-          req.id = decoded.id;
-          next();
-        });
-      })
-      .catch(err => {
-        return res.status(401).send({
-          message: 'Unauthorized!',
-        });
-      });
   }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: 'Unauthorized!',
+      });
+    }
+    req.userId = decoded.id;
+    req.isAdmin = decoded.isAdmin;
+    if (req.isAdmin !== true) return res.status(500).json({ message: "your are not allowed for this feature" });
+    next();
+  });
+};
+
+
+isSuperAdmin = (req, res, next) => {
+  let token = req.headers['x-access-token'];
+
+  if (!token) {
+    return res.status(403).send({
+      message: 'No token provided!',
+    });
+  }
+  jwt.verify(token, config.secret, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: 'Unauthorized!',
+      });
+    }
+    req.userId = decoded.id;
+    req.isAdmin = decoded.isAdmin;
+    req.superAdmin = decoded.superAdmin
+    if (req.isAdmin !== true && req.superAdmin !== true) return res.status(500).json({ message: "your are not allowed for this feature" });
+    next();
+  });
 };
 
 const authenticationJWT = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
+  isSuperAdmin: isSuperAdmin
 };
 module.exports = authenticationJWT;

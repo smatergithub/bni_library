@@ -1,5 +1,6 @@
 ('use strict');
-
+const { v4: uuidv4 } = require('uuid');
+var faker = require('faker');
 module.exports = {
   up: (queryInterface, Sequelize) => {
     /*
@@ -12,13 +13,84 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+
     return queryInterface.bulkInsert(
       'categories',
       [
         {
-          id: 23123123123123123,
-          code: '12313123123',
-          displayName: 'John Doe',
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: uuidv4(),
+          code: Math.floor(1000 + Math.random() * 9000),
+          displayName: faker.name.jobTitle(),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
