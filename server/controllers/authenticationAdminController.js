@@ -6,8 +6,7 @@ var config = require('../config/auth-config');
 module.exports = {
   register(req, res) {
     Admins.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
+      name: req.body.name,
       username: req.body.username,
       address: req.body.address,
       email: req.body.email,
@@ -31,7 +30,7 @@ module.exports = {
     })
       .then(user => {
         if (!user) {
-          return res.status(404).send({ message: 'User Not found.' });
+          return res.status(404).send({ message: 'Admin Account Not found.' });
         }
 
         var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
@@ -43,13 +42,17 @@ module.exports = {
           });
         }
 
-        var token = jwt.sign({ id: user.id }, config.secret, {
+        var token = jwt.sign({
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          isAdmin: user.isAdmin
+        }, config.secret, {
           expiresIn: 86400, // 24 hours
         });
         res.status(200).send({
           id: user.id,
-          firstName: user.firstName,
-          lastName: user.lastName,
+          name: user.name,
           username: user.username,
           address: user.address,
           email: user.email,

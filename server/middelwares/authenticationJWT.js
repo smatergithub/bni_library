@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/auth-config');
-const Admins = require('../models').admins;
 
 verifyToken = (req, res, next) => {
   let token = req.headers['x-access-token'];
@@ -36,21 +35,10 @@ isAdmin = (req, res, next) => {
         message: 'Unauthorized!',
       });
     }
-    console.log('decoded data', decoded);
-    Admins.findOne({
-      where: {
-        isAdmin: true,
-      },
-    })
-      .then(res => {
-        req.adminId = decoded.id;
-        next();
-      })
-      .catch(err => {
-        return res.status(401).send({
-          message: 'Unauthorized! Not Admin',
-        });
-      });
+    req.adminId = decoded.id;
+    req.isAdmin = decoded.isAdmin;
+    if (req.isAdmin !== true) return res.status(500).json({ message: "your are not allowed for this feature" });
+    next();
   });
 };
 

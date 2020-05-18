@@ -9,8 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
+      name: DataTypes.STRING,
       username: DataTypes.STRING,
       address: DataTypes.STRING,
       email: DataTypes.STRING,
@@ -20,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  admins.associate = function(models) {
+  admins.associate = function (models) {
     // associations can be defined here
     admins.hasMany(models.transactions, {
       foreignKey: 'adminId',

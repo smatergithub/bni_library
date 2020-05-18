@@ -10,6 +10,7 @@ const AuthenticationController = require('../controllers/authenticationControlle
 const AuthenticationAdminController = require('../controllers/authenticationAdminController');
 const CategoriesController = require('../controllers/categoriesController');
 const BookController = require('../controllers/bookController');
+const UserController = require('../controllers/userController');
 
 //routing controller
 router.post(
@@ -27,6 +28,11 @@ router.post(
 );
 router.post('/admin/login', AuthenticationAdminController.login);
 router.get('/admin/profile', [AuthJWT.isAdmin], AuthenticationAdminController.profileAdmin);
+
+
+
+router.get('/users', [AuthJWT.isAdmin], UserController.list);
+router.post('/users/:id', [AuthJWT.isAdmin], UserController.toggleUserIsAdmin);
 
 router.get('/categories', [AuthJWT.isAdmin], CategoriesController.list);
 router.get('/categories/:id', [AuthJWT.isAdmin], CategoriesController.getById);
