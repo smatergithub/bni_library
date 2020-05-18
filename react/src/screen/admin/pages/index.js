@@ -7,6 +7,7 @@ import Dashboard from './dashboard';
 import CreateNewBook from './createNewBook';
 import Books from './books';
 import Ebooks from './ebooks';
+import User from './users';
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     main: () => <Dashboard />,
   },
   {
+    path: '/admin/users',
+    exact: false,
+    main: () => <User />,
+  },
+  {
     path: '/admin/add-new-book',
     exact: false,
     main: props => <CreateNewBook {...props} />,
@@ -42,7 +48,7 @@ function HomeAdmin(props) {
     history.push('/admin/add-new-book');
   }
   return (
-    <div className="bg-gray-100 font-family-karla flex">
+    <div className="bg-gray-100 font-family-karla flex modal-active">
       <div
         style={{
           zIndex: '10000',

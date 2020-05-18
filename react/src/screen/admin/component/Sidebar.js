@@ -22,6 +22,12 @@ const routes = [
     params: 'ebooks',
   },
   {
+    path: '/admin/users',
+    name: 'User',
+    icon: 'fas fa-table',
+    params: 'users',
+  },
+  {
     path: '/admin/analytics',
     name: 'Analytics',
     icon: 'fas fa-align-left',

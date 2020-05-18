@@ -143,7 +143,7 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
               </div>
             </div>
           </div>
-          <div className="block w-full overflow-x-auto">
+          <div className="block w-full ">
             <table className="items-center w-full bg-transparent border-collapse">
               <thead className="thead-light">
                 <tr>
@@ -171,7 +171,7 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                         {ebook.author}
                       </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                      {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                         <div className="flex items-center">
                           <span className="mr-2">60%</span>
                           <div className="relative w-full">
@@ -185,7 +185,7 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                             </div>
                           </div>
                         </div>
-                      </td>
+                      </td> */}
                     </tr>
                   );
                 })}
