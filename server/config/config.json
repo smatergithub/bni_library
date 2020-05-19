@@ -1,16 +1,16 @@
 {
   "development": {
-    "username": "root",
-    "password": null,
-    "database": "database_development",
+    "username": "admin",
+    "password": "root",
+    "database": "bni_dev",
     "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false
   },
-  "test": {
+  "staging": {
     "username": "root",
     "password": null,
-    "database": "database_test",
+    "database": "bni_staging",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false
@@ -18,7 +18,7 @@
   "production": {
     "username": "root",
     "password": null,
-    "database": "database_production",
+    "database": "bni_production",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "operatorsAliases": false

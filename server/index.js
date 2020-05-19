@@ -14,17 +14,13 @@ app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-// ======> do not remove <=======
-// app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 app.use('/api/', indexRouter);
-// ======> do not remove <=======
-// app.get('*', (req, res) =>
-//   res
-//     .status(200)
-//     .sendFile(
-//       path.join(__dirname, '..', 'react', 'build', 'index.html')
-//     )
-// );
+
+app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
+
+app.get('*', (req, res) =>
+  res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
+);
 
 var db = require('./models');
 db.sequelize.sync().then(function() {
