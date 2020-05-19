@@ -33,7 +33,7 @@ const mockBookFavorite = [
   },
 ];
 
-function User() {
+function Approval() {
   let [showModal, setShowModal] = useState(false);
   let [showModalDeletion, setShowModalDeletion] = useState(false);
   let [activeTabs, setActiveTabs] = useState('user');
@@ -50,13 +50,13 @@ function User() {
         <div className="my-5">Anda yakin untuk menghapus user ini?</div>
       </Modal>
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Pengguna</h1>
+        <h1 className="w-full text-3xl text-black pb-6">Permintaan Baru</h1>
         <div className="flex flex-wrap mt-5 px-1">
           <div className="w-full xl:w-12/12 mb-12 xl:mb-0">
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
               <div className="rounded-t mb-0 px-4 py-3 border-0">
                 <div className="flex flex-wrap items-center">
-                  <div className="relative w-full px-1 py-2 max-w-full flex flex-row  flex-1">
+                  <div className="relative w-full px-1 py-5 max-w-full flex flex-row  flex-1">
                     <div
                       className={`font-semibold text-base  px-5 py-1 border-b-2 ${
                         activeTabs === 'user'
@@ -65,17 +65,34 @@ function User() {
                       } cursor-pointer`}
                       onClick={() => setActiveTabs('user')}
                     >
-                      USER
+                      BUKU
                     </div>
                     <div
-                      className={`font-semibold text-base  px-5 py-1 border-b-2 ${
+                      className={`relative font-semibold text-base  px-5 py-1 border-b-2 ${
                         activeTabs === 'admin'
                           ? 'border-gray-800 text-gray-800'
                           : 'border-gray-500 text-gray-500'
                       } cursor-pointer`}
                       onClick={() => setActiveTabs('admin')}
                     >
-                      ADMIN
+                      EBOOK
+                      <span
+                        style={{
+                          width: 25,
+                          height: 25,
+                          backgroundColor: 'red',
+                          display: 'flex',
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          position: 'absolute',
+                          right: '0',
+                          top: '-1em',
+                          color: 'white',
+                          borderRadius: '50%',
+                        }}
+                      >
+                        3
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -127,16 +144,20 @@ function User() {
                                 transition: 'all .15s ease',
                               }}
                             >
-                              {activeTabs === 'user' ? 'Make as Admin' : 'Make as User'}
+                              Approve?
                             </button>
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            <div
-                              className="text-red-600 cursor-pointer"
+                            <button
                               onClick={() => setShowModalDeletion(true)}
+                              className="bg-red-600  text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                              type="button"
+                              style={{
+                                transition: 'all .15s ease',
+                              }}
                             >
-                              Delete
-                            </div>
+                              Reject?
+                            </button>
                           </td>
                         </tr>
                       );
@@ -152,4 +173,4 @@ function User() {
   );
 }
 
-export default User;
+export default Approval;

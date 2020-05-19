@@ -2,13 +2,14 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Sidebar from '../component/Sidebar';
-// import Header from '../component/Header';
+import Header from '../component/Header';
 import Dashboard from './dashboard';
 import CreateNewBook from './createNewBook';
 import Books from './books';
 import Ebooks from './ebooks';
 import User from './users';
 import Categories from './categories';
+import Approval from './approval';
 
 const routes = [
   {
@@ -46,6 +47,11 @@ const routes = [
     exact: false,
     main: props => <Categories {...props} />,
   },
+  {
+    path: '/admin/aproval',
+    exact: false,
+    main: props => <Approval {...props} />,
+  },
 ];
 
 function HomeAdmin(props) {
@@ -63,15 +69,17 @@ function HomeAdmin(props) {
         <Sidebar url={match.params.id} createNewBook={createNewBook} />
       </div>
       <div className="w-full flex flex-col h-screen overflow-y-hidden">
-        {/* <Header /> */}
         <Switch>
-          {routes.map((route, index) => (
-            // Render more <Route>s with the same paths as
-            // above, but different components this time.
-            <Route key={index} path={route.path} exact={route.exact}>
-              <route.main {...props} />
-            </Route>
-          ))}
+          <div>
+            <Header />
+            {routes.map((route, index) => (
+              // Render more <Route>s with the same paths as
+              // above, but different components this time.
+              <Route key={index} path={route.path} exact={route.exact}>
+                <route.main {...props} />
+              </Route>
+            ))}
+          </div>
         </Switch>
       </div>
     </div>

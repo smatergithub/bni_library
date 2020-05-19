@@ -6,38 +6,51 @@ const routes = [
   {
     path: '/admin/dashboard',
     name: 'Dashboard',
-    icon: 'fas fa-tachometer-alt',
+    icon: 'fas fa-home',
     params: 'dashboard',
+    notif: false,
+  },
+  {
+    path: '/admin/aproval',
+    name: 'Approval',
+    icon: 'fas fa-check-circle',
+    params: 'aproval',
+    notif: true,
   },
   {
     path: '/admin/books',
     name: 'Daftar Buku',
     icon: 'fas fa-table',
     params: 'books',
+    notif: false,
   },
   {
     path: '/admin/ebooks',
     name: 'Daftar Ebook',
-    icon: 'fas fa-table',
+    icon: 'fas fa-file-pdf',
     params: 'ebooks',
+    notif: false,
   },
   {
     path: '/admin/users',
     name: 'User',
-    icon: 'fas fa-table',
+    icon: 'fas fa-id-badge',
     params: 'users',
+    notif: false,
   },
   {
     path: '/admin/analytics',
     name: 'Analytics',
     icon: 'fas fa-align-left',
     params: 'analytics',
+    notif: false,
   },
   {
     path: '/admin/kategori',
     name: 'Kategori Buku',
-    icon: 'fas fa-align-left',
+    icon: 'fas fa-indent',
     params: 'kategori',
+    notif: false,
   },
 ];
 
@@ -69,6 +82,23 @@ function Sidebar({ url, createNewBook }) {
               >
                 <i className={`${rt.icon} mr-3`} />
                 {rt.name}
+                {rt.notif && (
+                  <span
+                    style={{
+                      width: 25,
+                      height: 25,
+                      backgroundColor: 'green',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      position: 'absolute',
+                      right: '2em',
+                      borderRadius: '50%',
+                    }}
+                  >
+                    3
+                  </span>
+                )}
               </div>
             </Link>
           );
