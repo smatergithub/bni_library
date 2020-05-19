@@ -1,53 +1,84 @@
-import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Redirect, Link } from "react-router-dom";
-import Sidebar from '../component/Sidebar'
-import Header from '../component/Header'
-import Dashboard from './dashboard'
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import Sidebar from '../component/Sidebar';
+// import Header from '../component/Header';
+import Dashboard from './dashboard';
+import CreateNewBook from './createNewBook';
+import Books from './books';
+import Ebooks from './ebooks';
+import User from './users';
+import Categories from './categories';
+
 const routes = [
   {
-    path: "/admin/dashboard",
-    exact: true,
-    main: () => <Dashboard />
+    path: '/admin/dashboard',
+    exact: false,
+    main: props => <Dashboard {...props} />,
   },
   {
-    path: "/admin/add-book",
+    path: '/admin/books',
     exact: false,
-    main: () => <Dashboard />
+    main: () => <Books />,
   },
   {
-    path: "/admin/analytics",
+    path: '/admin/ebooks',
     exact: false,
-    main: () => () => <Dashboard />
-  }
+    main: () => <Ebooks />,
+  },
+  {
+    path: '/admin/analytics',
+    exact: false,
+    main: () => <Dashboard />,
+  },
+  {
+    path: '/admin/users',
+    exact: false,
+    main: () => <User />,
+  },
+  {
+    path: '/admin/add-new-book',
+    exact: false,
+    main: props => <CreateNewBook {...props} />,
+  },
+  {
+    path: '/admin/kategori',
+    exact: false,
+    main: props => <Categories {...props} />,
+  },
 ];
+
 function HomeAdmin(props) {
-
+  const { history, match } = props;
+  function createNewBook() {
+    history.push('/admin/add-new-book');
+  }
   return (
-    <Router>
-      <div class="bg-gray-100 font-family-karla flex" >
-        <div style={{
-          zIndex: '10000'
-        }}>
-          <Sidebar url={props.match.params.id} />
-        </div>
-        <div class="w-full flex flex-col h-screen overflow-y-hidden">
-          {/* <Header /> */}
-          <Switch>
-            {routes.map((route, index) => (
-              // Render more <Route>s with the same paths as
-              // above, but different components this time.
-              <Route
-                key={index}
-                path={route.path}
-                exact={route.exact}
-                children={<route.main />}
-              />
-            ))}
-          </Switch>
-        </div>
-
+    <div className="bg-gray-100 font-family-karla flex modal-active">
+      <div
+        style={{
+          zIndex: '10000',
+        }}
+      >
+        <Sidebar url={match.params.id} createNewBook={createNewBook} />
       </div>
-    </Router>
-  )
+      <div className="w-full flex flex-col h-screen overflow-y-hidden">
+        {/* <Header /> */}
+        <Switch>
+          {routes.map((route, index) => (
+            // Render more <Route>s with the same paths as
+            // above, but different components this time.
+            <Route key={index} path={route.path} exact={route.exact}>
+              <route.main {...props} />
+            </Route>
+          ))}
+        </Switch>
+      </div>
+    </div>
+  );
 }
-export default HomeAdmin
+HomeAdmin.propTypes = {
+  history: PropTypes.object.isRequired,
+  match: PropTypes.object.isRequired,
+};
+export default HomeAdmin;

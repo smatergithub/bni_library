@@ -1,9 +1,10 @@
 // Swagger set up
 const options = {
+  apis: ['./routes/index.js'],
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'API E-LIBRARY',
+      title: 'Time to document that Express API you built',
       version: '1.0.0',
       description: 'A test project to understand how easy it is to document and Express API',
       license: {
@@ -18,14 +19,10 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:2000/swagger',
+        url: 'http://localhost:3000/api/',
       },
     ],
   },
-  apis: ['../models/index.js', '../routes/index.js'],
-  basePath: '/',
 };
 
-module.exports = {
-  options,
-};
+module.exports = options;
