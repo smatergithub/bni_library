@@ -36,6 +36,7 @@ const mockBookFavorite = [
 function User() {
   let [showModal, setShowModal] = useState(false);
   let [showModalDeletion, setShowModalDeletion] = useState(false);
+  let [activeTabs, setActiveTabs] = useState('user');
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <Modal title="Konfirmasi" open={showModal} onCLose={() => setShowModal(false)}>
@@ -49,13 +50,33 @@ function User() {
         <div className="my-5">Anda yakin untuk menghapus user ini?</div>
       </Modal>
       <main className="w-full flex-grow p-6">
+        <h1 className="w-full text-3xl text-black pb-6">Pengguna</h1>
         <div className="flex flex-wrap mt-5 px-1">
           <div className="w-full xl:w-12/12 mb-12 xl:mb-0">
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
               <div className="rounded-t mb-0 px-4 py-3 border-0">
                 <div className="flex flex-wrap items-center">
-                  <div className="relative w-full px-1 max-w-full flex-grow flex-1">
-                    <h3 className="font-semibold text-base text-gray-800">USER</h3>
+                  <div className="relative w-full px-1 py-2 max-w-full flex flex-row  flex-1">
+                    <div
+                      className={`font-semibold text-base  px-5 py-1 border-b-2 ${
+                        activeTabs === 'user'
+                          ? 'border-gray-800 text-gray-800'
+                          : 'border-gray-500 text-gray-500'
+                      } cursor-pointer`}
+                      onClick={() => setActiveTabs('user')}
+                    >
+                      USER
+                    </div>
+                    <div
+                      className={`font-semibold text-base  px-5 py-1 border-b-2 ${
+                        activeTabs === 'admin'
+                          ? 'border-gray-800 text-gray-800'
+                          : 'border-gray-500 text-gray-500'
+                      } cursor-pointer`}
+                      onClick={() => setActiveTabs('admin')}
+                    >
+                      ADMIN
+                    </div>
                   </div>
                 </div>
               </div>
@@ -106,7 +127,7 @@ function User() {
                                 transition: 'all .15s ease',
                               }}
                             >
-                              Make as Admin
+                              {activeTabs === 'user' ? 'Make as Admin' : 'Make as User'}
                             </button>
                           </td>
                           <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
