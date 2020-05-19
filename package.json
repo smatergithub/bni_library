@@ -4,7 +4,10 @@
   "description": "E-Learning",
   "main": "index.js",
   "scripts": {
+    "start": "cross-env NODE_ENV=development node server/index.js",
     "setup": "concurrently \"sequelize db:migrate \" \"cd react && npm install\"",
+    "clean": "rm -rf react/build",
+    "build": "npm run clean && cd react && INLINE_RUNTIME_CHUNK=false GENERATE_SOURCEMAP=false npm run build",
     "dev-react": "cd react && npm run start",
     "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
     "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
