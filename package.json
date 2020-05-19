@@ -4,6 +4,7 @@
   "description": "E-Learning",
   "main": "index.js",
   "scripts": {
+    "setup": "concurrently \"sequelize db:migrate \" \"cd react && npm install\"",
     "dev-react": "cd react && npm run start",
     "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
     "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
