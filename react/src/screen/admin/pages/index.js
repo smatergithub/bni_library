@@ -9,6 +9,7 @@ import Books from './books';
 import Ebooks from './ebooks';
 import User from './users';
 import Categories from './categories';
+import Approval from './approval';
 
 const routes = [
   {
@@ -45,6 +46,11 @@ const routes = [
     path: '/admin/kategori',
     exact: false,
     main: props => <Categories {...props} />,
+  },
+  {
+    path: '/admin/aproval',
+    exact: false,
+    main: props => <Approval {...props} />,
   },
 ];
 

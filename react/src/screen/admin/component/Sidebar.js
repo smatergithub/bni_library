@@ -10,6 +10,12 @@ const routes = [
     params: 'dashboard',
   },
   {
+    path: '/admin/aproval',
+    name: 'Approval',
+    icon: 'fas fa-table',
+    params: 'aproval',
+  },
+  {
     path: '/admin/books',
     name: 'Daftar Buku',
     icon: 'fas fa-table',
