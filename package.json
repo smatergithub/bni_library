@@ -24,7 +24,7 @@
     }
   },
   "lint-staged": {
-    "react/*js": [
+    "*.{js,jsx}": [
       "pretty-quick --staged",
       "eslint react/src/ --fix",
       "git add"
