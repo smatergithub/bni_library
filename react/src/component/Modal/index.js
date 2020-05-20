@@ -1,5 +1,5 @@
 import React from 'react';
-
+let nnn;
 export default function Modal({ open, title, onCLose, children }) {
   return (
     <>
