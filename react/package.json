@@ -2,6 +2,7 @@
   "name": "bni_library",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:2000",
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.3.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -17,6 +18,7 @@
     "react-redux": "^7.1.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.4.0",
+    "react-toastify": "^6.0.5",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
     "tailwindcss": "^1.1.4"

@@ -1,6 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+import UserApi from '../../../redux/action/user';
+import { ToastError, ToastSuccess } from '../../../component';
 
 function Login() {
+  let [user, setUser] = useState({ username: '', password: '' });
+
+  async function onLogin() {
+    if (user.username.trim().length === 0 && user.password.trim().length === 0) {
+      return ToastError('Email atau password tidak boleh kosong');
+    } else {
+      UserApi.login(user)
+        .then(res => {
+          if (res) {
+            ToastSuccess('Login berhasil');
+          }
+        })
+        .catch(err => {
+          let msg = err.message || 'Something wrong';
+          ToastError(msg);
+        });
+    }
+  }
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -29,6 +49,7 @@ function Login() {
                         Email
                       </label>
                       <input
+                        onChange={e => setUser({ ...user, username: e.target.value })}
                         type="email"
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Email"
@@ -46,6 +67,7 @@ function Login() {
                       </label>
                       <input
                         type="password"
+                        onChange={e => setUser({ ...user, password: e.target.value })}
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Password"
                         style={{
@@ -62,6 +84,7 @@ function Login() {
                     </div>
                     <div className="text-center mt-6">
                       <button
+                        onClick={() => onLogin()}
                         className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                         type="button"
                         style={{
