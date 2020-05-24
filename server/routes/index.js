@@ -10,6 +10,7 @@ const AuthenticationController = require('../controllers/authenticationControlle
 const CategoriesController = require('../controllers/categoriesController');
 const BookController = require('../controllers/bookController');
 const UserController = require('../controllers/userController');
+const RepositoryController = require("../controllers/repositoryController");
 
 //routing controller
 router.post(
@@ -18,7 +19,7 @@ router.post(
   AuthenticationController.register
 );
 router.post('/auth/login', AuthenticationController.login);
-router.post('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
+router.get('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
 
 router.get('/users', [AuthJWT.isAdmin], UserController.list);
 router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
@@ -36,6 +37,14 @@ router.get('/books/:id', [AuthJWT.isAdmin], BookController.getById);
 router.post('/books', [AuthJWT.isAdmin], BookController.add);
 router.put('/books/:id', [AuthJWT.isAdmin], BookController.update);
 router.delete('/books/:id', [AuthJWT.isAdmin], BookController.delete);
+
+
+router.get('/repository', RepositoryController.list);
+router.get('/repository/:id', RepositoryController.getById);
+router.post('/repository', RepositoryController.add);
+router.delete('/repository/:id', RepositoryController.delete);
+
+
 
 //docs swagger
 const specs = swaggerJsdoc(options);

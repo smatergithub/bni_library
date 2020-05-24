@@ -90,7 +90,7 @@ module.exports = {
         image: req.file.path,
         author: req.body.author,
         transDate: req.body.transDate,
-        isPromotion: req.body.isPromotion,
+        isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
         categoryId: req.body.categoryId,
       })
         .then(response => res.status(200).send(response))

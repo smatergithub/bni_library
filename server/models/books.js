@@ -33,11 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'categories',
     });
 
-    books.hasOne(models.transactiondetails, {
-      foreignKey: 'bookId',
-      as: 'transactiondetails',
-      onDelete: 'CASCADE',
-    });
   };
   return books;
 };

@@ -12,6 +12,8 @@ module.exports = {
       address: req.body.address,
       email: req.body.email,
       phoneNumber: req.body.phoneNumber,
+      isAdmin: false,
+      superAdmin: false,
       password: bcrypt.hashSync(req.body.password, 8),
     })
       .then(response => {
@@ -42,7 +44,7 @@ module.exports = {
           });
         }
 
-        var token = jwt.sign({ id: user.id }, config.secret, {
+        var token = jwt.sign({ id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin }, config.secret, {
           expiresIn: 86400, // 24 hours
         });
         res.status(200).send({
@@ -53,6 +55,8 @@ module.exports = {
           address: user.address,
           email: user.email,
           phoneNumber: user.phoneNumber,
+          isAdmin: user.isAdmin,
+          superAdmin: user.superAdmin,
           accessToken: token,
         });
       })
@@ -63,6 +67,7 @@ module.exports = {
 
   profileUser(req, res) {
     var userId = req.userId;
+    console.log("userId", userId);
     Users.findOne({
       where: {
         id: userId,
@@ -80,6 +85,8 @@ module.exports = {
           address: user.address,
           email: user.email,
           phoneNumber: user.phoneNumber,
+          isAdmin: user.isAdmin,
+          superAdmin: user.superAdmin
         };
         res.status(200).send(dataUser);
       })
