@@ -1,38 +1,38 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('repositories', {
+    return queryInterface.createTable('transactionBooks', {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      university: {
+      code: {
         type: Sequelize.STRING
       },
-      titleRepository: {
+      transDate: {
+        type: Sequelize.DATE
+      },
+      status: {
         type: Sequelize.STRING
       },
-      typeRepository: {
+      note: {
         type: Sequelize.STRING
       },
-      bab1: {
+      quantity: {
+        type: Sequelize.INTEGER
+      },
+      startDate: {
+        type: Sequelize.DATE
+      },
+      endDate: {
+        type: Sequelize.DATE
+      },
+      userId: {
         type: Sequelize.STRING
       },
-      bab2: {
-        type: Sequelize.STRING
-      },
-      bab3: {
-        type: Sequelize.STRING
-      },
-      bab4: {
-        type: Sequelize.STRING
-      },
-      bab5: {
-        type: Sequelize.STRING
-      },
-      abstrack: {
+      bookId: {
         type: Sequelize.STRING
       },
       createdAt: {
@@ -46,6 +46,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('repositories');
+    return queryInterface.dropTable('transactionBooks');
   }
 };

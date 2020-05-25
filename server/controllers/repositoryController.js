@@ -66,10 +66,10 @@ module.exports = {
   add(req, res) {
     UploadFileExcel(req, res, err => {
       if (err) throw err;
-      console.log("mimetype", req.files['abstrack'])
       return Repositorys.create({
         university: req.body.university,
         titleRepository: req.body.titleRepository,
+        typeRepository: req.body.typeRepository,
         bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
         bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
         bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,

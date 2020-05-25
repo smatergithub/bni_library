@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     university: DataTypes.STRING,
     titleRepository: DataTypes.STRING,
+    typeRepository: DataTypes.STRING,
     bab1: DataTypes.STRING,
     bab2: DataTypes.STRING,
     bab3: DataTypes.STRING,

@@ -7,10 +7,11 @@ var options = require('./configSwagger');
 
 //controller
 const AuthenticationController = require('../controllers/authenticationController');
-const CategoriesController = require('../controllers/categoriesController');
 const BookController = require('../controllers/bookController');
+const EbookController = require('../controllers/ebookController');
 const UserController = require('../controllers/userController');
 const RepositoryController = require("../controllers/repositoryController");
+
 
 //routing controller
 router.post(
@@ -24,13 +25,6 @@ router.get('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.prof
 router.get('/users', [AuthJWT.isAdmin], UserController.list);
 router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
 
-router.get('/categories', [AuthJWT.isAdmin], CategoriesController.list);
-router.get('/categories/:id', [AuthJWT.isAdmin], CategoriesController.getById);
-router.post('/categories', [AuthJWT.isAdmin], CategoriesController.add);
-router.put('/categories/:id', [AuthJWT.isAdmin], CategoriesController.update);
-router.delete('/categories/:id', [AuthJWT.isAdmin], CategoriesController.delete);
-
-
 
 router.get('/books', [AuthJWT.isAdmin], BookController.list);
 router.get('/books/:id', [AuthJWT.isAdmin], BookController.getById);
@@ -39,10 +33,16 @@ router.put('/books/:id', [AuthJWT.isAdmin], BookController.update);
 router.delete('/books/:id', [AuthJWT.isAdmin], BookController.delete);
 
 
-router.get('/repository', RepositoryController.list);
-router.get('/repository/:id', RepositoryController.getById);
-router.post('/repository', RepositoryController.add);
-router.delete('/repository/:id', RepositoryController.delete);
+router.get('/ebooks', [AuthJWT.isAdmin], EbookController.list);
+router.get('/ebooks/:id', [AuthJWT.isAdmin], EbookController.getById);
+router.post('/ebooks', [AuthJWT.isAdmin], EbookController.add);
+router.put('/ebooks/:id', [AuthJWT.isAdmin], EbookController.update);
+router.delete('/ebooks/:id', [AuthJWT.isAdmin], EbookController.delete);
+
+router.get('/repository', [AuthJWT.isAdmin], RepositoryController.list);
+router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
+router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
+router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
 
 
