@@ -6,6 +6,66 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
+  getEbookList(req, res) {
+
+
+    // queryStrings
+    let { q, order, sort, limit, offset } = req.query;
+
+    let paramQuerySQL = {};
+
+    //search (q) , need fix
+    if (q != '' && typeof q !== 'undefined') {
+      paramQuerySQL.where = {
+        q: {
+          [Op.like]: '%' + q + '%'
+        }
+      }
+
+    }
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+
+    // offset
+    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
+      paramQuerySQL.offset = parseInt(offset);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (
+      order != '' &&
+      typeof order !== 'undefined' &&
+      ['name'].includes(order.toLowerCase())
+    ) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    return Ebooks.findAndCountAll(paramQuerySQL).then(book => {
+      res.status(200).send(book);
+    })
+      .catch(err => {
+        res.status(500).send(err)
+      })
+  },
+  getEbookById(req, res) {
+    return Ebooks.findByPk(req.params.id)
+      .then(ebook => {
+        if (!ebook) {
+          return res.status(404).send({
+            message: 'Ebook Not Found',
+          });
+        }
+        return res.status(200).send(book);
+      })
+      .catch(error => res.status(400).send(error));
+  },
   list(req, res) {
 
     // queryStrings

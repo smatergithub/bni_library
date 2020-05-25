@@ -13,7 +13,7 @@ const UserController = require('../controllers/userController');
 const RepositoryController = require("../controllers/repositoryController");
 
 
-//routing controller
+//routing authentication and register
 router.post(
   '/auth/register',
   [verifySignUp.checkDuplicateUsernameOrEmail],
@@ -25,6 +25,16 @@ router.get('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.prof
 router.get('/users', [AuthJWT.isAdmin], UserController.list);
 router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
 
+
+//routing user feature
+
+router.get('/book/getAll', BookController.list);
+router.get('/bookDetail/:id', BookController.getById);
+
+router.get('/ebook/getAll', EbookController.list);
+router.get('/ebookDetail/:id', EbookController.getById);
+
+//routing admin panel feature
 
 router.get('/books', [AuthJWT.isAdmin], BookController.list);
 router.get('/books/:id', [AuthJWT.isAdmin], BookController.getById);
