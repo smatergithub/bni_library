@@ -18,13 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       category: DataTypes.STRING,
       image: DataTypes.STRING,
       author: DataTypes.STRING,
-      transDate: DataTypes.DATE,
       isPromotion: DataTypes.BOOLEAN,
     },
     {}
   );
-  books.associate = function (models) {
-
-  };
+  books.associate = function(models) {};
   return books;
 };

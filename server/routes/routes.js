@@ -11,6 +11,7 @@ const BookController = require('../controllers/bookController');
 const EbookController = require('../controllers/ebookController');
 const UserController = require('../controllers/userController');
 const RepositoryController = require("../controllers/repositoryController");
+const TransactionBookController = require("../controllers/transactionBookController");
 
 
 //routing authentication and register
@@ -54,7 +55,9 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
-
+router.post('/trans-book', [AuthJWT.isAdmin], TransactionBookController.borrowBook);
+router.get('/trans-book', [AuthJWT.isAdmin], TransactionBookController.list);
+router.get('/trans-book/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 //docs swagger
 const specs = swaggerJsdoc(options);

@@ -19,6 +19,15 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   transactionBook.associate = function (models) {
     // associations can be defined here
+    transactionBook.belongsTo(models.books, {
+      foreignKey: 'bookId',
+      as: 'book'
+    })
+
+    transactionBook.belongsTo(models.users, {
+      foreignKey: 'userId',
+      as: 'user'
+    })
   };
   return transactionBook;
 };
