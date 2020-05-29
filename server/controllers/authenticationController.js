@@ -44,9 +44,13 @@ module.exports = {
           });
         }
 
-        var token = jwt.sign({ id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin }, config.secret, {
-          expiresIn: 86400, // 24 hours
-        });
+        var token = jwt.sign(
+          { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+          config.secret,
+          {
+            expiresIn: 86400, // 24 hours
+          }
+        );
         res.status(200).send({
           id: user.id,
           firstName: user.firstName,
@@ -67,7 +71,6 @@ module.exports = {
 
   profileUser(req, res) {
     var userId = req.userId;
-    console.log("userId", userId);
     Users.findOne({
       where: {
         id: userId,
@@ -86,7 +89,7 @@ module.exports = {
           email: user.email,
           phoneNumber: user.phoneNumber,
           isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin
+          superAdmin: user.superAdmin,
         };
         res.status(200).send(dataUser);
       })

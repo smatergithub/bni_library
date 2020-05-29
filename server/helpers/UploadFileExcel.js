@@ -3,7 +3,7 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname + './../public/document/'),
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
 
     //cb(null, file.originalname);
@@ -12,7 +12,6 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, cb) => {
   // reject a file
-  console.log("file mimetype", file.mimetype);
   if (file.mimetype === 'application/pdf') {
     cb(null, true);
   } else {
@@ -29,7 +28,6 @@ const fileFilter = (req, file, cb) => {
 //   }
 // };
 
-
 const UploadFileExcel = multer({
   storage: storage,
   // limits: {
@@ -42,14 +40,7 @@ const UploadFileExcel = multer({
   { name: 'bab3', maxCount: 1 },
   { name: 'bab4', maxCount: 1 },
   { name: 'bab5', maxCount: 1 },
-  { name: 'abstrack', maxCount: 1 }
+  { name: 'abstrack', maxCount: 1 },
 ]);
-
-
-
-
-
-
-
 
 module.exports = UploadFileExcel;
