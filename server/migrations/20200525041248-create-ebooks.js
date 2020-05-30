@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('books', {
+    return queryInterface.createTable('ebooks', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -9,46 +9,43 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       code: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       statementResponsibility: {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING,
-      },
-      dateBook: {
-        type: Sequelize.DATE,
-      },
-      stockBook: {
-        type: Sequelize.INTEGER,
-      },
-      category: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       image: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
       author: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING
       },
-      isPromotion: {
-        type: Sequelize.BOOLEAN,
+      dateEbook: {
+        type: Sequelize.DATE
+      },
+      category: {
+        type: Sequelize.STRING
+      },
+      sourceEbook: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-      },
+        type: Sequelize.DATE
+      }
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('books');
-  },
+    return queryInterface.dropTable('ebooks');
+  }
 };

@@ -43,10 +43,27 @@ module.exports = {
     }
 
     return Users.findAndCountAll(paramQuerySQL)
-      .then(user => res.status(200).json({
-        count: user.count,
-        data: user.rows
-      }))
+      .then(user => {
+        let data = [];
+        user.rows.forEach(item => {
+          let dataUser = {
+            id: item.id,
+            firstName: item.firstName,
+            lastName: item.lastName,
+            username: item.username,
+            address: item.address,
+            email: item.email,
+            phoneNumber: item.phoneNumber,
+            isAdmin: item.isAdmin,
+            superAdmin: item.superAdmin
+          };
+          data.push(dataUser);
+        })
+        res.status(200).json({
+          count: user.count,
+          data: data
+        })
+      })
       .catch(error => {
         res.status(400).send(error);
       });
