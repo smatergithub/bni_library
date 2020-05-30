@@ -1,14 +1,12 @@
 const Books = require('../models').books;
-const upload = require("../helpers/Upload.js");
+const Upload = require('../helpers/Upload.js');
 const path = require('path');
 
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-
   getBookList(req, res) {
-
     // queryStrings
     let { q, order, sort, limit, offset } = req.query;
 
@@ -18,10 +16,9 @@ module.exports = {
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
 
     //limit
@@ -39,20 +36,17 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Books.findAndCountAll(paramQuerySQL).then(book => {
-      res.status(200).send(book);
-    })
-      .catch(err => {
-        res.status(500).send(err)
+    return Books.findAndCountAll(paramQuerySQL)
+      .then(book => {
+        res.status(200).send(book);
       })
+      .catch(err => {
+        res.status(500).send(err);
+      });
   },
 
   getBookById(req, res) {
@@ -74,15 +68,13 @@ module.exports = {
 
     let paramQuerySQL = {};
 
-
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
 
     //limit
@@ -100,21 +92,17 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Books.findAndCountAll(paramQuerySQL).then(book => {
-      res.status(200).send(book);
-    })
-      .catch(err => {
-        res.status(500).send(err)
+    return Books.findAndCountAll(paramQuerySQL)
+      .then(book => {
+        res.status(200).send(book);
       })
-
+      .catch(err => {
+        res.status(500).send(err);
+      });
   },
 
   getById(req, res) {
@@ -131,17 +119,18 @@ module.exports = {
   },
 
   add(req, res) {
-    upload(req, res, err => {
+    Upload(req, res, err => {
       if (err) throw err;
+      // console.log('req file', req.file);
       return Books.create({
         code: req.body.code,
         title: req.body.title,
         statementResponsibility: req.body.statementResponsibility,
         description: req.body.description,
-        dateBook: req.body.edition,
-        stockBook: req.body.stock,
+        dateBook: req.body.dateBook,
+        stockBook: req.body.stockBook,
         category: req.body.category,
-        image: req.file.path,
+        image: req.body.image,
         author: req.body.author,
         isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
       })
@@ -151,7 +140,7 @@ module.exports = {
   },
 
   update(req, res) {
-    upload(req, res, err => {
+    Upload(req, res, err => {
       if (err) throw err;
       return Books.findByPk(req.params.id)
         .then(book => {
@@ -164,10 +153,10 @@ module.exports = {
               title: req.body.title,
               statementResponsibility: req.body.statementResponsibility,
               description: req.body.description,
-              dateBook: req.body.edition,
-              stockBook: req.body.stock,
+              dateBook: req.body.dateBook,
+              stockBook: req.body.stockBook,
               category: req.body.category,
-              image: req.file.path,
+              image: req.body.image,
               author: req.body.author,
               isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
             })
