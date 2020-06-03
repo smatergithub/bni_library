@@ -3,17 +3,18 @@ import { Switch, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
+import Books from './books';
 
 const routes = [
   {
-    path: '/welcome',
+    path: '/',
     exact: false,
     main: () => <LandingPages />,
   },
   {
     path: '/home',
     exact: false,
-    main: () => <LandingPages />,
+    main: () => <Books />,
   },
   {
     path: '/katalog',
@@ -35,6 +36,11 @@ const routes = [
     exact: false,
     main: () => <LandingPages />,
   },
+  {
+    path: '/books',
+    exact: false,
+    main: () => <Books />,
+  },
 ];
 
 function HomeUser(props) {
@@ -47,7 +53,7 @@ function HomeUser(props) {
       <div>
         <NavBar />
         {routes.map((route, index) => (
-          <Route key={index} path={route.path} exact={false}>
+          <Route key={index} path={route.path} exact={true}>
             <route.main {...props} />
           </Route>
         ))}
