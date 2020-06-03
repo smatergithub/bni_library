@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import UserApi from '../../../redux/action/user';
-import { ToastError, ToastSuccess } from '../../../component';
+import UserApi from '../../../../redux/action/user';
+import { ToastError, ToastSuccess } from '../../../../component';
 
 function Login() {
   let [user, setUser] = useState({ username: '', password: '' });
