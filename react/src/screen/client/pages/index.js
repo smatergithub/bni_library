@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
+import About from './about';
 
 const routes = [
   {
@@ -29,7 +30,7 @@ const routes = [
   {
     path: '/about',
     exact: false,
-    main: () => <LandingPages />,
+    main: () => <About />,
   },
   {
     path: '/faq',
