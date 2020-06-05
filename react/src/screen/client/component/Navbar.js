@@ -1,39 +1,80 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+
+let dropdown = (
+  <React.Fragment>
+    <div className="origin-top-right absolute left-0 mt-2 w-32 rounded-md shadow-lg katalog-dropdown">
+      <div
+        className="rounded-md bg-white shadow-xs"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="options-menu"
+      >
+        <div className="py-1">
+          <Link to="/books">
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+              role="menuitem"
+            >
+              Buku
+            </a>
+          </Link>
+          <Link to="/ebook">
+            <a
+              href="#"
+              className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+              role="menuitem"
+            >
+              Ebook
+            </a>
+          </Link>
+        </div>
+      </div>
+    </div>
+  </React.Fragment>
+);
+
 const routes = [
   {
     path: '/home',
     params: 'home',
     name: 'Home',
+    dropdown: null,
   },
   {
     path: '/katalog',
     params: 'katalog',
     name: 'Katalog',
+    dropdown: dropdown,
   },
   {
     path: '/riset',
     params: 'riset',
     name: 'Riset',
+    dropdown: null,
   },
   {
     path: '/about',
     params: 'about',
     name: 'About',
+    dropdown: null,
   },
   {
     path: '/faq',
     params: 'faq',
     name: 'FAQ',
+    dropdown: null,
   },
 ];
 
 function NavBar(url) {
   const [selectedMenu, setSelectedMenu] = useState(url);
+
   return (
     <nav
       id="header"
-      className="fixed w-full z-30 top-0 text-white"
+      className={`fixed w-full z-30 top-0 text-white bg-white `}
       style={{
         zIndex: 1000,
       }}
@@ -41,27 +82,9 @@ function NavBar(url) {
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
         <div className="pl-4 flex items-center">
           <a
-            className="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
+            className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
             href="#"
           >
-            <svg
-              className="h-8 fill-current inline"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 512.005 512.005"
-            >
-              <rect
-                fill="#2a2a31"
-                x="16.539"
-                y="425.626"
-                width="479.767"
-                height="50.502"
-                transform="matrix(1,0,0,1,0,0)"
-              />
-              <path
-                className="plane-take-off"
-                d=" M 510.7 189.151 C 505.271 168.95 484.565 156.956 464.365 162.385 L 330.156 198.367 L 155.924 35.878 L 107.19 49.008 L 211.729 230.183 L 86.232 263.767 L 36.614 224.754 L 0 234.603 L 45.957 314.27 L 65.274 347.727 L 105.802 336.869 L 240.011 300.886 L 349.726 271.469 L 483.935 235.486 C 504.134 230.057 516.129 209.352 510.7 189.151 Z "
-              />
-            </svg>{' '}
             BNI
           </a>
         </div>
@@ -92,11 +115,23 @@ function NavBar(url) {
                 <li className="mr-3">
                   <Link to={`${rt.path}`} onClick={() => setSelectedMenu(rt.params)}>
                     <div
-                      className={`inline-block text-lg text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
+                      className={`relative inline-block text-lg text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
                         selectedMenu === rt.params ? 'border-b-2 border-gray-900' : ''
-                      } `}
+                      } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
-                      {rt.name}
+                      <div className="relative">
+                        {rt.name}{' '}
+                        {rt.params === 'katalog' ? (
+                          <i
+                            className="fas fa-caret-down absolute "
+                            style={{
+                              top: 6,
+                              right: -17,
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                      {rt.dropdown}
                     </div>
                   </Link>
                 </li>
