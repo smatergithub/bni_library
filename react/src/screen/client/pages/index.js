@@ -5,6 +5,7 @@ import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
 import About from './about';
+import Faq from './faq';
 
 const routes = [
   {
@@ -33,14 +34,14 @@ const routes = [
     main: () => <About />,
   },
   {
-    path: '/faq',
-    exact: false,
-    main: () => <LandingPages />,
-  },
-  {
     path: '/books',
     exact: false,
     main: () => <Books />,
+  },
+  {
+    path: '/faq',
+    exact: false,
+    main: () => <Faq />,
   },
 ];
 
