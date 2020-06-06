@@ -53,7 +53,7 @@ function HomeUser(props) {
   return (
     <Switch>
       <div>
-        <NavBar />
+        <NavBar url={match.params.id} />
         {routes.map((route, index) => (
           <Route key={index} path={route.path} exact={true}>
             <route.main {...props} />

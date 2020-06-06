@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 let dropdown = (
   <React.Fragment>
-    <div className="origin-top-right absolute left-0 mt-2 w-32 rounded-md shadow-lg katalog-dropdown">
+    <div className="origin-top-right absolute top-20 left-0 mt-2 w-32 rounded-md shadow-lg katalog-dropdown">
       <div
         className="rounded-md bg-white shadow-xs"
         role="menu"
@@ -68,7 +68,7 @@ const routes = [
   },
 ];
 
-function NavBar(url) {
+function NavBar({ url }) {
   const [selectedMenu, setSelectedMenu] = useState(url);
 
   return (
@@ -113,7 +113,10 @@ function NavBar(url) {
             {routes.map(rt => {
               return (
                 <li className="mr-3">
-                  <Link to={`${rt.path}`} onClick={() => setSelectedMenu(rt.params)}>
+                  <Link
+                    to={rt.params === 'katalog' ? '' : `${rt.path}`}
+                    onClick={() => setSelectedMenu(rt.params)}
+                  >
                     <div
                       className={`relative inline-block text-lg text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
                         selectedMenu === rt.params ? 'border-b-2 border-gray-900' : ''
