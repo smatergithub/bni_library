@@ -6,6 +6,7 @@ import LandingPages from './landingPages';
 import Books from './books';
 import About from './about';
 import Faq from './faq';
+import Research from './research';
 
 const routes = [
   {
@@ -26,7 +27,7 @@ const routes = [
   {
     path: '/riset',
     exact: false,
-    main: () => <LandingPages />,
+    main: () => <Research />,
   },
   {
     path: '/about',
