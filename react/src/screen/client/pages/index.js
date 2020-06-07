@@ -5,6 +5,9 @@ import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
 import About from './about';
+import Faq from './faq';
+import Research from './research';
+import Home from './home';
 
 const routes = [
   {
@@ -15,7 +18,7 @@ const routes = [
   {
     path: '/home',
     exact: false,
-    main: () => <Books />,
+    main: () => <Home />,
   },
   {
     path: '/katalog',
@@ -25,7 +28,7 @@ const routes = [
   {
     path: '/riset',
     exact: false,
-    main: () => <LandingPages />,
+    main: () => <Research />,
   },
   {
     path: '/about',
@@ -33,14 +36,14 @@ const routes = [
     main: () => <About />,
   },
   {
-    path: '/faq',
-    exact: false,
-    main: () => <LandingPages />,
-  },
-  {
     path: '/books',
     exact: false,
     main: () => <Books />,
+  },
+  {
+    path: '/faq',
+    exact: false,
+    main: () => <Faq />,
   },
 ];
 
@@ -52,7 +55,7 @@ function HomeUser(props) {
   return (
     <Switch>
       <div>
-        <NavBar />
+        <NavBar url={match.params.id} />
         {routes.map((route, index) => (
           <Route key={index} path={route.path} exact={true}>
             <route.main {...props} />
