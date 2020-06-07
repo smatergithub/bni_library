@@ -7,6 +7,7 @@ import Books from './books';
 import About from './about';
 import Faq from './faq';
 import Research from './research';
+import Home from './home';
 
 const routes = [
   {
@@ -17,7 +18,7 @@ const routes = [
   {
     path: '/home',
     exact: false,
-    main: () => <Books />,
+    main: () => <Home />,
   },
   {
     path: '/katalog',

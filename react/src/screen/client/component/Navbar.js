@@ -39,25 +39,25 @@ const routes = [
   {
     path: '/home',
     params: 'home',
-    name: 'Home',
+    name: 'HOME',
     dropdown: null,
   },
   {
     path: '/katalog',
     params: 'katalog',
-    name: 'Katalog',
+    name: 'KATALOG',
     dropdown: dropdown,
   },
   {
     path: '/riset',
     params: 'riset',
-    name: 'Riset',
+    name: 'RISET',
     dropdown: null,
   },
   {
     path: '/about',
     params: 'about',
-    name: 'About',
+    name: 'ABOUT',
     dropdown: null,
   },
   {
@@ -118,7 +118,7 @@ function NavBar({ url }) {
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
-                      className={`relative inline-block text-lg text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
+                      className={`relative inline-block text-sm text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
                         selectedMenu === rt.params ? 'border-b-2 border-gray-900' : ''
                       } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
