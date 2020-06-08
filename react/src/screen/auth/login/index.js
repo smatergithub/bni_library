@@ -1,26 +1,43 @@
-import React, { useState } from 'react';
-import UserApi from '../../../../redux/action/user';
-import { ToastError, ToastSuccess } from '../../../../component';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { signIn } from '../../../redux/action/user';
+import { ToastError, ToastSuccess } from '../../../component';
 
-function Login() {
-  let [user, setUser] = useState({ username: '', password: '' });
-
+function Login(props) {
+  let { history } = props;
+  let [user, setUser] = useState({ username: 'admin', password: 'admin' });
   async function onLogin() {
+    let userObj = {
+      logged: true,
+      role: 'user',
+    };
     if (user.username.trim().length === 0 && user.password.trim().length === 0) {
       return ToastError('Email atau password tidak boleh kosong');
     } else {
-      UserApi.login(user)
-        .then(res => {
-          if (res) {
-            ToastSuccess('Login berhasil');
-          }
-        })
-        .catch(err => {
-          let msg = err.message || 'Something wrong';
-          ToastError(msg);
-        });
+      if (user.username === 'admin' && user.password === 'admin') {
+        userObj.role = 'admin';
+        props.signIn(userObj);
+        setTimeout(() => {
+          history.push('/admin/dashboard');
+        }, 1000);
+      }
+
+      // UserApi.login(user)
+      //   .then(res => {
+      //     if (res) {
+      //       ToastSuccess('Login berhasil');
+      //     }
+      //   })
+      //   .catch(err => {
+      //     let msg = err.message || 'Something wrong';
+      //     ToastError(msg);
+      //   });
     }
   }
+  useEffect(() => {
+    ToastSuccess('Username = admin , Password = admin  ');
+  }, []);
+
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -42,10 +59,7 @@ function Login() {
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form>
                     <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
+                      <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Email
                       </label>
                       <input
@@ -59,10 +73,7 @@ function Login() {
                       />
                     </div>
                     <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
+                      <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Password
                       </label>
                       <input
@@ -77,7 +88,10 @@ function Login() {
                     </div>
                     <div>
                       <label className="inline-flex items-center cursor-pointer hover:text-gray-800 ">
-                        <span className="ml-2 text-sm font-semibold text-gray-700 ">
+                        <span
+                          className="ml-2 text-sm font-semibold text-gray-700 "
+                          onClick={() => history.push('/auth/forgot-password')}
+                        >
                           Lupa Password?
                         </span>
                       </label>
@@ -95,7 +109,10 @@ function Login() {
                       </button>
                     </div>
 
-                    <div className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer ">
+                    <div
+                      className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer "
+                      onClick={() => history.push('/auth/register')}
+                    >
                       Daftar
                     </div>
                   </form>
@@ -108,4 +125,4 @@ function Login() {
     </main>
   );
 }
-export default Login;
+export default connect(null, { signIn })(Login);

@@ -1,8 +1,8 @@
-import Request from '../../utils/request';
+import { SIGN_IN, SIGN_OUT } from '../type';
 
-export default class UsersApi {
-  static login(userData) {
-    const endpoint = '/api/auth/login';
-    return Request.post(endpoint, userData);
-  }
-}
+export const signIn = user => dispatch => {
+  return dispatch({ type: SIGN_IN, payload: user });
+};
+export const signOut = () => dispatch => {
+  return dispatch({ type: SIGN_OUT });
+};

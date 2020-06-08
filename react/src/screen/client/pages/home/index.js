@@ -13,7 +13,7 @@ function Home() {
             <div class="bg-white rounded-lg shadow-lg">
               <div class="px-4 py-8">
                 <div class="h-24">
-                  <img src="images/icon-home-1.svg" alt="" class="mx-auto" />
+                  {/* <img src="images/icon-home-1.svg" alt="" class="mx-auto" /> */}
                 </div>
                 <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
                   HOT BOOKS
@@ -27,7 +27,7 @@ function Home() {
             <div class="bg-white rounded-lg shadow-lg">
               <div class="px-4 py-8">
                 <div class="h-24">
-                  <img src="images/icon-home-2.svg" alt="" class="mx-auto" />
+                  {/* <img src="images/icon-home-2.svg" alt="" class="mx-auto" /> */}
                 </div>
                 <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
                   EBOOKS
@@ -41,7 +41,7 @@ function Home() {
             <div class="bg-white rounded-lg shadow-lg">
               <div class="px-4 py-8">
                 <div class="h-24">
-                  <img src="images/icon-home-3.svg" alt="" class="mx-auto" />
+                  {/* <img src="images/icon-home-3.svg" alt="" class="mx-auto" /> */}
                 </div>
                 <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
                   NEWS

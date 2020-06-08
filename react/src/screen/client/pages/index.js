@@ -12,8 +12,8 @@ import Home from './home';
 const routes = [
   {
     path: '/',
-    exact: false,
-    main: () => <LandingPages />,
+    exact: true,
+    main: props => <LandingPages {...props} />,
   },
   {
     path: '/home',
@@ -49,15 +49,13 @@ const routes = [
 
 function HomeUser(props) {
   const { history, match } = props;
-  function createNewBook() {
-    history.push('/admin/add-new-book');
-  }
+
   return (
     <Switch>
       <div>
-        <NavBar url={match.params.id} />
+        <NavBar url={match.params.id} props={props} />
         {routes.map((route, index) => (
-          <Route key={index} path={route.path} exact={true}>
+          <Route key={index} path={route.path} exact={route.exact}>
             <route.main {...props} />
           </Route>
         ))}
