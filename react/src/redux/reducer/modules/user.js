@@ -1,4 +1,4 @@
-import { SIGN_IN } from '../../type';
+import { SIGN_IN, SIGN_OUT } from '../../type';
 
 const initialState = {
   isAuth: false,
@@ -13,7 +13,8 @@ const user = (state = initialState, action) => {
         isAuth: action.payload.logged,
         role: action.payload.role,
       };
-
+    case SIGN_OUT:
+      return initialState;
     default:
       return state;
   }
