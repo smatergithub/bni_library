@@ -1,6 +1,7 @@
 import React from 'react';
 
-function LandingPages() {
+function LandingPages(props) {
+  let { history } = props;
   return (
     <React.Fragment>
       <div className="pt-24">
@@ -13,7 +14,10 @@ function LandingPages() {
               has been the industry's standard dummy text ever since the 1500s,{' '}
             </p>
 
-            <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-full my-6 py-2 px-10 shadow-lg">
+            <button
+              className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-full my-6 py-2 px-10 shadow-lg"
+              onClick={() => history.push('/auth/register')}
+            >
               Start Now
             </button>
           </div>

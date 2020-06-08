@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import UserApi from '../../../../redux/action/user';
-import { ToastError, ToastSuccess } from '../../../../component';
+import UserApi from '../../../redux/action/user';
+import { ToastError, ToastSuccess } from '../../../component';
 
-function Login() {
+function Login(props) {
+  let { history } = props;
   let [user, setUser] = useState({ username: '', password: '' });
 
   async function onLogin() {
@@ -21,6 +22,8 @@ function Login() {
         });
     }
   }
+
+  console.log(props);
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -42,10 +45,7 @@ function Login() {
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   <form>
                     <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
+                      <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Email
                       </label>
                       <input
@@ -59,10 +59,7 @@ function Login() {
                       />
                     </div>
                     <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
+                      <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Password
                       </label>
                       <input
@@ -77,7 +74,10 @@ function Login() {
                     </div>
                     <div>
                       <label className="inline-flex items-center cursor-pointer hover:text-gray-800 ">
-                        <span className="ml-2 text-sm font-semibold text-gray-700 ">
+                        <span
+                          className="ml-2 text-sm font-semibold text-gray-700 "
+                          onClick={() => history.push('/auth/forgot-password')}
+                        >
                           Lupa Password?
                         </span>
                       </label>
@@ -95,7 +95,10 @@ function Login() {
                       </button>
                     </div>
 
-                    <div className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer ">
+                    <div
+                      className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer "
+                      onClick={() => history.push('/auth/register')}
+                    >
                       Daftar
                     </div>
                   </form>

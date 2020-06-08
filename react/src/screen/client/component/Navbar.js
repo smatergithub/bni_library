@@ -68,7 +68,8 @@ const routes = [
   },
 ];
 
-function NavBar({ url }) {
+function NavBar({ url, props }) {
+  let { history } = props;
   const [selectedMenu, setSelectedMenu] = useState(url);
 
   return (
@@ -81,12 +82,12 @@ function NavBar({ url }) {
     >
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
         <div className="pl-4 flex items-center">
-          <a
+          <div
             className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-            href="#"
+            onClick={() => history.push('/')}
           >
             BNI
-          </a>
+          </div>
         </div>
 
         <div className="block lg:hidden pr-4">
@@ -140,6 +141,14 @@ function NavBar({ url }) {
                 </li>
               );
             })}
+            <li className="ml-3">
+              <button
+                className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg"
+                onClick={() => history.push('/auth/login')}
+              >
+                Masuk
+              </button>
+            </li>
           </ul>
         </div>
       </div>
