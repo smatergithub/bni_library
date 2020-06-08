@@ -1,29 +1,43 @@
-import React, { useState } from 'react';
-import UserApi from '../../../redux/action/user';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { signIn } from '../../../redux/action/user';
 import { ToastError, ToastSuccess } from '../../../component';
 
 function Login(props) {
   let { history } = props;
-  let [user, setUser] = useState({ username: '', password: '' });
-
+  let [user, setUser] = useState({ username: 'admin', password: 'admin' });
   async function onLogin() {
+    let userObj = {
+      logged: true,
+      role: 'user',
+    };
     if (user.username.trim().length === 0 && user.password.trim().length === 0) {
       return ToastError('Email atau password tidak boleh kosong');
     } else {
-      UserApi.login(user)
-        .then(res => {
-          if (res) {
-            ToastSuccess('Login berhasil');
-          }
-        })
-        .catch(err => {
-          let msg = err.message || 'Something wrong';
-          ToastError(msg);
-        });
+      if (user.username === 'admin' && user.password === 'admin') {
+        userObj.role = 'admin';
+        props.signIn(userObj);
+        setTimeout(() => {
+          history.push('/admin/dashboard');
+        }, 1000);
+      }
+
+      // UserApi.login(user)
+      //   .then(res => {
+      //     if (res) {
+      //       ToastSuccess('Login berhasil');
+      //     }
+      //   })
+      //   .catch(err => {
+      //     let msg = err.message || 'Something wrong';
+      //     ToastError(msg);
+      //   });
     }
   }
+  useEffect(() => {
+    ToastSuccess('Username = admin , Password = admin  ');
+  }, []);
 
-  console.log(props);
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -111,4 +125,4 @@ function Login(props) {
     </main>
   );
 }
-export default Login;
+export default connect(null, { signIn })(Login);
