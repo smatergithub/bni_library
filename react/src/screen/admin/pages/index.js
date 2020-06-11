@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { signOut } from '../../../redux/action/user';
+import PropTypes, { func } from 'prop-types';
 import Sidebar from '../component/Sidebar';
 import Header from '../component/Header';
 import Dashboard from './dashboard';
@@ -59,6 +61,9 @@ function HomeAdmin(props) {
   function createNewBook() {
     history.push('/admin/add-new-book');
   }
+  function logout() {
+    props.signOut();
+  }
   return (
     <div className="bg-gray-100 font-family-karla flex modal-active">
       <div
@@ -71,7 +76,7 @@ function HomeAdmin(props) {
       <div className="w-full flex flex-col h-screen overflow-y-hidden">
         <Switch>
           <div>
-            <Header />
+            <Header logout={logout} />
             {routes.map((route, index) => (
               // Render more <Route>s with the same paths as
               // above, but different components this time.
@@ -89,4 +94,4 @@ HomeAdmin.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-export default HomeAdmin;
+export default connect(null, { signOut })(HomeAdmin);

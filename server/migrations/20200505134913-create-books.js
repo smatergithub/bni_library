@@ -20,7 +20,13 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
-      edition: {
+      dateBook: {
+        type: Sequelize.DATE,
+      },
+      stockBook: {
+        type: Sequelize.INTEGER,
+      },
+      category: {
         type: Sequelize.STRING,
       },
       image: {
@@ -29,15 +35,8 @@ module.exports = {
       author: {
         type: Sequelize.STRING,
       },
-      transDate: {
-        type: Sequelize.DATE,
-      },
       isPromotion: {
         type: Sequelize.BOOLEAN,
-      },
-      categoryId: {
-        allowNull: false,
-        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

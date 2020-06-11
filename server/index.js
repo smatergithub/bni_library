@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors');
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/routes');
 var corsOptions = {
   origin: 'http://localhost:2001',
 };
@@ -18,16 +18,17 @@ app.use('/api/', indexRouter);
 
 app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
+
 app.get('*', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
 );
 
 var db = require('./models');
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   console.log('database connection success');
 });
 
 const PORT = process.env.PORT || 2000;
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log(`Server running in PORT: ${PORT}`);
 });

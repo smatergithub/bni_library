@@ -1,27 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-
+import { connect } from 'react-redux';
+import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 import Dashboard from '../screen/admin/pages';
-import CreateNewRepo from '../screen/client/createNewRepo';
-import Login from '../screen/client/login';
-import Register from '../screen/client/register';
-import ForgotPassword from '../screen/client/forgotPassword';
-import ResetPassword from '../screen/client/resetPassword';
+import Home from '../screen/client/pages';
+import Auth from '../screen/auth';
 
-function Routes() {
+import WithAdmin from './authAdmin';
+
+function Routes(props) {
   return (
     <Router>
-      <Switch>
-        <Redirect exact from="/" to="admin/dashboard" />
-        <Route exact path="/admin/:id" component={Dashboard} />
-        <Route exact path="/buat-repo-baru" component={CreateNewRepo} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/lupa-password" component={ForgotPassword} />
-        <Route exact path="/reset-password" component={ResetPassword} />
-      </Switch>
+      <Route exact path="/:id" component={Home} />
+      <Route exact path="/" component={Home} />
+      <WithAdmin user={props.user} path="/admin/:id" component={Dashboard} />
+      <Route exact path="/auth/:id" component={Auth} />
     </Router>
   );
 }
+let mapState = state => {
+  let { user } = state;
 
-export default Routes;
+  return { user };
+};
+export default connect(mapState)(Routes);

@@ -29,3 +29,14 @@
 .account-link:hover {
   background: $main-light;
 }
+
+.katalog-hover {
+  .katalog-dropdown {
+    visibility: hidden;
+  }
+  &:hover {
+    .katalog-dropdown {
+      visibility: visible;
+    }
+  }
+}

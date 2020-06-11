@@ -13,31 +13,15 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       statementResponsibility: DataTypes.STRING,
       description: DataTypes.STRING,
-      edition: DataTypes.STRING,
+      dateBook: DataTypes.DATE,
+      stockBook: DataTypes.INTEGER,
+      category: DataTypes.STRING,
       image: DataTypes.STRING,
       author: DataTypes.STRING,
-      transDate: DataTypes.DATE,
       isPromotion: DataTypes.BOOLEAN,
-      categoryId: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
     },
     {}
   );
-  books.associate = function (models) {
-    // associations can be defined here
-
-    books.belongsTo(models.categories, {
-      foreignKey: 'categoryId',
-      as: 'categories',
-    });
-
-    books.hasOne(models.transactiondetails, {
-      foreignKey: 'bookId',
-      as: 'transactiondetails',
-      onDelete: 'CASCADE',
-    });
-  };
+  books.associate = function(models) {};
   return books;
 };
