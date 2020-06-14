@@ -9,43 +9,46 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       code: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       title: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       statementResponsibility: {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       author: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       dateEbook: {
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       category: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       sourceEbook: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      isBorrowed: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('ebooks');
-  }
+  },
 };

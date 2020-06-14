@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const Books = require('../models').books;
+const Books = require('../models/').books;
 const TransactionBook = require('../models').transactionBook;
 
 module.exports = {
