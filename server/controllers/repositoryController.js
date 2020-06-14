@@ -1,5 +1,5 @@
-const Repositorys = require("../models").repository;
-const UploadFileExcel = require("../helpers/UploadFileExcel");
+const Repositorys = require('../models/').repository;
+const UploadFileExcel = require('../helpers/UploadFileExcel');
 const path = require('path');
 
 module.exports = {
@@ -13,10 +13,9 @@ module.exports = {
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -33,22 +32,18 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Repositorys.findAndCountAll(paramQuerySQL).then(repository => {
-      res.status(200).send(repository)
-    })
-      .catch(err => {
-        res.status(500).send(err)
+    return Repositorys.findAndCountAll(paramQuerySQL)
+      .then(repository => {
+        res.status(200).send(repository);
       })
+      .catch(err => {
+        res.status(500).send(err);
+      });
   },
-
 
   getById(req, res) {
     return Repositorys.findByPk(req.params.id)
@@ -82,8 +77,6 @@ module.exports = {
     });
   },
 
-
-
   delete(req, res) {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
@@ -97,4 +90,4 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-}
+};
