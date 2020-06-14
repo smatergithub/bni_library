@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
@@ -8,6 +9,7 @@ import About from './about';
 import Faq from './faq';
 import Research from './research';
 import Home from './home';
+import Accounts from './account';
 
 const routes = [
   {
@@ -41,19 +43,30 @@ const routes = [
     main: () => <Books />,
   },
   {
+    path: '/ebook',
+    exact: false,
+    main: () => <Books />,
+  },
+  {
     path: '/faq',
     exact: false,
     main: () => <Faq />,
   },
+  {
+    path: '/akun',
+    exact: false,
+    main: () => <Accounts />,
+  },
 ];
 
 function HomeUser(props) {
+  let { user } = props;
   const { history, match } = props;
 
   return (
     <Switch>
       <div>
-        <NavBar url={match.params.id} props={props} />
+        <NavBar url={match.params.id} props={props} isAuth={user.isAuth} />
         {routes.map((route, index) => (
           <Route key={index} path={route.path} exact={route.exact}>
             <route.main {...props} />
@@ -67,4 +80,7 @@ HomeUser.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-export default HomeUser;
+let mapState = state => {
+  return { user: state.user };
+};
+export default connect(mapState)(HomeUser);

@@ -68,7 +68,7 @@ const routes = [
   },
 ];
 
-function NavBar({ url, props }) {
+function NavBar({ url, isAuth, props }) {
   let { history } = props;
   const [selectedMenu, setSelectedMenu] = useState(url);
 
@@ -142,12 +142,21 @@ function NavBar({ url, props }) {
               );
             })}
             <li className="ml-3">
-              <button
-                className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg"
-                onClick={() => history.push('/auth/login')}
-              >
-                Masuk
-              </button>
+              {isAuth ? (
+                <div
+                  className="cursor-pointer bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center"
+                  onClick={() => history.push('/akun')}
+                >
+                  <i className="fas fa-user text-lg text-white"></i>
+                </div>
+              ) : (
+                <button
+                  className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg"
+                  onClick={() => history.push('/auth/login')}
+                >
+                  Masuk
+                </button>
+              )}
             </li>
           </ul>
         </div>
