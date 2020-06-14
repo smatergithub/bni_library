@@ -1,5 +1,5 @@
-const Ebooks = require('../models').ebooks;
-const upload = require("../helpers/Upload.js");
+const Ebooks = require('../models/').ebooks;
+const Upload = require('../helpers/Upload.js');
 const path = require('path');
 
 const Sequelize = require('sequelize');
@@ -7,8 +7,6 @@ const Op = Sequelize.Op;
 
 module.exports = {
   getEbookList(req, res) {
-
-
     // queryStrings
     let { q, order, sort, limit, offset } = req.query;
 
@@ -18,10 +16,9 @@ module.exports = {
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
 
     //limit
@@ -39,20 +36,17 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Ebooks.findAndCountAll(paramQuerySQL).then(book => {
-      res.status(200).send(book);
-    })
-      .catch(err => {
-        res.status(500).send(err)
+    return Ebooks.findAndCountAll(paramQuerySQL)
+      .then(book => {
+        res.status(200).send(book);
       })
+      .catch(err => {
+        res.status(500).send({ err });
+      });
   },
   getEbookById(req, res) {
     return Ebooks.findByPk(req.params.id)
@@ -67,7 +61,6 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
   list(req, res) {
-
     // queryStrings
     let { q, order, sort, limit, offset } = req.query;
 
@@ -77,10 +70,9 @@ module.exports = {
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
 
     //limit
@@ -98,21 +90,17 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Ebooks.findAndCountAll(paramQuerySQL).then(book => {
-      res.status(200).send(book);
-    })
-      .catch(err => {
-        res.status(500).send(err)
+    return Ebooks.findAndCountAll(paramQuerySQL)
+      .then(book => {
+        res.status(200).send(book);
       })
-
+      .catch(err => {
+        res.status(500).send(err);
+      });
   },
 
   getById(req, res) {
@@ -123,13 +111,13 @@ module.exports = {
             message: 'Ebook Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(ebook);
       })
       .catch(error => res.status(400).send(error));
   },
 
   add(req, res) {
-    upload(req, res, err => {
+    Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.create({
         code: req.body.code,
@@ -140,20 +128,23 @@ module.exports = {
         author: req.body.author,
         dateEbook: req.body.dateBook,
         category: req.body.category,
-        sourceEbook: req.body.sourceEbook
+        sourceEbook: req.body.sourceEbook,
+        isBorrowed: false,
       })
-        .then(response => res.status(200).send(response))
+        .then(response =>
+          res.status(200).json({ message: 'successfully create ebook', data: response })
+        )
         .catch(err => res.status(400).send(err));
     });
   },
 
   update(req, res) {
-    upload(req, res, err => {
+    Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.findByPk(req.params.id)
         .then(ebook => {
           if (!ebook) {
-            return res.status(400).send({ message: 'Book not found' });
+            return res.status(400).send({ message: 'Ebook not found' });
           }
           return ebook
             .update({
@@ -165,9 +156,12 @@ module.exports = {
               author: req.body.author,
               dateEbook: req.body.dateBook,
               category: req.body.category,
-              sourceEbook: req.body.sourceEbook
+              sourceEbook: req.body.sourceEbook,
+              isBorrowed: false,
             })
-            .then(response => res.status(200).send(response))
+            .then(response =>
+              res.status(200).json({ message: 'successfully update ebook', data: response })
+            )
             .catch(err => res.status(400).send(err));
         })
         .catch(error => res.status(400).send(error));
@@ -178,11 +172,11 @@ module.exports = {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
-          return res.status(400).send({ message: 'Book not found' });
+          return res.status(400).send({ message: 'Ebook not found' });
         }
         return ebook
           .destroy()
-          .then(() => res.status(204).send({ message: 'succesfully delete' }))
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));

@@ -130,11 +130,13 @@ module.exports = {
         dateBook: req.body.dateBook,
         stockBook: req.body.stockBook,
         category: req.body.category,
-        image: req.body.image,
+        image: req.file.path,
         author: req.body.author,
         isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
       })
-        .then(response => res.status(200).send(response))
+        .then(response =>
+          res.status(200).json({ message: 'successfully create book', data: response })
+        )
         .catch(err => res.status(400).send(err));
     });
   },
@@ -156,11 +158,13 @@ module.exports = {
               dateBook: req.body.dateBook,
               stockBook: req.body.stockBook,
               category: req.body.category,
-              image: req.body.image,
+              image: req.body.file.path,
               author: req.body.author,
               isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
             })
-            .then(response => res.status(200).send(response))
+            .then(response =>
+              res.status(200).json({ message: 'successfully create book', data: response })
+            )
             .catch(err => res.status(400).send(err));
         })
         .catch(error => res.status(400).send(error));
@@ -175,7 +179,7 @@ module.exports = {
         }
         return book
           .destroy()
-          .then(() => res.status(204).send({ message: 'succesfully delete' }))
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));
