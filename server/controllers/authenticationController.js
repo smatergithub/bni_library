@@ -6,14 +6,9 @@ var config = require('../config/auth-config');
 module.exports = {
   register(req, res) {
     Users.create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
-      address: req.body.address,
+      name: req.body.name,
       email: req.body.email,
-      phoneNumber: req.body.phoneNumber,
-      isAdmin: false,
-      superAdmin: false,
+      superAdmin: true,
       password: bcrypt.hashSync(req.body.password, 8),
     })
       .then(response => {
