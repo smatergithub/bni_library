@@ -9,19 +9,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      firstName: DataTypes.STRING,
-      lastName: DataTypes.STRING,
-      username: DataTypes.STRING,
+      name: DataTypes.STRING,
       address: DataTypes.STRING,
       email: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
       password: DataTypes.STRING,
       isAdmin: DataTypes.BOOLEAN,
-      superAdmin: DataTypes.BOOLEAN
+      superAdmin: DataTypes.BOOLEAN,
     },
     {}
   );
-  users.associate = function (models) {
+  users.associate = function(models) {
     // associations can be defined here
   };
   return users;

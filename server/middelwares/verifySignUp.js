@@ -1,7 +1,7 @@
 const Users = require('../models').users;
 
 checkDuplicateUsernameOrEmail = (req, res, next) => {
-  if (req.body.username === undefined || req.body.email === undefined) {
+  if (req.body.name === undefined || req.body.email === undefined) {
     res.status(201).send({
       message: '.',
     });
@@ -10,7 +10,7 @@ checkDuplicateUsernameOrEmail = (req, res, next) => {
   // Username
   Users.findOne({
     where: {
-      username: req.body.username,
+      name: req.body.name,
     },
   }).then(user => {
     if (user) {
