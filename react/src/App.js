@@ -6,6 +6,7 @@ import Router from './routers';
 import './styles/custom/index.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
+import Loader from '../src/component/Loader';
 import configureStore from './redux/store/configureStore';
 
 const { store } = configureStore();
@@ -18,6 +19,7 @@ function App() {
           zIndex: 10000,
         }}
       />
+      <Loader />
     </Provider>
   );
 }
