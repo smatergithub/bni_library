@@ -1,15 +1,18 @@
 import axios from 'axios';
+import { trackPromise } from 'react-promise-tracker';
 
 const defaultResponseOptions = {
   fullResponse: false,
 };
 
 const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
-  axios(requestOptions)
-    .then(response => (responseOptions.fullResponse ? response : response.data))
-    .catch(error => {
-      throw responseOptions.fullResponse ? error.response : error.response.data;
-    });
+  trackPromise(
+    axios(requestOptions)
+      .then(response => (responseOptions.fullResponse ? response : response.data))
+      .catch(error => {
+        throw responseOptions.fullResponse ? error.response : error.response.data;
+      })
+  );
 
 export default class Request {
   static get(url, params) {
