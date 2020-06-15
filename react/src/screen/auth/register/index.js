@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-
+import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
 
 function Register(props) {
+  let { history } = props;
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,7 +16,14 @@ function Register(props) {
   function onFormSubmit(e) {
     e.preventDefault();
 
-    props.signUp(formData);
+    props.signUp(formData).then(res => {
+      if (res.resp) {
+        ToastSuccess(res.msg);
+        history.push('/auth/login');
+      } else {
+        ToastError(res.msg);
+      }
+    });
     // console.log(formData);
   }
   return (
