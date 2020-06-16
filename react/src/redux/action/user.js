@@ -2,10 +2,18 @@ import { SIGN_IN, SIGN_OUT } from '../type';
 import UserApi from '../client/UserApi';
 
 export const signIn = user => dispatch => {
-  UserApi.login(user).then(res => {
-    console.log(res);
-  });
-  // return dispatch({ type: SIGN_IN, payload: user });
+  return UserApi.login(user)
+    .then(res => {
+      if (res) {
+        localStorage.setItem('bni_jwtToken', res.accessToken);
+        dispatch({ type: SIGN_IN, payload: res });
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
 };
 export const signUp = user => () => {
   return UserApi.register(user)

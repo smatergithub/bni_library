@@ -10,8 +10,8 @@ const user = (state = initialState, action) => {
     case SIGN_IN:
       return {
         ...state,
-        isAuth: action.payload.logged,
-        role: action.payload.role,
+        isAuth: true,
+        role: action.payload.superAdmin ? '2' : action.payload.isAdmin ? '1' : '0',
       };
     case SIGN_OUT:
       return initialState;

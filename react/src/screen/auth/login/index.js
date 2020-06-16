@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { signIn } from '../../../redux/action/user';
-import { ToastError, ToastSuccess } from '../../../component';
+import { ToastError } from '../../../component';
 
 function Login(props) {
   let { history } = props;
@@ -11,16 +11,19 @@ function Login(props) {
     if (user.email.trim().length === 0 && user.password.trim().length === 0) {
       return ToastError('Email atau password tidak boleh kosong');
     } else {
-      props.signIn(user);
-      // .then(res => {
-      //   if (res) {
-      //     ToastSuccess('Login berhasil');
-      //   }
-      // })
-      // .catch(err => {
-      //   let msg = err.message || 'Something wrong';
-      //   ToastError(msg);
-      // });
+      props
+        .signIn(user)
+        .then(res => {
+          if (res.resp) {
+            history.push('/admin/dashboard');
+          } else {
+            ToastError(res.msg);
+          }
+        })
+        .catch(err => {
+          let msg = err.message || 'Something wrong';
+          ToastError(msg);
+        });
     }
   }
 

@@ -22,7 +22,7 @@ module.exports = {
   login(req, res) {
     Users.findOne({
       where: {
-        username: req.body.username,
+        email: req.body.email,
       },
     })
       .then(user => {
@@ -34,7 +34,6 @@ module.exports = {
 
         if (!passwordIsValid) {
           return res.status(401).send({
-            accessToken: null,
             message: 'Invalid Password!',
           });
         }

@@ -1,8 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+
 import { signOut } from '../../../redux/action/user';
-import PropTypes, { func } from 'prop-types';
+
 import Sidebar from '../component/Sidebar';
 import Header from '../component/Header';
 import Dashboard from './dashboard';
@@ -62,6 +64,7 @@ function HomeAdmin(props) {
     history.push('/admin/add-new-book');
   }
   function logout() {
+    localStorage.clear();
     props.signOut();
   }
   return (
@@ -90,8 +93,13 @@ function HomeAdmin(props) {
     </div>
   );
 }
+let mapState = state => {
+  let { user } = state;
+
+  return { user };
+};
 HomeAdmin.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-export default connect(null, { signOut })(HomeAdmin);
+export default connect(mapState, { signOut })(HomeAdmin);
