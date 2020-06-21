@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config/auth-config');
+require('dotenv').config();
 
 verifyToken = (req, res, next) => {
   let token = req.headers['x-access-token'];
@@ -10,7 +10,7 @@ verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: 'Unauthorized!',
@@ -29,7 +29,7 @@ isAdmin = (req, res, next) => {
       message: 'No token provided!',
     });
   }
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: 'Unauthorized!',
@@ -51,7 +51,7 @@ isSuperAdmin = (req, res, next) => {
       message: 'No token provided!',
     });
   }
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(401).send({
         message: 'Unauthorized!',
