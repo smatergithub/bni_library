@@ -12,6 +12,7 @@ const EbookController = require('../controllers/ebookController');
 const UserController = require('../controllers/userController');
 const RepositoryController = require('../controllers/repositoryController');
 const TransactionBookController = require('../controllers/transactionBookController');
+const TransactionEbookController = require('../controllers/transactionEbookController');
 
 //routing authentication and register
 router.post(
@@ -19,6 +20,7 @@ router.post(
   [verifySignUp.checkDuplicateUsernameOrEmail],
   AuthenticationController.register
 );
+router.post('/auth/verification', AuthenticationController.verificationAccount);
 router.post('/auth/login', AuthenticationController.login);
 router.get('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
 
@@ -62,6 +64,14 @@ router.post(
   '/transaction-book/return/:transactionId',
   [AuthJWT.verifyToken],
   TransactionBookController.returnABook
+);
+
+router.post('/transaction-ebook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);
+router.get('/transaction-ebook', [AuthJWT.verifyToken], TransactionEbookController.list);
+router.post(
+  '/transaction-ebook/return/:transactionId',
+  [AuthJWT.verifyToken],
+  TransactionEbookController.returnEbook
 );
 
 //docs swagger
