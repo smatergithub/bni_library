@@ -13,7 +13,6 @@ const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptio
         throw responseOptions.fullResponse ? error.response : error.response.data;
       })
   );
-
 export default class Request {
   static get(url, params) {
     const requestOptions = { method: 'get', url };
@@ -24,7 +23,23 @@ export default class Request {
   }
 
   static post(url, data, options) {
-    const requestOptions = { method: 'post', url, data };
+    const requestOptions = {
+      method: 'post',
+      url,
+      data,
+    };
+    return makeAxiosRequest(requestOptions, options);
+  }
+  static postWithAuth(url, data, options, isFormData) {
+    const requestOptions = {
+      method: 'post',
+      url,
+      data,
+      headers: {
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
     return makeAxiosRequest(requestOptions, options);
   }
 

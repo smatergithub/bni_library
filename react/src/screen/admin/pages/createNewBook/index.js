@@ -1,13 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
+import { CreateNewBookAction } from '../../../../redux/action/books';
+import { ToastError, ToastSuccess } from '../../../../component';
 
-function CreateNewBook() {
+function CreateNewBook(props) {
   const { handleSubmit, register, errors } = useForm();
   let [image, setImage] = React.useState(null);
 
   function onSubmit(formData) {
     formData['image'] = image;
-    console.log(formData);
+    formData['isPromotion'] = 1;
+    formData['dateBook'] = new Date();
+    formData['stockBook'] = 10;
+    props.CreateNewBookAction(formData).then(res => {
+      if (res.resp) {
+        ToastSuccess(res.msg);
+      } else {
+        ToastError(res.msg);
+      }
+    });
   }
   let uploadImage = e => {
     e.preventDefault();
@@ -147,14 +159,10 @@ function CreateNewBook() {
                   </label>
 
                   <input
-                    name="image"
                     onChange={e => uploadImage(e)}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="image/png, image/jpeg"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
                     aria-label="Email"
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
@@ -196,4 +204,4 @@ function CreateNewBook() {
   );
 }
 
-export default CreateNewBook;
+export default connect(null, { CreateNewBookAction })(CreateNewBook);
