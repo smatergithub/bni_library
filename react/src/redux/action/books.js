@@ -7,7 +7,6 @@ import BookApi from '../client/BookApi';
 
 export const CreateNewBookAction = book => () => {
   var formdata = new FormData();
-
   for (var key in book) {
     formdata.append(key, book[key]);
   }
@@ -19,6 +18,22 @@ export const CreateNewBookAction = book => () => {
           msg: 'Buku Berhasil di tambahkan',
         };
       }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getBooks = params => () => {
+  return BookApi.getBooks(params)
+    .then(res => {
+      console.log(res);
+      // if (res) {
+      //   return {
+      //     resp: true,
+      //     msg: 'Buku Berhasil di tambahkan',
+      //   };
+      // }
     })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
