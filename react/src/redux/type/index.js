@@ -5,4 +5,4 @@ export const SIGN_OUT = 'SIGN_OUT';
 
 // ===========> type for books action here <===========
 
-export const BOOKS = 'CREATE_NEW_BOOK';
+export const BOOKS = 'BOOKS';

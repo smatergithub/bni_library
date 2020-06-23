@@ -21,6 +21,16 @@ export default class Request {
     }
     return makeAxiosRequest(requestOptions);
   }
+  static getWithAuth(url) {
+    const requestOptions = {
+      method: 'get',
+      url,
+      headers: {
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
+    return makeAxiosRequest(requestOptions);
+  }
 
   static post(url, data, options) {
     const requestOptions = {

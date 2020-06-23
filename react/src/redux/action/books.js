@@ -1,4 +1,5 @@
 import BookApi from '../client/BookApi';
+import { BOOKS } from '../type';
 /**
  * note: for book creation doesn't need to dispatch //
  * any reducer type,
@@ -7,7 +8,6 @@ import BookApi from '../client/BookApi';
 
 export const CreateNewBookAction = book => () => {
   var formdata = new FormData();
-
   for (var key in book) {
     formdata.append(key, book[key]);
   }
@@ -17,6 +17,22 @@ export const CreateNewBookAction = book => () => {
         return {
           resp: true,
           msg: 'Buku Berhasil di tambahkan',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getBooks = params => dispatch => {
+  return BookApi.getBooks(params)
+    .then(res => {
+      if (res) {
+        dispatch({ type: BOOKS, payload: res });
+        return {
+          resp: true,
+          msg: '',
         };
       }
     })
