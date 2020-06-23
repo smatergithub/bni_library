@@ -8,7 +8,7 @@ const Op = Sequelize.Op;
 module.exports = {
   getBookList(req, res) {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
 
@@ -27,8 +27,8 @@ module.exports = {
     }
 
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt(page);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -64,7 +64,7 @@ module.exports = {
 
   list(req, res) {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
 
@@ -82,9 +82,9 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt(page);
     }
 
     // sort par defaut si param vide ou inexistant
