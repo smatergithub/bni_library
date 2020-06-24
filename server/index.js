@@ -5,7 +5,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 
-var indexRouter = require('./routes/routes');
+var UserRoute = require('./routes/UserRoute');
+var AdminRoute = require("./routes/AdminRoute")
 var corsOptions = {
   origin: 'http://localhost:2001',
 };
@@ -15,7 +16,9 @@ app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/api/', indexRouter);
+
+app.use('/api/', UserRoute);
+app.use('/api/admin', AdminRoute);
 
 app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
@@ -24,11 +27,11 @@ app.get('*', (req, res) =>
 );
 
 var db = require('./models');
-db.sequelize.sync().then(function() {
-  console.log('database connection success');
+db.sequelize.sync().then(function () {
+  // console.log('database connection success');
 });
 
 const port = process.env.PORT_BACKEND;
-app.listen(port, function() {
+app.listen(port, function () {
   console.log(`Server running in PORT: ${port}`);
 });

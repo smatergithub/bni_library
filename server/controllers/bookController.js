@@ -1,6 +1,5 @@
 const Books = require('../models').books;
 const Upload = require('../helpers/Upload.js');
-const path = require('path');
 
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
