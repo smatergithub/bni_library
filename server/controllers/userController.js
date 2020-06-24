@@ -3,20 +3,18 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-  list(req, res) {
+  list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {};
-
 
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         q: {
-          [Op.like]: '%' + q + '%'
-        }
-      }
-
+          [Op.like]: '%' + q + '%',
+        },
+      };
     }
 
     //limit
@@ -24,9 +22,9 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt(page);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -34,11 +32,7 @@ module.exports = {
       sort = 'ASC';
     }
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['name'].includes(order.toLowerCase())
-    ) {
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
 
@@ -48,28 +42,28 @@ module.exports = {
         user.rows.forEach(item => {
           let dataUser = {
             id: item.id,
-            firstName: item.firstName,
-            lastName: item.lastName,
-            username: item.username,
+            name: item.name,
             address: item.address,
             email: item.email,
             phoneNumber: item.phoneNumber,
             isAdmin: item.isAdmin,
-            superAdmin: item.superAdmin
+            superAdmin: item.superAdmin,
           };
           data.push(dataUser);
-        })
+        });
+        let activePage = Math.ceil(user.count / paramQuerySQL.limit);
         res.status(200).json({
           count: user.count,
-          data: data
-        })
+          activePage: activePage,
+          data: data,
+        });
       })
       .catch(error => {
         res.status(400).send(error);
       });
   },
 
-  toggleUserIsAdmin(req, res) {
+  toggleUserIsAdmin: async (req, res) => {
     return Users.findByPk(req.params.id)
       .then(user => {
         if (!user) {
@@ -77,13 +71,13 @@ module.exports = {
             message: 'user Not Found',
           });
         }
-        return user.update({
-          isAdmin: req.body.isAdmin
-        })
+        return user
+          .update({
+            isAdmin: req.body.isAdmin,
+          })
           .then(() => res.status(200).send(user))
           .catch(error => res.status(400).send(error));
       })
       .catch(error => res.status(400).send(error));
   },
-
 };

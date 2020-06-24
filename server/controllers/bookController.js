@@ -6,12 +6,11 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-  getBookList(req, res) {
+  getBookList: async (req, res) => {
     // queryStrings
     let { q, order, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
-
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
@@ -20,17 +19,14 @@ module.exports = {
         },
       };
     }
-
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
     // offset
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt(page);
     }
-
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -40,17 +36,24 @@ module.exports = {
       paramQuerySQL.order = [[order, sort]];
     }
 
-    return Books.findAndCountAll(paramQuerySQL)
+    return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        res.status(200).send(book);
+        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.offset;
+        res.status(200).json({
+          count: book.count,
+          totalPage: activePage,
+          activePage: page,
+          data: book.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getBookById(req, res) {
-    return Books.findByPk(req.params.id)
+  getBookById: async (req, res) => {
+    return await Books.findByPk(req.params.id)
       .then(book => {
         if (!book) {
           return res.status(404).send({
@@ -62,12 +65,10 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  list(req, res) {
+  list: async (req, res) => {
     // queryStrings
     let { q, order, sort, limit, page } = req.query;
-
     let paramQuerySQL = {};
-
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
@@ -81,12 +82,10 @@ module.exports = {
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt(page);
     }
-
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -95,18 +94,24 @@ module.exports = {
     if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
-
-    return Books.findAndCountAll(paramQuerySQL)
+    return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        res.status(200).send(book);
+        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.offset;
+        res.status(200).json({
+          count: book.count,
+          totalPage: activePage,
+          activePage: page,
+          data: book.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getById(req, res) {
-    return Books.findByPk(req.params.id)
+  getById: async (req, res) => {
+    return await Books.findByPk(req.params.id)
       .then(book => {
         if (!book) {
           return res.status(404).send({
@@ -118,7 +123,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  add(req, res) {
+  add: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       // console.log('req file', req.file);
@@ -141,7 +146,7 @@ module.exports = {
     });
   },
 
-  update(req, res) {
+  update: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       return Books.findByPk(req.params.id)
@@ -171,7 +176,7 @@ module.exports = {
     });
   },
 
-  delete(req, res) {
+  delete: async (req, res) => {
     return Books.findByPk(req.params.id)
       .then(book => {
         if (!book) {

@@ -7,7 +7,7 @@ var bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 module.exports = {
-  register(req, res) {
+  register: async (req, res) => {
     Users.create({
       name: req.body.name,
       email: req.body.email,
@@ -33,7 +33,7 @@ module.exports = {
       });
   },
 
-  login(req, res) {
+  login: async (req, res) => {
     Users.findOne({
       where: {
         email: req.body.email,
@@ -75,7 +75,7 @@ module.exports = {
       });
   },
 
-  verificationAccount(req, res) {
+  verificationAccount: async (req, res) => {
     Users.findOne({
       where: { email: req.query.email },
     })
@@ -110,7 +110,7 @@ module.exports = {
       });
   },
 
-  profileUser(req, res) {
+  profileUser: async (req, res) => {
     var userId = req.userId;
     Users.findOne({
       where: {

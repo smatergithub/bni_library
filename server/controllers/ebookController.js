@@ -6,12 +6,10 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-  getEbookList(req, res) {
+  getEbookList: async (req, res) => {
     // queryStrings
     let { q, order, sort, limit, page } = req.query;
-
     let paramQuerySQL = {};
-
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
@@ -20,17 +18,14 @@ module.exports = {
         },
       };
     }
-
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt(page);
     }
-
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -41,14 +36,22 @@ module.exports = {
     }
 
     return Ebooks.findAndCountAll(paramQuerySQL)
-      .then(book => {
-        res.status(200).send(book);
+      .then(ebook => {
+        let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.offset;
+        res.status(200).json({
+          count: ebook.count,
+          totalPage: activePage,
+          activePage: page,
+          data: ebook.rows,
+        });
       })
       .catch(err => {
         res.status(500).send({ err });
       });
   },
-  getEbookById(req, res) {
+
+  getEbookById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
@@ -60,7 +63,8 @@ module.exports = {
       })
       .catch(error => res.status(400).send(error));
   },
-  list(req, res) {
+
+  list: async (req, res) => {
     // queryStrings
     let { q, order, sort, limit, page } = req.query;
 
@@ -95,15 +99,22 @@ module.exports = {
     }
 
     return Ebooks.findAndCountAll(paramQuerySQL)
-      .then(book => {
-        res.status(200).send(book);
+      .then(ebook => {
+        let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.offset;
+        res.status(200).json({
+          count: ebook.count,
+          totalPage: activePage,
+          activePage: page,
+          data: ebook.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getById(req, res) {
+  getById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
@@ -116,7 +127,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  add(req, res) {
+  add: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.create({
@@ -138,7 +149,7 @@ module.exports = {
     });
   },
 
-  update(req, res) {
+  update: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.findByPk(req.params.id)
@@ -168,7 +179,7 @@ module.exports = {
     });
   },
 
-  delete(req, res) {
+  delete: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
