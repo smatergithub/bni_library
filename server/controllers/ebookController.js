@@ -8,7 +8,7 @@ const Op = Sequelize.Op;
 module.exports = {
   getEbookList: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, page } = req.query;
+    let { q, order, sort, limit, page, offset } = req.query;
     let paramQuerySQL = {};
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
@@ -24,7 +24,11 @@ module.exports = {
     }
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt(page);
+      paramQuerySQL.page = parseInt(page);
+    }
+    // offset
+    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
@@ -38,7 +42,7 @@ module.exports = {
     return Ebooks.findAndCountAll(paramQuerySQL)
       .then(ebook => {
         let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.offset;
+        let page = paramQuerySQL.page;
         res.status(200).json({
           count: ebook.count,
           totalPage: activePage,
@@ -66,7 +70,7 @@ module.exports = {
 
   list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, page } = req.query;
+    let { q, order, sort, limit, page, offset } = req.query;
 
     let paramQuerySQL = {};
 
@@ -86,7 +90,11 @@ module.exports = {
 
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt(page);
+      paramQuerySQL.page = parseInt(page);
+    }
+    // offset
+    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -101,7 +109,7 @@ module.exports = {
     return Ebooks.findAndCountAll(paramQuerySQL)
       .then(ebook => {
         let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.offset;
+        let page = paramQuerySQL.page;
         res.status(200).json({
           count: ebook.count,
           totalPage: activePage,
