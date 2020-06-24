@@ -3,9 +3,9 @@ const UploadFileExcel = require('../helpers/UploadFileExcel');
 const path = require('path');
 
 module.exports = {
-  list(req, res) {
+  list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, page } = req.query;
+    let { q, order, sort, limit, page, offset } = req.query;
 
     let paramQuerySQL = {};
 
@@ -24,7 +24,11 @@ module.exports = {
 
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt(page);
+      paramQuerySQL.page = parseInt(page);
+    }
+    // offset
+    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -38,14 +42,21 @@ module.exports = {
 
     return Repositorys.findAndCountAll(paramQuerySQL)
       .then(repository => {
-        res.status(200).send(repository);
+        let activePage = Math.ceil(repository.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: repository.count,
+          totalPage: activePage,
+          activePage: page,
+          data: repository.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getById(req, res) {
+  getById: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
         if (!repository) {
@@ -58,7 +69,7 @@ module.exports = {
       .catch(error => res.status(400).send(error));
   },
 
-  add(req, res) {
+  add: async (req, res) => {
     UploadFileExcel(req, res, err => {
       if (err) throw err;
       return Repositorys.create({
@@ -77,7 +88,7 @@ module.exports = {
     });
   },
 
-  delete(req, res) {
+  delete: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
         if (!repository) {
