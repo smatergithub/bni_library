@@ -7,10 +7,12 @@ var bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 module.exports = {
+
   register: async (req, res) => {
     Users.create({
-      name: req.body.name,
+      nama: req.body.nama,
       email: req.body.email,
+      tanggalLahir: req.body.tanggalLahir,
       password: bcrypt.hashSync(req.body.password, 8),
     })
       .then(user => {
@@ -32,6 +34,42 @@ module.exports = {
         res.status(500).send({ message: err.message });
       });
   },
+
+  verificationAccount: async (req, res) => {
+    Users.findOne({
+      where: { email: req.query.email },
+    })
+      .then(user => {
+        if (!user.isVerified) {
+          VerificationUser.findOne({
+            where: { token: req.query.verificationToken },
+          })
+            .then(foundToken => {
+              if (foundToken) {
+                Users.update({ isVerified: true })
+                  .then(updateUser => {
+                    return res.status(403).json(`User with ${user.email} has been verified`);
+                  })
+                  .catch(reason => {
+                    return res.status(403).json({ message: "Verification failed" });
+                  });
+              } else {
+                return res.status(404).json({ message: "Token expired " });
+              }
+            })
+            .catch(err => {
+              return res.status(404).send(err);
+            });
+
+        } else {
+          return res.status(400).json({ message: "Email Not Found" });
+        }
+      })
+      .catch(err => {
+        return res.status(404).json({ message: err });
+      });
+  },
+
 
   login: async (req, res) => {
     Users.findOne({
@@ -60,13 +98,7 @@ module.exports = {
           }
         );
         res.status(200).send({
-          id: user.id,
-          name: user.name,
-          address: user.address,
           email: user.email,
-          phoneNumber: user.phoneNumber,
-          isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin,
           accessToken: token,
         });
       })
@@ -75,63 +107,4 @@ module.exports = {
       });
   },
 
-  verificationAccount: async (req, res) => {
-    Users.findOne({
-      where: { email: req.query.email },
-    })
-      .then(user => {
-        if (user.isVerified) {
-          return res.status(202).json(`Email Already Verified`);
-        } else {
-          VerificationUser.findOne({
-            where: { token: req.query.verificationToken },
-          })
-            .then(foundToken => {
-              if (foundToken) {
-                console.log('query foundToken', foundToken);
-                Users.update({ isVerified: true })
-                  .then(updateUser => {
-                    return res.status(403).json(`User with ${user.email} has been verified`);
-                  })
-                  .catch(reason => {
-                    return res.status(403).json(`Verification failed`);
-                  });
-              } else {
-                return res.status(404).json(`Token expired 1111`);
-              }
-            })
-            .catch(err => {
-              return res.status(404).send(err);
-            });
-        }
-      })
-      .catch(reason => {
-        return res.status(404).json(`Email not found`);
-      });
-  },
-
-  profileUser: async (req, res) => {
-    var userId = req.userId;
-    Users.findOne({
-      where: {
-        id: userId,
-      },
-    })
-      .then(user => {
-        if (!user) {
-          return res.status(404).send({ message: 'User Not found.' });
-        }
-        let dataUser = {
-          id: user.id,
-          name: user.name,
-          address: user.address,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin,
-        };
-        res.status(200).send(dataUser);
-      })
-      .catch(error => res.status(400).send(error));
-  },
 };

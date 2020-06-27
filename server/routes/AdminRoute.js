@@ -4,13 +4,13 @@ var { verifySignUp, AuthJWT } = require('../middelwares');
 
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
-const UserController = require('../controllers/UserController');
+const UserManageController = require('../controllers/UserManageController');
 const RepositoryController = require('../controllers/RepositoryController');
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
 
-router.get('/users', [AuthJWT.isAdmin], UserController.list);
-router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
+router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
+router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
 
 //routing admin panel feature
 

@@ -4,6 +4,7 @@ var { verifySignUp, AuthJWT } = require('../middelwares');
 
 //controller
 const AuthenticationController = require('../controllers/AuthenticationController');
+const ProfileUserController = require("../controllers/ProfileUserController");
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
 const TransactionBookController = require('../controllers/TransactionBookController');
@@ -17,10 +18,11 @@ router.get('/ebook/list', EbookController.list);
 router.get('/ebook/detail/:id', EbookController.getById);
 
 
-router.post('/auth/register', [verifySignUp.checkDuplicateUsernameOrEmail], AuthenticationController.register);
-router.post('/auth/login', AuthenticationController.login);
-router.get('/auth/profile', [AuthJWT.verifyToken], AuthenticationController.profileUser);
-router.post('/auth/verification', AuthenticationController.verificationAccount);
+router.post('/register', [verifySignUp.checkDuplicateUsernameOrEmail], AuthenticationController.register);
+router.post('/login', AuthenticationController.login);
+router.post('/verification', AuthenticationController.verificationAccount);
+router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
+router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserController.listBorrowBookUser)
 
 router.post('/transaction-book', [AuthJWT.verifyToken], TransactionBookController.borrowBook);
 router.post('/transaction-ebook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);

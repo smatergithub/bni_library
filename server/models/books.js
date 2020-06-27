@@ -22,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  books.associate = function(models) {};
+  books.associate = function (models) {
+    books.hasMany(models.transactionBook, {
+      foreignKey: 'bookId',
+      as: 'transactionBook'
+    })
+  };
   return books;
 };

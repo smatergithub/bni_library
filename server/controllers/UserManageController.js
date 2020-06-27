@@ -16,12 +16,10 @@ module.exports = {
         },
       };
     }
-
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.page = parseInt(page);

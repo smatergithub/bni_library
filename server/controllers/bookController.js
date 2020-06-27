@@ -40,7 +40,6 @@ module.exports = {
       paramQuerySQL.order = [[order, sort]];
     }
 
-
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / paramQuerySQL.limit);
