@@ -25,7 +25,7 @@ module.exports = {
       }
 
       if (ebook.isBorrowed) {
-        return res.json({
+        return res.status(404).json({
           message: 'Ebook Already Borrowed',
         });
       }
@@ -38,11 +38,11 @@ module.exports = {
             isBorrowed: true,
           })
           .catch(err => {
-            return res.status(400).send(err);
+            return res.status(404).send(err);
           });
       })
       .catch(err => {
-        return res.status(400).send(err);
+        return res.status(404).send(err);
       });
 
     const createTransaction = await transactionEbook
@@ -59,7 +59,7 @@ module.exports = {
       })
 
     if (!createTransaction) {
-      return res.status(400).send("Failed Transaction");
+      return res.status(404).send("Failed Transaction");
     }
 
     return res.status(200).json({
@@ -87,11 +87,11 @@ module.exports = {
             status: 'Returned',
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
     Ebooks.findByPk(transactionEbook.ebookId)
@@ -101,14 +101,14 @@ module.exports = {
             isBorrowed: false,
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
-    return res.json({
+    return res.status(200).json({
       message: 'Succesfully Return',
     });
   },

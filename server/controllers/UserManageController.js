@@ -61,7 +61,7 @@ module.exports = {
         });
       })
       .catch(error => {
-        res.status(400).send(error);
+        res.status(404).send(error);
       });
   },
 
@@ -78,8 +78,8 @@ module.exports = {
             isAdmin: req.body.isAdmin,
           })
           .then(() => res.status(200).send(user))
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(404).send(error));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(404).send(error));
   },
 };

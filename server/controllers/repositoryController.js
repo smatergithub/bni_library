@@ -66,7 +66,7 @@ module.exports = {
         }
         return res.status(200).send(repository);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
   add: async (req, res) => {
@@ -83,8 +83,8 @@ module.exports = {
         bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
         abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
       })
-        .then(response => res.status(200).send(response))
-        .catch(err => res.status(400).send(err));
+        .then(response => res.status(203).json({ message: "Succesfully Create Repository", data: response }))
+        .catch(err => res.status(500).send(err));
     });
   },
 
@@ -92,13 +92,13 @@ module.exports = {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
         if (!repository) {
-          return res.status(400).send({ message: 'repository not found' });
+          return res.status(404).send({ message: 'repository not found' });
         }
         return repository
           .destroy()
-          .then(() => res.status(204).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(400).send(error));
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
+          .catch(error => res.status(404).send(error));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 };

@@ -31,11 +31,11 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
-router.get('/transaction-book', [AuthJWT.isAdmin], TransactionBookController.list);
-router.post('/transaction-book/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
+router.get('/transactionBook', [AuthJWT.isAdmin], TransactionBookController.list);
+router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 
-router.get('/transaction-ebook', [AuthJWT.isAdmin], TransactionEbookController.list);
-router.post('/transaction-ebook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
+router.get('/transactionEbook', [AuthJWT.isAdmin], TransactionEbookController.list);
+router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 
 module.exports = router;

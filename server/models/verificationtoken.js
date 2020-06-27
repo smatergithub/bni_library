@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     verificationToken.belongsTo(models.users, {
       foreignKey: 'userId',
       as: 'user',
-      foreignKeyConstraint: true,
     });
   };
   return verificationToken;

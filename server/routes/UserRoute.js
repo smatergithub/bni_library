@@ -24,7 +24,7 @@ router.post('/verification', AuthenticationController.verificationAccount);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserController.listBorrowBookUser)
 
-router.post('/transaction-book', [AuthJWT.verifyToken], TransactionBookController.borrowBook);
-router.post('/transaction-ebook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);
+router.post('/transactionBook/borrowBook', [AuthJWT.verifyToken], TransactionBookController.borrowBook);
+router.post('/transactionEbook/borrowEbook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);
 
 module.exports = router;

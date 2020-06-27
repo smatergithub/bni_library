@@ -52,7 +52,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        res.json(err);
+        res.status(500).send(err);
       });
   },
 
@@ -81,11 +81,11 @@ module.exports = {
               stockBook: book.stockBook - bookData.quantity,
             })
             .catch(err => {
-              return res.status(400).send(err);
+              return res.status(404).send(err);
             });
         })
         .catch(err => {
-          return res.status(400).send(err);
+          return res.status(404).send(err);
         });
 
       const createTransaction = await TransactionBook.create({
@@ -101,10 +101,10 @@ module.exports = {
       });
 
       if (!createTransaction) {
-        return res.status(400).send("Failed Transaction");
+        return res.status(404).send("Failed Transaction");
       }
 
-      return res.status(200).json({
+      return res.status(203).json({
         message: "Process Succesfully",
         data: createTransaction
       });
@@ -130,11 +130,11 @@ module.exports = {
             status: 'Returned',
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
     Books.findByPk(transactionBook.bookId)
@@ -144,14 +144,14 @@ module.exports = {
             stockBook: book.stockBook + transactionBook.quantity,
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
-    return res.json({
+    return res.status(200).json({
       message: 'Succesfully Return',
     });
   },
