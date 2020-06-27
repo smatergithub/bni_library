@@ -22,6 +22,7 @@ router.post('/register', [verifySignUp.checkDuplicateUsernameOrEmail], Authentic
 router.post('/login', AuthenticationController.login);
 router.post('/verification', AuthenticationController.verificationAccount);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
+router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserController.listBorrowBookUser)
 
 router.post('/transactionBook/borrowBook', [AuthJWT.verifyToken], TransactionBookController.borrowBook);

@@ -26,7 +26,6 @@ module.exports = {
           unit: user.unit,
           jenjang: user.jenjang,
           jabatan: user.jabatan,
-          email: user.email,
           alamat: user.alamat,
           email: user.email,
           imageUrl: user.imageUrl,
@@ -63,10 +62,9 @@ module.exports = {
           jabatan: req.body.jabatan,
           email: req.body.email,
           alamat: req.body.alamat,
-          email: req.body.email,
           imageUrl: req.body.imageUrl,
-          isAdmin: req.body.isAdmin,
-          superAdmin: req.body.superAdmin,
+          isAdmin: false,
+          superAdmin: false,
         };
         user.update(dataUser).then(response => {
           res.status(200).json({ message: "Succesfully Update" })
