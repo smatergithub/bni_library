@@ -1,4 +1,3 @@
-const Sequelize = require('sequelize');
 const Ebooks = require('../models/').ebooks;
 const TransactionEbook = require('../models').transactionEbook;
 
@@ -15,49 +14,59 @@ module.exports = {
 
   // pinjam ebook
   borrowEbook: async (req, res) => {
-    const { ebookId, isBorrowed, startDate, endDate, note } = req.body;
+    const { ebooks } = req.body;
 
-    const ebook = await Ebooks.findByPk(ebookId);
+    ebooks.forEach(async (ebookData) => {
+      let ebook = await Ebooks.findByPk(ebookData.ebookId);
+      if (!ebook) {
+        return res.status(404).json({
+          message: "Ebook not Found"
+        })
+      }
 
-    // validate if quantity grather than ebook stock
-    if (ebook.isBorrowed) {
-      return res.json({
-        message: 'Ebook Already Borrowed',
-      });
-    }
+      if (ebook.isBorrowed) {
+        return res.status(404).json({
+          message: 'Ebook Already Borrowed',
+        });
+      }
+    })
 
-    Ebooks.findByPk(ebookId)
+    await Ebooks.findByPk(ebookId)
       .then(ebook => {
         ebook
           .update({
             isBorrowed: true,
           })
           .catch(err => {
-            return res.status(400).send(err);
+            return res.status(404).send(err);
           });
       })
       .catch(err => {
-        return res.status(400).send(err);
+        return res.status(404).send(err);
       });
 
-    transactionEbook
+    const createTransaction = await transactionEbook
       .create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
         status: 'Borrowed',
         userId: req.userId,
-        note,
-        isBorrowed,
-        startDate,
-        endDate,
-        ebookId,
+        note: req.body.note,
+        isBorrowed: true,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        ebookId: ebookData.ebookId,
       })
-      .then(result => {
-        res.status(200).send(result);
-      })
-      .catch(err => {
-        res.status(400).send(err);
-      });
+
+    if (!createTransaction) {
+      return res.status(404).send("Failed Transaction");
+    }
+
+    return res.status(200).json({
+      message: "Process Succesfully",
+      data: createTransaction
+    });
+
   },
 
   returnEbook: async (req, res) => {
@@ -78,11 +87,11 @@ module.exports = {
             status: 'Returned',
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
     Ebooks.findByPk(transactionEbook.ebookId)
@@ -92,14 +101,14 @@ module.exports = {
             isBorrowed: false,
           })
           .catch(err => {
-            res.status(400).send(err);
+            res.status(404).send(err);
           });
       })
       .catch(err => {
-        res.status(400).send(err);
+        res.status(404).send(err);
       });
 
-    return res.json({
+    return res.status(200).json({
       message: 'Succesfully Return',
     });
   },

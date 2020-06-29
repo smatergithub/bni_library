@@ -4,13 +4,13 @@ var { verifySignUp, AuthJWT } = require('../middelwares');
 
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
-const UserController = require('../controllers/UserController');
+const UserManageController = require('../controllers/UserManageController');
 const RepositoryController = require('../controllers/RepositoryController');
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
 
-router.get('/users', [AuthJWT.isAdmin], UserController.list);
-router.post('/users/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserController.toggleUserIsAdmin);
+router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
+router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
 
 //routing admin panel feature
 
@@ -31,11 +31,11 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
-router.get('/transaction-book', [AuthJWT.isAdmin], TransactionBookController.list);
-router.post('/transaction-book/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
+router.get('/transactionBook', [AuthJWT.isAdmin], TransactionBookController.list);
+router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 
-router.get('/transaction-ebook', [AuthJWT.isAdmin], TransactionEbookController.list);
-router.post('/transaction-ebook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
+router.get('/transactionEbook', [AuthJWT.isAdmin], TransactionEbookController.list);
+router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 
 module.exports = router;

@@ -18,7 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/', UserRoute);
-app.use('/api/admin', AdminRoute);
+app.use('/api/admin/', AdminRoute);
 
 app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 

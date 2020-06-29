@@ -1,5 +1,5 @@
 const Users = require('../models').users;
-const VerificationUser = require('../models').verificationToken;
+const VerificationToken = require('../models').verificationToken;
 const cryptoRandomString = require('crypto-random-string');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -7,68 +7,31 @@ var bcrypt = require('bcryptjs');
 require('dotenv').config();
 
 module.exports = {
+
   register: async (req, res) => {
     Users.create({
-      name: req.body.name,
+      nama: req.body.nama,
       email: req.body.email,
+      tanggalLahir: req.body.tanggalLahir,
       password: bcrypt.hashSync(req.body.password, 8),
+      isVerified: false,
+      isAdmin: false,
+      superAdmin: false
     })
       .then(user => {
-        VerificationUser.create({
+        VerificationToken.create({
           userId: user.id,
-          token: cryptoRandomString({ length: 16, type: 'base64' }),
+          token: cryptoRandomString({ length: 20 }),
         })
           .then(verification => {
-            res.send({
+            res.status(203).send({
               message: 'account was registered successfully!',
               dataToken: verification.token,
             });
           })
           .catch(err => {
-            res.status(500).send({ message: err.message });
+            res.status(404).send({ message: "failed registered account" });
           });
-      })
-      .catch(err => {
-        res.status(500).send({ message: err.message });
-      });
-  },
-
-  login: async (req, res) => {
-    Users.findOne({
-      where: {
-        email: req.body.email,
-      },
-    })
-      .then(user => {
-        if (!user) {
-          return res.status(404).send({ message: 'User Not found.' });
-        }
-
-        var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
-        if (!passwordIsValid) {
-          return res.status(401).send({
-            message: 'Invalid Password!',
-          });
-        }
-
-        var token = jwt.sign(
-          { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
-          process.env.SECRET_TOKEN,
-          {
-            expiresIn: 86400, // 24 hours
-          }
-        );
-        res.status(200).send({
-          id: user.id,
-          name: user.name,
-          address: user.address,
-          email: user.email,
-          phoneNumber: user.phoneNumber,
-          isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin,
-          accessToken: token,
-        });
       })
       .catch(err => {
         res.status(500).send({ message: err.message });
@@ -81,57 +44,73 @@ module.exports = {
     })
       .then(user => {
         if (user.isVerified) {
-          return res.status(202).json(`Email Already Verified`);
-        } else {
-          VerificationUser.findOne({
-            where: { token: req.query.verificationToken },
-          })
-            .then(foundToken => {
-              if (foundToken) {
-                console.log('query foundToken', foundToken);
-                Users.update({ isVerified: true })
-                  .then(updateUser => {
-                    return res.status(403).json(`User with ${user.email} has been verified`);
-                  })
-                  .catch(reason => {
-                    return res.status(403).json(`Verification failed`);
-                  });
-              } else {
-                return res.status(404).json(`Token expired 1111`);
-              }
-            })
-            .catch(err => {
-              return res.status(404).send(err);
-            });
+          return res.status(404).json({ message: "Email Already verified" });
         }
+        VerificationToken.findOne({
+          where: { token: req.query.token, userId: user.id },
+        })
+          .then(foundToken => {
+            if (!foundToken) {
+              return res.status(404).json({ message: "Token expired " });
+            }
+            user.update({ isVerified: true })
+              .then(updateUser => {
+                return res.status(200).json(`User with ${user.email} has been verified`);
+              })
+              .catch(err => {
+                return res.status(404).json({ message: "Verification failed" });
+              });
+          })
+          .catch(err => {
+            return res.status(500).json({ message: "error disni gan" });
+          });
+
       })
-      .catch(reason => {
-        return res.status(404).json(`Email not found`);
+      .catch(err => {
+        return res.status(500).json({ message: err });
       });
   },
 
-  profileUser: async (req, res) => {
-    var userId = req.userId;
+
+  login: async (req, res) => {
     Users.findOne({
       where: {
-        id: userId,
+        email: req.body.email,
       },
     })
       .then(user => {
         if (!user) {
           return res.status(404).send({ message: 'User Not found.' });
         }
-        let dataUser = {
-          id: user.id,
-          name: user.name,
-          address: user.address,
+
+
+        var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+
+        if (!passwordIsValid) {
+          return res.status(404).send({
+            message: 'Invalid Password!',
+          });
+        }
+
+        if (!user.isVerified) {
+          return res.status(404).send({ message: 'User Not Verification.' });
+        }
+
+        var token = jwt.sign(
+          { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+          process.env.SECRET_TOKEN,
+          {
+            expiresIn: 86400, // 24 hours
+          }
+        );
+        res.status(200).send({
           email: user.email,
-          phoneNumber: user.phoneNumber,
-          isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin,
-        };
-        res.status(200).send(dataUser);
+          accessToken: token,
+        });
       })
-      .catch(error => res.status(400).send(error));
+      .catch(err => {
+        res.status(500).send({ message: err.message });
+      });
   },
+
 };

@@ -40,7 +40,6 @@ module.exports = {
       paramQuerySQL.order = [[order, sort]];
     }
 
-
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / paramQuerySQL.limit);
@@ -67,7 +66,7 @@ module.exports = {
         }
         return res.status(200).send(book);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
   list: async (req, res) => {
@@ -130,7 +129,7 @@ module.exports = {
         }
         return res.status(200).send(book);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
   add: async (req, res) => {
@@ -150,9 +149,9 @@ module.exports = {
         isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
       })
         .then(response =>
-          res.status(200).json({ message: 'successfully create book', data: response })
+          res.status(203).json({ message: 'successfully create book', data: response })
         )
-        .catch(err => res.status(400).send(err));
+        .catch(err => res.status(500).send(err));
     });
   },
 
@@ -180,9 +179,9 @@ module.exports = {
             .then(response =>
               res.status(200).json({ message: 'successfully create book', data: response })
             )
-            .catch(err => res.status(400).send(err));
+            .catch(err => res.status(404).send(err));
         })
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(500).send(error));
     });
   },
 
@@ -190,13 +189,13 @@ module.exports = {
     return Books.findByPk(req.params.id)
       .then(book => {
         if (!book) {
-          return res.status(400).send({ message: 'Book not found' });
+          return res.status(404).send({ message: 'Book not found' });
         }
         return book
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(404).send(error));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 };

@@ -9,10 +9,20 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      name: DataTypes.STRING,
-      address: DataTypes.STRING,
-      email: DataTypes.STRING,
+      npp: DataTypes.STRING,
+      nama: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
+      tanggalLahir: DataTypes.DATE,
+      wilayah: DataTypes.STRING,
+      singkatan: DataTypes.STRING,
+      kdunit: DataTypes.STRING,
+      unitBesaran: DataTypes.STRING,
+      unit: DataTypes.STRING,
+      jenjang: DataTypes.STRING,
+      jabatan: DataTypes.STRING,
+      alamat: DataTypes.STRING,
+      email: DataTypes.STRING,
+      imageUrl: DataTypes.STRING,
       password: DataTypes.STRING,
       isVerified: DataTypes.BOOLEAN,
       isAdmin: DataTypes.BOOLEAN,
@@ -20,8 +30,12 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  users.associate = function(models) {
+  users.associate = function (models) {
     // associations can be defined here
+    users.hasMany(models.transactionBook, {
+      foreignKey: 'userId',
+      as: 'users'
+    })
   };
   return users;
 };
