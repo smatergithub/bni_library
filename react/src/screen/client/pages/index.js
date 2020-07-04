@@ -53,7 +53,7 @@ const routes = [
     main: () => <Faq />,
   },
   {
-    path: '/akun',
+    path: '/profile/home',
     exact: false,
     main: () => <Accounts />,
   },
