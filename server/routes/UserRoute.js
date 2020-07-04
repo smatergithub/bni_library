@@ -21,6 +21,8 @@ router.get('/ebook/detail/:id', EbookController.getById);
 router.post('/register', [verifySignUp.checkDuplicateUsernameOrEmail], AuthenticationController.register);
 router.post('/login', AuthenticationController.login);
 router.post('/verification', AuthenticationController.verificationAccount);
+router.post('/resetPassword', AuthenticationController.resetPassword);
+router.post('/updatePassword', AuthenticationController.updatePassword);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserController.listBorrowBookUser)

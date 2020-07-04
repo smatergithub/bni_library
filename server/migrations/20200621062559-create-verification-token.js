@@ -14,6 +14,15 @@ module.exports = {
       token: {
         type: Sequelize.STRING,
       },
+      expiredDateToken: {
+        type: Sequelize.DATE,
+      },
+      resetToken: {
+        type: Sequelize.STRING,
+      },
+      expiredDateResetToken: {
+        type: Sequelize.DATE,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
