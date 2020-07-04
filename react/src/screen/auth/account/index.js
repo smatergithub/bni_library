@@ -14,12 +14,12 @@ const routes = [
   {
     path: '/profile/wishlist',
     exact: false,
-    main: () => <Borrowed />,
+    main: () => <Wishlist />,
   },
   {
-    path: '/profile/pinjam',
+    path: '/profile/books',
     exact: false,
-    main: () => <Wishlist />,
+    main: () => <Borrowed />,
   },
 ];
 

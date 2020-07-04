@@ -12,7 +12,7 @@ const routes = [
     params: 'wishlist',
   },
   {
-    path: '/profile/pinjam',
+    path: '/profile/books',
     name: 'BUKU',
     params: 'books',
   },
