@@ -9,7 +9,7 @@ import About from './about';
 import Faq from './faq';
 import Research from './research';
 import Home from './home';
-import Accounts from './account';
+import Accounts from '../../auth/account';
 
 const routes = [
   {
