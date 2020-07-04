@@ -1,5 +1,6 @@
 const Users = require('../models').users;
 const TransactionBook = require("../models").transactionBook;
+const Books = require('../models/').books;
 
 module.exports = {
   profileUser: async (req, res) => {
@@ -80,26 +81,46 @@ module.exports = {
 
   listBorrowBookUser: async (req, res) => {
     var userId = req.userId;
-    Users.findOne({
-      where: {
-        id: userId
-      },
-    }).then(user => {
-      TransactionBook.findOne({
-        where: {
-          userId: user.id
-        },
-        includes: ['books']
-      })
-        .then(transaction => {
-          res.status(200).send(transaction)
+    let { q, order, sort, limit, page, offset } = req.query;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      include: ['book', 'user']
+    }
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.page = parseInt(page);
+    }
+    // offset
+    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
+      paramQuerySQL.offset = parseInt(offset - 1);
+    }
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    TransactionBook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows
         })
-        .catch(err => {
-          res.status(400).send(err)
-        })
-    })
-      .catch(err => {
-        res.status(400).send(err);
+          .catch(err => {
+            res.status(500).send(err);
+          })
       })
   }
 

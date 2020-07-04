@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: DataTypes.STRING,
       token: DataTypes.STRING,
+      expiredDateToken: DataTypes.DATE,
+      resetToken: DataTypes.STRING,
+      expiredDateResetToken: DataTypes.DATE,
     },
     {}
   );
