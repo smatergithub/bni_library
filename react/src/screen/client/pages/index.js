@@ -9,7 +9,7 @@ import About from './about';
 import Faq from './faq';
 import Research from './research';
 import Home from './home';
-import Accounts from './account';
+import Accounts from '../../auth/account';
 
 const routes = [
   {
@@ -53,7 +53,7 @@ const routes = [
     main: () => <Faq />,
   },
   {
-    path: '/akun',
+    path: '/profile/home',
     exact: false,
     main: () => <Accounts />,
   },
