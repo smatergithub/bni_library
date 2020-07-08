@@ -1,8 +1,9 @@
 const Books = require('../models').books;
-const Upload = require('../helpers/Upload.js');
-
+const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+
+const readXlsxFile = require("read-excel-file/node");
 
 module.exports = {
   getBookList: async (req, res) => {
@@ -103,6 +104,12 @@ module.exports = {
     if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
+
+    let path =
+      __basedir + "/public/documentBook/";
+
+    console.log("base dir gan", path);
+
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / paramQuerySQL.limit);
@@ -139,7 +146,7 @@ module.exports = {
       return Books.create({
         code: req.body.code,
         title: req.body.title,
-        statementResponsibility: req.body.statementResponsibility,
+        note: req.body.note,
         description: req.body.description,
         dateBook: req.body.dateBook,
         stockBook: req.body.stockBook,
@@ -167,7 +174,7 @@ module.exports = {
             .update({
               code: req.body.code,
               title: req.body.title,
-              statementResponsibility: req.body.statementResponsibility,
+              note: req.body.note,
               description: req.body.description,
               dateBook: req.body.dateBook,
               stockBook: req.body.stockBook,
@@ -185,6 +192,61 @@ module.exports = {
     });
   },
 
+  uploadBook: async (req, res) => {
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send("Please upload an excel file!");
+      }
+
+      let path =
+        __basedir + "/public/documentBook/" + req.file.filename;
+
+      console.log("base dir gan", path);
+
+      readXlsxFile(path).then((rows) => {
+        // skip header
+        rows.shift();
+
+        let Databooks = [];
+
+        rows.forEach((row) => {
+          let rowBook = {
+            code: row[0],
+            title: row[1],
+            note: row[2],
+            description: row[3],
+            dateBook: row[4],
+            stockBook: row[5],
+            category: row[6],
+            image: row[7],
+            author: row[8],
+            isPromotion: row[9],
+          };
+
+          Databooks.push(rowBook);
+        });
+
+        Books.bulkCreate(Databooks)
+          .then(() => {
+            res.status(200).json({
+              message: "Uploaded the file successfully: " + req.file.originalname,
+            });
+          })
+          .catch((error) => {
+            res.status(500).json({
+              message: "Fail to import data into database!",
+              error: error.message,
+            });
+          });
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        message: "Could not upload the file: " + req.file.originalname,
+      });
+    }
+  },
+
   delete: async (req, res) => {
     return Books.findByPk(req.params.id)
       .then(book => {
@@ -198,4 +260,7 @@ module.exports = {
       })
       .catch(error => res.status(500).send(error));
   },
+
+
+
 };

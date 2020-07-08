@@ -1,5 +1,5 @@
 const Repositorys = require('../models/').repository;
-const UploadFileExcel = require('../helpers/UploadFileExcel');
+const UploadMultipleDocument = require('../middelwares/uploadMultipleDocument');
 const path = require('path');
 
 module.exports = {
@@ -70,7 +70,7 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    UploadFileExcel(req, res, err => {
+    UploadMultipleDocument(req, res, err => {
       if (err) throw err;
       return Repositorys.create({
         university: req.body.university,

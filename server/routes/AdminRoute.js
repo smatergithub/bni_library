@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
-var { verifySignUp, AuthJWT } = require('../middelwares');
+const express = require('express');
+const router = express.Router();
+const { verifySignUp, AuthJWT } = require('../middelwares');
+const UploadDocument = require("../middelwares/uploadDocument");
 
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
@@ -18,6 +19,7 @@ router.get('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
 router.post('/book', [AuthJWT.isAdmin], BookController.add);
 router.put('/book/:id', [AuthJWT.isAdmin], BookController.update);
+router.put('/book/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), BookController.uploadBook);
 router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
 router.get('/ebook', [AuthJWT.isAdmin], EbookController.list);

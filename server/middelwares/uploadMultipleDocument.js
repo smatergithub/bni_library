@@ -3,32 +3,27 @@ const path = require('path');
 
 const storage = multer.diskStorage({
   destination: path.join(__dirname + './../public/document/'),
-  filename: function(req, file, cb) {
+  filename: function (req, file, cb) {
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
 
     //cb(null, file.originalname);
   },
 });
 
+
 const fileFilter = (req, file, cb) => {
-  // reject a file
-  if (file.mimetype === 'application/pdf') {
+  if (
+    file.mimetype.includes("excel") ||
+    file.mimetype.includes("spreadsheetml") || file.mimetype.includes('application/pdf')
+  ) {
     cb(null, true);
   } else {
-    cb(null, false);
+    cb("Please upload only excel file.", false);
   }
 };
 
-// const fileFilter = (req, file, cb) => {
-//   // reject a file
-//   if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-//     cb(null, true);
-//   } else {
-//     cb(null, false);
-//   }
-// };
 
-const UploadFileExcel = multer({
+const MultipleUploadDocument = multer({
   storage: storage,
   // limits: {
   //   fileSize: 1024 * 1024 * 5,
@@ -43,4 +38,4 @@ const UploadFileExcel = multer({
   { name: 'abstrack', maxCount: 1 },
 ]);
 
-module.exports = UploadFileExcel;
+module.exports = MultipleUploadDocument;

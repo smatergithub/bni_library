@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       code: DataTypes.STRING,
       title: DataTypes.STRING,
-      statementResponsibility: DataTypes.STRING,
+      note: DataTypes.STRING,
       description: DataTypes.STRING,
       image: DataTypes.STRING,
       author: DataTypes.STRING,
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  ebooks.associate = function(models) {
+  ebooks.associate = function (models) {
     // associations can be defined here
   };
   return ebooks;
