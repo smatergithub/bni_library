@@ -1,6 +1,5 @@
 const Users = require('../models').users;
 const TransactionBook = require("../models").transactionBook;
-const Books = require('../models/').books;
 
 module.exports = {
   profileUser: async (req, res) => {

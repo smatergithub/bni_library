@@ -5,6 +5,8 @@ const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
 
+global.__basedir = __dirname + "/..";
+
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require("./routes/AdminRoute")
 var corsOptions = {

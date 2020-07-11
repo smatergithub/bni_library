@@ -14,7 +14,7 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
       },
-      statementResponsibility: {
+      note: {
         type: Sequelize.STRING,
       },
       description: {

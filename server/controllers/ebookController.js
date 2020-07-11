@@ -1,5 +1,5 @@
 const Ebooks = require('../models/').ebooks;
-const Upload = require('../helpers/Upload.js');
+const Upload = require('../middelwares/uploadImage');
 const path = require('path');
 
 const Sequelize = require('sequelize');
@@ -141,7 +141,7 @@ module.exports = {
       return Ebooks.create({
         code: req.body.code,
         title: req.body.title,
-        statementResponsibility: req.body.statementResponsibility,
+        note: req.body.note,
         description: req.body.description,
         image: req.file.path,
         author: req.body.author,
@@ -169,7 +169,7 @@ module.exports = {
             .update({
               code: req.body.code,
               title: req.body.title,
-              statementResponsibility: req.body.statementResponsibility,
+              note: req.body.note,
               description: req.body.description,
               image: req.file.path,
               author: req.body.author,
