@@ -12,22 +12,22 @@ let dropdown = (
       >
         <div className="py-1">
           <Link to="/books">
-            <a
+            <div
               href="#"
               className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
               role="menuitem"
             >
               Buku
-            </a>
+            </div>
           </Link>
           <Link to="/ebook">
-            <a
+            <div
               href="#"
               className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
               role="menuitem"
             >
               Ebook
-            </a>
+            </div>
           </Link>
         </div>
       </div>
