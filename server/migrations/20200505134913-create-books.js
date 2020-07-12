@@ -8,31 +8,43 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      code: {
+      kategori: {
         type: Sequelize.STRING,
       },
-      title: {
+      judul: {
         type: Sequelize.STRING,
       },
-      note: {
+      pengarang: {
+        type: Sequelize.STRING,
+      },
+      tahunTerbit: {
         type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
-      dateBook: {
-        type: Sequelize.DATE,
-      },
-      stockBook: {
+      stockBuku: {
         type: Sequelize.INTEGER,
       },
-      category: {
+      tanggalTerbit: {
+        type: Sequelize.STRING,
+      },
+      isbn: {
+        type: Sequelize.STRING,
+      },
+      bahasa: {
+        type: Sequelize.STRING,
+      },
+      penerbit: {
+        type: Sequelize.STRING,
+      },
+      lokasiPerpustakaan: {
+        type: Sequelize.STRING,
+      },
+      status: {
         type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING,
-      },
-      author: {
         type: Sequelize.STRING,
       },
       isPromotion: {
