@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verifySignUp, AuthJWT } = require('../middelwares');
 const UploadDocument = require("../middelwares/uploadDocument");
-
+const UploadImage = require("../middelwares/uploadImage");
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
 const UserManageController = require('../controllers/UserManageController');
@@ -17,9 +17,9 @@ router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserMan
 
 router.get('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
-router.post('/book', [AuthJWT.isAdmin], BookController.add);
-router.put('/book/:id', [AuthJWT.isAdmin], BookController.update);
-router.put('/book/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), BookController.uploadBook);
+router.post('/book', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.add);
+router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.update);
+router.post('/book/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), BookController.uploadBook);
 router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
 router.get('/ebook', [AuthJWT.isAdmin], EbookController.list);

@@ -6,19 +6,10 @@ module.exports = {
   list: async (req, res) => {
 
     // queryStrings
-    let { q, order, sort, limit, page, offset } = req.query;
+    let { order, sort, limit, page, offset } = req.query;
     let paramQuerySQL = {
       include: ['book', 'user']
     };
-
-    //search (q) , need fix
-    if (q != '' && typeof q !== 'undefined') {
-      paramQuerySQL.where = {
-        q: {
-          [Op.like]: '%' + q + '%',
-        },
-      };
-    }
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -68,7 +59,7 @@ module.exports = {
         })
       }
       // validate if quantity grather than book stock
-      if (bookData.quantity > book.stockBook) {
+      if (bookData.quantity > book.stockBuku) {
         return res.json({
           message: 'exceeded the stock limit',
         });
@@ -78,7 +69,8 @@ module.exports = {
         .then(book => {
           book
             .update({
-              stockBook: book.stockBook - bookData.quantity,
+              stockBuku: book.stockBuku - bookData.quantity,
+              status: book.stockBuku < 0 ? "Ada" : "Kosong",
             })
             .catch(err => {
               return res.status(404).send(err);
@@ -105,7 +97,7 @@ module.exports = {
       }
 
       return res.status(203).json({
-        message: "Process Succesfully",
+        message: "Process Succesfully create Transaction Borrow Book",
         data: createTransaction
       });
     })
@@ -141,7 +133,7 @@ module.exports = {
       .then(book => {
         book
           .update({
-            stockBook: book.stockBook + transactionBook.quantity,
+            stockBuku: book.stockBuku + transactionBook.quantity,
           })
           .catch(err => {
             res.status(404).send(err);
@@ -152,7 +144,7 @@ module.exports = {
       });
 
     return res.status(200).json({
-      message: 'Succesfully Return',
+      message: 'Succesfully Return Book',
     });
   },
 };

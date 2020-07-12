@@ -1,5 +1,5 @@
 const Books = require('../models').books;
-const Upload = require('../middelwares/uploadImage');
+// const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -7,18 +7,9 @@ const readXlsxFile = require("read-excel-file/node");
 
 module.exports = {
   getBookList: async (req, res) => {
-    // queryStrings
-    let { q, order, sort, limit, offset, page } = req.query;
+    let { order, sort, limit, offset, page } = req.query;
 
     let paramQuerySQL = {};
-    //search (q) , need fix
-    if (q != '' && typeof q !== 'undefined') {
-      paramQuerySQL.where = {
-        q: {
-          [Op.like]: '%' + q + '%',
-        },
-      };
-    }
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -31,7 +22,6 @@ module.exports = {
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
       paramQuerySQL.offset = parseInt(offset - 1);
     }
-
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -40,7 +30,6 @@ module.exports = {
     if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
-
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / paramQuerySQL.limit);
@@ -72,16 +61,8 @@ module.exports = {
 
   list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, offset, page } = req.query;
+    let { order, sort, limit, offset, page } = req.query;
     let paramQuerySQL = {};
-    //search (q) , need fix
-    if (q != '' && typeof q !== 'undefined') {
-      paramQuerySQL.where = {
-        q: {
-          [Op.like]: '%' + q + '%',
-        },
-      };
-    }
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -104,11 +85,6 @@ module.exports = {
     if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
       paramQuerySQL.order = [[order, sort]];
     }
-
-    let path =
-      __basedir + "/public/documentBook/";
-
-    console.log("base dir gan", path);
 
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
@@ -140,56 +116,65 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    Upload(req, res, err => {
-      if (err) throw err;
-      // console.log('req file', req.file);
-      return Books.create({
-        code: req.body.code,
-        title: req.body.title,
-        note: req.body.note,
-        description: req.body.description,
-        dateBook: req.body.dateBook,
-        stockBook: req.body.stockBook,
-        category: req.body.category,
-        image: req.file.path,
-        author: req.body.author,
-        isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
-      })
-        .then(response =>
-          res.status(203).json({ message: 'successfully create book', data: response })
-        )
-        .catch(err => res.status(500).send(err));
-    });
+
+    // let path =
+    //   __basedir + "/server/public/images/" + req.file.filename;
+
+    return Books.create({
+      kategori: req.body.kategori,
+      judul: req.body.judul,
+      pengarang: req.body.pengarang,
+      tahunTerbit: req.body.tahunTerbit,
+      description: req.body.description,
+      stockBuku: req.body.stockBuku,
+      tanggalTerbit: req.body.tanggalTerbit,
+      isbn: req.body.isbn,
+      bahasa: req.body.bahasa,
+      penerbit: req.body.penerbit,
+      lokasiPerpustakaan: req.body.lokasiPerpustakaan,
+      status: req.body.status,
+      image: req.file.path,
+      isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
+    })
+      .then(response =>
+        res.status(203).json({ message: 'successfully create book', data: response })
+      )
+      .catch(err => res.status(500).send(err));
   },
 
   update: async (req, res) => {
-    Upload(req, res, err => {
-      if (err) throw err;
-      return Books.findByPk(req.params.id)
-        .then(book => {
-          if (!book) {
-            return res.status(400).send({ message: 'Book not found' });
-          }
-          return book
-            .update({
-              code: req.body.code,
-              title: req.body.title,
-              note: req.body.note,
-              description: req.body.description,
-              dateBook: req.body.dateBook,
-              stockBook: req.body.stockBook,
-              category: req.body.category,
-              image: req.body.file.path,
-              author: req.body.author,
-              isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
-            })
-            .then(response =>
-              res.status(200).json({ message: 'successfully create book', data: response })
-            )
-            .catch(err => res.status(404).send(err));
-        })
-        .catch(error => res.status(500).send(error));
-    });
+    return Books.findByPk(req.params.id)
+      .then(book => {
+        if (!book) {
+          return res.status(400).send({ message: 'Book not found' });
+        }
+
+        let path =
+          __basedir + "/server/public/images/" + req.file.filename;
+
+        return book
+          .update({
+            kategori: req.body.kategori,
+            judul: req.body.judul,
+            pengarang: req.body.pengarang,
+            tahunTerbit: req.body.tahunTerbit,
+            description: req.body.description,
+            stockBuku: req.body.stockBuku,
+            tanggalTerbit: req.body.tanggalTerbit,
+            isbn: req.body.isbn,
+            bahasa: req.body.bahasa,
+            penerbit: req.body.penerbit,
+            lokasiPerpustakaan: req.body.lokasiPerpustakaan,
+            status: req.body.status,
+            image: req.file.path,
+            isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
+          })
+          .then(response =>
+            res.status(200).json({ message: 'successfully update book', data: response })
+          )
+          .catch(err => res.status(404).send(err));
+      })
+      .catch(error => res.status(500).send(error));
   },
 
   uploadBook: async (req, res) => {
@@ -199,9 +184,7 @@ module.exports = {
       }
 
       let path =
-        __basedir + "/public/documentBook/" + req.file.filename;
-
-      console.log("base dir gan", path);
+        __basedir + "/server/public/documentBook/" + req.file.filename;
 
       readXlsxFile(path).then((rows) => {
         // skip header
@@ -211,16 +194,20 @@ module.exports = {
 
         rows.forEach((row) => {
           let rowBook = {
-            code: row[0],
-            title: row[1],
-            note: row[2],
-            description: row[3],
-            dateBook: row[4],
-            stockBook: row[5],
-            category: row[6],
-            image: row[7],
-            author: row[8],
-            isPromotion: row[9],
+            kategori: row[0],
+            judul: row[1],
+            pengarang: row[2],
+            tahunTerbit: row[3],
+            description: row[4],
+            stockBuku: row[5],
+            tanggalTerbit: row[6],
+            isbn: row[7],
+            bahasa: row[8],
+            penerbit: row[9],
+            lokasiPerpustakaan: row[10],
+            status: row[11],
+            image: row[12],
+            isPromotion: false,
           };
 
           Databooks.push(rowBook);
@@ -240,7 +227,6 @@ module.exports = {
           });
       });
     } catch (error) {
-      console.log(error);
       res.status(500).json({
         message: "Could not upload the file: " + req.file.originalname,
       });
