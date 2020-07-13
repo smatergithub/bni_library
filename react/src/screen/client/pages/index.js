@@ -9,7 +9,8 @@ import About from './about';
 import Faq from './faq';
 import Research from './research';
 import Home from './home';
-import Accounts from './account';
+import Accounts from '../../auth/account';
+import DetailBooks from './detailBooks';
 
 const routes = [
   {
@@ -53,7 +54,12 @@ const routes = [
     main: () => <Faq />,
   },
   {
-    path: '/akun',
+    path: '/detail-book',
+    exact: false,
+    main: () => <DetailBooks />,
+  },
+  {
+    path: '/profile/home',
     exact: false,
     main: () => <Accounts />,
   },
@@ -64,16 +70,14 @@ function HomeUser(props) {
   const { history, match } = props;
 
   return (
-    <Switch>
-      <div>
-        <NavBar url={match.params.id} props={props} isAuth={user.isAuth} />
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} exact={route.exact}>
-            <route.main {...props} />
-          </Route>
-        ))}
-      </div>
-    </Switch>
+    <div>
+      <NavBar url={match.params.id} props={props} isAuth={user.isAuth} />
+      {routes.map((route, index) => (
+        <Route key={index} path={route.path} exact={route.exact}>
+          <route.main {...props} />
+        </Route>
+      ))}
+    </div>
   );
 }
 HomeUser.propTypes = {

@@ -1,17 +1,15 @@
 const Ebooks = require('../models/').ebooks;
-const Upload = require('../helpers/Upload.js');
+const Upload = require('../middelwares/uploadImage');
 const path = require('path');
 
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
 module.exports = {
-  getEbookList(req, res) {
+  getEbookList: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
-
+    let { q, order, sort, limit, page, offset } = req.query;
     let paramQuerySQL = {};
-
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
@@ -20,17 +18,18 @@ module.exports = {
         },
       };
     }
-
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.page = parseInt(page);
+    }
     // offset
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
-
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -41,14 +40,22 @@ module.exports = {
     }
 
     return Ebooks.findAndCountAll(paramQuerySQL)
-      .then(book => {
-        res.status(200).send(book);
+      .then(ebook => {
+        let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: ebook.count,
+          totalPage: activePage,
+          activePage: page,
+          data: ebook.rows,
+        });
       })
       .catch(err => {
         res.status(500).send({ err });
       });
   },
-  getEbookById(req, res) {
+
+  getEbookById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
@@ -58,11 +65,12 @@ module.exports = {
         }
         return res.status(200).send(book);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
-  list(req, res) {
+
+  list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
+    let { q, order, sort, limit, page, offset } = req.query;
 
     let paramQuerySQL = {};
 
@@ -80,9 +88,13 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.page = parseInt(page);
+    }
     // offset
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -95,15 +107,22 @@ module.exports = {
     }
 
     return Ebooks.findAndCountAll(paramQuerySQL)
-      .then(book => {
-        res.status(200).send(book);
+      .then(ebook => {
+        let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: ebook.count,
+          totalPage: activePage,
+          activePage: page,
+          data: ebook.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getById(req, res) {
+  getById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
@@ -113,16 +132,16 @@ module.exports = {
         }
         return res.status(200).send(ebook);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
-  add(req, res) {
+  add: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.create({
         code: req.body.code,
         title: req.body.title,
-        statementResponsibility: req.body.statementResponsibility,
+        note: req.body.note,
         description: req.body.description,
         image: req.file.path,
         author: req.body.author,
@@ -132,25 +151,25 @@ module.exports = {
         isBorrowed: false,
       })
         .then(response =>
-          res.status(200).json({ message: 'successfully create ebook', data: response })
+          res.status(203).json({ message: 'successfully create ebook', data: response })
         )
-        .catch(err => res.status(400).send(err));
+        .catch(err => res.status(500).send(err));
     });
   },
 
-  update(req, res) {
+  update: async (req, res) => {
     Upload(req, res, err => {
       if (err) throw err;
       return Ebooks.findByPk(req.params.id)
         .then(ebook => {
           if (!ebook) {
-            return res.status(400).send({ message: 'Ebook not found' });
+            return res.status(404).send({ message: 'Ebook not found' });
           }
           return ebook
             .update({
               code: req.body.code,
               title: req.body.title,
-              statementResponsibility: req.body.statementResponsibility,
+              note: req.body.note,
               description: req.body.description,
               image: req.file.path,
               author: req.body.author,
@@ -162,23 +181,23 @@ module.exports = {
             .then(response =>
               res.status(200).json({ message: 'successfully update ebook', data: response })
             )
-            .catch(err => res.status(400).send(err));
+            .catch(err => res.status(404).send(err));
         })
-        .catch(error => res.status(400).send(error));
+        .catch(error => res.status(500).send(error));
     });
   },
 
-  delete(req, res) {
+  delete: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
-          return res.status(400).send({ message: 'Ebook not found' });
+          return res.status(404).send({ message: 'Ebook not found' });
         }
         return ebook
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(400).send(error));
+          .catch(error => res.status(404).send(error));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 };

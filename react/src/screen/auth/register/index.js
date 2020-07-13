@@ -1,6 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { ToastError, ToastSuccess } from '../../../component';
+import { signUp } from '../../../redux/action/user';
 
-function Register() {
+function Register(props) {
+  let { history } = props;
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    isAdmin: true,
+  });
+
+  function onFormSubmit(e) {
+    e.preventDefault();
+
+    props.signUp(formData).then(res => {
+      if (res.resp) {
+        ToastSuccess(res.msg);
+        history.push('/auth/login');
+      } else {
+        ToastError(res.msg);
+      }
+    });
+    // console.log(formData);
+  }
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -16,11 +41,10 @@ function Register() {
                   <div className="text-center mb-3">
                     <h4 className="text-gray-600 text-sm font-bold">Register</h4>
                   </div>
-
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form>
+                  <form onSubmit={e => onFormSubmit(e)}>
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -29,25 +53,10 @@ function Register() {
                         Nama
                       </label>
                       <input
-                        type="email"
+                        type="text"
+                        onChange={e => setFormData({ ...formData, name: e.target.value })}
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Email"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      />
-                    </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
-                        Telepon
-                      </label>
-                      <input
-                        type="email"
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Email"
+                        placeholder="Nama"
                         style={{
                           transition: 'all 0.15s ease 0s',
                         }}
@@ -62,6 +71,7 @@ function Register() {
                       </label>
                       <input
                         type="email"
+                        onChange={e => setFormData({ ...formData, email: e.target.value })}
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Email"
                         style={{
@@ -78,6 +88,7 @@ function Register() {
                       </label>
                       <input
                         type="password"
+                        onChange={e => setFormData({ ...formData, password: e.target.value })}
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Password"
                         style={{
@@ -93,6 +104,9 @@ function Register() {
                         Konfirmasi Password
                       </label>
                       <input
+                        onChange={e =>
+                          setFormData({ ...formData, confirmPassword: e.target.value })
+                        }
                         type="password"
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Password"
@@ -105,7 +119,7 @@ function Register() {
                     <div className="text-center mt-10">
                       <button
                         className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="button"
+                        type="submit"
                         style={{
                           transition: 'all 0.15s ease 0s',
                         }}
@@ -123,4 +137,4 @@ function Register() {
     </main>
   );
 }
-export default Register;
+export default connect(null, { signUp })(Register);

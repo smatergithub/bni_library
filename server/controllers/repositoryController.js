@@ -1,11 +1,11 @@
 const Repositorys = require('../models/').repository;
-const UploadFileExcel = require('../helpers/UploadFileExcel');
+const UploadMultipleDocument = require('../middelwares/uploadMultipleDocument');
 const path = require('path');
 
 module.exports = {
-  list(req, res) {
+  list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, offset } = req.query;
+    let { q, order, sort, limit, page, offset } = req.query;
 
     let paramQuerySQL = {};
 
@@ -22,9 +22,13 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
+    // page
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.page = parseInt(page);
+    }
     // offset
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset);
+      paramQuerySQL.offset = parseInt(offset - 1);
     }
 
     // sort par defaut si param vide ou inexistant
@@ -38,14 +42,21 @@ module.exports = {
 
     return Repositorys.findAndCountAll(paramQuerySQL)
       .then(repository => {
-        res.status(200).send(repository);
+        let activePage = Math.ceil(repository.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: repository.count,
+          totalPage: activePage,
+          activePage: page,
+          data: repository.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
       });
   },
 
-  getById(req, res) {
+  getById: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
         if (!repository) {
@@ -55,11 +66,11 @@ module.exports = {
         }
         return res.status(200).send(repository);
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 
-  add(req, res) {
-    UploadFileExcel(req, res, err => {
+  add: async (req, res) => {
+    UploadMultipleDocument(req, res, err => {
       if (err) throw err;
       return Repositorys.create({
         university: req.body.university,
@@ -72,22 +83,22 @@ module.exports = {
         bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
         abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
       })
-        .then(response => res.status(200).send(response))
-        .catch(err => res.status(400).send(err));
+        .then(response => res.status(203).json({ message: "Succesfully Create Repository", data: response }))
+        .catch(err => res.status(500).send(err));
     });
   },
 
-  delete(req, res) {
+  delete: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
         if (!repository) {
-          return res.status(400).send({ message: 'repository not found' });
+          return res.status(404).send({ message: 'repository not found' });
         }
         return repository
           .destroy()
-          .then(() => res.status(204).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(400).send(error));
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
+          .catch(error => res.status(404).send(error));
       })
-      .catch(error => res.status(400).send(error));
+      .catch(error => res.status(500).send(error));
   },
 };

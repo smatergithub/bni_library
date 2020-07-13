@@ -1,16 +1,18 @@
 import axios from 'axios';
+import { trackPromise } from 'react-promise-tracker';
 
 const defaultResponseOptions = {
   fullResponse: false,
 };
 
 const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
-  axios(requestOptions)
-    .then(response => (responseOptions.fullResponse ? response : response.data))
-    .catch(error => {
-      throw responseOptions.fullResponse ? error.response : error.response.data;
-    });
-
+  trackPromise(
+    axios(requestOptions)
+      .then(response => (responseOptions.fullResponse ? response : response.data))
+      .catch(error => {
+        throw responseOptions.fullResponse ? error.response : error.response.data;
+      })
+  );
 export default class Request {
   static get(url, params) {
     const requestOptions = { method: 'get', url };
@@ -19,9 +21,35 @@ export default class Request {
     }
     return makeAxiosRequest(requestOptions);
   }
+  static getWithAuth(url) {
+    const requestOptions = {
+      method: 'get',
+      url,
+      headers: {
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
+    return makeAxiosRequest(requestOptions);
+  }
 
   static post(url, data, options) {
-    const requestOptions = { method: 'post', url, data };
+    const requestOptions = {
+      method: 'post',
+      url,
+      data,
+    };
+    return makeAxiosRequest(requestOptions, options);
+  }
+  static postWithAuth(url, data, options, isFormData) {
+    const requestOptions = {
+      method: 'post',
+      url,
+      data,
+      headers: {
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
     return makeAxiosRequest(requestOptions, options);
   }
 

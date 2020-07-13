@@ -9,19 +9,28 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
       },
-      code: DataTypes.STRING,
-      title: DataTypes.STRING,
-      statementResponsibility: DataTypes.STRING,
-      description: DataTypes.STRING,
-      dateBook: DataTypes.DATE,
-      stockBook: DataTypes.INTEGER,
-      category: DataTypes.STRING,
+      kategori: DataTypes.STRING,
+      judul: DataTypes.STRING,
+      pengarang: DataTypes.STRING,
+      tahunTerbit: DataTypes.STRING,
+      description: DataTypes.TEXT,
+      stockBuku: DataTypes.INTEGER,
+      tanggalTerbit: DataTypes.STRING,
+      isbn: DataTypes.STRING,
+      bahasa: DataTypes.STRING,
+      penerbit: DataTypes.STRING,
+      lokasiPerpustakaan: DataTypes.STRING,
+      status: DataTypes.STRING,
       image: DataTypes.STRING,
-      author: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
     {}
   );
-  books.associate = function(models) {};
+  books.associate = function (models) {
+    books.hasMany(models.transactionBook, {
+      foreignKey: 'bookId',
+      as: 'transactionBook'
+    })
+  };
   return books;
 };

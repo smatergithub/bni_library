@@ -14,16 +14,11 @@ module.exports = {
       }], {});
     */
     const salt = bcrypt.genSalt(8);
-    const hashedPassword = bcrypt.hash(123123, salt);
     return queryInterface.bulkInsert('users', [
       {
-        firstName: 'hendra',
-        lastName: 'gunawan',
-        username: 'admin',
-        address: 'bengkong',
+        name: 'hendra',
         email: 'gunawan140@gmail.com',
-        phoneNumber: 123132123,
-        password: hashedPassword,
+        password: bcrypt.hash(123123),
         isAdmin: 1,
         superAdmin: 1,
       },

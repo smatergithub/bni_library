@@ -25,7 +25,12 @@
 .nav-item:hover {
   background: $main-light;
 }
-
+.nav-item-profile-active {
+  background: $main-light;
+}
+.nav-item-profile:hover {
+  background: $main-light;
+}
 .account-link:hover {
   background: $main-light;
 }

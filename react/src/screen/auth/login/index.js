@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { signIn } from '../../../redux/action/user';
-import { ToastError, ToastSuccess } from '../../../component';
+import { ToastError } from '../../../component';
 
 function Login(props) {
   let { history } = props;
-  let [user, setUser] = useState({ username: 'admin', password: 'admin' });
-  async function onLogin() {
-    let userObj = {
-      logged: true,
-      role: 'user',
-    };
-    if (user.username.trim().length === 0 && user.password.trim().length === 0) {
+  let [user, setUser] = useState({ email: '', password: '' });
+  function onLogin(e) {
+    e.preventDefault();
+    if (user.email.trim().length === 0 && user.password.trim().length === 0) {
       return ToastError('Email atau password tidak boleh kosong');
     } else {
-      if (user.username === 'admin' && user.password === 'admin') {
-        userObj.role = 'admin';
-        props.signIn(userObj);
-        setTimeout(() => {
-          history.push('/admin/dashboard');
-        }, 1000);
-      }
-
-      // UserApi.login(user)
-      //   .then(res => {
-      //     if (res) {
-      //       ToastSuccess('Login berhasil');
-      //     }
-      //   })
-      //   .catch(err => {
-      //     let msg = err.message || 'Something wrong';
-      //     ToastError(msg);
-      //   });
+      props
+        .signIn(user)
+        .then(res => {
+          if (res.resp) {
+            history.push('/admin/dashboard');
+          } else {
+            ToastError(res.msg);
+          }
+        })
+        .catch(err => {
+          let msg = err.message || 'Something wrong';
+          ToastError(msg);
+        });
     }
   }
-  useEffect(() => {
-    ToastSuccess('Username = admin , Password = admin  ');
-  }, []);
 
   return (
     <main>
@@ -57,13 +46,13 @@ function Login(props) {
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form>
+                  <form onSubmit={e => onLogin(e)}>
                     <div className="relative w-full mb-3">
                       <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Email
                       </label>
                       <input
-                        onChange={e => setUser({ ...user, username: e.target.value })}
+                        onChange={e => setUser({ ...user, email: e.target.value })}
                         type="email"
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                         placeholder="Email"
@@ -98,9 +87,8 @@ function Login(props) {
                     </div>
                     <div className="text-center mt-6">
                       <button
-                        onClick={() => onLogin()}
                         className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="button"
+                        type="submit"
                         style={{
                           transition: 'all 0.15s ease 0s',
                         }}

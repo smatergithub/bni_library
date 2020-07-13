@@ -6,6 +6,7 @@ import Router from './routers';
 import './styles/custom/index.scss';
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
+
 import configureStore from './redux/store/configureStore';
 
 const { store } = configureStore();

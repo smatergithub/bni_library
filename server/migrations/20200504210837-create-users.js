@@ -1,5 +1,4 @@
 'use strict';
-const { v4: uuidv4 } = require('uuid');
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('users', {
@@ -9,26 +8,54 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      firstName: {
+      npp: {
         type: Sequelize.STRING,
       },
-      lastName: {
-        type: Sequelize.STRING,
-      },
-      username: {
-        type: Sequelize.STRING,
-      },
-      address: {
-        type: Sequelize.STRING,
-      },
-      email: {
+      nama: {
         type: Sequelize.STRING,
       },
       phoneNumber: {
         type: Sequelize.STRING,
       },
+      tanggalLahir: {
+        type: Sequelize.DATE,
+      },
+      wilayah: {
+        type: Sequelize.STRING,
+      },
+      singkatan: {
+        type: Sequelize.STRING,
+      },
+      kdunit: {
+        type: Sequelize.STRING,
+      },
+      unitBesaran: {
+        type: Sequelize.STRING,
+      },
+      unit: {
+        type: Sequelize.STRING,
+      },
+      jenjang: {
+        type: Sequelize.STRING,
+      },
+      jabatan: {
+        type: Sequelize.STRING,
+      },
+      alamat: {
+        type: Sequelize.STRING,
+      },
+      email: {
+        type: Sequelize.STRING,
+      },
+      imageUrl: {
+        type: Sequelize.STRING,
+      },
+
       password: {
         type: Sequelize.STRING,
+      },
+      isVerified: {
+        type: Sequelize.BOOLEAN,
       },
       isAdmin: {
         type: Sequelize.BOOLEAN,
