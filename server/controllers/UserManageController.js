@@ -82,4 +82,19 @@ module.exports = {
       })
       .catch(error => res.status(404).send(error));
   },
+
+  dataSourceUserList: async (req, res) => {
+    return Users.findAll().then(user => {
+      let userDisplay = []
+      user.forEach(item => {
+        const userData = {
+          value: item.id,
+          label: item.name
+        }
+        userDisplay.push(userData)
+      })
+      res.status(200).send(userDisplay);
+    })
+      .catch(error => res.status(404).send(error));
+  }
 };
