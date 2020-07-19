@@ -145,7 +145,7 @@ function NavBar({ url, isAuth, props }) {
               {isAuth ? (
                 <div
                   className="cursor-pointer bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center"
-                  onClick={() => history.push('/akun')}
+                  onClick={() => history.push('/profile/home')}
                 >
                   <i className="fas fa-user text-lg text-white"></i>
                 </div>

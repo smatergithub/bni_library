@@ -43,10 +43,11 @@ module.exports = {
         user.rows.forEach(item => {
           let dataUser = {
             id: item.id,
-            name: item.name,
-            address: item.address,
+            nama: item.nama,
+            alamat: item.alamat,
             email: item.email,
             phoneNumber: item.phoneNumber,
+            wilayah: item.wilayah,
             isAdmin: item.isAdmin,
             superAdmin: item.superAdmin,
           };

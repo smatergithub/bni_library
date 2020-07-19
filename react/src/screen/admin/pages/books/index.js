@@ -2,52 +2,76 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getBooks } from '../../../../redux/action/books';
 import Table from '../../component/Table';
-// let mockBook = [
-//   {
-//     author: 'asas',
-//     category: 'asas',
-//     code: 'asas',
-//     createdAt: '2020-06-22T16:44:01.000Z',
-//     dateBook: '2020-06-22T16:44:01.000Z',
-//     description: 'asasa',
-//     id: 'bab1fec0-e3b2-4901-966d-6330ec5ca93f',
-//     image:
-//       '/Users/nagacoder/Documents/freelence/bni_library/server/public/images/image-1592844241421.jpg',
-//     isPromotion: true,
-//     statementResponsibility: 'asasa',
-//     stockBook: 10,
-//     title: 'asas',
-//     updatedAt: '2020-06-22T16:44:01.000Z',
-//   },
-// ];
-function Books(props) {
-  let [loading, setLoading] = React.useState(false);
-  React.useEffect(() => {
+
+const Books = (props) => {
+  const [loading, setLoading] = React.useState(false);
+  const [filterOptions, seFilterOptions] = React.useState({
+    page: 1,
+    limit: 5
+  })
+
+
+  const paginationOptions = (pagination) => {
+    console.log("pagination", pagination);
+  }
+  const retrieveDataBook = () => {
     setLoading(true);
-    props.getBooks('page=1&limit=10').then(res => {
+    props.getBooks(filterOptions).then(res => {
       if (res) {
         setLoading(false);
       }
-    });
+    }).catch(err => { console.log("error", err) });
+  }
+
+  React.useEffect(() => {
+    retrieveDataBook();
   }, []);
 
+
+
   if (loading) return null;
-  let { books } = props;
+  const { books } = props;
+
+
+  const columns = [
+    {
+      name: "judul",
+      displayName: "Judul"
+    },
+    {
+      name: "pengarang",
+      displayName: "Pengarang"
+    },
+    {
+      name: "tahunTerbit",
+      displayName: "Tahun Terbit"
+    },
+    {
+      name: "stockBuku",
+      displayName: "Stock Buku"
+    },
+    {
+      name: "status",
+      displayName: "Status"
+    }
+  ]
+
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
 
-        <Table data={books.rows} />
+        {books.data !== undefined ? <Table columns={columns} source={books} isLoading={loading} limit={filterOptions.limit} onPaginationUpdated={(pagination) => paginationOptions(pagination)} /> : null}
       </main>
     </div>
   );
 }
 
-let mapState = state => {
+let mapStateToProps = state => {
   return {
     books: state.books.books,
   };
 };
 
-export default connect(mapState, { getBooks })(Books);
+export default connect(mapStateToProps, { getBooks })(Books);

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 
 function WithAdminAuth({ user, component: Component, ...rest }) {
-  function validateRoute(role) {
+  function validateRoute() {
     let checkAccessToken = localStorage.getItem('bni_jwtToken');
-
-    if (checkAccessToken !== null || role === '2' || role === '1') {
+    let role = localStorage.getItem('bni_UserRole');
+    console.log(role);
+    if ((checkAccessToken !== null && role === '3') || role === '2') {
       return true;
     } else {
       return false;
@@ -15,9 +16,7 @@ function WithAdminAuth({ user, component: Component, ...rest }) {
   return (
     <Route
       {...rest}
-      render={props =>
-        validateRoute(user.role) ? <Component {...props} /> : <Redirect to={'/'} />
-      }
+      render={props => (validateRoute() ? <Component {...props} /> : <Redirect to={'/'} />)}
     />
   );
 }

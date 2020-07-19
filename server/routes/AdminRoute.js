@@ -15,7 +15,7 @@ router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserMan
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList)
 //routing admin panel feature
 
-router.get('/book', [AuthJWT.isAdmin], BookController.list);
+router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
 router.post('/book', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.add);
 router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.update);
@@ -24,8 +24,8 @@ router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
 router.get('/ebook', [AuthJWT.isAdmin], EbookController.list);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
-router.post('/ebook', [AuthJWT.isAdmin], EbookController.add);
-router.put('/ebook/:id', [AuthJWT.isAdmin], EbookController.update);
+router.post('/ebook', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
+router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.update);
 router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);
 
 router.get('/repository', [AuthJWT.isAdmin], RepositoryController.list);
