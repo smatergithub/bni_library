@@ -14,7 +14,7 @@ const TransactionEbookController = require('../controllers/TransactionEbookContr
 router.post('/book/list', BookController.getBookList);
 router.get('/book/detail/:id', BookController.getById);
 
-router.get('/ebook/list', EbookController.list);
+router.get('/ebook/list', EbookController.getEbookList);
 router.get('/ebook/detail/:id', EbookController.getById);
 
 

@@ -9,8 +9,8 @@ export default class EbookApi {
     const url = `/api/admin/ebook/${id}`;
     return Request.putWithAuth(`url`, body, true);
   }
-  static list() {
-    const url = `/api/admin/ebook`;
+  static list(param) {
+    const url = `/api/admin/ebook?offset=${param.page}&limit=${param.limit}`;
     return Request.getWithAuth(url);
   }
 

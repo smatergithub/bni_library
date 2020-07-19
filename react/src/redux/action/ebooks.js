@@ -64,8 +64,8 @@ export const DeleteEbookAction = id => () => {
 
 };
 
-export const getEbooks = body => dispatch => {
-  return BookApi.list(body)
+export const getEbooks = param => dispatch => {
+  return EbookApi.list(param)
     .then(res => {
       if (res) {
         dispatch({ type: EBOOKS, payload: res });
@@ -83,7 +83,7 @@ export const getEbooks = body => dispatch => {
 
 
 export const getDetailEbook = id => dispatch => {
-  return BookApi.detail(id).then(res => {
+  return EbookApi.detail(id).then(res => {
     if (res) {
       dispatch({ type: DETAIL_EBOOK, payload: res });
       return {

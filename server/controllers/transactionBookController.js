@@ -33,11 +33,11 @@ module.exports = {
 
     TransactionBook.findAndCountAll(paramQuerySQL)
       .then(result => {
-        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let totalPage = Math.ceil(book.count / req.body.limit);
+        let page = Math.ceil(req.body.page);
         res.status(200).json({
           count: result.count,
-          totalPage: activePage,
+          totalPage: totalPage,
           activePage: page,
           data: result.rows,
         });

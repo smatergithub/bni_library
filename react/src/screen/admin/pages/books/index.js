@@ -10,6 +10,10 @@ const Books = (props) => {
     limit: 5
   })
 
+
+  const paginationOptions = (pagination) => {
+    console.log("pagination", pagination);
+  }
   const retrieveDataBook = () => {
     setLoading(true);
     props.getBooks(filterOptions).then(res => {
@@ -27,13 +31,38 @@ const Books = (props) => {
 
   if (loading) return null;
   const { books } = props;
-  console.log("books", books);
+
+
+  const columns = [
+    {
+      name: "judul",
+      displayName: "Judul"
+    },
+    {
+      name: "pengarang",
+      displayName: "Pengarang"
+    },
+    {
+      name: "tahunTerbit",
+      displayName: "Tahun Terbit"
+    },
+    {
+      name: "stockBuku",
+      displayName: "Stock Buku"
+    },
+    {
+      name: "status",
+      displayName: "Status"
+    }
+  ]
+
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
 
-        <Table data={books.data} />
+        {books.data !== undefined ? <Table columns={columns} source={books} isLoading={loading} limit={filterOptions.limit} onPaginationUpdated={(pagination) => paginationOptions(pagination)} /> : null}
       </main>
     </div>
   );

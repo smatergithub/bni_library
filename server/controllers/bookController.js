@@ -32,8 +32,8 @@ module.exports = {
     }
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let activePage = Math.ceil(book.count / req.body.limit);
+        let page = req.body.page;
         res.status(200).json({
           count: book.count,
           totalPage: activePage,
@@ -88,11 +88,11 @@ module.exports = {
 
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let totalPage = Math.ceil(book.count / req.body.limit);
+        let page = Math.ceil(req.body.page);
         res.status(200).json({
           count: book.count,
-          totalPage: activePage,
+          totalPage: totalPage,
           activePage: page,
           data: book.rows,
         });
