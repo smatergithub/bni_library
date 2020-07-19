@@ -1,6 +1,7 @@
 import React from 'react';
 
-function Information({ changePages }) {
+function Information({ user, changePages }) {
+  if (user === null) return null;
   return (
     <div class="bg-white rounded-lg shadow-lg pl-10 relative">
       <div class="px-4 py-8 flex">
@@ -12,9 +13,9 @@ function Information({ changePages }) {
           />
         </div>
         <div className="h-32 flex-start px-8">
-          <h4 class=" text-lg tracking-wide uppercase leading-tight">Reynhard Sinaga</h4>
-          <div class="text-sm text-gray-600">Staf</div>
-          <div class="mt-1 text-sm text-gray-700">BNI Jakarta</div>
+          <h4 class=" text-lg tracking-wide uppercase leading-tight">{user.nama}</h4>
+          <div class="text-sm text-gray-600">{user.jabatan}</div>
+          <div class="mt-1 text-sm text-gray-700">{user.unit}</div>
         </div>
         <button
           className="absolute lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm h-10 px-5"
