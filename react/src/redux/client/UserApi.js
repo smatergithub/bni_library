@@ -9,4 +9,8 @@ export default class UsersApi {
     const endpoint = '/api/register';
     return Request.post(endpoint, userData);
   }
+  static getMe() {
+    const endpoint = '/api/profile/me';
+    return Request.getWithAuth(endpoint);
+  }
 }

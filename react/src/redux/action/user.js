@@ -32,6 +32,22 @@ export const signUp = user => () => {
       return { resp: false, msg: msg };
     });
 };
+export const getMe = () => () => {
+  return UserApi.getMe()
+    .then(res => {
+      if (res) {
+        console.log(res);
+        return {
+          resp: true,
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
 export const signOut = () => dispatch => {
   return dispatch({ type: SIGN_OUT });
 };
