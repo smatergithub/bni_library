@@ -83,7 +83,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        res.json(err);
+        res.status(500).send(err);
       });
   },
 

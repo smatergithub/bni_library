@@ -11,8 +11,8 @@ import Dashboard from './dashboard';
 import CreateNewBook from './createNewBook';
 import Books from './books';
 import Ebooks from './ebooks';
+import Repository from "./repository";
 import User from './users';
-import Categories from './categories';
 import Approval from './approval';
 
 const routes = [
@@ -30,6 +30,10 @@ const routes = [
     path: '/admin/ebooks',
     exact: false,
     main: () => <Ebooks />,
+  }, {
+    path: '/admin/repository',
+    exact: false,
+    main: () => <Repository />,
   },
   {
     path: '/admin/analytics',
@@ -45,11 +49,6 @@ const routes = [
     path: '/admin/add-new-book',
     exact: false,
     main: props => <CreateNewBook {...props} />,
-  },
-  {
-    path: '/admin/kategori',
-    exact: false,
-    main: props => <Categories {...props} />,
   },
   {
     path: '/admin/aproval',

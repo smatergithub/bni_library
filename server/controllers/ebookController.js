@@ -9,7 +9,9 @@ module.exports = {
   getEbookList: async (req, res) => {
     // queryStrings
     let { q, order, sort, limit, page, offset } = req.query;
+
     let paramQuerySQL = {};
+
     //search (q) , need fix
     if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
@@ -18,10 +20,12 @@ module.exports = {
         },
       };
     }
+
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
+
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.page = parseInt(page);
@@ -30,6 +34,7 @@ module.exports = {
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
       paramQuerySQL.offset = parseInt(offset - 1);
     }
+
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -51,10 +56,9 @@ module.exports = {
         });
       })
       .catch(err => {
-        res.status(500).send({ err });
+        res.status(500).send(err);
       });
   },
-
   getEbookById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
@@ -108,11 +112,11 @@ module.exports = {
 
     return Ebooks.findAndCountAll(paramQuerySQL)
       .then(ebook => {
-        let activePage = Math.ceil(ebook.count / paramQuerySQL.limit);
+        let totalPage = Math.ceil(ebook.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
           count: ebook.count,
-          totalPage: activePage,
+          totalPage: totalPage,
           activePage: page,
           data: ebook.rows,
         });
@@ -136,55 +140,49 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    Upload(req, res, err => {
-      if (err) throw err;
-      return Ebooks.create({
-        code: req.body.code,
-        title: req.body.title,
-        note: req.body.note,
-        description: req.body.description,
-        image: req.file.path,
-        author: req.body.author,
-        dateEbook: req.body.dateBook,
-        category: req.body.category,
-        sourceEbook: req.body.sourceEbook,
-        isBorrowed: false,
-      })
-        .then(response =>
-          res.status(203).json({ message: 'successfully create ebook', data: response })
-        )
-        .catch(err => res.status(500).send(err));
-    });
+    return Ebooks.create({
+      code: req.body.code,
+      title: req.body.title,
+      note: req.body.note,
+      description: req.body.description,
+      image: req.file.path,
+      author: req.body.author,
+      dateEbook: req.body.dateBook,
+      category: req.body.category,
+      sourceEbook: req.body.sourceEbook,
+      isBorrowed: false,
+    })
+      .then(response =>
+        res.status(203).json({ message: 'successfully create ebook', data: response })
+      )
+      .catch(err => res.status(500).send(err));
   },
 
   update: async (req, res) => {
-    Upload(req, res, err => {
-      if (err) throw err;
-      return Ebooks.findByPk(req.params.id)
-        .then(ebook => {
-          if (!ebook) {
-            return res.status(404).send({ message: 'Ebook not found' });
-          }
-          return ebook
-            .update({
-              code: req.body.code,
-              title: req.body.title,
-              note: req.body.note,
-              description: req.body.description,
-              image: req.file.path,
-              author: req.body.author,
-              dateEbook: req.body.dateBook,
-              category: req.body.category,
-              sourceEbook: req.body.sourceEbook,
-              isBorrowed: false,
-            })
-            .then(response =>
-              res.status(200).json({ message: 'successfully update ebook', data: response })
-            )
-            .catch(err => res.status(404).send(err));
-        })
-        .catch(error => res.status(500).send(error));
-    });
+    return Ebooks.findByPk(req.params.id)
+      .then(ebook => {
+        if (!ebook) {
+          return res.status(404).send({ message: 'Ebook not found' });
+        }
+        return ebook
+          .update({
+            code: req.body.code,
+            title: req.body.title,
+            note: req.body.note,
+            description: req.body.description,
+            image: req.file.path,
+            author: req.body.author,
+            dateEbook: req.body.dateBook,
+            category: req.body.category,
+            sourceEbook: req.body.sourceEbook,
+            isBorrowed: false,
+          })
+          .then(response =>
+            res.status(200).json({ message: 'successfully update ebook', data: response })
+          )
+          .catch(err => res.status(404).send(err));
+      })
+      .catch(error => res.status(500).send(error));
   },
 
   delete: async (req, res) => {

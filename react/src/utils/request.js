@@ -58,8 +58,38 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
 
+  static putWithAuth(url, data, options, isFormData) {
+    const requestOptions = {
+      method: 'put',
+      url,
+      data,
+      headers: {
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
+    return makeAxiosRequest(requestOptions, options);
+  }
+
+
   static delete(url, params, options) {
     const requestOptions = { method: 'delete', url, params };
     return makeAxiosRequest(requestOptions, options);
   }
+
+  static deleteWithAuth(url, data, options, isFormData) {
+    const requestOptions = {
+      method: 'delete',
+      url,
+      data,
+      headers: {
+        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+    };
+    return makeAxiosRequest(requestOptions, options);
+  }
+
 }
+
+
