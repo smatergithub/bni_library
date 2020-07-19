@@ -6,3 +6,11 @@ export const SIGN_OUT = 'SIGN_OUT';
 // ===========> type for books action here <===========
 
 export const BOOKS = 'BOOKS';
+export const DETAIL_BOOK = "DETAIL_BOOK";
+
+
+
+// ===========> type for ebooks action here <===========
+
+export const EBOOKS = 'EBOOKS';
+export const DETAIL_EBOOK = "DETAIL_EBOOK";

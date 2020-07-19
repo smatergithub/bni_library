@@ -15,7 +15,7 @@ router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserMan
 
 //routing admin panel feature
 
-router.get('/book', [AuthJWT.isAdmin], BookController.list);
+router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
 router.post('/book', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.add);
 router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.update);

@@ -1,35 +1,5 @@
 import React from 'react';
 
-const dataTable = [
-  {
-    no: 12,
-    name: 'ADRIAN',
-    npp: 123434,
-    status: 'ACTIVE',
-    address: 'BATAM',
-  },
-  {
-    no: 12,
-    name: 'EMMA',
-    npp: 123434,
-    status: 'ACTIVE',
-    address: 'BATAM',
-  },
-  {
-    no: 12,
-    name: 'HENDRA',
-    npp: 123434,
-    status: 'ACTIVE',
-    address: 'BATAM',
-  },
-  {
-    no: 12,
-    name: 'SILVA',
-    npp: 123434,
-    status: 'ACTIVE',
-    address: 'BATAM',
-  },
-];
 function Table({ data }) {
   if (!data) return null;
   return (
