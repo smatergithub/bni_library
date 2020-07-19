@@ -5,6 +5,7 @@ import Login from './login';
 import Register from './register';
 import ForgotPassword from './forgotPassword';
 import ResetPassword from './resetPassword';
+import Activation from './activation';
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     path: '/auth/forgot-password',
     exact: false,
     main: props => <ForgotPassword {...props} />,
+  },
+  {
+    path: '/auth/activation',
+    exact: false,
+    main: props => <Activation {...props} />,
   },
   {
     path: '/auth/reset-password',

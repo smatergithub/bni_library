@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import DatePicker from 'react-datepicker';
 import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
 
@@ -10,22 +11,29 @@ function Register(props) {
     email: '',
     password: '',
     confirmPassword: '',
-    isAdmin: true,
+    tanggalLahir: '',
   });
+  let [dateBorn, setDateBorn] = React.useState(null);
+  let [isRegisterSuccess, setIsRequestSuccess] = React.useState(false);
+  let [token, setToken] = React.useState('');
 
   function onFormSubmit(e) {
     e.preventDefault();
-
+    formData.tanggalLahir = dateBorn;
     props.signUp(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
-        history.push('/auth/login');
+        console.log(res);
+        setIsRequestSuccess(true);
+        setToken(res.token);
+        // history.push('/auth/login');
       } else {
         ToastError(res.msg);
       }
     });
     // console.log(formData);
   }
+
   return (
     <main>
       <section className="absolute w-full h-full">
@@ -44,90 +52,120 @@ function Register(props) {
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form onSubmit={e => onFormSubmit(e)}>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
-                        Nama
-                      </label>
-                      <input
-                        type="text"
-                        onChange={e => setFormData({ ...formData, name: e.target.value })}
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Nama"
+                  {isRegisterSuccess && (
+                    <div>
+                      Klik link ini untuk aktivasi akun{' '}
+                      <span
                         style={{
-                          transition: 'all 0.15s ease 0s',
+                          color: 'red',
+                          cursor: 'pointer',
                         }}
-                      />
-                    </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
+                        onClick={() => props.history.push(`/auth/activation?token=${token}`)}
                       >
-                        Email
-                      </label>
-                      <input
-                        type="email"
-                        onChange={e => setFormData({ ...formData, email: e.target.value })}
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Email"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      />
+                        click here!
+                      </span>
                     </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        onChange={e => setFormData({ ...formData, password: e.target.value })}
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Password"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      />
-                    </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
-                        Konfirmasi Password
-                      </label>
-                      <input
-                        onChange={e =>
-                          setFormData({ ...formData, confirmPassword: e.target.value })
-                        }
-                        type="password"
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        placeholder="Password"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      />
-                    </div>
+                  )}
 
-                    <div className="text-center mt-10">
-                      <button
-                        className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="submit"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      >
-                        Daftar
-                      </button>
-                    </div>
-                  </form>
+                  {!isRegisterSuccess && (
+                    <form onSubmit={e => onFormSubmit(e)}>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Nama
+                        </label>
+                        <input
+                          type="text"
+                          onChange={e => setFormData({ ...formData, name: e.target.value })}
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          placeholder="Nama"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        />
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          onChange={e => setFormData({ ...formData, email: e.target.value })}
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          placeholder="Email"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        />
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Tanggal Lahir
+                        </label>
+                        <DatePicker
+                          selected={dateBorn}
+                          onChange={setDateBorn}
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                        />
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Password
+                        </label>
+                        <input
+                          type="password"
+                          onChange={e => setFormData({ ...formData, password: e.target.value })}
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          placeholder="Password"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        />
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Konfirmasi Password
+                        </label>
+                        <input
+                          onChange={e =>
+                            setFormData({ ...formData, confirmPassword: e.target.value })
+                          }
+                          type="password"
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          placeholder="Password"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        />
+                      </div>
+
+                      <div className="text-center mt-10">
+                        <button
+                          className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                          type="submit"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        >
+                          Daftar
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
