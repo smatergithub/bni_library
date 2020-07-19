@@ -6,3 +6,4 @@ export const SIGN_OUT = 'SIGN_OUT';
 // ===========> type for books action here <===========
 
 export const BOOKS = 'BOOKS';
+export const BOOK_USERS = 'BOOK_USERS';
