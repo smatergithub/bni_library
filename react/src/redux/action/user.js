@@ -6,6 +6,7 @@ export const signIn = user => dispatch => {
     .then(res => {
       if (res) {
         localStorage.setItem('bni_jwtToken', res.accessToken);
+        localStorage.setItem('bni_UserRole', res.role);
         dispatch({ type: SIGN_IN, payload: res });
         return { resp: true, msg: '' };
       }

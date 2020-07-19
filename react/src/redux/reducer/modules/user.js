@@ -11,7 +11,7 @@ const user = (state = initialState, action) => {
       return {
         ...state,
         isAuth: true,
-        role: action.payload.superAdmin ? '2' : action.payload.isAdmin ? '1' : '0',
+        role: action.payload.role,
       };
     case SIGN_OUT:
       return initialState;

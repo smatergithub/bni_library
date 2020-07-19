@@ -113,7 +113,7 @@ module.exports = {
         res.status(200).send({
           email: user.email,
           accessToken: token,
-          role: user.superAdmin === 1 ? '3' : user.isAdmin === 1 ? '2' : '1',
+          role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
         });
       })
       .catch(err => {
