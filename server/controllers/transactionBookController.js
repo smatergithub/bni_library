@@ -4,16 +4,54 @@ const TransactionBook = require('../models').transactionBook;
 
 module.exports = {
   list: async (req, res) => {
-
-    // queryStrings
-    let { order, sort, limit, page, offset } = req.query;
+    let { code, status, startDate, endDate, userId, limit, offset, page, order, sort } = req.body;
     let paramQuerySQL = {
       include: ['book', 'user']
     };
-    //limit
+
+    if (code != '' && typeof code !== 'undefined') {
+      paramQuerySQL.where = {
+        code: {
+          [Op.like]: '%' + code + '%'
+        }
+      }
+    }
+    if (status != '' && typeof status !== 'undefined') {
+      paramQuerySQL.where = {
+        status: {
+          [Op.like]: '%' + status + '%'
+        }
+      }
+    }
+
+    if (startDate != '' && typeof startDate !== 'undefined') {
+      paramQuerySQL.where = {
+        startDate: {
+          [Op.like]: '%' + startDate + '%'
+        }
+      }
+    }
+
+    if (endDate != '' && typeof endDate !== 'undefined') {
+      paramQuerySQL.where = {
+        endDate: {
+          [Op.like]: '%' + endDate + '%'
+        }
+      }
+    }
+
+    if (userId != '' && typeof userId !== 'undefined') {
+      paramQuerySQL.where = {
+        userId: {
+          [Op.like]: '%' + userId + '%'
+        }
+      }
+    }
+
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
+
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.page = parseInt(page);
@@ -22,13 +60,16 @@ module.exports = {
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
       paramQuerySQL.offset = parseInt(offset - 1);
     }
-    // sort par defaut si param vide ou inexistant
-    if (typeof sort === 'undefined' || sort == '') {
-      sort = 'ASC';
-    }
+
     // order by
-    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
-      paramQuerySQL.order = [[order, sort]];
+    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [
+        [order, sort]
+      ];
+    }
+
+    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+      sort = 'DESC';
     }
 
     TransactionBook.findAndCountAll(paramQuerySQL)
