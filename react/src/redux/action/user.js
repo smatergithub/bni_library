@@ -1,4 +1,4 @@
-import { SIGN_IN, SIGN_OUT } from '../type';
+import { SIGN_IN, SIGN_OUT, USERS } from '../type';
 import UserApi from '../client/UserApi';
 
 export const signIn = user => dispatch => {
@@ -34,4 +34,21 @@ export const signUp = user => () => {
 };
 export const signOut = () => dispatch => {
   return dispatch({ type: SIGN_OUT });
+};
+
+export const getUsersListToAdmin = param => dispatch => {
+  return UserApi.listUserAdmin(param)
+    .then(res => {
+      if (res) {
+        dispatch({ type: USERS, payload: res });
+        return {
+          resp: true,
+          msg: '',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
 };

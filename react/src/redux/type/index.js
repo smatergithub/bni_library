@@ -3,6 +3,13 @@ export const SELECT_NAME_BYID = 'SELECT_NAME_BYID';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 
+
+
+// ===========> type for users action here <===========
+
+export const USERS = 'USERS';
+export const DETAIL_USERS = "DETAIL_USERS";
+
 // ===========> type for books action here <===========
 
 export const BOOKS = 'BOOKS';
@@ -14,3 +21,9 @@ export const DETAIL_BOOK = "DETAIL_BOOK";
 
 export const EBOOKS = 'EBOOKS';
 export const DETAIL_EBOOK = "DETAIL_EBOOK";
+
+
+// ===========> type for repositorys action here <===========
+
+export const REPOSITORYS = 'REPOSITORYS';
+export const DETAIL_REPOSITORY = "DETAIL_REPOSITORY";

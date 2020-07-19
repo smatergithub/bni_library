@@ -32,26 +32,26 @@ const routes = [
     notif: false,
   },
   {
+    path: '/admin/repository',
+    name: 'Daftar Repository',
+    icon: 'fas fa-file-pdf',
+    params: 'repository',
+    notif: false,
+  },
+  {
     path: '/admin/users',
-    name: 'User',
+    name: 'Daftar User',
     icon: 'fas fa-id-badge',
     params: 'users',
     notif: false,
   },
-  {
-    path: '/admin/analytics',
-    name: 'Analytics',
-    icon: 'fas fa-align-left',
-    params: 'analytics',
-    notif: false,
-  },
-  {
-    path: '/admin/kategori',
-    name: 'Kategori Buku',
-    icon: 'fas fa-indent',
-    params: 'kategori',
-    notif: false,
-  },
+  // {
+  //   path: '/admin/analytics',
+  //   name: 'Analytics',
+  //   icon: 'fas fa-align-left',
+  //   params: 'analytics',
+  //   notif: false,
+  // },
 ];
 
 function Sidebar({ url, createNewBook }) {

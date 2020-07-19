@@ -1,13 +1,15 @@
 import { combineReducers } from 'redux';
 
-import user from './modules/user';
+import users from './modules/user';
 import books from './modules/books';
 import ebooks from "./modules/ebooks"
+import repositorys from "./modules/repositorys";
 
 const rootReducer = combineReducers({
-  user,
+  users,
   books,
-  ebooks
+  ebooks,
+  repositorys
 });
 
 export default rootReducer;
