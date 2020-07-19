@@ -22,6 +22,7 @@ export const signUp = user => () => {
         return {
           resp: true,
           msg: 'Registration was successfully, Now you can  login  with your account !',
+          token: res.verificationToken,
         };
       }
     })
