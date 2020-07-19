@@ -12,7 +12,7 @@ const TransactionEbookController = require('../controllers/TransactionEbookContr
 
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
 router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
-
+router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList)
 //routing admin panel feature
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
@@ -33,11 +33,11 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
-router.get('/transactionBook', [AuthJWT.isAdmin], TransactionBookController.list);
+router.post('/transactionBook', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 
-router.get('/transactionEbook', [AuthJWT.isAdmin], TransactionEbookController.list);
+router.post('/transactionEbook', [AuthJWT.isAdmin], TransactionEbookController.list);
 router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 
 module.exports = router;

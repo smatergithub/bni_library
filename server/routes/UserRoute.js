@@ -7,15 +7,18 @@ const AuthenticationController = require('../controllers/AuthenticationControlle
 const ProfileUserController = require("../controllers/ProfileUserController");
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
+const DataSourceFilterBookController = require("../controllers/dataSourceFilterBookController");
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
 
 
 router.post('/book/list', BookController.getBookList);
-router.get('/book/detail/:id', BookController.getById);
+router.get('/book/detail/:id', BookController.getBookById);
+router.get('/categoryBook', DataSourceFilterBookController.getCategory);
+router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
 router.get('/ebook/list', EbookController.getEbookList);
-router.get('/ebook/detail/:id', EbookController.getById);
+router.get('/ebook/detail/:id', EbookController.getEbookById);
 
 
 router.post('/register', [verifySignUp.checkDuplicateUsernameOrEmail], AuthenticationController.register);

@@ -6,6 +6,7 @@ export const signIn = user => dispatch => {
     .then(res => {
       if (res) {
         localStorage.setItem('bni_jwtToken', res.accessToken);
+        localStorage.setItem('bni_UserRole', res.role);
         dispatch({ type: SIGN_IN, payload: res });
         return { resp: true, msg: '' };
       }
@@ -22,6 +23,7 @@ export const signUp = user => () => {
         return {
           resp: true,
           msg: 'Registration was successfully, Now you can  login  with your account !',
+          token: res.verificationToken,
         };
       }
     })

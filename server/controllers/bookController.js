@@ -7,13 +7,37 @@ const readXlsxFile = require("read-excel-file/node");
 
 module.exports = {
   getBookList: async (req, res) => {
-    let { order, sort, limit, offset, page } = req.query;
+    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let paramQuerySQL = {}
 
-    let paramQuerySQL = {};
-    //limit
+
+    if (judul != '' && typeof judul !== 'undefined') {
+      paramQuerySQL.where = {
+        judul: {
+          [Op.like]: '%' + judul + '%'
+        }
+      }
+    }
+    if (kategori != '' && typeof kategori !== 'undefined') {
+      paramQuerySQL.where = {
+        kategori: {
+          [Op.like]: '%' + kategori + '%'
+        }
+      }
+    }
+
+    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
+      paramQuerySQL.where = {
+        tahunTerbit: {
+          [Op.like]: '%' + tahunTerbit + '%'
+        }
+      }
+    }
+
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
+
     // page
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.page = parseInt(page);
@@ -22,14 +46,18 @@ module.exports = {
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
       paramQuerySQL.offset = parseInt(offset - 1);
     }
-    // sort par defaut si param vide ou inexistant
-    if (typeof sort === 'undefined' || sort == '') {
-      sort = 'ASC';
-    }
+
     // order by
-    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
-      paramQuerySQL.order = [[order, sort]];
+    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [
+        [order, sort]
+      ];
     }
+
+    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+      sort = 'DESC';
+    }
+
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / req.body.limit);
@@ -60,11 +88,33 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    // queryStrings
-    let { order, sort, limit, offset, page } = req.query;
-    let paramQuerySQL = {};
+    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let paramQuerySQL = {}
 
-    //limit
+
+    if (judul != '' && typeof judul !== 'undefined') {
+      paramQuerySQL.where = {
+        judul: {
+          [Op.like]: '%' + judul + '%'
+        }
+      }
+    }
+    if (kategori != '' && typeof kategori !== 'undefined') {
+      paramQuerySQL.where = {
+        kategori: {
+          [Op.like]: '%' + kategori + '%'
+        }
+      }
+    }
+
+    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
+      paramQuerySQL.where = {
+        tahunTerbit: {
+          [Op.like]: '%' + tahunTerbit + '%'
+        }
+      }
+    }
+
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
@@ -77,13 +127,16 @@ module.exports = {
     if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
       paramQuerySQL.offset = parseInt(offset - 1);
     }
-    // sort par defaut si param vide ou inexistant
-    if (typeof sort === 'undefined' || sort == '') {
-      sort = 'ASC';
-    }
+
     // order by
-    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
-      paramQuerySQL.order = [[order, sort]];
+    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [
+        [order, sort]
+      ];
+    }
+
+    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+      sort = 'DESC';
     }
 
     return await Books.findAndCountAll(paramQuerySQL)
