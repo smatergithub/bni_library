@@ -5,4 +5,8 @@ export default class BookUserApi {
     const url = 'api/book/list';
     return Request.postWithAuth(url, books, true);
   }
+  static getById(id) {
+    const url = `api/book/detail/${id}`;
+    return Request.getWithAuth(url);
+  }
 }

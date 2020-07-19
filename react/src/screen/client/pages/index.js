@@ -16,52 +16,52 @@ const routes = [
   {
     path: '/',
     exact: true,
-    main: props => <LandingPages {...props} />,
+    main: <LandingPages />,
   },
   {
     path: '/home',
     exact: false,
-    main: () => <Home />,
+    main: <Home />,
   },
   {
     path: '/katalog',
     exact: false,
-    main: () => <LandingPages />,
+    main: <LandingPages />,
   },
   {
     path: '/riset',
     exact: false,
-    main: () => <Research />,
+    main: <Research />,
   },
   {
     path: '/about',
     exact: false,
-    main: () => <About />,
+    main: <About />,
   },
   {
     path: '/books',
     exact: false,
-    main: () => <Books />,
+    main: <Books />,
   },
   {
     path: '/ebook',
     exact: false,
-    main: () => <Books />,
+    main: <Books />,
   },
   {
     path: '/faq',
     exact: false,
-    main: () => <Faq />,
+    main: <Faq />,
   },
   {
     path: '/detail-book',
     exact: false,
-    main: () => <DetailBooks />,
+    main: <DetailBooks />,
   },
   {
     path: '/profile/home',
     exact: false,
-    main: () => <Accounts />,
+    main: <Accounts />,
   },
 ];
 
@@ -73,9 +73,7 @@ function HomeUser(props) {
     <div>
       <NavBar url={match.params.id} props={props} isAuth={user.isAuth} />
       {routes.map((route, index) => (
-        <Route key={index} path={route.path} exact={route.exact}>
-          <route.main {...props} />
-        </Route>
+        <Route key={index} path={route.path} exact={route.exact} component={() => route.main} />
       ))}
     </div>
   );

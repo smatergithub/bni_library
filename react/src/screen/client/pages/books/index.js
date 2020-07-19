@@ -109,7 +109,7 @@ function Books(props) {
                     </div>
                     <button
                       className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-                      onClick={() => history.push('/detail-book')}
+                      onClick={() => history.push(`/detail-book?id=${book.id}`)}
                     >
                       Detail
                     </button>

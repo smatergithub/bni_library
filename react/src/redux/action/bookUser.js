@@ -17,3 +17,19 @@ export const getAllBook = params => dispatch => {
       return { resp: false, msg: msg };
     });
 };
+export const getBookById = id => () => {
+  return BookUserApi.getById(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
