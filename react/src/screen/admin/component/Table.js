@@ -69,7 +69,7 @@ const Table = (props) => {
                 {columns.map((column, innerIndex) => {
                   return (
                     <React.Fragment key={innerIndex}>
-                      {column.name === "actions" ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : <td className="w-1/6 text-left py-3 px-4">{item[column.name]}</td>}
+                      {column.name === "actions" ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : column.customRender ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : <td className="w-1/6 text-left py-3 px-4">{item[column.name]}</td>}
                     </React.Fragment>
                   )
                 })}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getEbooks } from "../../../../redux/action/ebooks";
-// import { getEbooks } from '../../../../redux/action/books';
+import Button from "../../component/Button";
+
 import Table from '../../component/Table';
 
 const Ebooks = (props) => {
@@ -52,6 +53,20 @@ const Ebooks = (props) => {
       name: "author",
       displayName: "Author"
     },
+    {
+      name: "actions",
+      displayName: "Actions",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <React.Fragment>
+              <Button style={{ marginRight: '5px' }}>Edit</Button>
+              <Button>Delete</Button>
+            </React.Fragment>
+          </React.Fragment>
+        );
+      },
+    }
   ]
 
 

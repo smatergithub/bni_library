@@ -6,7 +6,7 @@
 .pnp.js
 /react/node_modules
 /react/build
-
+/server/public
 # testing
 /coverage
 

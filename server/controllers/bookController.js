@@ -7,7 +7,7 @@ const readXlsxFile = require("read-excel-file/node");
 
 module.exports = {
   getBookList: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {}
 
 
@@ -39,12 +39,13 @@ module.exports = {
     }
 
     // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
+    // if (page != '' && typeof page !== 'undefined' && page > 0) {
+    //   paramQuerySQL.page = parseInt(page);
+    // }
+
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
     // order by
@@ -88,7 +89,7 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {}
 
 
@@ -119,13 +120,12 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
+
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      console.log("test", parseInt((page - 1) * req.body.limit));
+      console.log("limit", req.body.limit)
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
     // order by

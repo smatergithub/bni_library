@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsersListToAdmin } from "../../../../redux/action/user";
 import Table from '../../component/Table';
+import Button from "../../component/Button";
 
 const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
@@ -51,6 +52,20 @@ const Ebooks = (props) => {
       name: "phoneNumber",
       displayName: "Nomor Telepon"
     },
+    {
+      name: "actions",
+      displayName: "Actions",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <React.Fragment>
+              <Button style={{ marginRight: '5px' }}>Edit</Button>
+              <Button>Delete</Button>
+            </React.Fragment>
+          </React.Fragment>
+        );
+      },
+    }
   ]
 
   console.log("users", users);
