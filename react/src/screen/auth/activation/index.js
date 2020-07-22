@@ -28,7 +28,7 @@ function Activation(props) {
     });
     // console.log(formData);
   }
-  console.log(dateBorn);
+
   return (
     <main>
       <section className="absolute w-full h-full">

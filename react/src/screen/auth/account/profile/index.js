@@ -15,6 +15,16 @@ function Profile(props) {
       }
     });
   }, []);
+  React.useEffect(() => {
+    if (!isEditUser) {
+      props.getMe().then(res => {
+        setProcessing(false);
+        if (res.resp) {
+          setUser(res.data);
+        }
+      });
+    }
+  }, [isEditUser]);
   if (processing && user === null) return null;
   return (
     <React.Fragment>

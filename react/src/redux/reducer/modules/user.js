@@ -1,9 +1,10 @@
-import { SIGN_IN, SIGN_OUT, USERS } from '../../type';
+import { SIGN_IN, SIGN_OUT, USERS, ME } from '../../type';
 
 const initialState = {
   isAuth: false,
   role: '',
-  users: []
+  users: [],
+  me: null,
 };
 
 const user = (state = initialState, action) => {
@@ -19,8 +20,14 @@ const user = (state = initialState, action) => {
     case USERS:
       return {
         ...state,
-        users: action.payload
-      }
+        users: action.payload,
+      };
+
+    case ME:
+      return {
+        ...state,
+        me: action.payload,
+      };
     default:
       return state;
   }

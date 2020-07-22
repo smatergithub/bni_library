@@ -7,6 +7,7 @@ export const SIGN_OUT = 'SIGN_OUT';
 
 export const USERS = 'USERS';
 export const DETAIL_USERS = 'DETAIL_USERS';
+export const ME = 'ME';
 
 // ===========> type for books action here <===========
 

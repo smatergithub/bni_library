@@ -28,4 +28,8 @@ export default class UsersApi {
     const endpoint = '/api/profile/me';
     return Request.getWithAuth(endpoint);
   }
+  static updateMe(userData) {
+    const url = `/api/profile/updateProfile`;
+    return Request.postWithAuth(url, userData, true);
+  }
 }
