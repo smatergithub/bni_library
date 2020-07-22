@@ -41,6 +41,7 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
   static postWithAuth(url, data, options, isFormData) {
+    console.log(data);
     const requestOptions = {
       method: 'post',
       url,
@@ -71,7 +72,6 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
 
-
   static delete(url, params, options) {
     const requestOptions = { method: 'delete', url, params };
     return makeAxiosRequest(requestOptions, options);
@@ -89,7 +89,4 @@ export default class Request {
     };
     return makeAxiosRequest(requestOptions, options);
   }
-
 }
-
-

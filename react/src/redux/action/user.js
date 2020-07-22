@@ -1,4 +1,4 @@
-import { SIGN_IN, SIGN_OUT, USERS } from '../type';
+import { SIGN_IN, SIGN_OUT, USERS, ME } from '../type';
 import UserApi from '../client/UserApi';
 
 export const signIn = user => dispatch => {
@@ -32,11 +32,11 @@ export const signUp = user => () => {
       return { resp: false, msg: msg };
     });
 };
-export const getMe = () => () => {
+export const getMe = () => dispatch => {
   return UserApi.getMe()
     .then(res => {
       if (res) {
-        console.log(res);
+        dispatch({ type: ME, payload: res });
         return {
           resp: true,
           data: res,
@@ -48,6 +48,22 @@ export const getMe = () => () => {
       return { resp: false, msg: msg };
     });
 };
+export const updateMe = data => () => {
+  return UserApi.updateMe(data)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const signOut = () => dispatch => {
   return dispatch({ type: SIGN_OUT });
 };
