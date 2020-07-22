@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getRepositorys } from "../../../../redux/action/repositorys";
 import Table from '../../component/Table';
+import Button from "../../component/Button";
+import moment from "moment";
 
 const Repository = (props) => {
   const [loading, setLoading] = React.useState(false);
@@ -49,8 +51,29 @@ const Repository = (props) => {
     },
     {
       name: "createdAt",
-      displayName: "Created At"
+      displayName: "Created At",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <span>{moment(rowData.createdAt).format("DD MMM YYYY")}</span>
+          </React.Fragment>
+        )
+      }
     },
+    {
+      name: "actions",
+      displayName: "Actions",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <React.Fragment>
+              <Button style={{ marginRight: '5px' }}>Edit</Button>
+              <Button>Delete</Button>
+            </React.Fragment>
+          </React.Fragment>
+        );
+      },
+    }
   ]
 
 

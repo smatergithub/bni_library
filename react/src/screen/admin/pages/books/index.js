@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getBooks } from '../../../../redux/action/books';
 import Table from '../../component/Table';
+import Button from "../../component/Button";
 
 const Books = (props) => {
   const [loading, setLoading] = React.useState(false);
@@ -12,9 +13,16 @@ const Books = (props) => {
 
 
   const paginationOptions = (pagination) => {
-    console.log("pagination", pagination);
+    seFilterOptions({
+      page: pagination.page,
+      limit: pagination.limit,
+      q: ""
+    })
   }
-  const retrieveDataBook = () => {
+
+
+
+  const retrieveDataBook = (filterOptions) => {
     setLoading(true);
     props.getBooks(filterOptions).then(res => {
       if (res) {
@@ -24,13 +32,12 @@ const Books = (props) => {
   }
 
   React.useEffect(() => {
-    retrieveDataBook();
+    retrieveDataBook(filterOptions)
+  }, [filterOptions])
+
+  React.useEffect(() => {
+    retrieveDataBook(filterOptions);
   }, []);
-
-
-
-  if (loading) return null;
-  const { books } = props;
 
 
   const columns = [
@@ -53,10 +60,25 @@ const Books = (props) => {
     {
       name: "status",
       displayName: "Status"
+    },
+    {
+      name: "actions",
+      displayName: "Actions",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <React.Fragment>
+              <Button style={{ marginRight: '5px' }}>Edit</Button>
+              <Button>Delete</Button>
+            </React.Fragment>
+          </React.Fragment>
+        );
+      },
     }
   ]
 
-
+  if (loading) return null;
+  const { books } = props;
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
