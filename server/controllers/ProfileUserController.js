@@ -83,6 +83,7 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
+      where: { status: "Borrowed" },
       include: ['book', 'user']
     }
 
@@ -114,9 +115,10 @@ module.exports = {
           activePage: page,
           data: result.rows
         })
-          .catch(err => {
-            res.status(500).send(err);
-          })
+
+      })
+      .catch(err => {
+        res.status(500).send(err);
       })
   }
 

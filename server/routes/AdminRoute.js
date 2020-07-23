@@ -17,7 +17,7 @@ router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserLi
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
-router.post('/book', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.add);
+router.post('/book/create', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.add);
 router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single("image"), BookController.update);
 router.post('/book/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), BookController.uploadBook);
 router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
@@ -33,7 +33,7 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
-router.post('/transactionBook', [AuthJWT.isAdmin], TransactionBookController.list);
+router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 

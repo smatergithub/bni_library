@@ -11,11 +11,17 @@ module.exports = {
       transactionBookId: {
         type: Sequelize.STRING
       },
-      BookId: {
+      bookId: {
+        type: Sequelize.STRING
+      },
+      userId: {
         type: Sequelize.STRING
       },
       rating: {
         type: Sequelize.INTEGER
+      },
+      note: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
