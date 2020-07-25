@@ -74,12 +74,6 @@ const Repository = (props) => {
               >
                 Edit
               </button>
-              <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-              >
-                Delete
-              </button>
             </React.Fragment>
           </React.Fragment>
         );
