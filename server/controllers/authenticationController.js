@@ -31,6 +31,7 @@ module.exports = {
             res.status(203).send({
               message: 'account was registered successfully!',
               verificationToken: verification.token,
+              email: req.body.email,
               expiredDateToken: verification.expiredDateToken,
             });
           })

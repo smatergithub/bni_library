@@ -16,6 +16,7 @@ function Register(props) {
   let [dateBorn, setDateBorn] = React.useState(null);
   let [isRegisterSuccess, setIsRequestSuccess] = React.useState(false);
   let [token, setToken] = React.useState('');
+  let [email, setEmail] = React.useState('');
 
   function onFormSubmit(e) {
     e.preventDefault();
@@ -26,6 +27,7 @@ function Register(props) {
         console.log(res);
         setIsRequestSuccess(true);
         setToken(res.token);
+        setEmail(res.email);
         // history.push('/auth/login');
       } else {
         ToastError(res.msg);
@@ -60,7 +62,9 @@ function Register(props) {
                           color: 'red',
                           cursor: 'pointer',
                         }}
-                        onClick={() => props.history.push(`/auth/activation?token=${token}`)}
+                        onClick={() =>
+                          props.history.push(`/auth/activation?email=${email}&token=${token}`)
+                        }
                       >
                         click here!
                       </span>

@@ -22,8 +22,26 @@ export const signUp = user => () => {
       if (res) {
         return {
           resp: true,
+          msg: 'Request was successfully, Please check your email to complete the registration!',
+          token: res.verificationToken,
+          email: res.email,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const verificationUser = param => () => {
+  return UserApi.verificationUser(param)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
           msg: 'Registration was successfully, Now you can  login  with your account !',
           token: res.verificationToken,
+          email: res.email,
         };
       }
     })
