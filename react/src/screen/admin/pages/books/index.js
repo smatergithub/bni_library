@@ -13,10 +13,10 @@ const Books = (props) => {
 
 
   const paginationOptions = (pagination) => {
+    console.log("data pagination", pagination)
     seFilterOptions({
       page: pagination.page,
       limit: pagination.limit,
-      q: ""
     })
   }
 
@@ -31,9 +31,10 @@ const Books = (props) => {
     }).catch(err => { console.log("error", err) });
   }
 
-  React.useEffect(() => {
-    retrieveDataBook(filterOptions)
-  }, [filterOptions])
+  // React.useEffect(() => {
+  //   retrieveDataBook(filterOptions)
+  //   console.log("filter", filterOptions)
+  // }, [filterOptions])
 
   React.useEffect(() => {
     retrieveDataBook(filterOptions);
@@ -68,8 +69,19 @@ const Books = (props) => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Button style={{ marginRight: '5px' }}>Edit</Button>
-              <Button>Delete</Button>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+              >
+                Edit
+              </button>
+              <button
+                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+              >
+                Delete
+              </button>
             </React.Fragment>
           </React.Fragment>
         );

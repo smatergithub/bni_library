@@ -33,7 +33,8 @@ const Table = (props) => {
       return
     }
     if (data.length) {
-      setCurrentPage(currentPage + 1)
+      let count = currentPage + 1
+      setCurrentPage(count)
       onPaginationUpdate()
     }
   }
@@ -45,7 +46,6 @@ const Table = (props) => {
     isLoading,
     source: { data, count, totalPage, dataCurrentPage }
   } = props;
-
   return (
     <div className="bg-white overflow-auto">
       <table className="min-w-full bg-white">
