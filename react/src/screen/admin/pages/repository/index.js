@@ -67,8 +67,13 @@ const Repository = (props) => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Button style={{ marginRight: '5px' }}>Edit</Button>
-              <Button>Delete</Button>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+              >
+                Edit
+              </button>
             </React.Fragment>
           </React.Fragment>
         );

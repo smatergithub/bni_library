@@ -17,6 +17,9 @@ module.exports = {
       status: {
         type: Sequelize.STRING
       },
+      isGiveRating: {
+        type: Sequelize.BOOLEAN
+      },
       note: {
         type: Sequelize.STRING
       },

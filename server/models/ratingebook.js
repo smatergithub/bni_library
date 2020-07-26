@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     transactionEbookId: DataTypes.STRING,
     ebookId: DataTypes.STRING,
+    userId: DataTypes.STRING,
+    note: DataTypes.STRING,
     rating: DataTypes.INTEGER
   }, {});
   ratingEbook.associate = function (models) {

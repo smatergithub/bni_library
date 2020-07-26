@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsersListToAdmin } from "../../../../redux/action/user";
 import Table from '../../component/Table';
-import Button from "../../component/Button";
 
 const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
@@ -59,8 +58,13 @@ const Ebooks = (props) => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Button style={{ marginRight: '5px' }}>Edit</Button>
-              <Button>Delete</Button>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+              >
+                Make Admin
+              </button>
             </React.Fragment>
           </React.Fragment>
         );
@@ -68,7 +72,6 @@ const Ebooks = (props) => {
     }
   ]
 
-  console.log("users", users);
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">

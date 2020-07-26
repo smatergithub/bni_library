@@ -1,6 +1,7 @@
 import React from 'react';
-let nnn;
-export default function Modal({ open, title, onCLose, children }) {
+
+
+export default function Modal({ open, title, onCLose, handleSubmit, children }) {
   return (
     <>
       {open ? (
@@ -27,10 +28,10 @@ export default function Modal({ open, title, onCLose, children }) {
                 </div>
                 {children}
                 <div class="flex justify-end pt-2">
-                  <button class="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">
+                  <button onClick={() => onCLose()} class="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">
                     Close
                   </button>
-                  <button class="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400">
+                  <button onClick={() => handleSubmit()} class="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400">
                     Submit
                   </button>
                 </div>
