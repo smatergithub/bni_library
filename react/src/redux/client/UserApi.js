@@ -9,6 +9,10 @@ export default class UsersApi {
     const url = '/api/register';
     return Request.post(url, userData);
   }
+  static verificationUser(userData) {
+    const url = `/api/verification?${userData}`;
+    return Request.post(url);
+  }
 
   static listUserAdmin(param) {
     const url = `/api/admin/manage-user?page=${param.page}&limit=${param.limit}`;
