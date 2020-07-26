@@ -2,20 +2,29 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Input, Select } from 'antd';
-import { getAllBook } from '../../../../redux/action/bookUser';
+import { NoData } from '../../../../component';
+import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
 const { Search } = Input;
 const { Option } = Select;
 
 function Books(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
+  let [category, setCategory] = React.useState([]);
 
-  function getAllBook() {
+  function getAllBook(params) {
     let formData = {
       page: 1,
       limit: 8,
       offset: 0,
     };
+    if (params) {
+      formData = {
+        ...formData,
+        ...params,
+      };
+    }
+
     props.getAllBook(formData).then(() => {
       setProcessing(false);
     });
@@ -23,9 +32,17 @@ function Books(props) {
   React.useEffect(() => {
     setProcessing(true);
     getAllBook();
+    props.getCategory().then(res => {
+      if (res.data.length > 0) {
+        setCategory(res.data);
+      }
+    });
   }, []);
   function handleChange(value) {
-    console.log(`selected ${value}`);
+    getAllBook({ kategori: value });
+  }
+  function handleSearch(value) {
+    getAllBook({ judul: value });
   }
 
   if (processing && props.books === null) return null;
@@ -46,17 +63,14 @@ function Books(props) {
               <div className="flex items-center" id="buku-nav-content">
                 <div className="pl-3 text-gray-800 inline-block no-underline hover:text-black">
                   <Select
-                    defaultValue="lucy"
+                    defaultValue="Kategori"
                     style={{ width: 120 }}
                     onChange={handleChange}
                     className="category"
                   >
-                    <Option value="jack">Jack</Option>
-                    <Option value="lucy">Lucy</Option>
-                    <Option value="disabled" disabled>
-                      Disabled
-                    </Option>
-                    <Option value="Yiminghe">yiminghe</Option>
+                    {category.map(op => {
+                      return <Option value={op.label}>{op.label}</Option>;
+                    })}
                   </Select>
                 </div>
 
@@ -65,13 +79,22 @@ function Books(props) {
                     placeholder="input search title"
                     enterButton="Cari"
                     size="large"
-                    allowClear
-                    onSearch={value => console.log(value)}
+                    onSearch={value => handleSearch(value)}
                   />
+                </div>
+                <div
+                  className="ml-10 cursor-pointer"
+                  onClick={() => {
+                    setCategory([]);
+                    getAllBook();
+                  }}
+                >
+                  Reset Filter
                 </div>
               </div>
             </div>
           </nav>
+          {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
               let img = book.image.split('/').pop();
@@ -122,4 +145,4 @@ let mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(mapStateToProps, { getAllBook })(Books));
+export default withRouter(connect(mapStateToProps, { getAllBook, getCategory })(Books));
