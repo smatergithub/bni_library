@@ -9,4 +9,8 @@ export default class BookUserApi {
     const url = `api/book/detail/${id}`;
     return Request.getWithAuth(url);
   }
+  static getCategory() {
+    const url = `api/categoryBook`;
+    return Request.getWithAuth(url);
+  }
 }
