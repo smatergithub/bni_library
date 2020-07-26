@@ -20,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'book'
     })
 
+    ratingBook.belongsTo(models.users, {
+      foreignKey: 'userId',
+      as: 'user'
+    })
     ratingBook.belongsTo(models.transactionBook, {
       foreignKey: 'transactionBookId',
       as: 'transactionBook'
