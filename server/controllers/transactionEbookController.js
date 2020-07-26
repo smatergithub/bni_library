@@ -3,7 +3,7 @@ const TransactionEbook = require('../models').transactionEbook;
 
 module.exports = {
   list: async (req, res) => {
-    let { code, status, startDate, endDate, userId, limit, offset, page, order, sort } = req.body;
+    let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
     let paramQuerySQL = {
       include: ['ebook', 'user']
     };
@@ -52,14 +52,11 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
+
 
     // order by
     if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
@@ -71,6 +68,7 @@ module.exports = {
     if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
       sort = 'DESC';
     }
+
     TransactionEbook.findAndCountAll(paramQuerySQL)
       .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
@@ -83,7 +81,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        res.json(err);
+        res.status(500).send(err);
       });
   },
 

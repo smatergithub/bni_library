@@ -7,7 +7,7 @@ const readXlsxFile = require("read-excel-file/node");
 
 module.exports = {
   getBookList: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {}
 
 
@@ -39,12 +39,13 @@ module.exports = {
     }
 
     // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
+    // if (page != '' && typeof page !== 'undefined' && page > 0) {
+    //   paramQuerySQL.page = parseInt(page);
+    // }
+
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
     // order by
@@ -60,8 +61,8 @@ module.exports = {
 
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let activePage = Math.ceil(book.count / req.body.limit);
+        let page = req.body.page;
         res.status(200).json({
           count: book.count,
           totalPage: activePage,
@@ -88,7 +89,7 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, offset, page, order, sort } = req.body;
+    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {}
 
 
@@ -119,13 +120,12 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
+
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      console.log("test", parseInt((page - 1) * req.body.limit));
+      console.log("limit", req.body.limit)
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
     // order by
@@ -141,11 +141,11 @@ module.exports = {
 
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
-        let activePage = Math.ceil(book.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let totalPage = Math.ceil(book.count / req.body.limit);
+        let page = Math.ceil(req.body.page);
         res.status(200).json({
           count: book.count,
-          totalPage: activePage,
+          totalPage: totalPage,
           activePage: page,
           data: book.rows,
         });

@@ -1,22 +1,22 @@
-import BookApi from '../client/BookApi';
-import { BOOKS, DETAIL_BOOK } from '../type';
+import EbookApi from '../client/EbookApi';
+import { EBOOKS, DETAIL_EBOOK } from '../type';
 /**
  * note: for book creation doesn't need to dispatch //
  * any reducer type,
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewBookAction = book => () => {
+export const CreateNewEbookAction = Ebook => () => {
   var formdata = new FormData();
-  for (var key in book) {
-    formdata.append(key, book[key]);
+  for (var key in Ebook) {
+    formdata.append(key, Ebook[key]);
   }
-  return BookApi.create(formdata)
+  return EbookApi.create(formdata)
     .then(res => {
       if (res) {
         return {
           resp: true,
-          msg: 'Buku Berhasil di tambahkan',
+          msg: 'Ebook Berhasil di tambahkan',
         };
       }
     })
@@ -26,17 +26,17 @@ export const CreateNewBookAction = book => () => {
     });
 };
 
-export const EditBookAction = (id, book) => () => {
+export const EditEbookAction = (id, Ebook) => () => {
   var formdata = new FormData();
-  for (var key in book) {
-    formdata.append(key, book[key]);
+  for (var key in Ebook) {
+    formdata.append(key, Ebook[key]);
   }
-  return BookApi.update(id, formdata)
+  return EbookApi.update(id, formdata)
     .then(res => {
       if (res) {
         return {
           resp: true,
-          msg: 'Buku Berhasil di diubah',
+          msg: 'Ebook Berhasil di diubah',
         };
       }
     })
@@ -47,13 +47,13 @@ export const EditBookAction = (id, book) => () => {
 };
 
 
-export const DeleteBookAction = id => () => {
-  return BookApi.delete(id)
+export const DeleteEbookAction = id => () => {
+  return EbookApi.delete(id)
     .then(res => {
       if (res) {
         return {
           resp: true,
-          msg: 'Buku Berhasil di dihapus',
+          msg: 'Ebook Berhasil di dihapus',
         };
       }
     })
@@ -64,11 +64,11 @@ export const DeleteBookAction = id => () => {
 
 };
 
-export const getBooks = body => dispatch => {
-  return BookApi.list(body)
+export const getEbooks = param => dispatch => {
+  return EbookApi.list(param)
     .then(res => {
       if (res) {
-        dispatch({ type: BOOKS, payload: res });
+        dispatch({ type: EBOOKS, payload: res });
         return {
           resp: true,
           msg: '',
@@ -82,10 +82,10 @@ export const getBooks = body => dispatch => {
 };
 
 
-export const getDetailBook = id => dispatch => {
-  return BookApi.detail(id).then(res => {
+export const getDetailEbook = id => dispatch => {
+  return EbookApi.detail(id).then(res => {
     if (res) {
-      dispatch({ type: DETAIL_BOOK, payload: res });
+      dispatch({ type: DETAIL_EBOOK, payload: res });
       return {
         resp: true,
         msg: '',

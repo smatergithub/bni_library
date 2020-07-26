@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsersListToAdmin } from "../../../../redux/action/user";
+import { getRepositorys } from "../../../../redux/action/repositorys";
 import Table from '../../component/Table';
+import Button from "../../component/Button";
+import moment from "moment";
 
-const Ebooks = (props) => {
+const Repository = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [filterOptions, seFilterOptions] = React.useState({
     page: 1,
@@ -15,9 +17,9 @@ const Ebooks = (props) => {
     console.log("pagination", pagination);
   }
 
-  const retrieveDataUser = (filterOptions) => {
+  const retrieveDataRepository = (filterOptions) => {
     setLoading(true);
-    props.getUsersListToAdmin(filterOptions).then(res => {
+    props.getRepositorys(filterOptions).then(res => {
       if (res) {
         setLoading(false);
       }
@@ -25,31 +27,38 @@ const Ebooks = (props) => {
   }
 
   React.useEffect(() => {
-    retrieveDataUser(filterOptions);
+    retrieveDataRepository(filterOptions);
   }, []);
 
 
 
   if (loading) return null;
-  const { users } = props;
+  const { repositorys } = props;
 
 
   const columns = [
     {
-      name: "nama",
-      displayName: "Nama"
+      name: "university",
+      displayName: "University"
     },
     {
-      name: "alamat",
-      displayName: "Alamat"
+      name: "titleRepository",
+      displayName: "Title Repository"
     },
     {
-      name: "email",
-      displayName: "email"
+      name: "typeRepository",
+      displayName: "Type Repository"
     },
     {
-      name: "phoneNumber",
-      displayName: "Nomor Telepon"
+      name: "createdAt",
+      displayName: "Created At",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <span>{moment(rowData.createdAt).format("DD MMM YYYY")}</span>
+          </React.Fragment>
+        )
+      }
     },
     {
       name: "actions",
@@ -63,7 +72,7 @@ const Ebooks = (props) => {
                 type="button"
                 style={{ marginRight: '5px' }}
               >
-                Make Admin
+                Edit
               </button>
             </React.Fragment>
           </React.Fragment>
@@ -72,12 +81,13 @@ const Ebooks = (props) => {
     }
   ]
 
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
+        <h1 className="w-full text-3xl text-black pb-6">Daftar Repository</h1>
 
-        {users.data !== undefined ? <Table columns={columns} source={users} isLoading={loading} limit={filterOptions.limit} onPaginationUpdated={(pagination) => paginationOptions(pagination)} /> : null}
+        {repositorys.data !== undefined ? <Table columns={columns} source={repositorys} isLoading={loading} limit={filterOptions.limit} onPaginationUpdated={(pagination) => paginationOptions(pagination)} /> : null}
       </main>
     </div>
   );
@@ -85,8 +95,8 @@ const Ebooks = (props) => {
 
 let mapStateToProps = state => {
   return {
-    users: state.users.users,
+    repositorys: state.repositorys.repositorys,
   };
 };
 
-export default connect(mapStateToProps, { getUsersListToAdmin })(Ebooks);
+export default connect(mapStateToProps, { getRepositorys })(Repository);

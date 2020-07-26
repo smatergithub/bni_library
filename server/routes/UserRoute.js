@@ -10,7 +10,7 @@ const EbookController = require('../controllers/EbookController');
 const DataSourceFilterBookController = require("../controllers/dataSourceFilterBookController");
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
-
+const RatingBookController = require("../controllers/ratingBookController");
 
 router.post('/book/list', BookController.getBookList);
 router.get('/book/detail/:id', BookController.getBookById);
@@ -32,5 +32,8 @@ router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserControll
 
 router.post('/transactionBook/borrowBook', [AuthJWT.verifyToken], TransactionBookController.borrowBook);
 router.post('/transactionEbook/borrowEbook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);
+
+
+router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
 
 module.exports = router;

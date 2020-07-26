@@ -40,6 +40,7 @@ module.exports = {
     'no-nested-ternary': 'off',
     'import/no-extraneous-dependencies': 'off',
     'import/no-extraneous-dependencies': 'off',
+    'no-restricted-globals': 'off',
   },
   settings: {
     'import/resolver': {

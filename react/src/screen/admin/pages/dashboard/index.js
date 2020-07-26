@@ -27,9 +27,9 @@ function Dashboard(props) {
               <p className="text-xl pb-3 flex items-center">
                 <i className="fas fa-list mr-3" /> Daftar Buku
               </p>
+              {/* <Table />
               <Table />
-              <Table />
-              <Table />
+              <Table /> */}
             </div>
           </main>
         </div>

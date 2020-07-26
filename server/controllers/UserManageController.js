@@ -5,7 +5,7 @@ const Op = Sequelize.Op;
 module.exports = {
   list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, page, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {};
 
     //search (q) , need fix
@@ -20,13 +20,9 @@ module.exports = {
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
     }
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
@@ -43,10 +39,11 @@ module.exports = {
         user.rows.forEach(item => {
           let dataUser = {
             id: item.id,
-            name: item.name,
-            address: item.address,
+            nama: item.nama,
+            alamat: item.alamat,
             email: item.email,
             phoneNumber: item.phoneNumber,
+            wilayah: item.wilayah,
             isAdmin: item.isAdmin,
             superAdmin: item.superAdmin,
           };
