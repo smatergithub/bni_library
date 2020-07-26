@@ -14,8 +14,14 @@ module.exports = {
       ebookId: {
         type: Sequelize.STRING
       },
+      UserId: {
+        type: Sequelize.STRING
+      },
       rating: {
         type: Sequelize.INTEGER
+      },
+      note: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,

@@ -114,9 +114,10 @@ module.exports = {
           activePage: page,
           data: result.rows
         })
-          .catch(err => {
-            res.status(500).send(err);
-          })
+
+      })
+      .catch(err => {
+        res.status(500).send(err);
       })
   }
 

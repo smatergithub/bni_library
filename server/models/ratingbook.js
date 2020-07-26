@@ -8,11 +8,23 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
     },
     transactionBookId: DataTypes.STRING,
-    BookId: DataTypes.STRING,
+    bookId: DataTypes.STRING,
+    userId: DataTypes.STRING,
+    note: DataTypes.STRING,
     rating: DataTypes.INTEGER
   }, {});
   ratingBook.associate = function (models) {
     // associations can be defined here
+    ratingBook.belongsTo(models.books, {
+      foreignKey: 'bookId',
+      as: 'book'
+    })
+
+    ratingBook.belongsTo(models.transactionBook, {
+      foreignKey: 'transactionBookId',
+      as: 'transactionBook'
+    })
+
   };
   return ratingBook;
 };
