@@ -1,14 +1,10 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Input, Select } from 'antd';
 import { getAllBook } from '../../../../redux/action/bookUser';
-let img = [
-  'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80',
-  'https://images.unsplash.com/photo-1535058314881-56b6eb96bd69?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80',
-  'https://images.unsplash.com/photo-1512045482940-f37f5216f639?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80',
-  'https://images.unsplash.com/photo-1511500210851-7b5a6fd70703?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80',
-  'https://images.unsplash.com/photo-1521056787327-165dc2a32836?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80',
-];
+const { Search } = Input;
+const { Option } = Select;
 
 function Books(props) {
   let { history } = props;
@@ -28,9 +24,12 @@ function Books(props) {
     setProcessing(true);
     getAllBook();
   }, []);
+  function handleChange(value) {
+    console.log(`selected ${value}`);
+  }
 
   if (processing && props.books === null) return null;
-  console.log(props.books);
+
   return (
     <main>
       <section className="bg-white py-8 ">
@@ -45,42 +44,37 @@ function Books(props) {
               </a>
 
               <div className="flex items-center" id="buku-nav-content">
-                <a
-                  className="pl-3 text-gray-800 inline-block no-underline hover:text-black"
-                  href="#"
-                >
-                  <svg
-                    className="fill-current hover:text-black"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
+                <div className="pl-3 text-gray-800 inline-block no-underline hover:text-black">
+                  <Select
+                    defaultValue="lucy"
+                    style={{ width: 120 }}
+                    onChange={handleChange}
+                    className="category"
                   >
-                    <path d="M7 11H17V13H7zM4 7H20V9H4zM10 15H14V17H10z" />
-                  </svg>
-                </a>
+                    <Option value="jack">Jack</Option>
+                    <Option value="lucy">Lucy</Option>
+                    <Option value="disabled" disabled>
+                      Disabled
+                    </Option>
+                    <Option value="Yiminghe">yiminghe</Option>
+                  </Select>
+                </div>
 
-                <a
-                  className="pl-3 text-gray-800 inline-block no-underline hover:text-black"
-                  href="#"
-                >
-                  <svg
-                    className="fill-current hover:text-black"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M10,18c1.846,0,3.543-0.635,4.897-1.688l4.396,4.396l1.414-1.414l-4.396-4.396C17.365,13.543,18,11.846,18,10 c0-4.411-3.589-8-8-8s-8,3.589-8,8S5.589,18,10,18z M10,4c3.309,0,6,2.691,6,6s-2.691,6-6,6s-6-2.691-6-6S6.691,4,10,4z" />
-                  </svg>
-                </a>
+                <div className="text-gray-800 px-1 bg-purple-white ">
+                  <Search
+                    placeholder="input search title"
+                    enterButton="Cari"
+                    size="large"
+                    allowClear
+                    onSearch={value => console.log(value)}
+                  />
+                </div>
               </div>
             </div>
           </nav>
           {props.books &&
             props.books.data.map((book, key) => {
               let img = book.image.split('/').pop();
-
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <a href="#">
