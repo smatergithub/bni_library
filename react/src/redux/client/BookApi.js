@@ -20,7 +20,7 @@ export default class BookApi {
   }
 
   static delete(id) {
-    const url = `/api/admin/book${id}`;
+    const url = `/api/admin/book/${id}`;
     return Request.deleteWithAuth(url);
   }
 }

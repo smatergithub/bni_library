@@ -6,7 +6,7 @@ function WithAdminAuth({ user, component: Component, ...rest }) {
   function validateRoute() {
     let checkAccessToken = localStorage.getItem('bni_jwtToken');
     let role = localStorage.getItem('bni_UserRole');
-    console.log(role);
+    // console.log(role);
     if ((checkAccessToken !== null && role === '3') || role === '2') {
       return true;
     } else {

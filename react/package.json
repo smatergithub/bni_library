@@ -2,7 +2,7 @@
   "name": "bni_library",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8080",
+  "proxy": "http://localhost:2000",
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^1.3.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^7.1.2",
     "antd": "^4.2.4",
     "axios": "^0.19.0",
+    "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "npm-run-all": "^4.1.5",
     "postcss-cli": "^6.1.3",

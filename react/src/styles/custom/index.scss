@@ -45,3 +45,15 @@
     }
   }
 }
+
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  height: 40px !important;
+}
+.ant-select-single.ant-select-show-arrow .ant-select-selection-item,
+.ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
+  margin-top: 4px !important;
+}
+.ant-btn-primary {
+  border-color: $main !important;
+  background-color: $main !important;
+}

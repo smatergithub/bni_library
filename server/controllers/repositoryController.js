@@ -5,7 +5,7 @@ const path = require('path');
 module.exports = {
   list: async (req, res) => {
     // queryStrings
-    let { q, order, sort, limit, page, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
 
@@ -22,13 +22,9 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
     }
 
     // sort par defaut si param vide ou inexistant

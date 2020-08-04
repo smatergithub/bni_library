@@ -51,9 +51,27 @@ const Ebooks = (props) => {
       name: "phoneNumber",
       displayName: "Nomor Telepon"
     },
+    {
+      name: "actions",
+      displayName: "Actions",
+      customRender: (rowData) => {
+        return (
+          <React.Fragment>
+            <React.Fragment>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+              >
+                Make Admin
+              </button>
+            </React.Fragment>
+          </React.Fragment>
+        );
+      },
+    }
   ]
 
-  console.log("users", users);
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">

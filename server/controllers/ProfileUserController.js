@@ -80,7 +80,7 @@ module.exports = {
 
   listBorrowBookUser: async (req, res) => {
     var userId = req.userId;
-    let { q, order, sort, limit, page, offset } = req.query;
+    let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
       include: ['book', 'user']
@@ -90,14 +90,11 @@ module.exports = {
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
     }
+
     // sort par defaut si param vide ou inexistant
     if (typeof sort === 'undefined' || sort == '') {
       sort = 'ASC';
@@ -117,9 +114,10 @@ module.exports = {
           activePage: page,
           data: result.rows
         })
-          .catch(err => {
-            res.status(500).send(err);
-          })
+
+      })
+      .catch(err => {
+        res.status(500).send(err);
       })
   }
 

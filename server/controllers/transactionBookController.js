@@ -1,12 +1,14 @@
-const Sequelize = require('sequelize');
+
 const Books = require('../models/').books;
 const TransactionBook = require('../models').transactionBook;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 module.exports = {
   list: async (req, res) => {
-    let { code, status, startDate, endDate, userId, limit, offset, page, order, sort } = req.body;
+    let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
     let paramQuerySQL = {
-      include: ['book', 'user']
+      include: ['book', 'user'],
     };
 
     if (code != '' && typeof code !== 'undefined') {
@@ -52,14 +54,11 @@ module.exports = {
       paramQuerySQL.limit = parseInt(limit);
     }
 
-    // page
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.page = parseInt(page);
-    }
     // offset
-    if (offset != '' && typeof offset !== 'undefined' && offset > 0) {
-      paramQuerySQL.offset = parseInt(offset - 1);
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
+
 
     // order by
     if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
@@ -71,26 +70,37 @@ module.exports = {
     if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
       sort = 'DESC';
     }
-
     TransactionBook.findAndCountAll(paramQuerySQL)
       .then(result => {
-        let totalPage = Math.ceil(book.count / req.body.limit);
-        let page = Math.ceil(req.body.page);
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
         res.status(200).json({
           count: result.count,
-          totalPage: totalPage,
+          totalPage: activePage,
           activePage: page,
-          data: result.rows,
-        });
+          data: result.rows
+        })
+
       })
       .catch(err => {
         res.status(500).send(err);
-      });
+      })
   },
 
   // pinjam buku
   borrowBook: async (req, res) => {
+
     const { books } = req.body;
+    var userId = req.userId;
+    const checkTransaction = await TransactionBook.findAll({
+      where: { userId: userId },
+      where: { status: "Borrowed" },
+    })
+
+    if (checkTransaction) {
+      return res.status(404).json({ message: "already borrow book before" });
+    }
+
     books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);
 
@@ -112,6 +122,7 @@ module.exports = {
             .update({
               stockBuku: book.stockBuku - bookData.quantity,
               status: book.stockBuku < 0 ? "Ada" : "Kosong",
+
             })
             .catch(err => {
               return res.status(404).send(err);
@@ -131,6 +142,7 @@ module.exports = {
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         bookId: bookData.bookId,
+        isGiveRating: false
       });
 
       if (!createTransaction) {
@@ -161,6 +173,7 @@ module.exports = {
         transaction
           .update({
             status: 'Returned',
+            isGiveRating: false
           })
           .catch(err => {
             res.status(404).send(err);
