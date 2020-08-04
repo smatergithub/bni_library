@@ -2,7 +2,7 @@ const Ebooks = require('../models/').ebooks;
 const Books = require('../models').books;
 const RatingBook = require("../models").ratingBook;
 const Users = require('../models').users;
-
+const sequelize = require('sequelize')
 
 module.exports = {
   dashboardSummary: async (req, res) => {
@@ -33,7 +33,8 @@ module.exports = {
     let paramQuerySQL = {
       include: ['book'],
       limit: 5,
-      order: [['rating', 'DESC']]
+      order: [['rating', 'DESC']],
+      attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
     };
 
 

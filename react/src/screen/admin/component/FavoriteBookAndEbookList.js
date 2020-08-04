@@ -46,7 +46,6 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
               </thead>
               <tbody>
                 {isLoading ? null : mockBookFavorite !== null ? mockBookFavorite.map(book => {
-                  console.log("books", book)
                   return (
                     <tr>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
@@ -60,7 +59,7 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                         {/* <i className="fas fa-arrow-up text-green-500 mr-4" /> */}
-                        {book.rating}
+                        {book.totalRating}
                       </td>
                     </tr>
                   );
@@ -110,7 +109,7 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                 </tr>
               </thead>
               <tbody>
-                {mockEbook.map(ebook => {
+                {isLoading ? null : mockBookFavorite !== null ? mockEbook.map(ebook => {
                   return (
                     <tr>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
@@ -136,7 +135,8 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                       </td> */}
                     </tr>
                   );
-                })}
+                }) : null}
+
               </tbody>
             </table>
           </div>
