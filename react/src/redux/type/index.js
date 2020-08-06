@@ -9,6 +9,8 @@ export const USERS = 'USERS';
 export const DETAIL_USERS = 'DETAIL_USERS';
 export const ME = 'ME';
 
+export const ADD_WISHLIST = 'ADD_WISHLIST';
+export const REMOVE_WISHLIST = 'REMOVE_WISHLIST';
 // ===========> type for books action here <===========
 
 export const BOOKS = 'BOOKS';
