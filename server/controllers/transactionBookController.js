@@ -149,7 +149,7 @@ module.exports = {
         return res.status(404).send("Failed Transaction");
       }
 
-      return res.status(203).json({
+      return res.status(201).json({
         message: "Process Succesfully create Transaction Borrow Book",
         data: createTransaction
       });

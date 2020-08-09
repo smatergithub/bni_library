@@ -79,7 +79,7 @@ module.exports = {
         bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
         abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
       })
-        .then(response => res.status(203).json({ message: "Succesfully Create Repository", data: response }))
+        .then(response => res.status(201).json({ message: "Succesfully Create Repository", data: response }))
         .catch(err => res.status(500).send(err));
     });
   },

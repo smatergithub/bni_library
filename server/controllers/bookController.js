@@ -37,12 +37,6 @@ module.exports = {
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
     }
-
-    // page
-    // if (page != '' && typeof page !== 'undefined' && page > 0) {
-    //   paramQuerySQL.page = parseInt(page);
-    // }
-
     // offset
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
@@ -123,8 +117,7 @@ module.exports = {
 
     // offset
     if (page != '' && typeof page !== 'undefined' && page > 0) {
-      console.log("test", parseInt((page - 1) * req.body.limit));
-      console.log("limit", req.body.limit)
+
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
@@ -190,7 +183,7 @@ module.exports = {
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response =>
-        res.status(203).json({ message: 'successfully create book', data: response })
+        res.status(201).json({ message: 'successfully create book', data: response })
       )
       .catch(err => res.status(500).send(err));
   },
@@ -219,7 +212,7 @@ module.exports = {
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
-            image: req.file.path,
+            // image: req.file.path,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>
@@ -227,7 +220,7 @@ module.exports = {
           )
           .catch(err => res.status(404).send(err));
       })
-      .catch(error => res.status(500).send(error));
+    // .catch(error => res.status(500).json({ test: error }));
   },
 
   uploadBook: async (req, res) => {

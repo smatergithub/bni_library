@@ -1,54 +1,18 @@
 import React, { useState } from 'react';
 import { Modal } from '../../../../component';
-const mockBookFavorite = [
-  {
-    title: 'Andi',
-    view: 2000,
-    author: 'Erlanga',
-    rate: 9,
-  },
-  {
-    title: 'Satria',
-    view: 2000,
-    author: 'Google',
-    rate: 9,
-  },
-  {
-    title: 'Onni chan',
-    view: 2000,
-    author: 'Gojek',
-    rate: 9,
-  },
-  {
-    title: 'Ahmad',
-    view: 2000,
-    author: 'Erlanga',
-    rate: 9,
-  },
-  {
-    title: 'Erlangga',
-    view: 2000,
-    author: 'Google',
-    rate: 9,
-  },
-];
+import TableApproval from "../../component/TableApproval";
+import { connect } from 'react-redux';
+import BookList from "./BookList";
+import EbookList from "./EbooklList";
 
-function Approval() {
-  let [showModal, setShowModal] = useState(false);
-  let [showModalDeletion, setShowModalDeletion] = useState(false);
-  let [activeTabs, setActiveTabs] = useState('user');
+
+
+function Approval(props) {
+  const [activeTabs, setActiveTabs] = useState('book');
+  const [loading, setLoading] = React.useState(false);
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
-      <Modal title="Konfirmasi" open={showModal} onCLose={() => setShowModal(false)}>
-        <div className="my-5">Anda yakin untuk menjadikan Grennady sebagai admin?</div>
-      </Modal>
-      <Modal
-        title="Konfirmasi"
-        open={showModalDeletion}
-        onCLose={() => setShowModalDeletion(false)}
-      >
-        <div className="my-5">Anda yakin untuk menghapus user ini?</div>
-      </Modal>
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Permintaan Baru</h1>
         <div className="flex flex-wrap mt-5 px-1">
@@ -59,24 +23,24 @@ function Approval() {
                   <div className="relative w-full px-1 py-5 max-w-full flex flex-row  flex-1">
                     <div
                       className={`font-semibold text-base  px-5 py-1 border-b-2 ${
-                        activeTabs === 'user'
+                        activeTabs === 'book'
                           ? 'border-gray-800 text-gray-800'
                           : 'border-gray-500 text-gray-500'
-                      } cursor-pointer`}
-                      onClick={() => setActiveTabs('user')}
+                        } cursor-pointer`}
+                      onClick={() => setActiveTabs('book')}
                     >
                       BUKU
                     </div>
                     <div
                       className={`relative font-semibold text-base  px-5 py-1 border-b-2 ${
-                        activeTabs === 'admin'
+                        activeTabs === 'ebook'
                           ? 'border-gray-800 text-gray-800'
                           : 'border-gray-500 text-gray-500'
-                      } cursor-pointer`}
-                      onClick={() => setActiveTabs('admin')}
+                        } cursor-pointer`}
+                      onClick={() => setActiveTabs('ebook')}
                     >
                       EBOOK
-                      <span
+                      {/* <span
                         style={{
                           width: 25,
                           height: 25,
@@ -92,79 +56,14 @@ function Approval() {
                         }}
                       >
                         3
-                      </span>
+                      </span> */}
                     </div>
                   </div>
                 </div>
               </div>
-              <div className="block w-full ">
-                <table className="items-center w-full bg-transparent border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                        nama
-                      </th>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                        email
-                      </th>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                        Status
-                      </th>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                        ROle
-                      </th>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                        action
-                      </th>
-                      <th className="px-1 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {mockBookFavorite.map((book, key) => {
-                      return (
-                        <tr>
-                          <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
-                            {book.title}
-                          </th>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            {book.view}
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            {book.author}
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            {book.author}
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            <button
-                              onClick={() => setShowModal(true)}
-                              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                              type="button"
-                              style={{
-                                transition: 'all .15s ease',
-                              }}
-                            >
-                              Approve?
-                            </button>
-                          </td>
-                          <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                            <button
-                              onClick={() => setShowModalDeletion(true)}
-                              className="bg-red-600  text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                              type="button"
-                              style={{
-                                transition: 'all .15s ease',
-                              }}
-                            >
-                              Reject?
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
+              {/* //table */}
+              {activeTabs === "book" && <BookList />}
+              {activeTabs === "ebook" && <EbookList />}
             </div>
           </div>
         </div>
@@ -173,4 +72,10 @@ function Approval() {
   );
 }
 
-export default Approval;
+let mapStateToProps = state => {
+  return {
+
+  };
+};
+
+export default connect(mapStateToProps, null)(Approval);

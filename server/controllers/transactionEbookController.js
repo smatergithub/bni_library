@@ -1,125 +1,81 @@
 const Ebooks = require('../models/').ebooks;
 const TransactionEbook = require('../models').transactionEbook;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 
 module.exports = {
   list: async (req, res) => {
-    let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
-    let paramQuerySQL = {
-      include: ['ebook', 'user']
-    };
+    console.log("test");
 
-    if (code != '' && typeof code !== 'undefined') {
-      paramQuerySQL.where = {
-        code: {
-          [Op.like]: '%' + code + '%'
-        }
-      }
-    }
-
-    if (status != '' && typeof status !== 'undefined') {
-      paramQuerySQL.where = {
-        status: {
-          [Op.like]: '%' + status + '%'
-        }
-      }
-    }
-
-    if (startDate != '' && typeof startDate !== 'undefined') {
-      paramQuerySQL.where = {
-        startDate: {
-          [Op.like]: '%' + startDate + '%'
-        }
-      }
-    }
-
-    if (endDate != '' && typeof endDate !== 'undefined') {
-      paramQuerySQL.where = {
-        endDate: {
-          [Op.like]: '%' + endDate + '%'
-        }
-      }
-    }
-
-    if (userId != '' && typeof userId !== 'undefined') {
-      paramQuerySQL.where = {
-        userId: {
-          [Op.like]: '%' + userId + '%'
-        }
-      }
-    }
-
-    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
-      paramQuerySQL.limit = parseInt(limit);
-    }
-
-    // offset
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
-    }
-
-
-    // order by
-    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
-      paramQuerySQL.order = [
-        [order, sort]
-      ];
-    }
-
-    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-      sort = 'DESC';
-    }
-
-    TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
-        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
-        res.status(200).json({
-          count: result.count,
-          totalPage: activePage,
-          activePage: page,
-          data: result.rows,
-        });
+    TransactionEbook.findAll({})
+      .then(res => {
+        console.log("res", res);
       })
-      .catch(err => {
-        res.status(500).send(err);
-      });
+    // TransactionEbook.findAll()
+    //   .then(result => {
+    //     console.log("result", result);
+    //     let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+    //     let page = paramQuerySQL.page;
+    //     res.status(200).json({
+    //       count: result.count,
+    //       // totalPage: activePage,
+    //       // activePage: page,
+    //       data: result
+    //     })
+
+    //   })
+    //   .catch(err => {
+    //     res.status(500).send(err);
+    //   })
   },
 
   // pinjam ebook
   borrowEbook: async (req, res) => {
+
     const { ebooks } = req.body;
+    var userId = req.userId;
+    // const checkTransaction = await TransactionEbook.findAll({
+    //   where: { userId: userId },
+    //   where: { status: "Borrowed" },
+    // })
+
+    // if (checkTransaction) {
+    //   return res.status(404).json({ message: "already borrow ebook before" });
+    // }
 
     ebooks.forEach(async (ebookData) => {
+      console.log("ebook data", ebookData)
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
+
       if (!ebook) {
         return res.status(404).json({
           message: "Ebook not Found"
         })
       }
+      // validate if quantity grather than book stock
+      // if (ebook.isBorrowed) {
+      //   return res.json({
+      //     message: 'Ebook Already Borrowed',
+      //   });
+      // }
 
-      if (ebook.isBorrowed) {
-        return res.status(404).json({
-          message: 'Ebook Already Borrowed',
+      await Ebooks.findByPk(ebookData.ebookId)
+        .then(book => {
+          book
+            .update({
+              isBorrowed: true,
+            })
+            .catch(err => {
+              return res.status(404).send(err);
+            });
+        })
+        .catch(err => {
+          return res.status(404).send(err);
         });
-      }
-    })
 
-    await Ebooks.findByPk(ebookId)
-      .then(ebook => {
-        ebook
-          .update({
-            isBorrowed: true,
-          })
-          .catch(err => {
-            return res.status(404).send(err);
-          });
-      })
-      .catch(err => {
-        return res.status(404).send(err);
-      });
 
-    const createTransaction = await transactionEbook
-      .create({
+      const createTransaction = await TransactionEbook.create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
         status: 'Borrowed',
@@ -129,16 +85,18 @@ module.exports = {
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         ebookId: ebookData.ebookId,
-      })
+        isGiveRating: false
+      });
 
-    if (!createTransaction) {
-      return res.status(404).send("Failed Transaction");
-    }
+      if (!createTransaction) {
+        return res.status(404).send("Failed Transaction");
+      }
 
-    return res.status(200).json({
-      message: "Process Succesfully",
-      data: createTransaction
-    });
+      return res.status(201).json({
+        message: "Process Succesfully create Transaction Borrow Ebook",
+        data: createTransaction
+      });
+    })
 
   },
 
@@ -147,7 +105,7 @@ module.exports = {
 
     const transactionEbook = await TransactionEbook.findByPk(transactionId);
 
-    if (!transactionBook) {
+    if (!TransactionEbook) {
       return res.json({
         message: 'transaction not found',
       });
@@ -158,6 +116,7 @@ module.exports = {
         transaction
           .update({
             status: 'Returned',
+            isGiveRating: false
           })
           .catch(err => {
             res.status(404).send(err);

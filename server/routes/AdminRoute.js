@@ -30,6 +30,7 @@ router.get('/ebook', [AuthJWT.isAdmin], EbookController.list);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
 router.post('/ebook', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
 router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.update);
+router.post('/ebook/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), EbookController.uploadEbook);
 router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);
 
 router.get('/repository', [AuthJWT.isAdmin], RepositoryController.list);
@@ -41,7 +42,7 @@ router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookControlle
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 
-router.post('/transactionEbook', [AuthJWT.isAdmin], TransactionEbookController.list);
+router.post('/transactionEbook/list', [AuthJWT.isAdmin], TransactionEbookController.list);
 router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 
 module.exports = router;

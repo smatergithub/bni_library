@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export default class Table extends Component {
+export default class TableApproval extends Component {
   state = {
     currentPage: this.props.page,
     currentLimit: this.props.limit
@@ -63,38 +63,38 @@ export default class Table extends Component {
     } = this.props;
     const { currentLimit, currentPage } = this.state;
     return (
-      <div className="bg-white overflow-auto">
-        <table className="min-w-full bg-white">
-          <thead className="bg-gray-800 text-white">
-            <tr>
-              {columns.map((column, index) => {
+      <React.Fragment>
+        <div className="block w-full ">
+          <table className="items-center w-full bg-transparent border-collapse">
+            <thead>
+              <tr>
+                {columns.map((column, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">{column.displayName}</th>
+                    </React.Fragment>
+                  )
+                })}
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? null : data.map((item, index) => {
                 return (
-                  <React.Fragment key={index}>
-                    <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm">{column.displayName}</th>
-                  </React.Fragment>
+                  <tr key={index}
+                  >
+                    {columns.map((column, innerIndex) => {
+                      return (
+                        <React.Fragment key={innerIndex}>
+                          {column.name === "actions" ? <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{column.customRender(item)}</th> : column.customRender ? <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{column.customRender(item)}</th> : <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{item[column.name]}</th>}
+                        </React.Fragment>
+                      )
+                    })}
+                  </tr>
                 )
               })}
-            </tr>
-
-          </thead>
-          <tbody className="text-gray-700">
-            {isLoading ? null : data.map((item, index) => {
-              return (
-                <tr key={index}
-                  className={index % 2 === 0 ? 'bg-gray-200 hover:bg-gray-300' : 'hover:bg-gray-300'}>
-                  {columns.map((column, innerIndex) => {
-                    return (
-                      <React.Fragment key={innerIndex}>
-                        {column.name === "actions" ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : column.customRender ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : <td className="w-1/6 text-left py-3 px-4">{item[column.name]}</td>}
-                      </React.Fragment>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
         <div className="flex justify-center bg-gray-300 mt-10">
           <nav className="relative z-0 inline-flex shadow-sm">
             <div
@@ -114,7 +114,7 @@ export default class Table extends Component {
               href="#"
               className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
             >
-              {currentPage > 0 ? currentPage : 0} of {totalPage}
+              {currentPage} of {totalPage}
             </div>
 
             <div
@@ -132,7 +132,7 @@ export default class Table extends Component {
             </div>
           </nav>
         </div>
-      </div>
+      </React.Fragment>
     )
   }
 }

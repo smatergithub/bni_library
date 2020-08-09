@@ -26,6 +26,10 @@ export const REPOSITORYS = 'REPOSITORYS';
 export const DETAIL_REPOSITORY = 'DETAIL_REPOSITORY';
 
 
+// ===========> type for transaction action here <===========
+
+export const TRANSACTION_BOOKS = 'TRANSACTION_BOOKS';
+export const TRANSACTION_EBOOKS = 'TRANSACTION_EBOOKS';
 // ===========> type for dashboard action here <===========
 
 export const DASHBOARD = 'DASHBOARD';

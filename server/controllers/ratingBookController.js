@@ -32,7 +32,7 @@ module.exports = {
             transaksi.update({
               isGiveRating: true
             }).then(response => {
-              return res.status(203).json({
+              return res.status(201).json({
                 message: "Process Succesfully input rating",
               });
             })

@@ -59,7 +59,7 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                         {/* <i className="fas fa-arrow-up text-green-500 mr-4" /> */}
-                        {book.totalRating}
+                        {book.rating}
                       </td>
                     </tr>
                   );
@@ -100,12 +100,12 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                   <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                     Author
                   </th>
-                  <th
+                  {/* <th
                     className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left"
                     style={{
                       minWidth: '140px',
                     }}
-                  />
+                  /> */}
                 </tr>
               </thead>
               <tbody>

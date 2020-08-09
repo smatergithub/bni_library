@@ -60,9 +60,12 @@ const Dashboard = (props) => {
       title: item.book.judul,
       tahunTerbit: item.book.tahunTerbit,
       pengarang: item.book.pengarang,
-      rating: item.rating
+      rating: item.totalRating
     }
   })
+
+
+
   return (
     <div className="bg-gray-100 font-family-karla flex">
       <div className="w-full flex flex-col h-screen overflow-y-hidden">
@@ -82,7 +85,7 @@ const Dashboard = (props) => {
               goToBookDetail={goToBookDetail}
               goToEBookDetail={goToEBookDetail}
               mockBookFavorite={dataSourceBook}
-              mockEbook={mockEbook}
+              mockEbook={dashboardSummary.ebook}
             />
           </main>
         </div>

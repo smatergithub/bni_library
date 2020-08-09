@@ -82,7 +82,7 @@ function Sidebar({ url, createNewBook }) {
               >
                 <i className={`${rt.icon} mr-3`} />
                 {rt.name}
-                {rt.notif && (
+                {/* {rt.notif && (
                   <span
                     style={{
                       width: 25,
@@ -98,7 +98,7 @@ function Sidebar({ url, createNewBook }) {
                   >
                     3
                   </span>
-                )}
+                )} */}
               </div>
             </Link>
           );
