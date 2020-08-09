@@ -26,3 +26,8 @@ export const DETAIL_EBOOK = 'DETAIL_EBOOK';
 
 export const REPOSITORYS = 'REPOSITORYS';
 export const DETAIL_REPOSITORY = 'DETAIL_REPOSITORY';
+
+
+// ===========> type for dashboard action here <===========
+
+export const DASHBOARD = 'DASHBOARD';

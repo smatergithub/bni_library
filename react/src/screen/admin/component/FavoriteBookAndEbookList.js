@@ -1,61 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const mockBookFavorite = [
-  {
-    title: 'Algorithm and Data structures for beginner',
-    view: 2000,
-    author: 'Erlanga',
-    rate: 9,
-  },
-  {
-    title: 'Coding Crack Interview',
-    view: 2000,
-    author: 'Google',
-    rate: 9,
-  },
-  {
-    title: 'Javascript for Babies',
-    view: 2000,
-    author: 'Gojek',
-    rate: 9,
-  },
-  {
-    title: 'Algorithm and Data structures for beginner',
-    view: 2000,
-    author: 'Erlanga',
-    rate: 9,
-  },
-  {
-    title: 'Coding Crack Interview',
-    view: 2000,
-    author: 'Google',
-    rate: 9,
-  },
-];
-const mockEbook = [
-  {
-    title: 'Data science for beginner',
-    author: 'James bond',
-  },
-  {
-    title: 'Competitive Programer',
-    author: 'Grennady',
-  },
-  {
-    title: 'Top Coder hack',
-    author: 'Grennady',
-  },
-  {
-    title: 'Web Development using Deno land',
-    author: 'Grennady',
-  },
-  {
-    title: 'Competitive Programer',
-    author: 'Grennady',
-  },
-];
-function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
+
+function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goToEBookDetail, goToBookDetail }) {
   return (
     <div className="flex flex-wrap mt-5 px-1">
       <div className="w-full xl:w-8/12 mb-12 xl:mb-0 ">
@@ -90,7 +37,7 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                     Tahun terbit
                   </th>
                   <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    View
+                    Pengarang
                   </th>
                   <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                     Rating
@@ -98,25 +45,25 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                 </tr>
               </thead>
               <tbody>
-                {mockBookFavorite.map(book => {
+                {isLoading ? null : mockBookFavorite !== null ? mockBookFavorite.map(book => {
                   return (
                     <tr>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
                         {book.title}
                       </th>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {book.view}
+                        {book.tahunTerbit}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {book.author}
+                        {book.pengarang}
                       </td>
                       <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        <i className="fas fa-arrow-up text-green-500 mr-4" />
-                        {book.rate}
+                        {/* <i className="fas fa-arrow-up text-green-500 mr-4" /> */}
+                        {book.totalRating}
                       </td>
                     </tr>
                   );
-                })}
+                }) : null}
               </tbody>
             </table>
           </div>
@@ -162,7 +109,7 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                 </tr>
               </thead>
               <tbody>
-                {mockEbook.map(ebook => {
+                {isLoading ? null : mockBookFavorite !== null ? mockEbook.map(ebook => {
                   return (
                     <tr>
                       <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
@@ -188,7 +135,8 @@ function FavoriteBookAndEbookList({ goToEBookDetail, goToBookDetail }) {
                       </td> */}
                     </tr>
                   );
-                })}
+                }) : null}
+
               </tbody>
             </table>
           </div>

@@ -9,11 +9,15 @@ const UserManageController = require('../controllers/UserManageController');
 const RepositoryController = require('../controllers/RepositoryController');
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
+const DashboardController = require("../controllers/dashboardController");
 
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
 router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList)
 //routing admin panel feature
+
+
+router.get("/dashboard", [AuthJWT.isAdmin], DashboardController.dashboardSummary)
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);

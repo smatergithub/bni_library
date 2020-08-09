@@ -6,6 +6,7 @@ import userBooks from './modules/bookUser';
 import ebooks from './modules/ebooks';
 import repositorys from './modules/repositorys';
 import wishlist from './modules/wishlist';
+import dashboard from './modules/dashboard';
 
 const rootReducer = combineReducers({
   users,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   ebooks,
   repositorys,
   wishlist,
+  dashboard,
 });
 
 export default rootReducer;
