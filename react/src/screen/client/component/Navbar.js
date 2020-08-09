@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 let dropdown = (
@@ -68,10 +69,32 @@ const routes = [
   },
 ];
 
-function NavBar({ url, isAuth, props }) {
+function NavBar(props) {
   let { history } = props;
-  const [selectedMenu, setSelectedMenu] = useState(url);
-
+  const [selectedMenu, setSelectedMenu] = useState(props.url);
+  console.log(props.wishlist.length);
+  let badge =
+    props.wishlist.length !== 0 ? (
+      <div
+        style={{
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          position: 'absolute',
+          right: -10,
+          top: -10,
+          backgroundColor: '#fc8181',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {props.wishlist.length}
+      </div>
+    ) : (
+      ''
+    );
   return (
     <nav
       id="header"
@@ -142,20 +165,20 @@ function NavBar({ url, isAuth, props }) {
               );
             })}
             <li className="ml-3">
-              {isAuth ? (
-                <div
-                  className="cursor-pointer bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center"
-                  onClick={() => history.push('/profile/home')}
-                >
-                  <i className="fas fa-user text-lg text-white"></i>
-                </div>
-              ) : (
-                <button
-                  className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg"
-                  onClick={() => history.push('/auth/login')}
-                >
-                  Masuk
-                </button>
+              {props.isAuth && (
+                <Link to="/profile/home">
+                  <div className="cursor-pointer relative bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center">
+                    <i className="fas fa-user text-lg text-white"></i>
+                    {badge}
+                  </div>
+                </Link>
+              )}
+              {!props.isAuth && (
+                <Link to="/auth/login">
+                  <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
+                    Masuk
+                  </button>
+                </Link>
               )}
             </li>
           </ul>
@@ -166,5 +189,10 @@ function NavBar({ url, isAuth, props }) {
     </nav>
   );
 }
+let mapStateToProps = state => {
+  return {
+    wishlist: state.wishlist.item,
+  };
+};
 
-export default NavBar;
+export default connect(mapStateToProps, null)(NavBar);

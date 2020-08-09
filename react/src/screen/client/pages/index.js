@@ -72,6 +72,7 @@ function HomeUser(props) {
   return (
     <div>
       <NavBar url={match.params.id} props={props} isAuth={isUserLogged} />
+
       {routes.map((route, index) => (
         <Route key={index} path={route.path} exact={route.exact} component={() => route.main} />
       ))}

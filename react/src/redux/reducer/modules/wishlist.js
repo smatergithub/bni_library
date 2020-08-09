@@ -5,17 +5,16 @@ let initialValue = {
 };
 
 const Wishlist = (state = initialValue, action) => {
-  console.log(action);
   switch (action.type) {
     case ADD_WISHLIST:
       return {
         ...state,
-        item: [...initialValue.item, action.payload],
+        item: [...state.item, action.payload],
       };
     case REMOVE_WISHLIST:
       return {
         ...state,
-        item: initialValue.item.filter(item => item.id !== action.payload.id),
+        item: state.item.filter(item => item.id !== action.payload.id),
       };
     default:
       return state;

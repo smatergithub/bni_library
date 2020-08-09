@@ -50,7 +50,7 @@ function Books(props) {
 
   if (processing && props.books === null) return null;
   const { wishlist } = props;
-  console.log(wishlist);
+  console.log('wishlist', wishlist);
   return (
     <main>
       <section className="bg-white py-8 ">
@@ -101,9 +101,8 @@ function Books(props) {
           {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
-              console.log('render');
               let img = book.image.split('/').pop();
-              console.log(props.books.data.some(wish => wishlist.find(ws => ws.id === wish.id)));
+              let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img
@@ -112,16 +111,17 @@ function Books(props) {
                   />
                   <div className="h-16 pt-2 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{book.judul}</h2>
-                    {props.books.data.some(wish => wishlist.every(ws => ws.id === wish.id)) ? (
+
+                    {!isAdd && (
                       <div
                         onClick={() => {
-                          // setSelectedBook(1);
                           props.addWishlist(book);
                         }}
                       >
                         <i className="far fa-heart text-3xl cursor-pointer"></i>
                       </div>
-                    ) : (
+                    )}
+                    {isAdd && (
                       <div onClick={() => props.removeWishlist(book)}>
                         <i className="fas fa-heart text-3xl text-red-400"></i>
                       </div>
