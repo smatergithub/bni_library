@@ -17,7 +17,7 @@ router.get('/book/detail/:id', BookController.getBookById);
 router.get('/categoryBook', DataSourceFilterBookController.getCategory);
 router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
-router.get('/ebook/list', EbookController.getEbookList);
+router.post('/ebook/list', EbookController.getEbookList);
 router.get('/ebook/detail/:id', EbookController.getEbookById);
 
 

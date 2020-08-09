@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
       pengarang: DataTypes.STRING,
       tahunTerbit: DataTypes.STRING,
       description: DataTypes.TEXT,
-      stockBuku: DataTypes.INTEGER,
       tanggalTerbit: DataTypes.STRING,
       isbn: DataTypes.STRING,
       bahasa: DataTypes.STRING,

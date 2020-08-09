@@ -26,9 +26,9 @@ router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single("image"), BookCont
 router.post('/book/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), BookController.uploadBook);
 router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
-router.get('/ebook', [AuthJWT.isAdmin], EbookController.list);
+router.post('/ebook', [AuthJWT.isAdmin], EbookController.list);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
-router.post('/ebook', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
+router.post('/ebook/create', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
 router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.update);
 router.post('/ebook/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), EbookController.uploadEbook);
 router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);

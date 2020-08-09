@@ -67,18 +67,20 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+
   getEbookById: async (req, res) => {
-    return Ebooks.findByPk(req.params.id)
+    return await Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'Ebook Not Found',
+            message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(ebook);
       })
       .catch(error => res.status(500).send(error));
   },
+
 
   list: async (req, res) => {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
@@ -162,6 +164,7 @@ module.exports = {
 
     // let path =
     //   __basedir + "/server/public/images/" + req.file.filename;
+
     return Ebooks.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
@@ -184,7 +187,6 @@ module.exports = {
       )
       .catch(err => res.status(500).send(err));
   },
-
 
 
   uploadEbook: async (req, res) => {
@@ -268,7 +270,7 @@ module.exports = {
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
-            image: req.file.path,
+            // image: req.file.path,
             sourceLink: req.body.sourceLink,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })

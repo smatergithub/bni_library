@@ -195,8 +195,8 @@ module.exports = {
           return res.status(400).send({ message: 'Book not found' });
         }
 
-        let path =
-          __basedir + "/server/public/images/" + req.file.filename;
+        // let path =
+        //   __basedir + "/server/public/images/" + req.file.filename;
 
         return book
           .update({
@@ -212,7 +212,7 @@ module.exports = {
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
-            // image: req.file.path,
+            image: req.file.path,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>
@@ -220,7 +220,7 @@ module.exports = {
           )
           .catch(err => res.status(404).send(err));
       })
-    // .catch(error => res.status(500).json({ test: error }));
+      .catch(error => res.status(500).json({ test: error }));
   },
 
   uploadBook: async (req, res) => {

@@ -23,9 +23,6 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      stockBuku: {
-        type: Sequelize.INTEGER,
-      },
       tanggalTerbit: {
         type: Sequelize.STRING,
       },
