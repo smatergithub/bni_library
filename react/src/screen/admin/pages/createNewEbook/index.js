@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker, Space, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { CreateNewBookAction } from '../../../../redux/action/books';
+import { CreateNewEbookAction } from '../../../../redux/action/ebooks';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 import { ToastError, ToastSuccess } from '../../../../component';
 
@@ -20,9 +20,10 @@ function CreateNewEBook(props) {
     formData['tahunTerbit'] = publishDate;
     formData['tanggalTerbit'] = publishDate;
     formData['status'] = statusValue == 'true' ? true : false;
-    props.CreateNewBookAction(formData).then(res => {
+    props.CreateNewEbookAction(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
+        props.history.push('/admin/ebooks');
       } else {
         ToastError(res.msg);
       }
@@ -75,7 +76,7 @@ function CreateNewEBook(props) {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
-        <h1 className="w-full text-3xl text-black pb-6">Biografi Buku</h1>
+        <h1 className="w-full text-3xl text-black pb-6">Biografi Ebook</h1>
 
         <div className="flex flex-wrap">
           <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
@@ -90,7 +91,7 @@ function CreateNewEBook(props) {
           <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
             <div className="leading-loose">
               <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
-                <p className="text-lg text-gray-800 font-medium pb-4">Informasi Buku</p>
+                <p className="text-lg text-gray-800 font-medium pb-4">Informasi Ebook</p>
                 <input
                   onChange={e => uploadPdf(e)}
                   type="file"
@@ -135,7 +136,7 @@ function CreateNewEBook(props) {
 
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Kategori Buku
+                    Kategori Ebook
                   </label>
                   <input
                     name="kategori"
@@ -332,4 +333,4 @@ function CreateNewEBook(props) {
   );
 }
 
-export default connect(null, { CreateNewBookAction, UploadEbookFIle })(CreateNewEBook);
+export default connect(null, { CreateNewEbookAction, UploadEbookFIle })(CreateNewEBook);

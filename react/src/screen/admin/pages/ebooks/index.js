@@ -68,20 +68,20 @@ const Ebooks = props => {
 
   const columns = [
     {
-      name: 'code',
-      displayName: 'Code',
+      name: 'judul',
+      displayName: 'Judul',
     },
     {
-      name: 'title',
-      displayName: 'Title',
+      name: 'kategori',
+      displayName: 'Kategori',
     },
     {
-      name: 'category',
-      displayName: 'Category',
+      name: 'pengarang',
+      displayName: 'Pengarang',
     },
     {
-      name: 'author',
-      displayName: 'Author',
+      name: 'penerbit',
+      displayName: 'Penerbit',
     },
     {
       name: 'actions',

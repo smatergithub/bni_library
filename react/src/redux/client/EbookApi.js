@@ -2,8 +2,8 @@ import Request from '../../utils/request';
 
 export default class EbookApi {
   static create(body) {
-    const url = '/api/admin/ebook';
-    return Request.postWithAuth(url, body, true);
+    const url = '/api/admin/ebook/create';
+    return Request.postWithAuth(url, body, false, true);
   }
   static uploadEbookFile(body) {
     const url = '/api/admin/book/upload';
