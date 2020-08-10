@@ -2,12 +2,15 @@ import React from 'react';
 import { DatePicker, Space, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { CreateNewEbookAction } from '../../../../redux/action/ebooks';
+import queryString from 'query-string';
+import { CreateNewEbookAction, getDetailEbook } from '../../../../redux/action/ebooks';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 import { ToastError, ToastSuccess } from '../../../../component';
 
 function CreateNewEBook(props) {
   const { handleSubmit, register, errors } = useForm();
+  const parsed = queryString.parse(props.location.search);
+  let { id } = parsed;
   let [image, setImage] = React.useState(null);
   let [promotionValue, setPromotionValue] = React.useState('false');
   let [statusValue, setStatusValue] = React.useState('false');
@@ -49,13 +52,25 @@ function CreateNewEBook(props) {
 
     reader.onloadend = () => {
       props.UploadEbookFIle({ file }).then(res => {
-        console.log(res);
+        if (res.resp) {
+          ToastSuccess(res.msg);
+          props.history.push('/admin/ebooks');
+        } else {
+          ToastError(res.msg);
+        }
       });
       // setSourceLink(file);
     };
 
     reader.readAsDataURL(file);
   };
+  React.useEffect(() => {
+    if (id) {
+      props.getDetailEbook(id).then(res => {
+        console.log(res);
+      });
+    }
+  }, []);
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
@@ -79,15 +94,17 @@ function CreateNewEBook(props) {
         <h1 className="w-full text-3xl text-black pb-6">Biografi Ebook</h1>
 
         <div className="flex flex-wrap">
-          <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
-            <button
-              type="button"
-              onClick={() => exportFile.current.click()}
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-            >
-              <i className="fas fa-upload mr-3" /> Import Ebook
-            </button>
-          </div>
+          {!id && (
+            <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
+              <button
+                type="button"
+                onClick={() => exportFile.current.click()}
+                className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              >
+                <i className="fas fa-upload mr-3" /> Import Ebook
+              </button>
+            </div>
+          )}
           <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
             <div className="leading-loose">
               <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
@@ -333,4 +350,6 @@ function CreateNewEBook(props) {
   );
 }
 
-export default connect(null, { CreateNewEbookAction, UploadEbookFIle })(CreateNewEBook);
+export default connect(null, { CreateNewEbookAction, UploadEbookFIle, getDetailEbook })(
+  CreateNewEBook
+);

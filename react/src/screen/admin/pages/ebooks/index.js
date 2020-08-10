@@ -3,12 +3,13 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getEbooks, DeleteEbookAction } from '../../../../redux/action/ebooks';
 import { NoData } from '../../../../component';
+import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import Table from '../../component/Table';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
-  const [detailData, setDetailData] = useState({});
+  const [detailData, setDetailData] = useState(null);
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
@@ -30,17 +31,21 @@ const Ebooks = props => {
   };
 
   const getDetailEbook = id => {
-    const { books } = props;
-    let detailData = books.data.filter(item => item.id === id);
-    setDetailData(detailData[0]);
+    setDetailData(id);
     setShowModalDeletion(true);
   };
 
   const handleActionDeleteEbook = () => {
     setLoading(true);
     props
-      .DeleteBookAction(detailData.id)
+      .DeleteEbookAction(detailData)
       .then(response => {
+        console.log(response);
+        if (response.resp) {
+          ToastSuccess(response.msg);
+        } else {
+          ToastError(response.msg);
+        }
         mappingDataSourceEbookList(filterOptions);
         setLoading(false);
         setShowModalDeletion(false);
@@ -90,13 +95,15 @@ const Ebooks = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <button
-                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-              >
-                Edit
-              </button>
+              <Link to={`/admin/edit-ebook?id=${rowData.id}`}>
+                <button
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                >
+                  Edit
+                </button>
+              </Link>
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -143,12 +150,12 @@ const Ebooks = props => {
         title="Konfirmasi"
         open={showModalDeletion}
         onCLose={() => {
-          setDetailData({});
+          setDetailData(null);
           setShowModalDeletion(false);
         }}
         handleSubmit={handleActionDeleteEbook}
       >
-        <div className="my-5">Anda yakin untuk menghapus user ini?</div>
+        <div className="my-5">Anda yakin untuk menghapus Ebook ini?</div>
       </Modal>
     </div>
   );

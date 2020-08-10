@@ -2,9 +2,8 @@ import React from 'react';
 import { DatePicker, Space, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { CreateNewBookAction } from '../../../../redux/action/books';
+import { CreateNewBookAction, UploadBookFIle } from '../../../../redux/action/books';
 import { ToastError, ToastSuccess } from '../../../../component';
-import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 
 function CreateNewBook(props) {
   const { handleSubmit, register, errors } = useForm();
@@ -56,7 +55,7 @@ function CreateNewBook(props) {
     let file = e.target.files[0];
 
     reader.onloadend = () => {
-      props.UploadEbookFIle({ file }).then(res => {
+      props.UploadBookFIle({ file }).then(res => {
         if (res) {
           console.log('res', res);
           ToastSuccess(res.msg);
@@ -318,4 +317,4 @@ function CreateNewBook(props) {
   );
 }
 
-export default connect(null, { CreateNewBookAction, UploadEbookFIle })(CreateNewBook);
+export default connect(null, { CreateNewBookAction, UploadBookFIle })(CreateNewBook);
