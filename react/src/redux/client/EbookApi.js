@@ -5,13 +5,17 @@ export default class EbookApi {
     const url = '/api/admin/ebook';
     return Request.postWithAuth(url, body, true);
   }
+  static uploadEbookFile(body) {
+    const url = '/api/admin/book/upload';
+    return Request.postWithAuth(url, body, false, true);
+  }
   static update(id, body) {
     const url = `/api/admin/ebook/${id}`;
     return Request.putWithAuth(`url`, body, true);
   }
   static list(param) {
-    const url = `/api/admin/ebook?offset=${param.page}&limit=${param.limit}`;
-    return Request.getWithAuth(url);
+    const url = `/api/admin/ebook`;
+    return Request.postWithAuth(url, param);
   }
 
   static detail(id) {

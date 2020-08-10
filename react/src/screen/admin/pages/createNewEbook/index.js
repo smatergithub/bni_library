@@ -3,10 +3,10 @@ import { DatePicker, Space, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { CreateNewBookAction } from '../../../../redux/action/books';
-import { ToastError, ToastSuccess } from '../../../../component';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
+import { ToastError, ToastSuccess } from '../../../../component';
 
-function CreateNewBook(props) {
+function CreateNewEBook(props) {
   const { handleSubmit, register, errors } = useForm();
   let [image, setImage] = React.useState(null);
   let [promotionValue, setPromotionValue] = React.useState('false');
@@ -40,6 +40,21 @@ function CreateNewBook(props) {
 
     reader.readAsDataURL(file);
   };
+  let uploadPdf = e => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      props.UploadEbookFIle({ file }).then(res => {
+        console.log(res);
+      });
+      // setSourceLink(file);
+    };
+
+    reader.readAsDataURL(file);
+  };
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
@@ -49,27 +64,6 @@ function CreateNewBook(props) {
   function onChangeStatus(value) {
     setStatusValue(value[0] ? 'true' : 'false');
   }
-  let uploadPdf = e => {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      props.UploadEbookFIle({ file }).then(res => {
-        if (res) {
-          console.log('res', res);
-          ToastSuccess(res.msg);
-          props.history.push('/admin/books');
-        } else {
-          ToastError(res.msg);
-        }
-      });
-      // setSourceLink(file);
-    };
-
-    reader.readAsDataURL(file);
-  };
   const optionsStatus = [
     { label: 'Aktif', value: true },
     { label: 'Non Aktif', value: false },
@@ -90,7 +84,7 @@ function CreateNewBook(props) {
               onClick={() => exportFile.current.click()}
               className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
-              <i className="fas fa-upload mr-3" /> Import Books
+              <i className="fas fa-upload mr-3" /> Import Ebook
             </button>
           </div>
           <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
@@ -218,6 +212,26 @@ function CreateNewBook(props) {
                   />
                   <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                 </div>
+
+                <div className="mt-2 ">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Link File
+                  </label>
+                  <input
+                    name="sourceLink"
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.sourceLink && errors.sourceLink.message}
+                  </div>
+                </div>
+
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Lokasi Perpustakaan
@@ -318,4 +332,4 @@ function CreateNewBook(props) {
   );
 }
 
-export default connect(null, { CreateNewBookAction, UploadEbookFIle })(CreateNewBook);
+export default connect(null, { CreateNewBookAction, UploadEbookFIle })(CreateNewEBook);

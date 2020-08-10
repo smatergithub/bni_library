@@ -1,86 +1,93 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
-import Modal from "../../../../component/Modal"
+import { NoData } from '../../../../component';
+import Modal from '../../../../component/Modal';
 
-const Books = (props) => {
+const Books = props => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
-    limit: 5
-  })
+    limit: 5,
+  });
 
-  const mappingDataSourceBookList = (filterOptions) => {
+  const mappingDataSourceBookList = filterOptions => {
     setLoading(true);
-    props.getBooks(filterOptions).then(res => {
-      if (res) {
-        setLoading(false);
-      }
-    }).catch(err => { console.log("error", err) });
-  }
+    props
+      .getBooks(filterOptions)
+      .then(res => {
+        if (res) {
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
-  const getDetailDataBook = (id) => {
+  const getDetailDataBook = id => {
     const { books } = props;
     let detailData = books.data.filter(item => item.id === id);
     setDetailData(detailData[0]);
     setShowModalDeletion(true);
-  }
+  };
 
   const handleActionDeleteBook = () => {
-    setLoading(true)
-    props.DeleteBookAction(detailData.id).then(response => {
-      mappingDataSourceBookList(filterOptions)
-      setLoading(false)
-      setShowModalDeletion(false);
-    })
-      .catch(err => console.log('err', err))
-  }
+    setLoading(true);
+    props
+      .DeleteBookAction(detailData.id)
+      .then(response => {
+        mappingDataSourceBookList(filterOptions);
+        setLoading(false);
+        setShowModalDeletion(false);
+      })
+      .catch(err => console.log('err', err));
+  };
 
   React.useEffect(() => {
     mappingDataSourceBookList(filterOptions);
   }, []);
 
-
-  const onPaginationUpdated = (pagination) => {
+  const onPaginationUpdated = pagination => {
     setFilterOptions({
       page: pagination.page,
       limit: pagination.limit,
-    })
-  }
+    });
+  };
 
   React.useEffect(() => {
     mappingDataSourceBookList(filterOptions);
-
-  }, [filterOptions])
+  }, [filterOptions]);
 
   const columns = [
     {
-      name: "judul",
-      displayName: "Judul"
+      name: 'judul',
+      displayName: 'Judul',
     },
     {
-      name: "pengarang",
-      displayName: "Pengarang"
+      name: 'pengarang',
+      displayName: 'Pengarang',
     },
     {
-      name: "tahunTerbit",
-      displayName: "Tahun Terbit"
+      name: 'tahunTerbit',
+      displayName: 'Tahun Terbit',
     },
     {
-      name: "stockBuku",
-      displayName: "Stock Buku"
+      name: 'stockBuku',
+      displayName: 'Stock Buku',
     },
     {
-      name: "status",
-      displayName: "Status"
+      name: 'status',
+      displayName: 'Status',
     },
     {
-      name: "actions",
-      displayName: "Actions",
-      customRender: (rowData) => {
+      name: 'actions',
+      displayName: 'Actions',
+      customRender: rowData => {
         return (
           <React.Fragment>
             <React.Fragment>
@@ -102,8 +109,8 @@ const Books = (props) => {
           </React.Fragment>
         );
       },
-    }
-  ]
+    },
+  ];
 
   if (loading) return null;
   const { books } = props;
@@ -111,15 +118,35 @@ const Books = (props) => {
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
-
-        {books.data !== undefined ? <Table columns={columns} source={books} isLoading={loading} limit={filterOptions.limit} page={filterOptions.page} onPaginationUpdated={onPaginationUpdated} /> : null}
+        <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
+          <Link to="/admin/add-new-book">
+            <button
+              type="button"
+              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            >
+              <i className="fas fa-plus mr-3" /> Buku Baru
+            </button>
+          </Link>
+        </div>
+        {books.data !== undefined && books.data.length !== 0 ? (
+          <Table
+            columns={columns}
+            source={books}
+            isLoading={loading}
+            limit={filterOptions.limit}
+            page={filterOptions.page}
+            onPaginationUpdated={onPaginationUpdated}
+          />
+        ) : (
+          <NoData />
+        )}
       </main>
       <Modal
         title="Konfirmasi"
         open={showModalDeletion}
         onCLose={() => {
-          setDetailData({})
-          setShowModalDeletion(false)
+          setDetailData({});
+          setShowModalDeletion(false);
         }}
         handleSubmit={handleActionDeleteBook}
       >
@@ -127,7 +154,7 @@ const Books = (props) => {
       </Modal>
     </div>
   );
-}
+};
 
 let mapStateToProps = state => {
   return {
