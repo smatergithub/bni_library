@@ -15,6 +15,7 @@ function CreateNewEBook(props) {
   let [promotionValue, setPromotionValue] = React.useState('false');
   let [statusValue, setStatusValue] = React.useState('false');
   let [publishDate, setPublishDate] = React.useState('');
+  let [ebook, setEbook] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
@@ -67,7 +68,11 @@ function CreateNewEBook(props) {
   React.useEffect(() => {
     if (id) {
       props.getDetailEbook(id).then(res => {
-        console.log(res);
+        if (res.resp) {
+          setEbook(res.data);
+        } else {
+          setEbook(null);
+        }
       });
     }
   }, []);
@@ -129,6 +134,7 @@ function CreateNewEBook(props) {
                     type="text"
                     name="judul"
                     aria-label="Name"
+                    defaultValue={ebook ? ebook.judul : ''}
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
@@ -141,6 +147,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="pengarang"
+                    defaultValue={ebook ? ebook.pengarang : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -157,6 +164,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="kategori"
+                    defaultValue={ebook ? ebook.kategori : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -172,6 +180,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="stockBuku"
+                    defaultValue={ebook ? ebook.stockBuku : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -188,6 +197,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="bahasa"
+                    defaultValue={ebook ? ebook.bahasa : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -204,6 +214,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="isbn"
+                    defaultValue={ebook ? ebook.isbn : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -220,6 +231,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="penerbit"
+                    defaultValue={ebook ? ebook.penerbit : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -237,6 +249,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="sourceLink"
+                    defaultValue={ebook ? ebook.sourceLink : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -256,6 +269,7 @@ function CreateNewEBook(props) {
                   </label>
                   <input
                     name="lokasiPerpustakaan"
+                    defaultValue={ebook ? ebook.lokasiPerpustakaan : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -320,6 +334,7 @@ function CreateNewEBook(props) {
                   </label>
                   <textarea
                     name="description"
+                    defaultValue={ebook ? ebook.description : ''}
                     className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     rows="6"
                     ref={register({
