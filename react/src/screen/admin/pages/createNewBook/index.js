@@ -1,31 +1,60 @@
 import React from 'react';
 import { DatePicker, Space, Checkbox } from 'antd';
+import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { CreateNewBookAction, UploadBookFIle } from '../../../../redux/action/books';
+import {
+  CreateNewBookAction,
+  UploadBookFIle,
+  getDetailBook,
+  EditBookAction,
+} from '../../../../redux/action/books';
 import { ToastError, ToastSuccess } from '../../../../component';
 
 function CreateNewBook(props) {
+  const parsed = queryString.parse(props.location.search);
+  let { id } = parsed;
   const { handleSubmit, register, errors } = useForm();
   let [image, setImage] = React.useState(null);
-  let [promotionValue, setPromotionValue] = React.useState('false');
-  let [statusValue, setStatusValue] = React.useState('false');
-  let [publishDate, setPublishDate] = React.useState('');
+  let [promotionValue, setPromotionValue] = React.useState(null);
+  let [statusValue, setStatusValue] = React.useState(null);
+  let [publishDate, setPublishDate] = React.useState(null);
+  let [book, setBook] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
-    formData['image'] = image;
-    formData['isPromotion'] = promotionValue == 'true' ? true : false;
-    formData['tahunTerbit'] = publishDate;
-    formData['tanggalTerbit'] = publishDate;
-    formData['status'] = statusValue == 'true' ? true : false;
-    props.CreateNewBookAction(formData).then(res => {
-      if (res.resp) {
-        ToastSuccess(res.msg);
-      } else {
-        ToastError(res.msg);
-      }
-    });
+    if (!id) {
+      formData['image'] = image;
+      formData['isPromotion'] = promotionValue == 'true' ? true : false;
+      formData['tahunTerbit'] = publishDate;
+      formData['tanggalTerbit'] = publishDate;
+      formData['status'] = statusValue == 'true' ? true : false;
+      props.CreateNewBookAction(formData).then(res => {
+        if (res.resp) {
+          ToastSuccess(res.msg);
+          props.history.push('/admin/books');
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    } else {
+      formData['image'] = image ? image : book.image;
+      formData['isPromotion'] =
+        promotionValue !== null ? (promotionValue == 'true' ? true : false) : book.isPromotion;
+      formData['tahunTerbit'] = publishDate ? publishDate : book.tahunTerbit;
+      formData['tanggalTerbit'] = publishDate ? publishDate : book.tahunTerbit;
+      formData['status'] =
+        statusValue !== null ? (statusValue === 'true' ? true : false) : book.status;
+
+      props.EditBookAction(id, formData).then(res => {
+        if (res.resp) {
+          props.history.push('/admin/books');
+          ToastSuccess(res.msg);
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    }
   }
   let uploadImage = e => {
     e.preventDefault();
@@ -39,6 +68,17 @@ function CreateNewBook(props) {
 
     reader.readAsDataURL(file);
   };
+  React.useEffect(() => {
+    if (id) {
+      props.getDetailBook(id).then(res => {
+        if (res.resp) {
+          setBook(res.data);
+        } else {
+          setBook(null);
+        }
+      });
+    }
+  }, []);
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
@@ -115,6 +155,7 @@ function CreateNewBook(props) {
                     className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
                     type="text"
                     name="judul"
+                    defaultValue={book ? book.judul : ''}
                     aria-label="Name"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -128,6 +169,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="pengarang"
+                    defaultValue={book ? book.pengarang : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -144,6 +186,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="kategori"
+                    defaultValue={book ? book.kategori : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -159,6 +202,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="stockBuku"
+                    defaultValue={book ? book.stockBuku : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
@@ -175,6 +219,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="bahasa"
+                    defaultValue={book ? book.bahasa : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -191,6 +236,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="isbn"
+                    defaultValue={book ? book.isbn : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -207,6 +253,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="penerbit"
+                    defaultValue={book ? book.penerbit : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -223,6 +270,7 @@ function CreateNewBook(props) {
                   </label>
                   <input
                     name="lokasiPerpustakaan"
+                    defaultValue={book ? book.lokasiPerpustakaan : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
@@ -287,6 +335,7 @@ function CreateNewBook(props) {
                   </label>
                   <textarea
                     name="description"
+                    defaultValue={book ? book.description : ''}
                     className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     rows="6"
                     ref={register({
@@ -317,4 +366,9 @@ function CreateNewBook(props) {
   );
 }
 
-export default connect(null, { CreateNewBookAction, UploadBookFIle })(CreateNewBook);
+export default connect(null, {
+  CreateNewBookAction,
+  UploadBookFIle,
+  getDetailBook,
+  EditBookAction,
+})(CreateNewBook);

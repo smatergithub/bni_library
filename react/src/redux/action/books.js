@@ -108,6 +108,7 @@ export const getDetailBook = id => dispatch => {
         return {
           resp: true,
           msg: '',
+          data: res,
         };
       }
     })

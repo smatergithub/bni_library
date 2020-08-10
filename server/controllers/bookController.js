@@ -189,6 +189,7 @@ module.exports = {
 
   update: async (req, res) => {
     return Books.findByPk(req.params.id)
+
       .then(book => {
         if (!book) {
           return res.status(400).send({ message: 'Book not found' });
@@ -196,7 +197,6 @@ module.exports = {
 
         // let path =
         //   __basedir + "/server/public/images/" + req.file.filename;
-
         return book
           .update({
             kategori: req.body.kategori,
@@ -211,7 +211,7 @@ module.exports = {
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
-            image: req.file.path,
+            image: req.file ? req.file.path : req.body.image,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>

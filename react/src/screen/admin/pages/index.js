@@ -53,6 +53,11 @@ const routes = [
     main: props => <CreateNewBook {...props} />,
   },
   {
+    path: '/admin/edit-book',
+    exact: false,
+    main: props => <CreateNewBook {...props} />,
+  },
+  {
     path: '/admin/edit-ebook',
     exact: false,
     main: props => <CreateNewEbook {...props} />,

@@ -91,13 +91,15 @@ const Books = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <button
-                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-              >
-                Edit
-              </button>
+              <Link to={`/admin/edit-book?id=${rowData.id}`}>
+                <button
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                >
+                  Edit
+                </button>
+              </Link>
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -150,7 +152,7 @@ const Books = props => {
         }}
         handleSubmit={handleActionDeleteBook}
       >
-        <div className="my-5">Anda yakin untuk menghapus user ini?</div>
+        <div className="my-5">Anda yakin untuk menghapus Buku ini?</div>
       </Modal>
     </div>
   );
