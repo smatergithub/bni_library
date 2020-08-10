@@ -11,7 +11,7 @@ export default class EbookApi {
   }
   static update(id, body) {
     const url = `/api/admin/ebook/${id}`;
-    return Request.putWithAuth(`url`, body, true);
+    return Request.putWithAuth(url, body, false, true);
   }
   static list(param) {
     const url = `/api/admin/ebook`;

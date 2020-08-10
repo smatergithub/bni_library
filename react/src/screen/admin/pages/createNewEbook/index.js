@@ -3,7 +3,11 @@ import { DatePicker, Space, Checkbox } from 'antd';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import queryString from 'query-string';
-import { CreateNewEbookAction, getDetailEbook } from '../../../../redux/action/ebooks';
+import {
+  CreateNewEbookAction,
+  getDetailEbook,
+  EditEbookAction,
+} from '../../../../redux/action/ebooks';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 import { ToastError, ToastSuccess } from '../../../../component';
 
@@ -12,26 +16,45 @@ function CreateNewEBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
   let [image, setImage] = React.useState(null);
-  let [promotionValue, setPromotionValue] = React.useState('false');
-  let [statusValue, setStatusValue] = React.useState('false');
-  let [publishDate, setPublishDate] = React.useState('');
+  let [promotionValue, setPromotionValue] = React.useState(null);
+  let [statusValue, setStatusValue] = React.useState(null);
+  let [publishDate, setPublishDate] = React.useState(null);
   let [ebook, setEbook] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
-    formData['image'] = image;
-    formData['isPromotion'] = promotionValue == 'true' ? true : false;
-    formData['tahunTerbit'] = publishDate;
-    formData['tanggalTerbit'] = publishDate;
-    formData['status'] = statusValue == 'true' ? true : false;
-    props.CreateNewEbookAction(formData).then(res => {
-      if (res.resp) {
-        ToastSuccess(res.msg);
-        props.history.push('/admin/ebooks');
-      } else {
-        ToastError(res.msg);
-      }
-    });
+    if (!id) {
+      formData['image'] = image;
+      formData['isPromotion'] = promotionValue == 'true' ? true : false;
+      formData['tahunTerbit'] = publishDate;
+      formData['tanggalTerbit'] = publishDate;
+      formData['status'] = statusValue == 'true' ? true : false;
+      props.CreateNewEbookAction(formData).then(res => {
+        if (res.resp) {
+          ToastSuccess(res.msg);
+          props.history.push('/admin/ebooks');
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    } else {
+      formData['image'] = image ? image : ebook.image;
+      formData['isPromotion'] =
+        promotionValue !== null ? (promotionValue == 'true' ? true : false) : ebook.isPromotion;
+      formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
+      formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
+      formData['status'] =
+        statusValue !== null ? (statusValue === 'true' ? true : false) : ebook.status;
+
+      props.EditEbookAction(id, formData).then(res => {
+        if (res.resp) {
+          ToastSuccess(res.msg);
+          props.history.push('/admin/ebooks');
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    }
   }
   let uploadImage = e => {
     e.preventDefault();
@@ -173,22 +196,6 @@ function CreateNewEBook(props) {
                     aria-label="Email"
                   />
                   <div className="text-red-700">{errors.kategori && errors.kategori.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Stock
-                  </label>
-                  <input
-                    name="stockBuku"
-                    defaultValue={ebook ? ebook.stockBuku : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.stockBuku && errors.stockBuku.message}</div>
                 </div>
 
                 <div className="mt-2">
@@ -365,6 +372,9 @@ function CreateNewEBook(props) {
   );
 }
 
-export default connect(null, { CreateNewEbookAction, UploadEbookFIle, getDetailEbook })(
-  CreateNewEBook
-);
+export default connect(null, {
+  CreateNewEbookAction,
+  UploadEbookFIle,
+  getDetailEbook,
+  EditEbookAction,
+})(CreateNewEBook);
