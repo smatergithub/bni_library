@@ -41,13 +41,13 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
   static postWithAuth(url, data, options, isFormData) {
-    console.log(data);
+    console.log(isFormData);
     const requestOptions = {
       method: 'post',
       url,
       data,
       headers: {
-        'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
+        'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
         'x-access-token': localStorage.getItem('bni_jwtToken'),
       },
     };

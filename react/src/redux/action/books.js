@@ -7,10 +7,12 @@ import { BOOKS, DETAIL_BOOK } from '../type';
  */
 
 export const CreateNewBookAction = book => () => {
+  console.log(book);
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
   }
+
   return BookApi.create(formdata)
     .then(res => {
       if (res) {
@@ -46,7 +48,6 @@ export const EditBookAction = (id, book) => () => {
     });
 };
 
-
 export const DeleteBookAction = id => () => {
   return BookApi.delete(id)
     .then(res => {
@@ -61,7 +62,6 @@ export const DeleteBookAction = id => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-
 };
 
 export const getBooks = body => dispatch => {
@@ -81,19 +81,19 @@ export const getBooks = body => dispatch => {
     });
 };
 
-
 export const getDetailBook = id => dispatch => {
-  return BookApi.detail(id).then(res => {
-    if (res) {
-      dispatch({ type: DETAIL_BOOK, payload: res });
-      return {
-        resp: true,
-        msg: '',
-      };
-    }
-  })
+  return BookApi.detail(id)
+    .then(res => {
+      if (res) {
+        dispatch({ type: DETAIL_BOOK, payload: res });
+        return {
+          resp: true,
+          msg: '',
+        };
+      }
+    })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-}
+};
