@@ -1,6 +1,6 @@
 import React from 'react';
 
-function NoData() {
+function NoData({ msg }) {
   return (
     <div className="w-full  p-6 flex justify-center pt-20 ">
       <div
@@ -13,7 +13,7 @@ function NoData() {
         }}
       >
         <img src="https://img.icons8.com/wired/64/000000/add-list.png" />
-        <div className="mt-10">Data tidak di temukan</div>
+        <div className="mt-10"> {msg ? msg : 'Data tidak di temukan'}</div>
       </div>
     </div>
   );
