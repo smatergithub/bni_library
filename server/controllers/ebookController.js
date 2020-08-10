@@ -196,7 +196,7 @@ module.exports = {
       }
 
       let path =
-        __basedir + "/server/public/documentEbook/" + req.file.filename;
+        __basedir + "/server/public/documentBook/" + req.file.filename;
 
       readXlsxFile(path).then((rows) => {
         // skip header
@@ -226,7 +226,7 @@ module.exports = {
           Databooks.push(rowBook);
         });
 
-        Books.bulkCreate(Databooks)
+        Ebooks.bulkCreate(Databooks)
           .then(() => {
             res.status(200).json({
               message: "Uploaded the file successfully: " + req.file.originalname,
