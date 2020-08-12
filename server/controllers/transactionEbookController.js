@@ -6,28 +6,85 @@ const Op = Sequelize.Op;
 
 module.exports = {
   list: async (req, res) => {
-    console.log("test");
+    let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
+    let paramQuerySQL = {
+      include: ['ebook', 'user'],
+    };
 
-    TransactionEbook.findAll({})
-      .then(res => {
-        console.log("res", res);
+    if (code != '' && typeof code !== 'undefined') {
+      paramQuerySQL.where = {
+        code: {
+          [Op.like]: '%' + code + '%'
+        }
+      }
+    }
+    if (status != '' && typeof status !== 'undefined') {
+      paramQuerySQL.where = {
+        status: {
+          [Op.like]: '%' + status + '%'
+        }
+      }
+    }
+
+    if (startDate != '' && typeof startDate !== 'undefined') {
+      paramQuerySQL.where = {
+        startDate: {
+          [Op.like]: '%' + startDate + '%'
+        }
+      }
+    }
+
+    if (endDate != '' && typeof endDate !== 'undefined') {
+      paramQuerySQL.where = {
+        endDate: {
+          [Op.like]: '%' + endDate + '%'
+        }
+      }
+    }
+
+    if (userId != '' && typeof userId !== 'undefined') {
+      paramQuerySQL.where = {
+        userId: {
+          [Op.like]: '%' + userId + '%'
+        }
+      }
+    }
+
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+    }
+
+
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [
+        [order, sort]
+      ];
+    }
+
+    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+      sort = 'DESC';
+    }
+    TransactionEbook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows
+        })
+
       })
-    // TransactionEbook.findAll()
-    //   .then(result => {
-    //     console.log("result", result);
-    //     let activePage = Math.ceil(result.count / paramQuerySQL.limit);
-    //     let page = paramQuerySQL.page;
-    //     res.status(200).json({
-    //       count: result.count,
-    //       // totalPage: activePage,
-    //       // activePage: page,
-    //       data: result
-    //     })
-
-    //   })
-    //   .catch(err => {
-    //     res.status(500).send(err);
-    //   })
+      .catch(err => {
+        res.status(500).send(err);
+      })
   },
 
   // pinjam ebook
@@ -45,7 +102,6 @@ module.exports = {
     // }
 
     ebooks.forEach(async (ebookData) => {
-      console.log("ebook data", ebookData)
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
 
       if (!ebook) {
@@ -78,7 +134,7 @@ module.exports = {
       const createTransaction = await TransactionEbook.create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
-        status: 'Borrowed',
+        status: 'Dipinjam',
         userId: req.userId,
         note: req.body.note,
         isBorrowed: true,
@@ -115,7 +171,7 @@ module.exports = {
       .then(transaction => {
         transaction
           .update({
-            status: 'Returned',
+            status: 'Dikembalikan',
             isGiveRating: false
           })
           .catch(err => {
@@ -141,7 +197,7 @@ module.exports = {
       });
 
     return res.status(200).json({
-      message: 'Succesfully Return',
+      message: 'Succesfully Return Ebook',
     });
   },
 };

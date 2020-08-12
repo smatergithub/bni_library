@@ -109,7 +109,7 @@ function BookList(props) {
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                disabled={rowData.status === "Returned" ? true : false}
+                disabled={rowData.status === "Dikembalikan" ? true : false}
               >
                 Return Book
               </button>
