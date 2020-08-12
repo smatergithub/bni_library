@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export default function Modal({ open, title, onCLose, handleSubmit, children }) {
   return (
     <>
@@ -10,13 +9,13 @@ export default function Modal({ open, title, onCLose, handleSubmit, children }) 
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             onClick={() => onCLose()}
           >
-            <div class="modal-container bg-white w-11/12 md:max-w-md rounded shadow-lg  overflow-y-auto">
-              <div class="modal-content py-4 text-left px-6">
-                <div class="flex justify-between items-center pb-3">
-                  <p class="text-2xl font-bold">{title}</p>
-                  <div class="modal-close cursor-pointer z-50">
+            <div className="modal-container bg-white w-11/12 md:max-w-md rounded shadow-lg  overflow-y-auto">
+              <div className="modal-content py-4 text-left px-6">
+                <div className="flex justify-between items-center pb-3">
+                  <p className="text-2xl font-bold">{title}</p>
+                  <div className="modal-close cursor-pointer z-50">
                     <svg
-                      class="fill-current text-black"
+                      className="fill-current text-black"
                       xmlns="http://www.w3.org/2000/svg"
                       width="18"
                       height="18"
@@ -27,11 +26,17 @@ export default function Modal({ open, title, onCLose, handleSubmit, children }) 
                   </div>
                 </div>
                 {children}
-                <div class="flex justify-end pt-2">
-                  <button onClick={() => onCLose()} class="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2">
+                <div className="flex justify-end pt-2">
+                  <button
+                    onClick={() => onCLose()}
+                    className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                  >
                     Close
                   </button>
-                  <button onClick={() => handleSubmit()} class="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400">
+                  <button
+                    onClick={() => handleSubmit()}
+                    className="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400"
+                  >
                     Submit
                   </button>
                 </div>

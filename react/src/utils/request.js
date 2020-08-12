@@ -41,7 +41,6 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
   static postWithAuth(url, data, options, isFormData) {
-    console.log(isFormData);
     const requestOptions = {
       method: 'post',
       url,

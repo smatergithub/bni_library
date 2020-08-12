@@ -27,7 +27,26 @@ export const CreateNewBookAction = book => () => {
       return { resp: false, msg: msg };
     });
 };
+export const UploadBookFIle = book => () => {
+  var formdata = new FormData();
+  for (var key in book) {
+    formdata.append(key, book[key]);
+  }
 
+  return BookApi.uploadEbookFile(formdata)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Buku Berhasil di tambahkan',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
 export const EditBookAction = (id, book) => () => {
   var formdata = new FormData();
   for (var key in book) {
@@ -89,6 +108,7 @@ export const getDetailBook = id => dispatch => {
         return {
           resp: true,
           msg: '',
+          data: res,
         };
       }
     })

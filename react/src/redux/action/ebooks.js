@@ -25,6 +25,26 @@ export const CreateNewEbookAction = Ebook => () => {
       return { resp: false, msg: msg };
     });
 };
+export const UploadEbookFIle = book => () => {
+  var formdata = new FormData();
+  for (var key in book) {
+    formdata.append(key, book[key]);
+  }
+
+  return EbookApi.uploadEbookFile(formdata)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Buku Berhasil di tambahkan',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
 
 export const EditEbookAction = (id, Ebook) => () => {
   var formdata = new FormData();
@@ -46,7 +66,6 @@ export const EditEbookAction = (id, Ebook) => () => {
     });
 };
 
-
 export const DeleteEbookAction = id => () => {
   return EbookApi.delete(id)
     .then(res => {
@@ -61,7 +80,6 @@ export const DeleteEbookAction = id => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-
 };
 
 export const getEbooks = param => dispatch => {
@@ -81,19 +99,20 @@ export const getEbooks = param => dispatch => {
     });
 };
 
-
 export const getDetailEbook = id => dispatch => {
-  return EbookApi.detail(id).then(res => {
-    if (res) {
-      dispatch({ type: DETAIL_EBOOK, payload: res });
-      return {
-        resp: true,
-        msg: '',
-      };
-    }
-  })
+  return EbookApi.detail(id)
+    .then(res => {
+      if (res) {
+        dispatch({ type: DETAIL_EBOOK, payload: res });
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-}
+};
