@@ -12,6 +12,7 @@ import CreateNewBook from './createNewBook';
 import Books from './books';
 import Ebooks from './ebooks';
 import CreateNewEbook from './createNewEbook';
+import CreateNewRepo from './createNewRepo';
 import Repository from './repository';
 import User from './users';
 import Approval from './approval';
@@ -36,6 +37,16 @@ const routes = [
     path: '/admin/repository',
     exact: false,
     main: () => <Repository />,
+  },
+  {
+    path: '/admin/new-repository',
+    exact: false,
+    main: props => <CreateNewRepo {...props} />,
+  },
+  {
+    path: '/admin/edit-repository',
+    exact: false,
+    main: props => <CreateNewRepo {...props} />,
   },
   {
     path: '/admin/analytics',
