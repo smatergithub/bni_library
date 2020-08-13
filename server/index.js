@@ -14,6 +14,7 @@ var corsOptions = {
 };
 
 const app = express();
+
 app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
@@ -29,11 +30,11 @@ app.get('/', (req, res) =>
 );
 
 var db = require('./models');
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   // console.log('database connection success');
 });
 
 const port = process.env.PORT_BACKEND;
-app.listen(port, function() {
+app.listen(port, function () {
   console.log(`Server running in PORT: ${port}`);
 });

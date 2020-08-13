@@ -36,6 +36,7 @@ router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);
 router.get('/repository', [AuthJWT.isAdmin], RepositoryController.list);
 router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
+router.put('/repository/:id', [AuthJWT.isAdmin], RepositoryController.update);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);

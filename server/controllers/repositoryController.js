@@ -84,6 +84,32 @@ module.exports = {
     });
   },
 
+  update: async (req, res) => {
+    UploadMultipleDocument(req, res, err => {
+      if (err) throw err;
+      return Repositorys.findByPk(req.params.id).then(repo => {
+        if (!repo) {
+          return res.status(400).send({ message: 'repo not found' })
+        }
+
+        return repo.update({
+          university: req.body.university,
+          titleRepository: req.body.titleRepository,
+          typeRepository: req.body.typeRepository,
+          bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
+          bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
+          bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,
+          bab4: req.files['bab4'] !== undefined ? req.files['bab4'][0].path : null,
+          bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
+          abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
+        }).then(response => res.status(201).json({ message: "Succesfully Create Repository", data: response }))
+          .catch(err => res.status(500).send(err));
+      }).catch(err => res.status(500).send(err));
+    })
+  },
+
+
+
   delete: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
       .then(repository => {
