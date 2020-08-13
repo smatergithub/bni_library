@@ -46,7 +46,6 @@ export const EditRepositoryAction = (id, Ebook) => () => {
     });
 };
 
-
 export const DeleteRepositoryAction = id => () => {
   return RepositoryApi.delete(id)
     .then(res => {
@@ -61,7 +60,6 @@ export const DeleteRepositoryAction = id => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-
 };
 
 export const getRepositorys = param => dispatch => {
@@ -81,19 +79,20 @@ export const getRepositorys = param => dispatch => {
     });
 };
 
-
 export const getDetailRepository = id => dispatch => {
-  return RepositoryApi.detail(id).then(res => {
-    if (res) {
-      dispatch({ type: DETAIL_REPOSITORY, payload: res });
-      return {
-        resp: true,
-        msg: '',
-      };
-    }
-  })
+  return RepositoryApi.detail(id)
+    .then(res => {
+      if (res) {
+        dispatch({ type: DETAIL_REPOSITORY, payload: res });
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-}
+};
