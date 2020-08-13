@@ -172,7 +172,7 @@ module.exports = {
       .then(transaction => {
         transaction
           .update({
-            status: 'Returned',
+            status: 'Dikembalikan',
             isGiveRating: false
           })
           .catch(err => {
