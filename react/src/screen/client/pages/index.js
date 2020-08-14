@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
+import Ebook from './ebooks';
 import About from './about';
 import Faq from './faq';
 import Research from './research';
@@ -44,10 +45,11 @@ const routes = [
     main: <Books />,
   },
   {
-    path: '/ebook',
+    path: '/ebooks',
     exact: false,
-    main: <Books />,
+    main: <Ebook />,
   },
+
   {
     path: '/faq',
     exact: false,
