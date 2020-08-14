@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
-import { getBookById } from '../../../../redux/action/bookUser';
+import { getBookById } from '../../../../redux/action/ebookUser';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
-function DetailBooks(props) {
+function DetailEbooks(props) {
   const parsed = queryString.parse(props.location.search);
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
-  let [books, setBooks] = React.useState(null);
+  let [ebooks, setEbooks] = React.useState(null);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
@@ -18,34 +18,34 @@ function DetailBooks(props) {
     props.getBookById(id).then(res => {
       setProcessing(false);
       if (res.resp) {
-        setBooks(res.data);
+        setEbooks(res.data);
       }
     });
   }, []);
   function redirectToLogin() {
-    props.history.push('/auth/login');
+    props.history.push('//auth/login');
   }
-  if (processing && books == null) return null;
+  if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <section className="py-16 lg:py-24 w-full">
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
-          onClick={() => history.push('/books')}
+          onClick={() => history.push('/ebooks')}
           style={{ width: '10em' }}
         >
           {' '}
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
-        {books !== null && (
+        {ebooks !== null && (
           <div class="flex  w-full">
             <div class="flex w-4/6 text-gray-700 bg-white px-20 py-10  m-2">
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
-                    src={books.image}
+                    // src={`http://localhost:2000/img/images/${ebooks.image.split('/').pop()}`}
+                    src={ebooks.image}
                     alt=""
                     style={{
                       height: 440,
@@ -55,7 +55,7 @@ function DetailBooks(props) {
                 </div>
               </div>
               <div className="w-3/5 px-5">
-                <div className="text-lg font-bold">{books.judul}</div>
+                <div className="text-lg font-bold">{ebooks.judul}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
                   style={{
@@ -72,10 +72,10 @@ function DetailBooks(props) {
                   </div>
                   <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
-                <div> Paperback | {books.bahasa}</div>
-                <div>{`By (author) ${books.pengarang}`}</div>
+                <div> Paperback | {ebooks.bahasa}</div>
+                <div>{`By (author) ${ebooks.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
-                <div>{books.description}</div>
+                <div>{ebooks.description}</div>
               </div>
             </div>
             <div class="w-2/6  bg-white px-10 py-10 m-2">
@@ -87,11 +87,11 @@ function DetailBooks(props) {
                 }}
               ></div>
 
-              <div> Author : {books.pengarang}</div>
-              <div> ISBN : {books.isbn}</div>
+              <div> Author : {ebooks.pengarang}</div>
+              <div> ISBN : {ebooks.isbn}</div>
               <div> Format : Hardback</div>
-              <div> Publishers : {books.penerbit}</div>
-              <div> Publication date : {books.tahunTerbit}</div>
+              <div> Publishers : {ebooks.penerbit}</div>
+              <div> Publication date : {ebooks.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div> Condition : New</div>
@@ -106,12 +106,12 @@ function DetailBooks(props) {
                 Pesan Sekarang
               </button>
               <button
+                className="w-full  text-gray-800  rounded-lg my-1 py-2 px-10 border border-gray-600"
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
                   }
                 }}
-                className="w-full  text-gray-800  rounded-lg my-1 py-2 px-10 border border-gray-600"
               >
                 Tambah Wishlist
               </button>
@@ -132,4 +132,4 @@ function DetailBooks(props) {
     </div>
   );
 }
-export default withRouter(connect(null, { getBookById })(DetailBooks));
+export default withRouter(connect(null, { getBookById })(DetailEbooks));

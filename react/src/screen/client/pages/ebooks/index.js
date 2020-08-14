@@ -1,21 +1,21 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
-import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
-import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
+import { getAllEbooks } from '../../../../redux/action/ebookUser';
+import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 const { Search } = Input;
 const { Option } = Select;
 
-function Books(props) {
+function Ebooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-  let [selectedBook, setSelectedBook] = React.useState(null);
+  let [searchParam, setSearchParam] = React.useState('');
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
 
-  function getAllBook(params) {
+  function getAllEbook(params) {
     let formData = {
       page: 1,
       limit: 8,
@@ -28,32 +28,35 @@ function Books(props) {
       };
     }
 
-    props.getAllBook(formData).then(() => {
+    props.getAllEbooks(formData).then(() => {
       setProcessing(false);
     });
   }
   React.useEffect(() => {
     setProcessing(true);
-    getAllBook();
-    props.getCategory().then(res => {
-      if (res.data.length > 0) {
-        setCategory(res.data);
-      }
-    });
+    getAllEbook();
+    // props.getCategory().then(res => {
+    //   if (res.data.length > 0) {
+    //     setCategory(res.data);
+    //   }
+    // });
   }, []);
 
   function handleChange(value) {
-    getAllBook({ kategori: value });
+    getAllEbook({ kategori: value });
   }
   function handleSearch(value) {
-    getAllBook({ judul: value });
+    setSearchParam(value);
+    getAllEbook({ judul: value });
   }
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
-  if (processing && props.books === null) return null;
+
+  if (processing && props.ebooks === null) return null;
   const { wishlist } = props;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
   return (
     <main>
       <section className="bg-white py-8 ">
@@ -64,7 +67,7 @@ function Books(props) {
                 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
                 href="#"
               >
-                Semua buku
+                Semua Ebook
               </a>
 
               <div className="flex items-center" id="buku-nav-content">
@@ -86,14 +89,16 @@ function Books(props) {
                     placeholder="input search title"
                     enterButton="Cari"
                     size="large"
+                    allowClear
                     onSearch={value => handleSearch(value)}
                   />
                 </div>
                 <div
                   className="ml-10 cursor-pointer"
                   onClick={() => {
+                    setSearchParam('');
                     setCategory([]);
-                    getAllBook();
+                    getAllEbook();
                   }}
                 >
                   Reset Filter
@@ -101,20 +106,20 @@ function Books(props) {
               </div>
             </div>
           </nav>
-          {props.books && props.books.data.length === 0 && <NoData />}
-          {props.books &&
-            props.books.data.map((book, key) => {
-              let img = book.image.split('/').pop();
-              let isAdd = wishlist.some(ws => ws.id === book.id);
+          {props.ebooks && props.ebooks.data.length === 0 && <NoData />}
+          {props.ebooks &&
+            props.ebooks.data.map((ebook, key) => {
+              let img = ebook.image.split('/').pop();
+              let isAdd = wishlist.some(ws => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img
                     className="hover:grow hover:shadow-lg h-64"
                     // src={`http://localhost:2000/img/images/${img}`}
-                    src={book.image}
+                    src={ebook.image}
                   />
                   <div className="h-16 pt-2 flex items-start justify-between">
-                    <h2 className="text-gray-800 text-lg">{book.judul}</h2>
+                    <h2 className="text-gray-800 text-lg">{ebook.judul}</h2>
 
                     {!isAdd && (
                       <div
@@ -122,7 +127,7 @@ function Books(props) {
                           if (!isUserLogged) {
                             setShowModalDeletion(true);
                           } else {
-                            props.addBookWishlist(book);
+                            props.addEbookWishlist(ebook);
                           }
                         }}
                       >
@@ -130,13 +135,13 @@ function Books(props) {
                       </div>
                     )}
                     {isAdd && (
-                      <div onClick={() => props.removeBookWishlist(book)}>
+                      <div onClick={() => props.removeEbookWishlist(ebook)}>
                         <i className="fas fa-heart text-3xl text-red-400"></i>
                       </div>
                     )}
                   </div>
 
-                  <div className="pt-1 text-gray-900">{book.pengarang}</div>
+                  <div className="pt-1 text-gray-900">{ebook.pengarang}</div>
                   <div className="flex items-center">
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />
@@ -146,7 +151,7 @@ function Books(props) {
                   </div>
                   <button
                     className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-                    onClick={() => history.push(`/detail-book?id=${book.id}`)}
+                    onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}
                   >
                     Detail
                   </button>
@@ -154,27 +159,27 @@ function Books(props) {
               );
             })}
         </div>
+        <Modal
+          title="Authentication required"
+          open={showModalDeletion}
+          onCLose={() => {
+            setShowModalDeletion(false);
+          }}
+          handleSubmit={redirectToLogin}
+        >
+          <div className="my-5">Silahkan Login terlebih dahulu</div>
+        </Modal>
       </section>
-      <Modal
-        title="Authentication required"
-        open={showModalDeletion}
-        onCLose={() => {
-          setShowModalDeletion(false);
-        }}
-        handleSubmit={redirectToLogin}
-      >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
-      </Modal>
     </main>
   );
 }
 let mapStateToProps = state => {
   return {
-    books: state.userBooks.books,
-    wishlist: state.wishlist.books,
+    ebooks: state.userEbooks.ebooks,
+    wishlist: state.wishlist.ebooks,
   };
 };
 
 export default withRouter(
-  connect(mapStateToProps, { getAllBook, getCategory, addBookWishlist, removeBookWishlist })(Books)
+  connect(mapStateToProps, { getAllEbooks, addEbookWishlist, removeEbookWishlist })(Ebooks)
 );

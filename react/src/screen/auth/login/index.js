@@ -103,6 +103,12 @@ function Login(props) {
                     >
                       Daftar
                     </div>
+                    <div
+                      className="mt-5 text-center text-red-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
+                      onClick={() => history.push('/')}
+                    >
+                      Beranda
+                    </div>
                   </form>
                 </div>
               </div>
