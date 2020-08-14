@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       transDate: DataTypes.DATE,
       status: DataTypes.STRING,
       isGiveRating: DataTypes.BOOLEAN,
+      isBorrowed: DataTypes.BOOLEAN,
       note: DataTypes.STRING,
       startDate: DataTypes.DATE,
       endDate: DataTypes.DATE,
@@ -23,9 +24,9 @@ module.exports = (sequelize, DataTypes) => {
   );
   transactionEbook.associate = function (models) {
     // associations can be defined here
-    transactionEbook.belongsTo(models.books, {
-      foreignKey: 'bookId',
-      as: 'book',
+    transactionEbook.belongsTo(models.ebooks, {
+      foreignKey: 'ebookId',
+      as: 'ebook',
     });
 
     transactionEbook.belongsTo(models.users, {

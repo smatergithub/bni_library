@@ -5,12 +5,14 @@ import PropTypes from 'prop-types';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
+import Ebook from './ebooks';
 import About from './about';
 import Faq from './faq';
 import Research from './research';
 import Home from './home';
 import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
+import DetailEbooks from './detailEbooks';
 
 const routes = [
   {
@@ -44,10 +46,11 @@ const routes = [
     main: <Books />,
   },
   {
-    path: '/ebook',
+    path: '/ebooks',
     exact: false,
-    main: <Books />,
+    main: <Ebook />,
   },
+
   {
     path: '/faq',
     exact: false,
@@ -57,6 +60,11 @@ const routes = [
     path: '/detail-book',
     exact: false,
     main: <DetailBooks />,
+  },
+  {
+    path: '/detail-ebook',
+    exact: false,
+    main: <DetailEbooks />,
   },
   {
     path: '/profile/home',
@@ -72,6 +80,7 @@ function HomeUser(props) {
   return (
     <div>
       <NavBar url={match.params.id} props={props} isAuth={isUserLogged} />
+
       {routes.map((route, index) => (
         <Route key={index} path={route.path} exact={route.exact} component={() => route.main} />
       ))}

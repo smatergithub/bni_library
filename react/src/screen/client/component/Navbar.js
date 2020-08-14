@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 let dropdown = (
@@ -20,7 +21,7 @@ let dropdown = (
               Buku
             </div>
           </Link>
-          <Link to="/ebook">
+          <Link to="/ebooks">
             <div
               href="#"
               className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
@@ -68,10 +69,32 @@ const routes = [
   },
 ];
 
-function NavBar({ url, isAuth, props }) {
+function NavBar(props) {
   let { history } = props;
-  const [selectedMenu, setSelectedMenu] = useState(url);
+  const [selectedMenu, setSelectedMenu] = useState(props.url);
 
+  let badge =
+    props.ebooks.length + props.books.length !== 0 ? (
+      <div
+        style={{
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          position: 'absolute',
+          right: -10,
+          top: -10,
+          backgroundColor: '#fc8181',
+          color: 'white',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        {props.ebooks.length + props.books.length}
+      </div>
+    ) : (
+      ''
+    );
   return (
     <nav
       id="header"
@@ -82,12 +105,11 @@ function NavBar({ url, isAuth, props }) {
     >
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
         <div className="pl-4 flex items-center">
-          <div
-            className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-            onClick={() => history.push('/')}
-          >
-            BNI
-          </div>
+          <Link to="/">
+            <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
+              BNI
+            </div>
+          </Link>
         </div>
 
         <div className="block lg:hidden pr-4">
@@ -142,20 +164,20 @@ function NavBar({ url, isAuth, props }) {
               );
             })}
             <li className="ml-3">
-              {isAuth ? (
-                <div
-                  className="cursor-pointer bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center"
-                  onClick={() => history.push('/profile/home')}
-                >
-                  <i className="fas fa-user text-lg text-white"></i>
-                </div>
-              ) : (
-                <button
-                  className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg"
-                  onClick={() => history.push('/auth/login')}
-                >
-                  Masuk
-                </button>
+              {props.isAuth && (
+                <Link to="/profile/home">
+                  <div className="cursor-pointer relative bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center">
+                    <i className="fas fa-user text-lg text-white"></i>
+                    {badge}
+                  </div>
+                </Link>
+              )}
+              {!props.isAuth && (
+                <Link to="/auth/login">
+                  <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
+                    Masuk
+                  </button>
+                </Link>
               )}
             </li>
           </ul>
@@ -166,5 +188,11 @@ function NavBar({ url, isAuth, props }) {
     </nav>
   );
 }
+let mapStateToProps = state => {
+  return {
+    books: state.wishlist.books,
+    ebooks: state.wishlist.ebooks,
+  };
+};
 
-export default NavBar;
+export default connect(mapStateToProps, null)(NavBar);

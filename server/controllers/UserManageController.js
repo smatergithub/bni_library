@@ -50,10 +50,11 @@ module.exports = {
           data.push(dataUser);
         });
         let totalPage = Math.ceil(user.count / paramQuerySQL.limit);
+        let page = Math.ceil(req.query.page);
         res.status(200).json({
           count: user.count,
           totalPage: totalPage,
-          activePage: paramQuerySQL.page,
+          activePage: page,
           data: data,
         });
       })

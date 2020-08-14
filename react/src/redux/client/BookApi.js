@@ -2,12 +2,16 @@ import Request from '../../utils/request';
 
 export default class BookApi {
   static create(body) {
-    const url = '/api/admin/book';
-    return Request.postWithAuth(url, body, true);
+    const url = '/api/admin/book/create';
+    return Request.postWithAuth(url, body, false, true);
+  }
+  static uploadEbookFile(body) {
+    const url = '/api/admin/book/upload';
+    return Request.postWithAuth(url, body, false, true);
   }
   static update(id, body) {
     const url = `/api/admin/book/${id}`;
-    return Request.putWithAuth(`url`, body, true);
+    return Request.putWithAuth(url, body, false, true);
   }
   static list(body) {
     const url = `/api/admin/book`;

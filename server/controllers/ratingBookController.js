@@ -10,7 +10,7 @@ module.exports = {
       }
     })
       .then(transaction => {
-        let dataTransactionReturned = transaction.filter(x => x.status === "Returned");
+        let dataTransactionReturned = transaction.filter(x => x.status === "Dikembalikan");
         let dataTransactionRating = dataTransactionReturned.filter(x => x.isGiveRating === false);
         if (!dataTransactionRating) {
           res.status(500).json({ message: "transaction book not found" })
@@ -32,7 +32,7 @@ module.exports = {
             transaksi.update({
               isGiveRating: true
             }).then(response => {
-              return res.status(203).json({
+              return res.status(201).json({
                 message: "Process Succesfully input rating",
               });
             })

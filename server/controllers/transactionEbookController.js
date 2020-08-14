@@ -1,11 +1,14 @@
 const Ebooks = require('../models/').ebooks;
 const TransactionEbook = require('../models').transactionEbook;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 
 module.exports = {
   list: async (req, res) => {
     let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
     let paramQuerySQL = {
-      include: ['ebook', 'user']
+      include: ['ebook', 'user'],
     };
 
     if (code != '' && typeof code !== 'undefined') {
@@ -15,7 +18,6 @@ module.exports = {
         }
       }
     }
-
     if (status != '' && typeof status !== 'undefined') {
       paramQuerySQL.where = {
         status: {
@@ -68,7 +70,6 @@ module.exports = {
     if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
       sort = 'DESC';
     }
-
     TransactionEbook.findAndCountAll(paramQuerySQL)
       .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
@@ -77,68 +78,81 @@ module.exports = {
           count: result.count,
           totalPage: activePage,
           activePage: page,
-          data: result.rows,
-        });
+          data: result.rows
+        })
+
       })
       .catch(err => {
         res.status(500).send(err);
-      });
+      })
   },
 
   // pinjam ebook
   borrowEbook: async (req, res) => {
+
     const { ebooks } = req.body;
+    var userId = req.userId;
+    // const checkTransaction = await TransactionEbook.findAll({
+    //   where: { userId: userId },
+    //   where: { status: "Borrowed" },
+    // })
+
+    // if (checkTransaction) {
+    //   return res.status(404).json({ message: "already borrow ebook before" });
+    // }
 
     ebooks.forEach(async (ebookData) => {
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
+
       if (!ebook) {
         return res.status(404).json({
           message: "Ebook not Found"
         })
       }
+      // validate if quantity grather than book stock
+      // if (ebook.isBorrowed) {
+      //   return res.json({
+      //     message: 'Ebook Already Borrowed',
+      //   });
+      // }
 
-      if (ebook.isBorrowed) {
-        return res.status(404).json({
-          message: 'Ebook Already Borrowed',
+      await Ebooks.findByPk(ebookData.ebookId)
+        .then(book => {
+          book
+            .update({
+              isBorrowed: true,
+            })
+            .catch(err => {
+              return res.status(404).send(err);
+            });
+        })
+        .catch(err => {
+          return res.status(404).send(err);
         });
-      }
-    })
 
-    await Ebooks.findByPk(ebookId)
-      .then(ebook => {
-        ebook
-          .update({
-            isBorrowed: true,
-          })
-          .catch(err => {
-            return res.status(404).send(err);
-          });
-      })
-      .catch(err => {
-        return res.status(404).send(err);
-      });
 
-    const createTransaction = await transactionEbook
-      .create({
+      const createTransaction = await TransactionEbook.create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
-        status: 'Borrowed',
+        status: 'Dipinjam',
         userId: req.userId,
         note: req.body.note,
         isBorrowed: true,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
         ebookId: ebookData.ebookId,
-      })
+        isGiveRating: false
+      });
 
-    if (!createTransaction) {
-      return res.status(404).send("Failed Transaction");
-    }
+      if (!createTransaction) {
+        return res.status(404).send("Failed Transaction");
+      }
 
-    return res.status(200).json({
-      message: "Process Succesfully",
-      data: createTransaction
-    });
+      return res.status(201).json({
+        message: "Process Succesfully create Transaction Borrow Ebook",
+        data: createTransaction
+      });
+    })
 
   },
 
@@ -147,7 +161,7 @@ module.exports = {
 
     const transactionEbook = await TransactionEbook.findByPk(transactionId);
 
-    if (!transactionBook) {
+    if (!TransactionEbook) {
       return res.json({
         message: 'transaction not found',
       });
@@ -157,7 +171,8 @@ module.exports = {
       .then(transaction => {
         transaction
           .update({
-            status: 'Returned',
+            status: 'Dikembalikan',
+            isGiveRating: false
           })
           .catch(err => {
             res.status(404).send(err);
@@ -182,7 +197,7 @@ module.exports = {
       });
 
     return res.status(200).json({
-      message: 'Succesfully Return',
+      message: 'Succesfully Return Ebook',
     });
   },
 };

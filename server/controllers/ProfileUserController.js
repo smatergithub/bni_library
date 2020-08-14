@@ -1,5 +1,6 @@
 const Users = require('../models').users;
 const TransactionBook = require("../models").transactionBook;
+const TransactionEbook = require('../models').transactionEbook;
 
 module.exports = {
   profileUser: async (req, res) => {
@@ -105,6 +106,51 @@ module.exports = {
     }
 
     TransactionBook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows
+        })
+
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      })
+  },
+
+
+  listBorrowEbookUser: async (req, res) => {
+    var userId = req.userId;
+    let { q, order, sort, limit, page } = req.query;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      where: { isBorrowed: true },
+      include: ['ebook', 'user']
+    }
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    TransactionEbook.findAndCountAll(paramQuerySQL)
       .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;

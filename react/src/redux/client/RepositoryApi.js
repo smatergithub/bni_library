@@ -7,7 +7,7 @@ export default class RepositoryApi {
   }
   static update(id, body) {
     const url = `/api/admin/repository/${id}`;
-    return Request.putWithAuth(`url`, body, true);
+    return Request.putWithAuth(url, body, true);
   }
   static list(param) {
     const url = `/api/admin/repository?offset=${param.page}&limit=${param.limit}`;

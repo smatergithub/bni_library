@@ -114,7 +114,7 @@ export default class Table extends Component {
               href="#"
               className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
             >
-              {currentPage} of {totalPage}
+              {currentPage > 0 ? currentPage : 0} of {totalPage}
             </div>
 
             <div

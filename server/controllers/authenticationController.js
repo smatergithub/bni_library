@@ -28,7 +28,7 @@ module.exports = {
           expiredDateToken: expireDate,
         })
           .then(verification => {
-            res.status(203).send({
+            res.status(201).send({
               message: 'account was registered successfully!',
               verificationToken: verification.token,
               email: req.body.email,

@@ -5,15 +5,12 @@ import Table from '../../component/Table';
 
 const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
-  const [filterOptions, seFilterOptions] = React.useState({
+  const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5
   })
 
 
-  const paginationOptions = (pagination) => {
-    console.log("pagination", pagination);
-  }
 
   const retrieveDataUser = (filterOptions) => {
     setLoading(true);
@@ -28,7 +25,17 @@ const Ebooks = (props) => {
     retrieveDataUser(filterOptions);
   }, []);
 
+  const onPaginationUpdated = (pagination) => {
+    setFilterOptions({
+      page: pagination.page,
+      limit: pagination.limit,
+    })
+  }
 
+  React.useEffect(() => {
+    retrieveDataUser(filterOptions);
+
+  }, [filterOptions])
 
   if (loading) return null;
   const { users } = props;
@@ -77,7 +84,7 @@ const Ebooks = (props) => {
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
 
-        {users.data !== undefined ? <Table columns={columns} source={users} isLoading={loading} limit={filterOptions.limit} onPaginationUpdated={(pagination) => paginationOptions(pagination)} /> : null}
+        {users.data !== undefined ? <Table columns={columns} source={users} isLoading={loading} limit={filterOptions.limit} page={filterOptions.page} onPaginationUpdated={onPaginationUpdated} /> : null}
       </main>
     </div>
   );

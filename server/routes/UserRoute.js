@@ -17,7 +17,7 @@ router.get('/book/detail/:id', BookController.getBookById);
 router.get('/categoryBook', DataSourceFilterBookController.getCategory);
 router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
-router.get('/ebook/list', EbookController.getEbookList);
+router.post('/ebook/list', EbookController.getEbookList);
 router.get('/ebook/detail/:id', EbookController.getEbookById);
 
 
@@ -29,6 +29,7 @@ router.post('/updatePassword', AuthenticationController.updatePassword);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get("/profile/listBorrowBook", [AuthJWT.verifyToken], ProfileUserController.listBorrowBookUser)
+router.get("/profile/listBorrowEbook", [AuthJWT.verifyToken], ProfileUserController.listBorrowEbookUser)
 
 router.post('/transactionBook/borrowBook', [AuthJWT.verifyToken], TransactionBookController.borrowBook);
 router.post('/transactionEbook/borrowEbook', [AuthJWT.verifyToken], TransactionEbookController.borrowEbook);

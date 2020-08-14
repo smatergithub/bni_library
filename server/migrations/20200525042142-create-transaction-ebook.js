@@ -32,6 +32,9 @@ module.exports = {
       userId: {
         type: Sequelize.STRING
       },
+      isBorrowed: {
+        type: Sequelize.BOOLEAN
+      },
       ebookId: {
         type: Sequelize.STRING
       },
