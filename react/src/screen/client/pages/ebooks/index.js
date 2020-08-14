@@ -1,8 +1,8 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Input, Select } from 'antd';
-import { NoData } from '../../../../component';
+import { NoData, Modal } from '../../../../component';
 import { getAllEbooks } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 const { Search } = Input;
@@ -13,6 +13,7 @@ function Ebooks(props) {
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
   let [searchParam, setSearchParam] = React.useState('');
+  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
 
   function getAllEbook(params) {
     let formData = {
@@ -48,10 +49,14 @@ function Ebooks(props) {
     setSearchParam(value);
     getAllEbook({ judul: value });
   }
+  function redirectToLogin() {
+    props.history.push('/auth/login');
+  }
 
   if (processing && props.ebooks === null) return null;
   const { wishlist } = props;
-  console.log(searchParam);
+  let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
   return (
     <main>
       <section className="bg-white py-8 ">
@@ -119,7 +124,11 @@ function Ebooks(props) {
                     {!isAdd && (
                       <div
                         onClick={() => {
-                          props.addEbookWishlist(ebook);
+                          if (!isUserLogged) {
+                            setShowModalDeletion(true);
+                          } else {
+                            props.addEbookWishlist(ebook);
+                          }
                         }}
                       >
                         <i className="far fa-heart text-3xl cursor-pointer"></i>
@@ -150,6 +159,16 @@ function Ebooks(props) {
               );
             })}
         </div>
+        <Modal
+          title="Authentication required"
+          open={showModalDeletion}
+          onCLose={() => {
+            setShowModalDeletion(false);
+          }}
+          handleSubmit={redirectToLogin}
+        >
+          <div className="my-5">Silahkan Login terlebih dahulu</div>
+        </Modal>
       </section>
     </main>
   );

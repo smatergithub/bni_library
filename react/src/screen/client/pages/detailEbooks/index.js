@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
+import { Modal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/ebookUser';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
@@ -10,6 +11,7 @@ function DetailEbooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [ebooks, setEbooks] = React.useState(null);
+  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
@@ -20,7 +22,11 @@ function DetailEbooks(props) {
       }
     });
   }, []);
+  function redirectToLogin() {
+    props.history.push('//auth/login');
+  }
   if (processing && ebooks == null) return null;
+  let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <section className="py-16 lg:py-24 w-full">
@@ -89,16 +95,40 @@ function DetailEbooks(props) {
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div> Condition : New</div>
-              <button className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+              <button
+                onClick={() => {
+                  if (!isUserLogged) {
+                    setShowModalDeletion(true);
+                  }
+                }}
+                className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+              >
                 Pesan Sekarang
               </button>
-              <button className="w-full  text-gray-800  rounded-lg my-1 py-2 px-10 border border-gray-600">
+              <button
+                className="w-full  text-gray-800  rounded-lg my-1 py-2 px-10 border border-gray-600"
+                onClick={() => {
+                  if (!isUserLogged) {
+                    setShowModalDeletion(true);
+                  }
+                }}
+              >
                 Tambah Wishlist
               </button>
             </div>
           </div>
         )}
       </section>
+      <Modal
+        title="Authentication required"
+        open={showModalDeletion}
+        onCLose={() => {
+          setShowModalDeletion(false);
+        }}
+        handleSubmit={redirectToLogin}
+      >
+        <div className="my-5">Silahkan Login terlebih dahulu</div>
+      </Modal>
     </div>
   );
 }
