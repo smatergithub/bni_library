@@ -9,12 +9,15 @@ export const USERS = 'USERS';
 export const DETAIL_USERS = 'DETAIL_USERS';
 export const ME = 'ME';
 
-export const ADD_WISHLIST = 'ADD_WISHLIST';
-export const REMOVE_WISHLIST = 'REMOVE_WISHLIST';
+export const ADD_BOOK_WISHLIST = 'ADD_BOOK_WISHLIST';
+export const REMOVE_BOOK_WISHLIST = 'REMOVE_BOOK_WISHLIST';
+export const ADD_EBOOK_WISHLIST = 'ADD_EBOOK_WISHLIST';
+export const REMOVE_EBOOK_WISHLIST = 'REMOVE_EBOOK_WISHLIST';
 // ===========> type for books action here <===========
 
 export const BOOKS = 'BOOKS';
 export const BOOK_USERS = 'BOOK_USERS';
+export const EBOOK_USERS = 'EBOOK_USERS';
 export const DETAIL_BOOK = 'DETAIL_BOOK';
 
 // ===========> type for ebooks action here <===========
@@ -26,7 +29,6 @@ export const DETAIL_EBOOK = 'DETAIL_EBOOK';
 
 export const REPOSITORYS = 'REPOSITORYS';
 export const DETAIL_REPOSITORY = 'DETAIL_REPOSITORY';
-
 
 // ===========> type for transaction action here <===========
 

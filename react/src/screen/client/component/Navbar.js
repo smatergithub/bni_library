@@ -21,7 +21,7 @@ let dropdown = (
               Buku
             </div>
           </Link>
-          <Link to="/ebook">
+          <Link to="/ebooks">
             <div
               href="#"
               className="block px-4 py-2 text-sm leading-5 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
@@ -72,9 +72,9 @@ const routes = [
 function NavBar(props) {
   let { history } = props;
   const [selectedMenu, setSelectedMenu] = useState(props.url);
-  console.log(props.wishlist.length);
+
   let badge =
-    props.wishlist.length !== 0 ? (
+    props.ebooks.length + props.books.length !== 0 ? (
       <div
         style={{
           width: 20,
@@ -90,7 +90,7 @@ function NavBar(props) {
           alignItems: 'center',
         }}
       >
-        {props.wishlist.length}
+        {props.ebooks.length + props.books.length}
       </div>
     ) : (
       ''
@@ -105,12 +105,11 @@ function NavBar(props) {
     >
       <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 py-2">
         <div className="pl-4 flex items-center">
-          <div
-            className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl"
-            onClick={() => history.push('/')}
-          >
-            BNI
-          </div>
+          <Link to="/">
+            <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
+              BNI
+            </div>
+          </Link>
         </div>
 
         <div className="block lg:hidden pr-4">
@@ -191,7 +190,8 @@ function NavBar(props) {
 }
 let mapStateToProps = state => {
   return {
-    wishlist: state.wishlist.item,
+    books: state.wishlist.books,
+    ebooks: state.wishlist.ebooks,
   };
 };
 
