@@ -162,8 +162,10 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    // let path =
-    //   __basedir + "/server/public/images/" + req.file.filename;
+    let path =
+      __basedir + req.file.filename;
+
+    console.log("path", path);
 
     return Books.create({
       kategori: req.body.kategori,
@@ -178,7 +180,7 @@ module.exports = {
       penerbit: req.body.penerbit,
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
-      image: req.file.path,
+      image: req.file.filename,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response =>
