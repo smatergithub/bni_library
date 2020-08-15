@@ -1,4 +1,4 @@
-import TransactionApi from "../client/TransactionApi";
+import TransactionApi from '../client/TransactionApi';
 import { TRANSACTION_BOOKS, TRANSACTION_EBOOKS } from '../type';
 /**
  * note: for book creation doesn't need to dispatch //
@@ -19,9 +19,7 @@ export const MakeReturnBook = id => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-
 };
-
 
 export const ListTransactionBook = body => dispatch => {
   return TransactionApi.getListTransactionBook(body)
@@ -40,7 +38,6 @@ export const ListTransactionBook = body => dispatch => {
     });
 };
 
-
 export const MakeReturnEbook = id => () => {
   return TransactionApi.returnEbook(id)
     .then(res => {
@@ -55,15 +52,28 @@ export const MakeReturnEbook = id => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-
 };
-
 
 export const ListTransactionEbook = body => dispatch => {
   return TransactionApi.getListTransactionEbook(body)
     .then(res => {
       if (res) {
         dispatch({ type: TRANSACTION_EBOOKS, payload: res });
+        return {
+          resp: true,
+          msg: '',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const orderBook = body => () => {
+  return TransactionApi.orderBook(body)
+    .then(res => {
+      if (res) {
         return {
           resp: true,
           msg: '',
