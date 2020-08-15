@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { getRepositorys } from '../../../../redux/action/repositorys';
+import { getRepositorys, DeleteRepositoryAction } from '../../../../redux/action/repositorys';
 import Table from '../../component/Table';
-import { NoData } from '../../../../component';
+import { NoData, Modal, ToastSuccess, ToastError } from '../../../../component';
 import moment from 'moment';
 
 const Repository = props => {
   const [loading, setLoading] = React.useState(false);
+  const [selectedRepo, setSelectedRepo] = React.useState(null);
+  const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [filterOptions, seFilterOptions] = React.useState({
     page: 1,
     limit: 5,
@@ -34,6 +36,21 @@ const Repository = props => {
   React.useEffect(() => {
     retrieveDataRepository(filterOptions);
   }, []);
+  const handleActionDeleteRepo = () => {
+    props
+      .DeleteRepositoryAction(selectedRepo)
+      .then(response => {
+        if (response.resp) {
+          ToastSuccess(response.msg);
+        } else {
+          ToastError(response.msg);
+        }
+        retrieveDataRepository(filterOptions);
+        setLoading(false);
+        setShowModalDeletion(false);
+      })
+      .catch(err => console.log('err', err));
+  };
 
   if (loading) return null;
   const { repositorys } = props;
@@ -78,6 +95,16 @@ const Repository = props => {
                   Edit
                 </button>
               </Link>
+              <button
+                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                onClick={() => {
+                  setSelectedRepo(rowData.id);
+                  setShowModalDeletion(true);
+                }}
+              >
+                Delete
+              </button>
             </React.Fragment>
           </React.Fragment>
         );
@@ -112,6 +139,17 @@ const Repository = props => {
           <NoData msg="Data Belum tersedia !" />
         )}
       </main>
+      <Modal
+        title="Konfirmasi"
+        open={showModalDeletion}
+        onCLose={() => {
+          setSelectedRepo(null);
+          setShowModalDeletion(false);
+        }}
+        handleSubmit={handleActionDeleteRepo}
+      >
+        <div className="my-5">Anda yakin untuk menghapus Repository ini?</div>
+      </Modal>
     </div>
   );
 };
@@ -122,4 +160,4 @@ let mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getRepositorys })(Repository);
+export default connect(mapStateToProps, { getRepositorys, DeleteRepositoryAction })(Repository);

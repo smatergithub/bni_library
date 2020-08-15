@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
-import { getAllEbooks } from '../../../../redux/action/ebookUser';
+import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 const { Search } = Input;
 const { Option } = Select;
@@ -31,15 +31,18 @@ function Ebooks(props) {
     props.getAllEbooks(formData).then(() => {
       setProcessing(false);
     });
+    function getEbookCategory() {
+      props.getEbookCategory().then(res => {
+        if (res.data.length > 0) {
+          setCategory(res.data);
+        }
+      });
+    }
   }
   React.useEffect(() => {
     setProcessing(true);
     getAllEbook();
-    // props.getCategory().then(res => {
-    //   if (res.data.length > 0) {
-    //     setCategory(res.data);
-    //   }
-    // });
+    getEbookCategory();
   }, []);
 
   function handleChange(value) {
@@ -98,6 +101,7 @@ function Ebooks(props) {
                   onClick={() => {
                     setSearchParam('');
                     setCategory([]);
+                    getEbookCategory();
                     getAllEbook();
                   }}
                 >
@@ -181,5 +185,10 @@ let mapStateToProps = state => {
 };
 
 export default withRouter(
-  connect(mapStateToProps, { getAllEbooks, addEbookWishlist, removeEbookWishlist })(Ebooks)
+  connect(mapStateToProps, {
+    getAllEbooks,
+    addEbookWishlist,
+    removeEbookWishlist,
+    getEbookCategory,
+  })(Ebooks)
 );
