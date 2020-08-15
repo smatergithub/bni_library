@@ -94,7 +94,7 @@ module.exports = {
     var userId = req.userId;
     const checkTransaction = await TransactionBook.findAll({
       where: { userId: userId },
-      where: { status: "Borrowed" },
+      where: { status: "Dipinjam" },
     })
 
     if (checkTransaction) {
@@ -135,7 +135,7 @@ module.exports = {
       const createTransaction = await TransactionBook.create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
-        status: 'Borrowed',
+        status: 'Dipinjam',
         userId: req.userId,
         note: req.body.note,
         quantity: bookData.quantity,
