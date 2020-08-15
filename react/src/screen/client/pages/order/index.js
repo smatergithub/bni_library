@@ -30,7 +30,7 @@ function OrderBook(props) {
     });
   }, []);
   function redirectToLogin() {
-    props.history.push('/auth/login');
+    props.history.push('/profile/books');
   }
   function onSubmit(formData) {
     if (moment(startDate).valueOf() > moment(endDate).valueOf()) {
@@ -47,7 +47,9 @@ function OrderBook(props) {
           },
         ];
         props.orderBook(formData).then(res => {
-          console.log(res);
+          if (res.resp) {
+            setShowModalDeletion(true);
+          }
         });
       }
     }
@@ -178,14 +180,14 @@ function OrderBook(props) {
         )}
       </section>
       <Modal
-        title="Authentication required"
+        title="Order Berhasil"
         open={showModalDeletion}
         onCLose={() => {
           setShowModalDeletion(false);
         }}
         handleSubmit={redirectToLogin}
       >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
+        <div className="my-5">Silahkan tunjukan invoice kepada admin perpustakaan </div>
       </Modal>
     </div>
   );

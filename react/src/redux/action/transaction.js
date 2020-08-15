@@ -77,6 +77,7 @@ export const orderBook = body => () => {
         return {
           resp: true,
           msg: '',
+          data: res,
         };
       }
     })

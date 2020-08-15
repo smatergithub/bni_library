@@ -2,7 +2,8 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import Sidebar from './component/Sidebar';
 import Profile from './profile';
-import Borrowed from './borrowed';
+import BorrowedBook from './borrowedBook';
+import BorrowedEbook from './borrowedEbook';
 import Wishlist from './wishlist';
 
 const routes = [
@@ -19,7 +20,12 @@ const routes = [
   {
     path: '/profile/books',
     exact: false,
-    main: () => <Borrowed />,
+    main: () => <BorrowedBook />,
+  },
+  {
+    path: '/profile/ebooks',
+    exact: false,
+    main: () => <BorrowedEbook />,
   },
 ];
 

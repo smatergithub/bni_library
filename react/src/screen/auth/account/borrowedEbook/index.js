@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '../component/card';
 
-function Borrowed() {
+function BorrowedEbook() {
   let listBook = () => {
     let books = [];
     for (var i = 0; i < 4; i++) {
@@ -28,4 +28,4 @@ function Borrowed() {
     </React.Fragment>
   );
 }
-export default Borrowed;
+export default BorrowedEbook;
