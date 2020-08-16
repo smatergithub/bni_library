@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
-import { getBookById } from '../../../../redux/action/ebookUser';
+import { getEbookById } from '../../../../redux/action/ebookUser';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 function DetailEbooks(props) {
@@ -15,7 +15,7 @@ function DetailEbooks(props) {
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
-    props.getBookById(id).then(res => {
+    props.getEbookById(id).then(res => {
       setProcessing(false);
       if (res.resp) {
         setEbooks(res.data);
@@ -23,7 +23,7 @@ function DetailEbooks(props) {
     });
   }, []);
   function redirectToLogin() {
-    props.history.push('//auth/login');
+    props.history.push('/auth/login');
   }
   if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
@@ -99,6 +99,8 @@ function DetailEbooks(props) {
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
+                  } else {
+                    props.history.push(`/order?id=${ebooks.id}&type=ebook`);
                   }
                 }}
                 className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
@@ -132,4 +134,4 @@ function DetailEbooks(props) {
     </div>
   );
 }
-export default withRouter(connect(null, { getBookById })(DetailEbooks));
+export default withRouter(connect(null, { getEbookById })(DetailEbooks));

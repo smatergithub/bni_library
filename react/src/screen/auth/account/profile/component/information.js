@@ -1,6 +1,10 @@
 import React from 'react';
 
 function Information({ user, changePages }) {
+  function logout() {
+    localStorage.clear();
+    window.location.replace('/');
+  }
   if (user === null) return null;
   return (
     <div class="bg-white rounded-lg shadow-lg pl-10 relative">
@@ -25,6 +29,16 @@ function Information({ user, changePages }) {
           onClick={() => changePages(true)}
         >
           UBAH
+        </button>
+        <button
+          className="absolute lg:mx-0 hover:underline text-red-600  rounded-sm h-10 px-5"
+          style={{
+            top: '5em',
+            right: '2em',
+          }}
+          onClick={() => logout()}
+        >
+          Logout
         </button>
       </div>
     </div>

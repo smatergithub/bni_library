@@ -99,6 +99,8 @@ function DetailBooks(props) {
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
+                  } else {
+                    props.history.push(`/order?id=${books.id}&type=book`);
                   }
                 }}
                 className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"

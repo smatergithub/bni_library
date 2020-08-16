@@ -92,14 +92,14 @@ module.exports = {
 
     const { books } = req.body;
     var userId = req.userId;
-    const checkTransaction = await TransactionBook.findAll({
-      where: { userId: userId },
-      where: { status: "Borrowed" },
-    })
+    // const checkTransaction = await TransactionBook.findAll({
+    //   where: { userId: userId },
+    //   where: { status: "Dipinjam" },
+    // })
 
-    if (checkTransaction) {
-      return res.status(404).json({ message: "already borrow book before" });
-    }
+    // if (checkTransaction) {
+    //   return res.status(404).json({ message: "already borrow book before" });
+    // }
 
     books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);
@@ -135,7 +135,7 @@ module.exports = {
       const createTransaction = await TransactionBook.create({
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
-        status: 'Borrowed',
+        status: 'Dipinjam',
         userId: req.userId,
         note: req.body.note,
         quantity: bookData.quantity,

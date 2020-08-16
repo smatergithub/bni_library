@@ -2,6 +2,7 @@ const Books = require('../models').books;
 // const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+require('dotenv').config();
 
 const readXlsxFile = require('read-excel-file/node');
 
@@ -162,8 +163,8 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    // let path =
-    //   __basedir + "/server/public/images/" + req.file.filename;
+
+    let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`
 
     return Books.create({
       kategori: req.body.kategori,
@@ -178,7 +179,7 @@ module.exports = {
       penerbit: req.body.penerbit,
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
-      image: req.file.path,
+      image: location,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response =>
@@ -195,8 +196,7 @@ module.exports = {
           return res.status(400).send({ message: 'Book not found' });
         }
 
-        // let path =
-        //   __basedir + "/server/public/images/" + req.file.filename;
+        let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`
         return book
           .update({
             kategori: req.body.kategori,
@@ -211,7 +211,7 @@ module.exports = {
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
-            image: req.file ? req.file.path : req.body.image,
+            image: req.file ? location : req.file,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>
