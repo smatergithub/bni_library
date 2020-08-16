@@ -24,7 +24,7 @@ function Register(props) {
     props.signUp(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
-        console.log(res);
+
         setIsRequestSuccess(true);
         setToken(res.token);
         setEmail(res.email);

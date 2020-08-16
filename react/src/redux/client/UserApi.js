@@ -44,4 +44,12 @@ export default class UsersApi {
     const url = `/api/profile/listBorrowEbook`;
     return Request.getWithAuth(url);
   }
+  static createBookFeeback(userData) {
+    const url = `/api/ratingBook`;
+    return Request.postWithAuth(url, userData, false, false);
+  }
+  static createEbookFeeback(userData) {
+    const url = `/api/ratingEbook`;
+    return Request.postWithAuth(url, userData, false, false);
+  }
 }
