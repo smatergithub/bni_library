@@ -1,6 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
@@ -56,6 +57,10 @@ function Books(props) {
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <main>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Buku | Ebni</title>
+      </Helmet>
       <section className="bg-white py-8 ">
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">

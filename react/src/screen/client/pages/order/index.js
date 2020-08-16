@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
 import queryString from 'query-string';
 import moment from 'moment';
@@ -116,6 +117,10 @@ function OrderBook(props) {
   if (processing && books == null) return null;
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Order | Ebni</title>
+      </Helmet>
       <section className="py-16 lg:py-24 w-full">
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"

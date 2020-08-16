@@ -1,9 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 // https://images.unsplash.com/photo-1503901813544-0b22efb6ba5b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80
 
 function About() {
   return (
     <React.Fragment>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Tentang | Ebni</title>
+      </Helmet>
       <div
         className="relative pt-16 pb-32 flex content-center items-center justify-center"
         style={{

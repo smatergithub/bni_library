@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { ToastError, ToastSuccess } from '../../../component';
@@ -24,6 +25,10 @@ function Activation(props) {
 
   return (
     <main>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Aktivasi | Ebni</title>
+      </Helmet>
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-gray-900"

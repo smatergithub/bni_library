@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import DatePicker from 'react-datepicker';
 import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
@@ -38,6 +39,10 @@ function Register(props) {
 
   return (
     <main>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Registrasi | Ebni</title>
+      </Helmet>
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-gray-900"
