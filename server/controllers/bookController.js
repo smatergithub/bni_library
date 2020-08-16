@@ -163,8 +163,7 @@ module.exports = {
   },
 
   add: async (req, res) => {
-
-    let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`
+    let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
     return Books.create({
       kategori: req.body.kategori,
@@ -196,7 +195,9 @@ module.exports = {
           return res.status(400).send({ message: 'Book not found' });
         }
 
-        let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`
+        let location = req.body.image
+          ? req.body.image
+          : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
         return book
           .update({
             kategori: req.body.kategori,

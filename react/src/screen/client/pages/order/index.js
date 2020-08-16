@@ -101,13 +101,13 @@ function OrderBook(props) {
     if (type == 'book') {
       props.createBookFeeback(formData).then(res => {
         if (res.resp) {
-          setShowModalDeletion(false);
+          setIsBorrowReview(false);
         }
       });
     } else {
       props.createEbookFeeback(formData).then(res => {
         if (res.resp) {
-          setShowModalDeletion(false);
+          setIsBorrowReview(false);
         }
       });
     }
