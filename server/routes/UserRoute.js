@@ -43,6 +43,6 @@ router.post('/transactionEbook/borrowEbook', [AuthJWT.verifyToken], TransactionE
 
 
 router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
-router.post('/ratingEBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
+router.post('/ratingEBook', [AuthJWT.verifyToken], RatingEbookController.inputRatingBook);
 
 module.exports = router;
