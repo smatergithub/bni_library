@@ -35,7 +35,6 @@ function Wishlist(props) {
         {wishlist.length === 0 && <NoData msg="Belum ada item wishlist !" />}
         {wishlist.length !== 0 &&
           wishlist.map((borrow, key) => {
-            console.log(borrow);
             return (
               <div key={key}>
                 <Card
