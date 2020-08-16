@@ -5,9 +5,15 @@ import queryString from 'query-string';
 import moment from 'moment';
 
 import { withRouter } from 'react-router-dom';
-import { Modal, ToastError, NoData } from '../../../../component';
+import { Modal, ToastError, NoData, FeedbackModal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/bookUser';
 import { getEbookById } from '../../../../redux/action/ebookUser';
+import {
+  getBorrowedEbookItem,
+  getBorrowedBookItem,
+  createBookFeeback,
+  createEbookFeeback,
+} from '../../../../redux/action/user';
 import { orderBook, orderEbook } from '../../../../redux/action/transaction';
 import Form from './form';
 function OrderBook(props) {
@@ -18,7 +24,7 @@ function OrderBook(props) {
   let [processing, setProcessing] = React.useState(false);
   let [books, setBooks] = React.useState(null);
   let [ebooks, setEbooks] = React.useState(null);
-
+  let [isBorrowReview, setIsBorrowReview] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
@@ -32,6 +38,16 @@ function OrderBook(props) {
           setBooks(null);
         }
       });
+      props.getBorrowedBookItem().then(res => {
+        if (res.data.length !== 0) {
+          let checkIsBorrowed = res.data.data.some(
+            book => book.status === 'Dikembalikan' && !book.isGiveRating
+          );
+          setIsBorrowReview(checkIsBorrowed);
+        } else {
+          setIsBorrowReview(false);
+        }
+      });
     } else {
       props.getEbookById(id).then(res => {
         setProcessing(false);
@@ -39,6 +55,16 @@ function OrderBook(props) {
           setEbooks(res.data);
         } else {
           setEbooks(null);
+        }
+      });
+      props.getBorrowedEbookItem().then(res => {
+        if (res.data.length !== 0) {
+          let checkIsBorrowed = res.data.data.some(
+            ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+          );
+          setIsBorrowReview(checkIsBorrowed);
+        } else {
+          setIsBorrowReview(false);
         }
       });
     }
@@ -69,6 +95,21 @@ function OrderBook(props) {
           }
         });
       }
+    }
+  }
+  function onFeedbackSubmit(formData) {
+    if (type == 'book') {
+      props.createBookFeeback(formData).then(res => {
+        if (res.resp) {
+          setIsBorrowReview(false);
+        }
+      });
+    } else {
+      props.createEbookFeeback(formData).then(res => {
+        if (res.resp) {
+          setIsBorrowReview(false);
+        }
+      });
     }
   }
 
@@ -103,9 +144,25 @@ function OrderBook(props) {
       >
         <div className="my-5">Silahkan tunjukan invoice kepada admin perpustakaan </div>
       </Modal>
+      <FeedbackModal
+        title="Action required"
+        open={isBorrowReview}
+        handleSubmit={formData => onFeedbackSubmit(formData)}
+      >
+        <div className="my-5">Silahkan Login terlebih dahulu</div>
+      </FeedbackModal>
     </div>
   );
 }
 export default withRouter(
-  connect(null, { getBookById, getEbookById, orderEbook, orderBook })(OrderBook)
+  connect(null, {
+    getBookById,
+    getEbookById,
+    orderEbook,
+    orderBook,
+    getBorrowedEbookItem,
+    getBorrowedBookItem,
+    createBookFeeback,
+    createEbookFeeback,
+  })(OrderBook)
 );

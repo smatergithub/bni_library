@@ -134,3 +134,36 @@ export const getBorrowedEbookItem = () => () => {
       return { resp: false, msg: msg };
     });
 };
+
+export const createBookFeeback = userData => () => {
+  return UserApi.createBookFeeback(userData)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const createEbookFeeback = userData => () => {
+  return UserApi.createEbookFeeback(userData)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
