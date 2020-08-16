@@ -18,4 +18,12 @@ export default class TransactionApi {
     const url = `/api/admin/transactionEbook/list`;
     return Request.postWithAuth(url, body, true);
   }
+  static orderBook(body) {
+    const url = `/api/transactionBook/borrowBook`;
+    return Request.postWithAuth(url, body, false, false);
+  }
+  static orderEbook(body) {
+    const url = `/api/transactionEbook/borrowEbook`;
+    return Request.postWithAuth(url, body, false, false);
+  }
 }

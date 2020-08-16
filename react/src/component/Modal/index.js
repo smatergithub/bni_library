@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Modal({ open, title, onCLose, handleSubmit, children }) {
+export default function Modal({ open, title, onCLose, handleSubmit, children, large }) {
   return (
     <>
       {open ? (
@@ -9,7 +9,14 @@ export default function Modal({ open, title, onCLose, handleSubmit, children }) 
             className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
             onClick={() => onCLose()}
           >
-            <div className="modal-container bg-white w-11/12 md:max-w-md rounded shadow-lg  overflow-y-auto">
+            <div
+              className={`modal-container bg-white ${
+                large ? '' : 'w-11/12 md:max-w-md'
+              } rounded shadow-lg  overflow-y-auto`}
+              style={{
+                width: '90% !important',
+              }}
+            >
               <div className="modal-content py-4 text-left px-6">
                 <div className="flex justify-between items-center pb-3">
                   <p className="text-2xl font-bold">{title}</p>

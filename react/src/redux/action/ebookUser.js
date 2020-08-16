@@ -17,7 +17,7 @@ export const getAllEbooks = params => dispatch => {
       return { resp: false, msg: msg };
     });
 };
-export const getBookById = id => () => {
+export const getEbookById = id => () => {
   return UserEbookApi.getByid(id)
     .then(res => {
       if (res) {

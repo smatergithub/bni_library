@@ -16,6 +16,11 @@ const routes = [
     name: 'BUKU',
     params: 'books',
   },
+  {
+    path: '/profile/ebooks',
+    name: 'EBOOK',
+    params: 'ebooks',
+  },
 ];
 const Sidebar = ({ url }) => {
   return (
