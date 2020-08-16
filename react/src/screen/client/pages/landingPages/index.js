@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function LandingPages(props) {
   let { history } = props;
@@ -13,13 +14,11 @@ function LandingPages(props) {
               Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
               has been the industry's standard dummy text ever since the 1500s,{' '}
             </p>
-
-            <button
-              className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-full my-6 py-2 px-10 shadow-lg"
-              onClick={() => history.push('/auth/register')}
-            >
-              Start Now
-            </button>
+            <Link to="/auth/register">
+              <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-full my-6 py-2 px-10 shadow-lg">
+                Start Now
+              </button>
+            </Link>
           </div>
 
           <div className="w-full md:w-3/5 py-6 text-center">

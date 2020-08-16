@@ -36,4 +36,12 @@ export default class UsersApi {
     const url = `/api/profile/updateProfile`;
     return Request.postWithAuth(url, userData, true);
   }
+  static getBorrowedBookItem() {
+    const url = `/api/profile/listBorrowBook`;
+    return Request.getWithAuth(url);
+  }
+  static getBorrowedEbookItem() {
+    const url = `/api/profile/listBorrowEbook`;
+    return Request.getWithAuth(url);
+  }
 }

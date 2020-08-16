@@ -1,5 +1,5 @@
 const Users = require('../models').users;
-const TransactionBook = require("../models").transactionBook;
+const TransactionBook = require('../models').transactionBook;
 const TransactionEbook = require('../models').transactionEbook;
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
       where: {
         id: userId,
       },
-      includes: ['book']
+      includes: ['book'],
     })
       .then(user => {
         if (!user) {
@@ -42,12 +42,12 @@ module.exports = {
     var userId = req.userId;
     Users.findOne({
       where: {
-        id: userId
-      }
+        id: userId,
+      },
     })
       .then(user => {
         if (!user) {
-          res.status(404).json({ message: "User Not Found " })
+          res.status(404).json({ message: 'User Not Found ' });
         }
         let dataUser = {
           id: userId ? userId : req.body.id,
@@ -67,16 +67,18 @@ module.exports = {
           isAdmin: false,
           superAdmin: false,
         };
-        user.update(dataUser).then(response => {
-          res.status(200).json({ message: "Succesfully Update" })
-        })
-          .catch(err => {
-            res.status(404).json({ message: "failed Update" })
+        user
+          .update(dataUser)
+          .then(response => {
+            res.status(200).json({ message: 'Succesfully Update' });
           })
+          .catch(err => {
+            res.status(404).json({ message: 'failed Update' });
+          });
       })
       .catch(err => {
         res.status(500).send(err);
-      })
+      });
   },
 
   listBorrowBookUser: async (req, res) => {
@@ -84,8 +86,8 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
-      include: ['book', 'user']
-    }
+      include: ['book', 'user'],
+    };
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -113,15 +115,13 @@ module.exports = {
           count: result.count,
           totalPage: activePage,
           activePage: page,
-          data: result.rows
-        })
-
+          data: result.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
-      })
+      });
   },
-
 
   listBorrowEbookUser: async (req, res) => {
     var userId = req.userId;
@@ -129,8 +129,8 @@ module.exports = {
     let paramQuerySQL = {
       where: { userId: userId },
       where: { isBorrowed: true },
-      include: ['ebook', 'user']
-    }
+      include: ['ebook', 'user'],
+    };
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -158,13 +158,11 @@ module.exports = {
           count: result.count,
           totalPage: activePage,
           activePage: page,
-          data: result.rows
-        })
-
+          data: result.rows,
+        });
       })
       .catch(err => {
         res.status(500).send(err);
-      })
-  }
-
+      });
+  },
 };

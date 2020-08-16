@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ type }) => {
+const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
   return (
     <div className="w-full mb-5 py-5 flex">
       <div className="w-1/6 h-48 flex items-center justify-center">
@@ -9,14 +9,15 @@ const Card = ({ type }) => {
 
       <div className="w-4/6 h-48  flex  items-center justify-start ">
         <div>
-          <h4 className="text-xl font-bold leading-tight">Seni Berpikir Positif</h4>
-          <div className="mt-2 leading-relaxed">Pengarang : Andrea Hirata</div>
-          <div className="mt-1 leading-relaxed"> Penerbit : Basa Basi </div>
-          <div className="mt-1 leading-relaxed"> Cover ISBN : 978-602-6651-69-3 </div>
+          <h4 className="text-xl font-bold leading-tight">{data.judul}</h4>
+          <div className="mt-2 leading-relaxed">Pengarang : {data.pengarang}</div>
+          <div className="mt-1 leading-relaxed"> Penerbit : {data.penerbit} </div>
+          <div className="mt-1 leading-relaxed"> Cover ISBN : {data.isbn} </div>
         </div>
       </div>
       <div className="w-1/6 h-48 flex flex-col items-center justify-between py-10">
         <button
+          onClick={() => onDetailClick()}
           className="lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm h-10 px-5"
           style={{
             right: '2em',
@@ -25,7 +26,7 @@ const Card = ({ type }) => {
           {type === 'wishlist' ? 'PESAN' : 'DETAIL'}
         </button>
         {type === 'wishlist' && (
-          <div className="text-red-500 cursor-pointer">
+          <div className="text-red-500 cursor-pointer" onClick={() => onRemoveItem()}>
             HAPUS
             <i
               className="fas fa-times-circle text-xl text-red-500 "

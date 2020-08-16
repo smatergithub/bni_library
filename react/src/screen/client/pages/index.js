@@ -13,6 +13,7 @@ import Home from './home';
 import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
+import Order from './order';
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path: '/detail-book',
     exact: false,
     main: <DetailBooks />,
+  },
+  {
+    path: '/order',
+    exact: false,
+    main: <Order />,
   },
   {
     path: '/detail-ebook',
