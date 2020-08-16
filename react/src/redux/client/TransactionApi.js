@@ -22,4 +22,8 @@ export default class TransactionApi {
     const url = `/api/transactionBook/borrowBook`;
     return Request.postWithAuth(url, body, false, false);
   }
+  static orderEbook(body) {
+    const url = `/api/transactionEbook/borrowEbook`;
+    return Request.postWithAuth(url, body, false, false);
+  }
 }

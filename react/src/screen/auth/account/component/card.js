@@ -1,6 +1,7 @@
 import React from 'react';
 
 const Card = ({ type, data, onDetailClick }) => {
+  console.log(data);
   return (
     <div className="w-full mb-5 py-5 flex">
       <div className="w-1/6 h-48 flex items-center justify-center">

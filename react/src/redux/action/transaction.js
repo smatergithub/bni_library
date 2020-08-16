@@ -86,3 +86,19 @@ export const orderBook = body => () => {
       return { resp: false, msg: msg };
     });
 };
+export const orderEbook = body => () => {
+  return TransactionApi.orderEbook(body)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

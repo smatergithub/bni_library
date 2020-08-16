@@ -102,8 +102,24 @@ export const getUsersListToAdmin = param => dispatch => {
       return { resp: false, msg: msg };
     });
 };
-export const getBorrowedItem = () => () => {
-  return UserApi.getBorrowedItem()
+export const getBorrowedBookItem = () => () => {
+  return UserApi.getBorrowedBookItem()
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getBorrowedEbookItem = () => () => {
+  return UserApi.getBorrowedEbookItem()
     .then(res => {
       if (res) {
         return {

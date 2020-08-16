@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Card from '../component/card';
-import { Modal } from '../../../../component';
-import { getBorrowedItem } from '../../../../redux/action/user';
+import { Modal, NoData } from '../../../../component';
+import { getBorrowedBookItem } from '../../../../redux/action/user';
 
 function Borrowed(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -10,7 +10,7 @@ function Borrowed(props) {
   let [bookBorrowSelected, setBookBorrowSelected] = React.useState(null);
 
   React.useEffect(() => {
-    props.getBorrowedItem().then(res => {
+    props.getBorrowedBookItem().then(res => {
       if (res.resp) {
         setBorrowItem(res.data);
       }
@@ -22,7 +22,7 @@ function Borrowed(props) {
   }
   if (borrowItem === null) return <div>Loading</div>;
   let books = bookBorrowSelected ? bookBorrowSelected.book : null;
-  console.log(bookBorrowSelected);
+
   return (
     <React.Fragment>
       <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
@@ -47,6 +47,7 @@ function Borrowed(props) {
               </>
             );
           })}
+        {borrowItem && borrowItem.data.length === 0 && <NoData msg="Belum ada data !" />}
       </div>
 
       {books && (
@@ -122,4 +123,4 @@ function Borrowed(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedItem })(Borrowed);
+export default connect(null, { getBorrowedBookItem })(Borrowed);
