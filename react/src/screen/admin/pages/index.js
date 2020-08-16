@@ -94,6 +94,9 @@ function HomeAdmin(props) {
     localStorage.clear();
     props.signOut();
   }
+  function updateProfile() {
+    history.push('/profile/home');
+  }
   return (
     <div className="bg-gray-100 font-family-karla flex modal-active">
       <div
@@ -106,7 +109,7 @@ function HomeAdmin(props) {
       <div className="w-full flex flex-col h-screen overflow-y-hidden">
         <Switch>
           <div>
-            <Header logout={logout} />
+            <Header logout={logout} updateProfile={updateProfile} />
             {routes.map((route, index) => (
               // Render more <Route>s with the same paths as
               // above, but different components this time.
