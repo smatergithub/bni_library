@@ -17,7 +17,7 @@ module.exports = {
         }
         const createRating = RatingEbook.create({
           transactionEbookId: dataTransactionRating[0].id,
-          bookId: dataTransactionRating[0].bookId,
+          ebookId: dataTransactionRating[0].ebookId,
           userId: req.userId,
           rating: req.body.rating,
           note: req.body.note
