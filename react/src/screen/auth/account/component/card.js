@@ -1,7 +1,6 @@
 import React from 'react';
 
-const Card = ({ type, data, onDetailClick }) => {
-  console.log(data);
+const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
   return (
     <div className="w-full mb-5 py-5 flex">
       <div className="w-1/6 h-48 flex items-center justify-center">
@@ -18,7 +17,7 @@ const Card = ({ type, data, onDetailClick }) => {
       </div>
       <div className="w-1/6 h-48 flex flex-col items-center justify-between py-10">
         <button
-          onClick={() => (type === 'wishlist' ? null : onDetailClick())}
+          onClick={() => onDetailClick()}
           className="lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm h-10 px-5"
           style={{
             right: '2em',
@@ -27,7 +26,7 @@ const Card = ({ type, data, onDetailClick }) => {
           {type === 'wishlist' ? 'PESAN' : 'DETAIL'}
         </button>
         {type === 'wishlist' && (
-          <div className="text-red-500 cursor-pointer">
+          <div className="text-red-500 cursor-pointer" onClick={() => onRemoveItem()}>
             HAPUS
             <i
               className="fas fa-times-circle text-xl text-red-500 "
