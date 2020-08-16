@@ -1,8 +1,13 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 function ResetPassword() {
   return (
     <main>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Ganti Password | Ebni</title>
+      </Helmet>
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-gray-900"

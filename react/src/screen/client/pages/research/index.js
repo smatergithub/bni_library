@@ -1,9 +1,14 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80';
 function Research() {
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Repository | Ebni</title>
+      </Helmet>
       <section className="py-16 lg:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { NoData } from '../../../../component';
 import { removeBookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import Card from '../component/card';
@@ -28,6 +29,10 @@ function Wishlist(props) {
 
   return (
     <React.Fragment>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Wishlist | Ebni</title>
+      </Helmet>
       <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         Wishlist
       </div>

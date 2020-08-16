@@ -1,8 +1,13 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 function Faq() {
   return (
     <React.Fragment>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>F A Q | Ebni</title>
+      </Helmet>
       <section className="relative py-20 mt-10">
         <div className="container mx-auto px-4">
           <div className="items-center flex flex-wrap">

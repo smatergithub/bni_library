@@ -4,6 +4,7 @@ import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
+import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 function DetailEbooks(props) {
@@ -11,6 +12,7 @@ function DetailEbooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [ebooks, setEbooks] = React.useState(null);
+  let [isWishlistClick, setIsWishlistClick] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
@@ -24,6 +26,14 @@ function DetailEbooks(props) {
   }, []);
   function redirectToLogin() {
     props.history.push('/auth/login');
+  }
+  function onWishlistClick(ebook) {
+    setIsWishlistClick(!isWishlistClick);
+    if (isWishlistClick) {
+      props.removeEbookWishlist(ebook);
+    } else {
+      props.addEbookWishlist(ebook);
+    }
   }
   if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
@@ -108,14 +118,20 @@ function DetailEbooks(props) {
                 Pesan Sekarang
               </button>
               <button
-                className="w-full  text-gray-800  rounded-lg my-1 py-2 px-10 border border-gray-600"
+                className={`w-full  ${
+                  isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
+                }  rounded-lg my-1 py-2 px-10 border ${
+                  isWishlistClick ? 'border-red-600' : 'border-gray-600'
+                }`}
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
+                  } else {
+                    onWishlistClick(ebooks);
                   }
                 }}
               >
-                Tambah Wishlist
+                {isWishlistClick ? 'Hapus Wishlist' : 'Tambah Wishlist'}
               </button>
             </div>
           </div>
@@ -134,4 +150,6 @@ function DetailEbooks(props) {
     </div>
   );
 }
-export default withRouter(connect(null, { getEbookById })(DetailEbooks));
+export default withRouter(
+  connect(null, { getEbookById, addEbookWishlist, removeEbookWishlist })(DetailEbooks)
+);

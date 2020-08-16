@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 import { getBorrowedEbookItem } from '../../../../redux/action/user';
@@ -23,9 +24,12 @@ function BorrowedEbook(props) {
 
   if (borrowItem === null) return <div>Loading</div>;
   let ebooks = ebookBorrowSelected ? ebookBorrowSelected.ebook : null;
-  console.log(borrowItem);
   return (
     <React.Fragment>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Ebook | Ebni</title>
+      </Helmet>
       <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         PINJAMAN
       </div>

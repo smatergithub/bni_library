@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { signIn } from '../../../redux/action/user';
 import { ToastError } from '../../../component';
@@ -30,6 +31,10 @@ function Login(props) {
 
   return (
     <main>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Login | Ebni</title>
+      </Helmet>
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-gray-900"
