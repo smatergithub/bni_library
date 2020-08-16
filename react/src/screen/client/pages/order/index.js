@@ -25,7 +25,6 @@ function OrderBook(props) {
   let [books, setBooks] = React.useState(null);
   let [ebooks, setEbooks] = React.useState(null);
   let [isBorrowReview, setIsBorrowReview] = React.useState(false);
-
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
@@ -101,14 +100,17 @@ function OrderBook(props) {
   function onFeedbackSubmit(formData) {
     if (type == 'book') {
       props.createBookFeeback(formData).then(res => {
-        console.log(res);
+        if (res.resp) {
+          setShowModalDeletion(false);
+        }
       });
     } else {
       props.createEbookFeeback(formData).then(res => {
-        console.log(res);
+        if (res.resp) {
+          setShowModalDeletion(false);
+        }
       });
     }
-    console.log(formData);
   }
 
   if (processing && books == null) return null;
