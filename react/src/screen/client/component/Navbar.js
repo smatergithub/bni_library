@@ -83,7 +83,7 @@ function NavBar(props) {
           position: 'absolute',
           right: -10,
           top: -10,
-          backgroundColor: '#fc8181',
+          backgroundColor: 'red',
           color: 'white',
           display: 'flex',
           justifyContent: 'center',
