@@ -6,6 +6,7 @@ import { ToastError } from '../../../component';
 function Login(props) {
   let { history } = props;
   let [user, setUser] = useState({ email: '', password: '' });
+
   function onLogin(e) {
     e.preventDefault();
     if (user.email.trim().length === 0 && user.password.trim().length === 0) {
