@@ -7,6 +7,8 @@ require('dotenv').config();
 
 global.__basedir = __dirname + '/..';
 
+global.__locationdir = __dirname;
+
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require('./routes/AdminRoute');
 var corsOptions = {
@@ -22,7 +24,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/', UserRoute);
 app.use('/api/admin/', AdminRoute);
-app.use('/img', express.static(path.join(__dirname, 'public')));
+app.use('/img/', express.static(path.join(__dirname, 'public')));
 // app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
 app.get('/', (req, res) =>
