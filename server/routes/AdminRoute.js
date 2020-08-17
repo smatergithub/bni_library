@@ -40,10 +40,12 @@ router.put('/repository/:id', [AuthJWT.isAdmin], RepositoryController.update);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
+router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 
 
 router.post('/transactionEbook/list', [AuthJWT.isAdmin], TransactionEbookController.list);
+router.post('/transactionEbook/history', [AuthJWT.isAdmin], TransactionEbookController.listHistory);
 router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 
 module.exports = router;
