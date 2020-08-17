@@ -45,13 +45,13 @@ const routes = [
     params: 'users',
     notif: false,
   },
-  // {
-  //   path: '/admin/analytics',
-  //   name: 'Analytics',
-  //   icon: 'fas fa-align-left',
-  //   params: 'analytics',
-  //   notif: false,
-  // },
+  {
+    path: '/admin/history',
+    name: 'History',
+    icon: 'fas fa-align-left',
+    params: 'history',
+    notif: false,
+  },
 ];
 
 function Sidebar({ url, createNewBook }) {
