@@ -1,5 +1,6 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -16,6 +17,7 @@ import CreateNewRepo from './createNewRepo';
 import Repository from './repository';
 import User from './users';
 import Approval from './approval';
+import History from './history';
 
 const routes = [
   {
@@ -83,6 +85,11 @@ const routes = [
     exact: false,
     main: props => <Approval {...props} />,
   },
+  {
+    path: '/admin/history',
+    exact: false,
+    main: props => <History {...props} />,
+  },
 ];
 
 function HomeAdmin(props) {
@@ -99,6 +106,10 @@ function HomeAdmin(props) {
   }
   return (
     <div className="bg-gray-100 font-family-karla flex modal-active">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Admin | BNI</title>
+      </Helmet>
       <div
         style={{
           zIndex: '10000',

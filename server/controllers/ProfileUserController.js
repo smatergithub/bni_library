@@ -64,8 +64,8 @@ module.exports = {
           email: req.body.email,
           alamat: req.body.alamat,
           imageUrl: req.body.imageUrl,
-          isAdmin: false,
-          superAdmin: false,
+          isAdmin: req.body.isAdmin,
+          superAdmin: req.body.superAdmin,
         };
         user
           .update(dataUser)

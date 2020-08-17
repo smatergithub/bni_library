@@ -8,6 +8,90 @@ module.exports = {
   list: async (req, res) => {
     let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
     let paramQuerySQL = {
+      where: { status: "Dipinjam" },
+      include: ['ebook', 'user'],
+    };
+
+    if (code != '' && typeof code !== 'undefined') {
+      paramQuerySQL.where = {
+        code: {
+          [Op.like]: '%' + code + '%'
+        }
+      }
+    }
+    if (status != '' && typeof status !== 'undefined') {
+      paramQuerySQL.where = {
+        status: {
+          [Op.like]: '%' + status + '%'
+        }
+      }
+    }
+
+    if (startDate != '' && typeof startDate !== 'undefined') {
+      paramQuerySQL.where = {
+        startDate: {
+          [Op.like]: '%' + startDate + '%'
+        }
+      }
+    }
+
+    if (endDate != '' && typeof endDate !== 'undefined') {
+      paramQuerySQL.where = {
+        endDate: {
+          [Op.like]: '%' + endDate + '%'
+        }
+      }
+    }
+
+    if (userId != '' && typeof userId !== 'undefined') {
+      paramQuerySQL.where = {
+        userId: {
+          [Op.like]: '%' + userId + '%'
+        }
+      }
+    }
+
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+    }
+
+
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['createdAt'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [
+        [order, sort]
+      ];
+    }
+
+    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+      sort = 'DESC';
+    }
+    TransactionEbook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows
+        })
+
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      })
+  },
+
+  listHistory: async (req, res) => {
+    let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
+    let paramQuerySQL = {
+      where: { status: "Dikembalikan" },
       include: ['ebook', 'user'],
     };
 
