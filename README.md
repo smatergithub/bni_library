@@ -71,3 +71,32 @@ Frontend Only
 ```sh
 $ npm run dev-react
 ```
+
+Deployment
+
+Create new database for production for example `ebni_production` base on config file from :
+`server/config/config.json`
+
+```sh
+$ npm install pm2@latest -g
+$ npm run build-prod
+$ pm2 start npm --name "BNI-LIBRARY" -- start
+```
+
+Restart Application
+
+```sh
+$ pm2 restart BNI-LIBRARY
+```
+
+Stop Appilication
+
+```sh
+$ pm2 stop BNI-LIBRARY
+```
+
+Delete Appilication
+
+```sh
+$ pm2 delete BNI-LIBRARY
+```

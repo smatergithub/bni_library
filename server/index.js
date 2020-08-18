@@ -25,18 +25,18 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/', UserRoute);
 app.use('/api/admin/', AdminRoute);
 app.use('/img/', express.static(path.join(__dirname, 'public')));
-// app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
+app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
 app.get('/', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
 );
 
 var db = require('./models');
-db.sequelize.sync().then(function () {
+db.sequelize.sync().then(function() {
   // console.log('database connection success');
 });
 
 const port = process.env.PORT_BACKEND;
-app.listen(port, function () {
+app.listen(port, function() {
   console.log(`Server running in PORT: ${port}`);
 });
