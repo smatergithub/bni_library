@@ -86,6 +86,50 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
+      where: { status: "Dipinjam" },
+      include: ['book', 'user'],
+    };
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    TransactionBook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows,
+        });
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  },
+
+  listHistoryBorrowBookUser: async (req, res) => {
+    var userId = req.userId;
+    let { q, order, sort, limit, page } = req.query;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      where: { status: "Dikembalikan" },
       include: ['book', 'user'],
     };
 
@@ -129,6 +173,51 @@ module.exports = {
     let paramQuerySQL = {
       where: { userId: userId },
       where: { isBorrowed: true },
+      where: { status: "Dipinjam" },
+      include: ['ebook', 'user'],
+    };
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    TransactionEbook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows,
+        });
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  },
+
+  listHistoryBorrowEbookUser: async (req, res) => {
+    var userId = req.userId;
+    let { q, order, sort, limit, page } = req.query;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      where: { isBorrowed: true },
+      where: { status: "Dikembalikan" },
       include: ['ebook', 'user'],
     };
 

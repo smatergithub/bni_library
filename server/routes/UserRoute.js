@@ -43,9 +43,14 @@ router.get(
   ProfileUserController.listBorrowBookUser
 );
 router.get(
-  '/profile/listBorrowEbook',
+  '/profile/listHistoryBorrowBook',
   [AuthJWT.verifyToken],
-  ProfileUserController.listBorrowEbookUser
+  ProfileUserController.listHistoryBorrowBookUser
+);
+router.get(
+  '/profile/listHistoryBorrowEbook',
+  [AuthJWT.verifyToken],
+  ProfileUserController.listHistoryBorrowEbookUser
 );
 
 router.post(
@@ -62,4 +67,7 @@ router.post(
 router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
 router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRatingEbook);
 
+
+router.get('/ratingBook/list', RatingBookController.listBookbyRating);
+router.get('/ratingEbook/list', RatingEbookController.listEbookbyRating);
 module.exports = router;
