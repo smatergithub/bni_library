@@ -1,5 +1,6 @@
 const TransactionEbook = require("../models").transactionEbook;
 const RatingEbook = require("../models").ratingEbook;
+const sequelize = require('sequelize')
 
 module.exports = {
   inputRatingEbook: async (req, res) => {
@@ -47,5 +48,30 @@ module.exports = {
       .catch(err => {
         res.status(200).send(err);
       })
+  },
+  listEbookbyRating: async (req, res) => {
+    let paramQuerySQL = {
+      include: ['book'],
+      limit: 5,
+      order: [['rating', 'DESC']],
+      attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
+    };
+
+    const RatingList = await RatingEbook.findAndCountAll(paramQuerySQL).then(response => {
+
+      return {
+        count: response.count,
+        data: response.rows,
+      }
+    })
+
+    try {
+      res.status(200).json({
+        RatingEbook: RatingList.data
+      });
+    }
+    catch (err) {
+      console.log(err)
+    }
   }
 }
