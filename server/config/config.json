@@ -9,10 +9,10 @@
   },
   "production": {
     "username": "root",
-    "password": "",
+    "password": "root",
     "database": "ebni_development",
     "host": "127.0.0.1",
-    "dialect": "mariadb",
+    "dialect": "mysql",
     "operatorsAliases": false
   }
 }
