@@ -48,13 +48,13 @@ $ cd bni_library
 $ npm install
 ```
 
+## Run Application
+
 \*Install Frontend Packages and Run Database Migration:
 
 ```sh
-$ npm run setup
+$ npm run setup-dev
 ```
-
-## Run Application
 
 ```sh
 $ npm run dev
@@ -72,14 +72,15 @@ Frontend Only
 $ npm run dev-react
 ```
 
-Deployment
+## Deployment
 
 Create new database for production for example `ebni_production` base on config file from :
 `server/config/config.json`
 
 ```sh
 $ npm install pm2@latest -g
-$ npm run build-prod
+$ npm run setup-prod
+$ npm run build-prod-win 'windows server' || npm run build-prod
 $ pm2 start  --name "BNI-LIBRARY" run.js
 ```
 
