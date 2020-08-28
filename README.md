@@ -80,7 +80,7 @@ Create new database for production for example `ebni_production` base on config 
 ```sh
 $ npm install pm2@latest -g
 $ npm run build-prod
-$ pm2 start npm --name "BNI-LIBRARY" -- start
+$ pm2 start  --name "BNI-LIBRARY" run.js
 ```
 
 Restart Application

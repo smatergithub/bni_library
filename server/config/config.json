@@ -9,7 +9,7 @@
   },
   "production": {
     "username": "root",
-    "password": "root",
+    "password": "",
     "database": "ebni_development",
     "host": "127.0.0.1",
     "dialect": "mariadb",
