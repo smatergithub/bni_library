@@ -14,6 +14,7 @@
     "winBuild": "npm run clean && cd react && set \"GENERATE_SOURCEMAP=false\"  \"INLINE_RUNTIME_CHUNK=false\" && npm run build",
     "dev-react": "cd react && npm run start",
     "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
+    "prod-server": "cross-env NODE_ENV=production nodemon --watch server server/index.js",
     "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
     "lint:fix": "eslint react/src/ --fix"
   },
