@@ -19,9 +19,10 @@ export default class UsersApi {
     return Request.getWithAuth(url);
   }
 
-  static toggleUserIntoAdmin(id) {
+  static toggleUserIntoAdmin(userData, id) {
+    console.log(id);
     const url = `/api/admin/manage-user/${id}`;
-    return Request.postWithAuth(url);
+    return Request.postWithAuth(url, userData, false, false);
   }
 
   static dataSourceListUser() {
