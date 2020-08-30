@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signOut } from '../../../redux/action/user';
+import { signOut, getMe } from '../../../redux/action/user';
 
 import Sidebar from '../component/Sidebar';
 import Header from '../component/Header';
@@ -104,6 +104,9 @@ function HomeAdmin(props) {
   function updateProfile() {
     history.push('/profile/home');
   }
+  React.useEffect(() => {
+    props.getMe();
+  });
   return (
     <div className="bg-gray-100 font-family-karla flex modal-active">
       <Helmet>
@@ -143,4 +146,4 @@ HomeAdmin.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-export default connect(mapState, { signOut })(HomeAdmin);
+export default connect(mapState, { signOut, getMe })(HomeAdmin);

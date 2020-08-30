@@ -28,7 +28,7 @@ function CreateNewBook(props) {
       formData['isPromotion'] = promotionValue == 'true' ? true : false;
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
-      formData['status'] = statusValue == 'true' ? true : false;
+      formData['status'] = statusValue == 'true' ? 'Ada' : 'Dipinjam';
       props.CreateNewBookAction(formData).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -44,7 +44,7 @@ function CreateNewBook(props) {
       formData['tahunTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['status'] =
-        statusValue !== null ? (statusValue === 'true' ? true : false) : book.status;
+        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Dipinjam') : book.status;
 
       props.EditBookAction(id, formData).then(res => {
         if (res.resp) {
@@ -110,8 +110,8 @@ function CreateNewBook(props) {
     reader.readAsDataURL(file);
   };
   const optionsStatus = [
-    { label: 'Aktif', value: true },
-    { label: 'Non Aktif', value: false },
+    { label: 'Ada', value: true },
+    { label: 'Dipinjam', value: false },
   ];
   const optionsPromotion = [
     { label: 'Ya', value: true },
@@ -204,7 +204,7 @@ function CreateNewBook(props) {
                     name="stockBuku"
                     defaultValue={book ? book.stockBuku : ''}
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
+                    type="number"
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}

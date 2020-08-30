@@ -7,6 +7,7 @@ import { updateMe } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
 
 function EditUser(props) {
+  let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
   function onSubmit(formData) {
@@ -15,7 +16,11 @@ function EditUser(props) {
     props.updateMe(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
-        props.changePages(false);
+        if (isAdmin) {
+          window.location.replace('/admin/dashboard');
+        } else {
+          props.changePages(false);
+        }
       } else {
         ToastError(res.msg);
       }

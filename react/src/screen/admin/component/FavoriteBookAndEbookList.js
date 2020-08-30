@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { NoData } from '../../../component';
 
-
-function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goToEBookDetail, goToBookDetail }) {
+function FavoriteBookAndEbookList({
+  isLoading,
+  mockBookFavorite,
+  mockEbook,
+  goToEBookDetail,
+  goToBookDetail,
+}) {
   return (
     <div className="flex flex-wrap mt-5 px-1">
       <div className="w-full xl:w-8/12 mb-12 xl:mb-0 ">
@@ -27,45 +33,53 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
             </div>
           </div>
           <div className="block w-full overflow-x-hide">
-            <table className="items-center w-full bg-transparent border-collapse">
-              <thead>
-                <tr>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Judul
-                  </th>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Tahun terbit
-                  </th>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Pengarang
-                  </th>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Rating
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? null : mockBookFavorite !== null ? mockBookFavorite.map(book => {
-                  return (
-                    <tr>
-                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
-                        {book.title}
-                      </th>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {book.tahunTerbit}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {book.pengarang}
-                      </td>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {/* <i className="fas fa-arrow-up text-green-500 mr-4" /> */}
-                        {book.rating}
-                      </td>
-                    </tr>
-                  );
-                }) : null}
-              </tbody>
-            </table>
+            {mockBookFavorite && mockBookFavorite.length !== 0 ? (
+              <table className="items-center w-full bg-transparent border-collapse">
+                <thead>
+                  <tr>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Judul
+                    </th>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Tahun terbit
+                    </th>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Pengarang
+                    </th>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Rating
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading
+                    ? null
+                    : mockBookFavorite !== null
+                    ? mockBookFavorite.map(book => {
+                        return (
+                          <tr>
+                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
+                              {book.title}
+                            </th>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                              {book.tahunTerbit}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                              {book.pengarang}
+                            </td>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                              {/* <i className="fas fa-arrow-up text-green-500 mr-4" /> */}
+                              {book.rating}
+                            </td>
+                          </tr>
+                        );
+                      })
+                    : null}
+                </tbody>
+              </table>
+            ) : (
+              <NoData msg="Belum ada data buku favorit " />
+            )}
           </div>
         </div>
       </div>
@@ -91,34 +105,38 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
             </div>
           </div>
           <div className="block w-full ">
-            <table className="items-center w-full bg-transparent border-collapse">
-              <thead className="thead-light">
-                <tr>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Judul
-                  </th>
-                  <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
-                    Author
-                  </th>
-                  {/* <th
+            {mockEbook && mockEbook !== undefined && mockEbook.length !== 0 ? (
+              <table className="items-center w-full bg-transparent border-collapse">
+                <thead className="thead-light">
+                  <tr>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Judul
+                    </th>
+                    <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                      Author
+                    </th>
+                    {/* <th
                     className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left"
                     style={{
                       minWidth: '140px',
                     }}
                   /> */}
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? null : mockBookFavorite !== null ? mockEbook.map(ebook => {
-                  return (
-                    <tr>
-                      <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
-                        {ebook.title}
-                      </th>
-                      <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        {ebook.author}
-                      </td>
-                      {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
+                  </tr>
+                </thead>
+                <tbody>
+                  {isLoading
+                    ? null
+                    : mockEbook !== null && mockEbook !== undefined
+                    ? mockEbook.map(ebook => {
+                        return (
+                          <tr className="p-4">
+                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2 ">
+                              {ebook.judul}
+                            </th>
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2">
+                              {ebook.pengarang}
+                            </td>
+                            {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                         <div className="flex items-center">
                           <span className="mr-2">60%</span>
                           <div className="relative w-full">
@@ -133,12 +151,15 @@ function FavoriteBookAndEbookList({ isLoading, mockBookFavorite, mockEbook, goTo
                           </div>
                         </div>
                       </td> */}
-                    </tr>
-                  );
-                }) : null}
-
-              </tbody>
-            </table>
+                          </tr>
+                        );
+                      })
+                    : null}
+                </tbody>
+              </table>
+            ) : (
+              <NoData msg="Belum ada data ebook " />
+            )}
           </div>
         </div>
       </div>

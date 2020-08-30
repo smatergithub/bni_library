@@ -167,3 +167,18 @@ export const createEbookFeeback = userData => () => {
       return { resp: false, msg: msg };
     });
 };
+export const toogleIsAdmin = (userData, id) => () => {
+  return UserApi.toggleUserIntoAdmin(userData, id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
