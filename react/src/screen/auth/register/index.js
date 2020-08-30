@@ -8,7 +8,7 @@ import { signUp } from '../../../redux/action/user';
 function Register(props) {
   let { history } = props;
   const [formData, setFormData] = useState({
-    name: '',
+    nama: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -87,7 +87,7 @@ function Register(props) {
                         </label>
                         <input
                           type="text"
-                          onChange={e => setFormData({ ...formData, name: e.target.value })}
+                          onChange={e => setFormData({ ...formData, nama: e.target.value })}
                           className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                           placeholder="Nama"
                           style={{
