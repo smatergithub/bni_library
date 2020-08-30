@@ -63,6 +63,21 @@ module.exports = {
       });
   },
 
+  deleteUser: async (req, res) => {
+    return Users.findByPk(req.params.id).then(user => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'user Not Found',
+        });
+      }
+      return user
+        .destroy()
+        .then(() => res.status(200).send({ message: 'succesfully delete' }))
+        .catch(error => res.status(404).send(error));
+    })
+      .catch(error => res.status(500).send(error));
+  },
+
   toggleUserIsAdmin: async (req, res) => {
     return Users.findByPk(req.params.id)
       .then(user => {

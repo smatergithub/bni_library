@@ -20,7 +20,12 @@ export default class UsersApi {
   }
 
   static toggleUserIntoAdmin(id) {
-    const url = `/api/admin/manage-user/${id}`;
+    const url = `/api/admin/manage-user/userIntoAdmin/${id}`;
+    return Request.postWithAuth(url);
+  }
+
+  static deleteUserList(id) {
+    const url = `/api/admin/manage-user/delete/${id}`;
     return Request.postWithAuth(url);
   }
 

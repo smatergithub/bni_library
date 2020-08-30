@@ -50,6 +50,41 @@ export const verificationUser = param => () => {
       return { resp: false, msg: msg };
     });
 };
+
+
+
+export const toggleUserIntoAdmin = id => () => {
+  return UserApi.toggleUserIntoAdmin(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Account User Berhasil di Menjadi Admin',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const deleteUser = id => () => {
+  return UserApi.deleteUserList(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Account User Berhasil di dihapus',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const getMe = () => dispatch => {
   return UserApi.getMe()
     .then(res => {

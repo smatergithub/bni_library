@@ -115,6 +115,8 @@ module.exports = {
           email: user.email,
           accessToken: token,
           role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
+          isAdmin: user.isAdmin,
+          superAdmin: user.superAdmin
         });
       })
       .catch(err => {
