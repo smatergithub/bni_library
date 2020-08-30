@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
-import { signIn } from '../../../redux/action/user';
+import { signIn, getMe } from '../../../redux/action/user';
 import { ToastError } from '../../../component';
 
 function Login(props) {
@@ -17,7 +17,13 @@ function Login(props) {
         .signIn(user)
         .then(res => {
           if (res.resp) {
-            history.push('/admin/dashboard');
+            props.getMe().then(res => {
+              if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
+                history.push('/profile/home?edit=true');
+              } else {
+                history.push('/admin/dashboard');
+              }
+            });
           } else {
             ToastError(res.msg);
           }
@@ -125,4 +131,4 @@ function Login(props) {
     </main>
   );
 }
-export default connect(null, { signIn })(Login);
+export default connect(null, { signIn, getMe })(Login);

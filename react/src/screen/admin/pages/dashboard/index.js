@@ -2,9 +2,9 @@ import React from 'react';
 import TopBar from '../../component/TopBar';
 import FavoriteBookAndEbookList from '../../component/FavoriteBookAndEbookList';
 import { connect } from 'react-redux';
-import { getDashboardSummary } from "../../../../redux/action/dashboard"
+import { getDashboardSummary } from '../../../../redux/action/dashboard';
 
-const Dashboard = (props) => {
+const Dashboard = props => {
   const [loading, setLoading] = React.useState(false);
 
   const { history } = props;
@@ -17,54 +17,37 @@ const Dashboard = (props) => {
 
   const mappingDataSourceDashboardSummary = () => {
     setLoading(true);
-    props.getDashboardSummary().then(res => {
-      if (res) {
-        setLoading(false);
-      }
-    }).catch(err => { console.log("error", err) });
-  }
+    props
+      .getDashboardSummary()
+      .then(res => {
+        if (res) {
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   React.useEffect(() => {
     mappingDataSourceDashboardSummary();
   }, []);
 
-  const mockEbook = [
-    {
-      title: 'Data science for beginner',
-      author: 'James bond',
-    },
-    {
-      title: 'Competitive Programer',
-      author: 'Grennady',
-    },
-    {
-      title: 'Top Coder hack',
-      author: 'Grennady',
-    },
-    {
-      title: 'Web Development using Deno land',
-      author: 'Grennady',
-    },
-    {
-      title: 'Competitive Programer',
-      author: 'Grennady',
-    },
-  ];
-
   if (loading) return null;
 
   const { dashboardSummary } = props;
 
-  const dataSourceBook = dashboardSummary.ratingBook === undefined ? null : dashboardSummary.ratingBook.map(item => {
-    return {
-      title: item.book.judul,
-      tahunTerbit: item.book.tahunTerbit,
-      pengarang: item.book.pengarang,
-      rating: item.totalRating
-    }
-  })
-
-
+  const dataSourceBook =
+    dashboardSummary.ratingBook === undefined
+      ? null
+      : dashboardSummary.ratingBook.map(item => {
+          return {
+            title: item.book.judul,
+            tahunTerbit: item.book.tahunTerbit,
+            pengarang: item.book.pengarang,
+            rating: item.totalRating,
+          };
+        });
 
   return (
     <div className="bg-gray-100 font-family-karla flex">
@@ -73,11 +56,28 @@ const Dashboard = (props) => {
           <main className="w-full flex-grow p-6">
             <h1 className="text-3xl text-black pb-6">Dashboard</h1>
             <div className="flex flex-wrap">
-              {loading ? null :
+              {loading ? null : (
                 <React.Fragment>
-                  <TopBar title={"Buku"} value={dashboardSummary.bookCount} icon={"fas fa-chart-pie"} description={"Total Buku"} />
-                  <TopBar title={"Ebook"} value={dashboardSummary.ebookCount} icon={"fas fa-percent"} description={"Total Ebook"} />
-                  <TopBar title={"Pengguna"} value={dashboardSummary.userCount} icon={"fas fa-users"} description={"Total Pengguna"} /></React.Fragment>}
+                  <TopBar
+                    title={'Buku'}
+                    value={dashboardSummary.bookCount}
+                    icon={'fas fa-chart-pie'}
+                    description={'Total Buku'}
+                  />
+                  <TopBar
+                    title={'Ebook'}
+                    value={dashboardSummary.ebookCount}
+                    icon={'fas fa-percent'}
+                    description={'Total Ebook'}
+                  />
+                  <TopBar
+                    title={'Pengguna'}
+                    value={dashboardSummary.userCount}
+                    icon={'fas fa-users'}
+                    description={'Total Pengguna'}
+                  />
+                </React.Fragment>
+              )}
             </div>
 
             <FavoriteBookAndEbookList
@@ -92,7 +92,7 @@ const Dashboard = (props) => {
       </div>
     </div>
   );
-}
+};
 
 let mapStateToProps = state => {
   return {

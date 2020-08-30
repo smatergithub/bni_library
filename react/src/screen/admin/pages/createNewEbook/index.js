@@ -28,7 +28,7 @@ function CreateNewEBook(props) {
       formData['isPromotion'] = promotionValue == 'true' ? true : false;
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
-      formData['status'] = statusValue == 'true' ? true : false;
+      formData['status'] = statusValue == 'true' ? 'Ada' : 'Dipinjam';
       props.CreateNewEbookAction(formData).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -44,7 +44,7 @@ function CreateNewEBook(props) {
       formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['status'] =
-        statusValue !== null ? (statusValue === 'true' ? true : false) : ebook.status;
+        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Dipinjam') : ebook.status;
 
       props.EditEbookAction(id, formData).then(res => {
         if (res.resp) {
@@ -109,8 +109,8 @@ function CreateNewEBook(props) {
     setStatusValue(value[0] ? 'true' : 'false');
   }
   const optionsStatus = [
-    { label: 'Aktif', value: true },
-    { label: 'Non Aktif', value: false },
+    { label: 'Ada', value: true },
+    { label: 'Dipinjam', value: false },
   ];
   const optionsPromotion = [
     { label: 'Ya', value: true },
