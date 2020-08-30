@@ -5,12 +5,21 @@ const defaultResponseOptions = {
   fullResponse: false,
 };
 
+// );
+
 const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
   trackPromise(
     axios(requestOptions)
       .then(response => (responseOptions.fullResponse ? response : response.data))
       .catch(error => {
-        throw responseOptions.fullResponse ? error.response : error.response.data;
+        if (error.response.status === 401) {
+          //place your reentry code
+          window.location.replace('/auth/login');
+          localStorage.clear('bni_UserRole');
+          localStorage.clear('bni_jwtToken');
+        } else {
+          throw responseOptions.fullResponse ? error.response : error.response.data;
+        }
       })
   );
 export default class Request {

@@ -28,6 +28,7 @@ const routes = [
     exact: false,
     main: props => <Activation {...props} />,
   },
+
   {
     path: '/auth/reset-password',
     exact: false,

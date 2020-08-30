@@ -27,7 +27,7 @@ app.use('/api/admin/', AdminRoute);
 app.use('/img/', express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
-app.get('/', (req, res) =>
+app.get('*', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
 );
 

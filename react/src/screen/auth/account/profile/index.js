@@ -1,18 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { withRouter } from 'react-router-dom';
+import queryString from 'query-string';
 import { getMe } from '../../../../redux/action/user';
 import Information from './component/information';
 import EditUser from './component/editForm';
 function Profile(props) {
+  const parsed = queryString.parse(props.location.search);
   let [isEditUser, setIsEditUser] = React.useState(false);
   let [processing, setProcessing] = React.useState(false);
   let [user, setUser] = React.useState(null);
   React.useEffect(() => {
+    let { edit } = parsed;
+
     props.getMe().then(res => {
       setProcessing(false);
       if (res.resp) {
         setUser(res.data);
+        if (edit && edit === 'true') {
+          setIsEditUser(true);
+        }
       }
     });
   }, []);
@@ -45,4 +53,4 @@ function Profile(props) {
   );
 }
 
-export default connect(null, { getMe })(Profile);
+export default connect(null, { getMe })(withRouter(Profile));

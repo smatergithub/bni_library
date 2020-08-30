@@ -10,40 +10,56 @@ import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 
-const Ebooks = (props) => {
+const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
-    limit: 5
-  })
+    limit: 5,
+  });
 
+<<<<<<< HEAD
   const retrieveDataUser = (filterOptions) => {
+=======
+  const retrieveDataUser = filterOptions => {
+>>>>>>> f2a5e919e82ad658625d4e15d213f6d389b36eb1
     setLoading(true);
-    props.getUsersListToAdmin(filterOptions).then(res => {
-      if (res) {
-        setLoading(false);
-      }
-    }).catch(err => { console.log("error", err) });
-  }
+    props
+      .getUsersListToAdmin(filterOptions)
+      .then(res => {
+        if (res) {
+          setLoading(false);
+        }
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+  };
 
   React.useEffect(() => {
     retrieveDataUser(filterOptions);
   }, []);
 
-  const onPaginationUpdated = (pagination) => {
+  const onPaginationUpdated = pagination => {
     setFilterOptions({
       page: pagination.page,
       limit: pagination.limit,
-    })
-  }
+    });
+  };
 
   React.useEffect(() => {
     retrieveDataUser(filterOptions);
+  }, [filterOptions]);
 
-  }, [filterOptions])
+  function onAdminAction(data, id) {
+    props.toogleIsAdmin(data, id).then(res => {
+      if (res.resp) {
+        retrieveDataUser(filterOptions);
+      }
+    });
+  }
 
 
   const getDetailUser = (id, MakeAdmin) => {
@@ -95,23 +111,22 @@ const Ebooks = (props) => {
   if (loading) return null;
   const { users } = props;
 
-
   const columns = [
     {
-      name: "nama",
-      displayName: "Nama"
+      name: 'nama',
+      displayName: 'Nama',
     },
     {
-      name: "alamat",
-      displayName: "Alamat"
+      name: 'alamat',
+      displayName: 'Alamat',
     },
     {
-      name: "email",
-      displayName: "email"
+      name: 'email',
+      displayName: 'email',
     },
     {
-      name: "phoneNumber",
-      displayName: "Nomor Telepon"
+      name: 'phoneNumber',
+      displayName: 'Nomor Telepon',
     },
     {
       name: "isAdmin",
@@ -146,8 +161,8 @@ const Ebooks = (props) => {
           </React.Fragment>
         );
       },
-    }
-  ]
+    },
+  ];
 
   console.log("user role", props.role)
 
@@ -156,7 +171,16 @@ const Ebooks = (props) => {
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
 
-        {users.data !== undefined ? <Table columns={columns} source={users} isLoading={loading} limit={filterOptions.limit} page={filterOptions.page} onPaginationUpdated={onPaginationUpdated} /> : null}
+        {users.data !== undefined ? (
+          <Table
+            columns={columns}
+            source={users}
+            isLoading={loading}
+            limit={filterOptions.limit}
+            page={filterOptions.page}
+            onPaginationUpdated={onPaginationUpdated}
+          />
+        ) : null}
       </main>
       <Modal
         title="Konfirmasi"
@@ -182,7 +206,7 @@ const Ebooks = (props) => {
       </Modal>
     </div>
   );
-}
+};
 
 let mapStateToProps = state => {
   return {

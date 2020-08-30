@@ -151,13 +151,13 @@ function Ebooks(props) {
                   </div>
 
                   <div className="pt-1 text-gray-900">{ebook.pengarang}</div>
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />
                     <i className="far fa-star text-yellow-700" />
-                  </div>
+                  </div> */}
                   <button
                     className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}
