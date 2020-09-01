@@ -137,30 +137,28 @@ const Ebooks = props => {
       customRender: (rowData) => {
         return (
           <React.Fragment>
-            <React.Fragment>
-              <button
-                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-                onClick={() => getDetailUser(rowData.id, "isAdmin")}
-              >
-                {rowData.isAdmin !== true ? " Make Admin" : " Make User"}
-              </button>
+
+            {!props.me ? null : props.me.superAdmin ? <React.Fragment><button
+              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() => getDetailUser(rowData.id, "isAdmin")}
+            >
+              {rowData.isAdmin !== true ? " Make Admin" : " Make User"}
+            </button>
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 onClick={() => getDetailUser(rowData.id, "delete")}
               >
                 Delete
-              </button>
-            </React.Fragment>
+              </button> </React.Fragment> : null}
+
           </React.Fragment>
         );
       },
     },
   ];
-
-  console.log("user role", props.role)
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -207,7 +205,8 @@ const Ebooks = props => {
 let mapStateToProps = state => {
   return {
     users: state.users.users,
-    role: state.users.role
+    role: state.users.role,
+    me: state.users.me
   };
 };
 

@@ -86,7 +86,6 @@ module.exports = {
             message: 'user Not Found',
           });
         }
-        console.log("dapat user", user);
         let requestAdmin = user.isAdmin === true ? false : true
         return user
           .update({
