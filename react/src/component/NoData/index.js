@@ -4,7 +4,7 @@ function NoData({ msg }) {
   return (
     <div className="w-full  p-6 flex justify-center pt-20 ">
       <div
-        className="w-3/12 flex-column "
+        className="w-4/12 flex-column "
         style={{
           display: 'flex',
           justifyContent: 'center',

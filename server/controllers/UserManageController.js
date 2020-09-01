@@ -86,9 +86,11 @@ module.exports = {
             message: 'user Not Found',
           });
         }
+        console.log("dapat user", user);
+        let requestAdmin = user.isAdmin === true ? false : true
         return user
           .update({
-            isAdmin: req.body.isAdmin,
+            isAdmin: requestAdmin,
           })
           .then(() => res.status(200).send(user))
           .catch(error => res.status(404).send(error));

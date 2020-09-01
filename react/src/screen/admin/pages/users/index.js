@@ -20,11 +20,7 @@ const Ebooks = props => {
     limit: 5,
   });
 
-<<<<<<< HEAD
-  const retrieveDataUser = (filterOptions) => {
-=======
   const retrieveDataUser = filterOptions => {
->>>>>>> f2a5e919e82ad658625d4e15d213f6d389b36eb1
     setLoading(true);
     props
       .getUsersListToAdmin(filterOptions)
@@ -142,14 +138,14 @@ const Ebooks = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              {rowData.isAdmin ? null : <button
+              <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
                 onClick={() => getDetailUser(rowData.id, "isAdmin")}
               >
-                Make Admin
-              </button>}
+                {rowData.isAdmin !== true ? " Make Admin" : " Make User"}
+              </button>
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
