@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       sourceLink: DataTypes.STRING,
       image: DataTypes.STRING,
+      countRating: DataTypes.INTEGER,
+      condition: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
     {}

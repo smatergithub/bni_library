@@ -179,6 +179,7 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
+      condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response =>
@@ -213,6 +214,7 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
+            condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>

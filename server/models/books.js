@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       lokasiPerpustakaan: DataTypes.STRING,
       status: DataTypes.STRING,
       image: DataTypes.STRING,
+      countRating: DataTypes.INTEGER,
+      condition: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
     {}

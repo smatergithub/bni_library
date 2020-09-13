@@ -1,6 +1,7 @@
 const TransactionEbook = require("../models").transactionEbook;
 const RatingEbook = require("../models").ratingEbook;
 const sequelize = require('sequelize')
+const Ebooks = require('../models/').ebooks;
 
 module.exports = {
   inputRatingEbook: async (req, res) => {

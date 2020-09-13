@@ -182,6 +182,7 @@ module.exports = {
       status: req.body.status,
       image: location,
       sourceLink: req.body.sourceLink,
+      condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response =>
@@ -273,6 +274,7 @@ module.exports = {
             status: req.body.status,
             image: req.file ? location : req.file,
             sourceLink: req.body.sourceLink,
+            condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>

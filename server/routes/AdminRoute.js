@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { verifySignUp, AuthJWT } = require('../middelwares');
+const { AuthJWT } = require('../middelwares');
 const UploadDocument = require("../middelwares/uploadDocument");
 const UploadImage = require("../middelwares/uploadImage");
 const BookController = require('../controllers/BookController');
@@ -9,6 +9,7 @@ const UserManageController = require('../controllers/UserManageController');
 const RepositoryController = require('../controllers/RepositoryController');
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
+const WilayahController = require("../controllers/wilayahController");
 const DashboardController = require("../controllers/dashboardController");
 
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
@@ -39,6 +40,12 @@ router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
 router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
 router.put('/repository/:id', [AuthJWT.isAdmin], RepositoryController.update);
 router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
+
+router.get('/wilayah', [AuthJWT.isAdmin], WilayahController.list);
+router.get('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.getById);
+router.post('/wilayah', [AuthJWT.isAdmin], WilayahController.add);
+router.put('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.update);
+router.delete('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.delete);
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);

@@ -44,6 +44,12 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      condition: {
+        type: Sequelize.STRING,
+      },
+      countRating: {
+        type: Sequelize.INTEGER,
+      },
       sourceLink: {
         type: Sequelize.STRING,
       },
