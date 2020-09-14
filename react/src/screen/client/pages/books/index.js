@@ -19,7 +19,7 @@ function Books(props) {
   function getAllBook(params) {
     let formData = {
       page: 1,
-      limit: 8,
+      limit: 5,
       offset: 0,
     };
     if (params) {
