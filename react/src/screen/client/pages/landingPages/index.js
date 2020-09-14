@@ -8,11 +8,14 @@ function LandingPages(props) {
       <div className="pt-24">
         <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
           <div className="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
-            <h1 className="my-4 text-3xl font-bold leading-tight">E-Library </h1>
-            <h1 className="text-3xl font-bold leading-tight">BNI Corporate University</h1>
+            <h1 className="my-4 text-3xl font-bold leading-tight">Digital Library</h1>
+            <h1 className="text-3xl font-bold leading-tight">
+              BNI Corporate University & Divisi Perencanaan Strategis
+            </h1>
             <p className="leading-normal text-2xl mb-8">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
-              has been the industry's standard dummy text ever since the 1500s,{' '}
+              Media Hybrid Perpustakaan yang ada di BNI Corporate University dan Divisi Perencanaan
+              Strategis yang menyediakan informasi buku-buku, jurnal, hasil riset baik secara
+              hardcopy dan softcopy dalam meningkatkan kompetensi dan knowledge para BNI Hi-Movers{' '}
             </p>
             <Link to="/auth/register">
               <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-full my-6 py-2 px-10 shadow-lg">
