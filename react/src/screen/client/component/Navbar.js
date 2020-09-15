@@ -107,7 +107,7 @@ function NavBar(props) {
         <div className="pl-4 flex items-center">
           <Link to="/">
             <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
-              BNI
+              Digital Library BNI
             </div>
           </Link>
         </div>
