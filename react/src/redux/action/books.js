@@ -7,7 +7,6 @@ import { BOOKS, DETAIL_BOOK } from '../type';
  */
 
 export const CreateNewBookAction = book => () => {
-  console.log(book);
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
