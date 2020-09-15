@@ -38,7 +38,12 @@ function Books(props) {
     getAllBook();
     props.getCategory().then(res => {
       if (res.data.length > 0) {
-        setCategory(res.data);
+        let categories = res.data
+          .map(e => e['label'])
+          .map((e, i, final) => final.indexOf(e) === i && i)
+          .filter(e => res.data[e])
+          .map(e => res.data[e]);
+        setCategory(categories);
       }
     });
   }, []);

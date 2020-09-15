@@ -32,13 +32,18 @@ function Ebooks(props) {
     props.getAllEbooks(formData).then(() => {
       setProcessing(false);
     });
-    function getEbookCategory() {
-      props.getEbookCategory().then(res => {
-        if (res.data.length > 0) {
-          setCategory(res.data);
-        }
-      });
-    }
+  }
+  function getEbookCategory() {
+    props.getEbookCategory().then(res => {
+      if (res.data.length > 0) {
+        let categories = res.data
+          .map(e => e['label'])
+          .map((e, i, final) => final.indexOf(e) === i && i)
+          .filter(e => res.data[e])
+          .map(e => res.data[e]);
+        setCategory(categories);
+      }
+    });
   }
   React.useEffect(() => {
     setProcessing(true);
