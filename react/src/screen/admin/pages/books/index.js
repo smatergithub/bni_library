@@ -13,6 +13,7 @@ const Books = props => {
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 2,
+    judul: '',
   });
 
   const mappingDataSourceBookList = filterOptions => {
@@ -53,10 +54,19 @@ const Books = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -138,6 +148,7 @@ const Books = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData />

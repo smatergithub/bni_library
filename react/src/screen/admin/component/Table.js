@@ -1,25 +1,52 @@
 import React, { Component } from 'react';
-let colOpt = [10, 20, 50, 100];
+let colOpt = [10, 25, 50, 100];
 class Table extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentPage: this.props.page,
       currentLimit: this.props.limit,
       showMultipleCol: false,
-      totalActiveColumn: 10,
+      totalActiveColumn: this.props.limit,
+      searchParam: '',
     };
+    this.wrapperRef = React.createRef();
+    this.handleClickOutside = this.handleClickOutside.bind(this);
   }
-  componentDidUpdate() {}
-  onPaginationUpdate = () => {
+  componentDidMount() {
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+  handleClickOutside(event) {
+    if (this.wrapperRef.current) {
+      if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+        this.setState({ showMultipleCol: false });
+      }
+    }
+  }
+  setWrapperRef(node) {
+    this.wrapperRef = node;
+  }
+
+  onPaginationUpdate = (limit, title) => {
     const { onPaginationUpdated } = this.props;
 
     if (onPaginationUpdated) {
-      onPaginationUpdated({
-        page: this.state.currentPage,
-        limit: this.state.currentLimit,
-      });
+      if (title) {
+        onPaginationUpdated({
+          page: this.state.currentPage,
+          limit: limit ? limit : this.state.currentLimit,
+          judul: title,
+        });
+      } else {
+        onPaginationUpdated({
+          page: this.state.currentPage,
+          limit: limit ? limit : this.state.currentLimit,
+        });
+      }
     }
   };
 
@@ -32,7 +59,7 @@ class Table extends Component {
           currentPage: currentPage - 1,
         },
         () => {
-          this.onPaginationUpdate();
+          this.onPaginationUpdate(null, null);
         }
       );
     }
@@ -54,28 +81,39 @@ class Table extends Component {
           currentPage: currentPage + 1,
         },
         () => {
-          this.onPaginationUpdate();
+          this.onPaginationUpdate(null, null);
         }
       );
     }
   };
-  onSelectMultipleColumn = col => {
-    this.setState({ totalActiveColumn: col }, () => {
-      this.setState({ showMultipleCol: false });
+  onSelectMultipleColumn = limit => {
+    this.setState({ showMultipleCol: false }, () => {
+      this.onPaginationUpdate(limit);
     });
+  };
+  handleSearch = e => {
+    e.preventDefault();
+    this.onPaginationUpdate(null, this.state.searchParam);
   };
 
   render() {
-    console.log(this.state.showMultipleCol);
     const {
       columns,
       isLoading,
+      searchDefaultValue,
       source: { data, totalPage },
     } = this.props;
-    const { currentLimit, currentPage } = this.state;
+    const {
+      currentLimit,
+      currentPage,
+      searchParam,
+      totalActiveColumn,
+      showMultipleCol,
+    } = this.state;
+
     return (
-      <div className="bg-white overflow-auto">
-        <div className="w-full flex justify-between items-center px-10 py-2 ">
+      <div className="bg-white overflow-auto px-10">
+        <div className="w-full flex justify-between items-center  py-2 ">
           <div className="flex justify-center items-center text-base pt-2 relative">
             Show{' '}
             <span
@@ -83,9 +121,9 @@ class Table extends Component {
               onClick={() => this.setState({ showMultipleCol: true })}
             >
               <button className=" rounded-full overflow-hidden  border-gray-600 focus:outline-none focus:border-white">
-                <span className="text-lg font-bold">{this.state.totalActiveColumn}</span>
+                <span className="text-lg font-bold">{totalActiveColumn}</span>
                 <span className="mt-10">
-                  {this.state.showMultipleCol ? (
+                  {showMultipleCol ? (
                     <i
                       className="fas fa-chevron-up text-xl mt-2"
                       style={{
@@ -104,12 +142,13 @@ class Table extends Component {
                   )}
                 </span>
               </button>
-              {this.state.showMultipleCol && (
+              {showMultipleCol && (
                 <div
                   className="mt-2 py-2 w-20 bg-white rounded-lg shadow-xl absolute"
                   style={{
                     left: '3em',
                   }}
+                  ref={this.wrapperRef}
                 >
                   {colOpt.map((item, key) => {
                     return (
@@ -129,19 +168,35 @@ class Table extends Component {
             </span>{' '}
             entries
           </div>
-          <div className="pt-2 relative  text-gray-600">
-            <input
-              className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
-              type="search"
-              name="search"
-              placeholder="Search"
-            />
-            <button
-              type="submit"
-              className="absolute right-0 top-0 mt-5 mr-4 border-0 focus:outline-none"
-            >
-              <i className="fas fa-search text-xl"></i>
-            </button>
+          <div className=" flex items-center">
+            <form className="pt-2 relative  text-gray-600" onSubmit={e => this.handleSearch(e)}>
+              <input
+                className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+                type="search"
+                name="search"
+                value={searchParam}
+                defaultValue={searchDefaultValue}
+                onChange={e => this.setState({ searchParam: e.target.value })}
+                placeholder={searchDefaultValue.trim().length !== 0 ? searchDefaultValue : 'Cari'}
+              />
+              <button
+                type="submit"
+                className="absolute right-0 top-0 mt-5 mr-4 border-0 focus:outline-none"
+              >
+                <i className="fas fa-search text-xl"></i>
+              </button>
+            </form>
+            {searchDefaultValue.trim().length !== 0 && (
+              <div
+                className="ml-5 cursor-pointer hover:text-gray-800"
+                onClick={() => {
+                  this.setState({ searchParam: '' });
+                  this.onPaginationUpdate(null, null);
+                }}
+              >
+                Clear
+              </div>
+            )}
           </div>
         </div>
         <table className="min-w-full bg-white">
