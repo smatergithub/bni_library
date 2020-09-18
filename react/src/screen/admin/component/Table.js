@@ -1,11 +1,17 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+let colOpt = [10, 20, 50, 100];
+class Table extends Component {
+  constructor(props) {
+    super(props);
 
-export default class Table extends Component {
-  state = {
-    currentPage: this.props.page,
-    currentLimit: this.props.limit
+    this.state = {
+      currentPage: this.props.page,
+      currentLimit: this.props.limit,
+      showMultipleCol: false,
+      totalActiveColumn: 10,
+    };
   }
-
+  componentDidUpdate() {}
   onPaginationUpdate = () => {
     const { onPaginationUpdated } = this.props;
 
@@ -16,7 +22,6 @@ export default class Table extends Component {
       });
     }
   };
-
 
   left = () => {
     const { currentPage } = this.state;
@@ -54,45 +59,136 @@ export default class Table extends Component {
       );
     }
   };
+  onSelectMultipleColumn = col => {
+    this.setState({ totalActiveColumn: col }, () => {
+      this.setState({ showMultipleCol: false });
+    });
+  };
 
   render() {
+    console.log(this.state.showMultipleCol);
     const {
       columns,
       isLoading,
-      source: { data, totalPage }
+      source: { data, totalPage },
     } = this.props;
     const { currentLimit, currentPage } = this.state;
     return (
       <div className="bg-white overflow-auto">
+        <div className="w-full flex justify-between items-center px-10 py-2 ">
+          <div className="flex justify-center items-center text-base pt-2 relative">
+            Show{' '}
+            <span
+              className="mx-2 bg-gray-200 px-5"
+              onClick={() => this.setState({ showMultipleCol: true })}
+            >
+              <button className=" rounded-full overflow-hidden  border-gray-600 focus:outline-none focus:border-white">
+                <span className="text-lg font-bold">{this.state.totalActiveColumn}</span>
+                <span className="mt-10">
+                  {this.state.showMultipleCol ? (
+                    <i
+                      className="fas fa-chevron-up text-xl mt-2"
+                      style={{
+                        marginBottom: -2,
+                        marginRight: -5,
+                      }}
+                    ></i>
+                  ) : (
+                    <i
+                      className="fas fa-chevron-down text-xl mt-2"
+                      style={{
+                        marginBottom: -2,
+                        marginLeft: 2,
+                      }}
+                    ></i>
+                  )}
+                </span>
+              </button>
+              {this.state.showMultipleCol && (
+                <div
+                  className="mt-2 py-2 w-20 bg-white rounded-lg shadow-xl absolute"
+                  style={{
+                    left: '3em',
+                  }}
+                >
+                  {colOpt.map((item, key) => {
+                    return (
+                      <div
+                        key={key}
+                        className="block px-4 py-2 text-gray-800 hover:bg-gray-500 cursor-pointer hover:text-white"
+                        onClick={() => {
+                          this.onSelectMultipleColumn(item);
+                        }}
+                      >
+                        {item}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </span>{' '}
+            entries
+          </div>
+          <div className="pt-2 relative  text-gray-600">
+            <input
+              className="border-2 border-gray-300 bg-white h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+              type="search"
+              name="search"
+              placeholder="Search"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 top-0 mt-5 mr-4 border-0 focus:outline-none"
+            >
+              <i className="fas fa-search text-xl"></i>
+            </button>
+          </div>
+        </div>
         <table className="min-w-full bg-white">
           <thead className="bg-gray-800 text-white">
             <tr>
               {columns.map((column, index) => {
                 return (
                   <React.Fragment key={index}>
-                    <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm">{column.displayName}</th>
+                    <th className="w-1/6 text-left py-3 px-4 uppercase font-semibold text-sm">
+                      {column.displayName}
+                    </th>
                   </React.Fragment>
-                )
+                );
               })}
             </tr>
-
           </thead>
           <tbody className="text-gray-700">
-            {isLoading ? null : data.map((item, index) => {
-              return (
-                <tr key={index}
-                  className={index % 2 === 0 ? 'bg-gray-200 hover:bg-gray-300' : 'hover:bg-gray-300'}>
-                  {columns.map((column, innerIndex) => {
-                    return (
-                      <React.Fragment key={innerIndex}>
-                        {column.name === "actions" ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : column.customRender ? <td className="w-1/6 text-left py-3 px-4">{column.customRender(item)}</td> : <td className="w-1/6 text-left py-3 px-4">{item[column.name]}</td>}
-                      </React.Fragment>
-                    )
-                  })}
-                </tr>
-              )
-            })}
-
+            {isLoading
+              ? null
+              : data.map((item, index) => {
+                  return (
+                    <tr
+                      key={index}
+                      className={
+                        index % 2 === 0 ? 'bg-gray-200 hover:bg-gray-300' : 'hover:bg-gray-300'
+                      }
+                    >
+                      {columns.map((column, innerIndex) => {
+                        return (
+                          <React.Fragment key={innerIndex}>
+                            {column.name === 'actions' ? (
+                              <td className="w-1/6 text-left py-3 px-4">
+                                {column.customRender(item)}
+                              </td>
+                            ) : column.customRender ? (
+                              <td className="w-1/6 text-left py-3 px-4">
+                                {column.customRender(item)}
+                              </td>
+                            ) : (
+                              <td className="w-1/6 text-left py-3 px-4">{item[column.name]}</td>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </tr>
+                  );
+                })}
           </tbody>
         </table>
         <div className="flex justify-center bg-gray-300 mt-10">
@@ -133,6 +229,8 @@ export default class Table extends Component {
           </nav>
         </div>
       </div>
-    )
+    );
   }
 }
+
+export default Table;

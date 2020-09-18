@@ -12,7 +12,7 @@ const Books = props => {
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
-    limit: 5,
+    limit: 2,
   });
 
   const mappingDataSourceBookList = filterOptions => {
