@@ -5,7 +5,6 @@ export const signIn = user => dispatch => {
   return UserApi.login(user)
     .then(res => {
       if (res) {
-        localStorage.setItem('bni_jwtToken', res.accessToken);
         localStorage.setItem('bni_UserRole', res.role);
         dispatch({ type: SIGN_IN, payload: res });
         return { resp: true, msg: '' };
@@ -50,8 +49,6 @@ export const verificationUser = param => () => {
       return { resp: false, msg: msg };
     });
 };
-
-
 
 export const toggleUserIntoAdmin = id => () => {
   return UserApi.toggleUserIntoAdmin(id)

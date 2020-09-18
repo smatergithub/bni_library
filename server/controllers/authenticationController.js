@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+const { setJWTCookieOption } = require('../utils/setCookies');
 
 require('dotenv').config();
 
@@ -111,12 +112,13 @@ module.exports = {
             expiresIn: 86400, // 24 hours
           }
         );
+        res.cookie('access_token', token, setJWTCookieOption());
         res.status(200).send({
           email: user.email,
-          accessToken: token,
+
           role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
           isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin
+          superAdmin: user.superAdmin,
         });
       })
       .catch(err => {

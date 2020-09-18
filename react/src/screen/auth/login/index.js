@@ -17,6 +17,7 @@ function Login(props) {
         .signIn(user)
         .then(res => {
           if (res.resp) {
+            debugger;
             props.getMe().then(res => {
               if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
                 history.push('/profile/home?edit=true');
