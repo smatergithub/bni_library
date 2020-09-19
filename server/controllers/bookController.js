@@ -184,7 +184,7 @@ module.exports = {
         })
 
         if (!createListBorrowBook) {
-          return res.status(404).send("Failed Transaction");
+          return res.status(404).send("Failed create Book");
         }
 
         return res.status(201).json({
