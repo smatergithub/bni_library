@@ -13,10 +13,10 @@ function Books(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-  let [selectedBook, setSelectedBook] = React.useState(null);
+
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [pagination, setPagination] = React.useState({
-    limit: 2,
+    limit: 8,
     page: 1,
     judul: '',
     kategori: '',
