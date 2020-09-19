@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {
-  getUsersListToAdmin, toggleUserIntoAdmin,
+  getUsersListToAdmin,
+  toggleUserIntoAdmin,
   deleteUser,
-  getMe
-} from "../../../../redux/action/user";
+  getMe,
+} from '../../../../redux/action/user';
 import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
@@ -18,6 +19,7 @@ const Ebooks = props => {
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const retrieveDataUser = filterOptions => {
@@ -39,10 +41,19 @@ const Ebooks = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -57,21 +68,16 @@ const Ebooks = props => {
     });
   }
 
-
   const getDetailUser = (id, MakeAdmin) => {
     const { users } = props;
     let detailData = users.data.filter(item => item.id === id);
     setDetailData(detailData[0]);
-    if (MakeAdmin === "isAdmin") {
+    if (MakeAdmin === 'isAdmin') {
       setShowModalMakeAdmin(true);
-    }
-    else {
+    } else {
       setShowModalDeletion(true);
     }
-
   };
-
-
 
   const makeUserIntoAdmin = () => {
     setLoading(true);
@@ -83,8 +89,8 @@ const Ebooks = props => {
         setShowModalMakeAdmin(false);
       })
       .catch(err => {
-        console.log("err", err)
-        ToastError("Tidak Bisa Akses Fitur Ini")
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
 
@@ -98,11 +104,10 @@ const Ebooks = props => {
         setShowModalDeletion(false);
       })
       .catch(err => {
-        console.log("err", err)
-        ToastError("Tidak Bisa Akses Fitur Ini")
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
-
 
   if (loading) return null;
   const { users } = props;
@@ -125,35 +130,37 @@ const Ebooks = props => {
       displayName: 'Nomor Telepon',
     },
     {
-      name: "isAdmin",
-      displayName: "Admin",
-      customRender: (rowData) => {
-        return rowData.isAdmin ? "Aktif" : "Tidak Aktif";
-      }
+      name: 'isAdmin',
+      displayName: 'Admin',
+      customRender: rowData => {
+        return rowData.isAdmin ? 'Aktif' : 'Tidak Aktif';
+      },
     },
     {
-      name: "actions",
-      displayName: "Actions",
-      customRender: (rowData) => {
+      name: 'actions',
+      displayName: 'Actions',
+      customRender: rowData => {
         return (
           <React.Fragment>
-
-            {!props.me ? null : props.me.superAdmin ? <React.Fragment><button
-              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-              type="button"
-              style={{ marginRight: '5px' }}
-              onClick={() => getDetailUser(rowData.id, "isAdmin")}
-            >
-              {rowData.isAdmin !== true ? " Make Admin" : " Make User"}
-            </button>
-              <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                onClick={() => getDetailUser(rowData.id, "delete")}
-              >
-                Delete
-              </button> </React.Fragment> : null}
-
+            {!props.me ? null : props.me.superAdmin ? (
+              <React.Fragment>
+                <button
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                  onClick={() => getDetailUser(rowData.id, 'isAdmin')}
+                >
+                  {rowData.isAdmin !== true ? ' Make Admin' : ' Make User'}
+                </button>
+                <button
+                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  onClick={() => getDetailUser(rowData.id, 'delete')}
+                >
+                  Delete
+                </button>{' '}
+              </React.Fragment>
+            ) : null}
           </React.Fragment>
         );
       },
@@ -173,6 +180,7 @@ const Ebooks = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : null}
       </main>
@@ -206,8 +214,13 @@ let mapStateToProps = state => {
   return {
     users: state.users.users,
     role: state.users.role,
-    me: state.users.me
+    me: state.users.me,
   };
 };
 
-export default connect(mapStateToProps, { getUsersListToAdmin, toggleUserIntoAdmin, deleteUser, getMe })(Ebooks);
+export default connect(mapStateToProps, {
+  getUsersListToAdmin,
+  toggleUserIntoAdmin,
+  deleteUser,
+  getMe,
+})(Ebooks);

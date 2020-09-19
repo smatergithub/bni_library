@@ -14,6 +14,7 @@ const Ebooks = props => {
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const mappingDataSourceEbookList = filterOptions => {
@@ -58,10 +59,19 @@ const Ebooks = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -141,6 +151,7 @@ const Ebooks = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData msg="Data belum tersedia !" />
