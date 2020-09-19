@@ -1,4 +1,5 @@
 const Books = require('../models').books;
+const ListBorrowBook = require("../models").listBorrowBook
 // const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -85,31 +86,12 @@ module.exports = {
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
-    let paramQuerySQL = {};
+    // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
+    let { limit, page } = req.body;
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', "user"],
+    };
 
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
-    if (kategori != '' && typeof kategori !== 'undefined') {
-      paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
-        },
-      };
-    }
-
-    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
-      paramQuerySQL.where = {
-        tahunTerbit: {
-          [Op.like]: '%' + tahunTerbit + '%',
-        },
-      };
-    }
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -121,19 +103,32 @@ module.exports = {
     }
 
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['createdAt'].includes(order.toLowerCase())
-    ) {
-      paramQuerySQL.order = [[order, sort]];
-    }
+    // if (
+    //   order != '' &&
+    //   typeof order !== 'undefined' &&
+    //   ['createdAt'].includes(order.toLowerCase())
+    // ) {
+    //   paramQuerySQL.order = [[order, sort]];
+    // }
+    // if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+    //   sort = 'DESC';
+    // }
 
-    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-      sort = 'DESC';
-    }
-
-    return await Books.findAndCountAll(paramQuerySQL)
+    // return await Books.findAndCountAll(paramQuerySQL)
+    //   .then(book => {
+    //     let totalPage = Math.ceil(book.count / req.body.limit);
+    //     let page = Math.ceil(req.body.page);
+    //     res.status(200).json({
+    //       count: book.count,
+    //       totalPage: totalPage,
+    //       activePage: page,
+    //       data: book.rows,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     res.status(500).send(err);
+    //   });
+    return await ListBorrowBook.findAndCountAll(paramQuerySQL)
       .then(book => {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
@@ -165,7 +160,7 @@ module.exports = {
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
-    return Books.create({
+    Books.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
       pengarang: req.body.pengarang,
@@ -182,9 +177,21 @@ module.exports = {
       condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
-      .then(response =>
-        res.status(201).json({ message: 'successfully create book', data: response })
-      )
+      .then(response => {
+        // console.log("response", response.id)
+        const createListBorrowBook = ListBorrowBook.create({
+          bookId: response.id
+        })
+
+        if (!createListBorrowBook) {
+          return res.status(404).send("Failed create Book");
+        }
+
+        return res.status(201).json({
+          message: "Process Succesfully create Book",
+          data: response
+        });
+      })
       .catch(err => res.status(500).send(err));
   },
 
@@ -217,9 +224,9 @@ module.exports = {
             condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
-          .then(response =>
+          .then(response => {
             res.status(200).json({ message: 'successfully update book', data: response })
-          )
+          })
           .catch(err => res.status(404).send(err));
       })
       .catch(error => res.status(500).json({ test: error }));

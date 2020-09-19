@@ -1,4 +1,5 @@
 const Ebooks = require('../models/').ebooks;
+const ListBorrowEbook = require("../models").listBorrowEbook
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 require('dotenv').config();
@@ -162,9 +163,6 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    // let path =
-    //   __basedir + "/server/public/images/" + req.file.filename;
-
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
     return Ebooks.create({
@@ -185,9 +183,24 @@ module.exports = {
       condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
-      .then(response =>
-        res.status(201).json({ message: 'successfully create ebook', data: response })
-      )
+      .then(response => {
+        // console.log("response", response.id)
+        const createListBorrowEbook = ListBorrowEbook.create({
+          EbookId: response.id
+        })
+
+        if (!createListBorrowEbook) {
+          return res.status(404).send("Failed create Ebook");
+        }
+
+        return res.status(201).json({
+          message: "Process Succesfully create Ebook",
+          data: response
+        });
+        // res.status(201).json({ message: 'successfully create ebook', data: response })
+      })
+
+
       .catch(err => res.status(500).send(err));
   },
 

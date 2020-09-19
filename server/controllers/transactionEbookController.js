@@ -1,5 +1,6 @@
 const Ebooks = require('../models/').ebooks;
 const TransactionEbook = require('../models').transactionEbook;
+const ListBorrowEbook = require("../models").listBorrowEbook;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -228,7 +229,14 @@ module.exports = {
         isGiveRating: false
       });
 
+      const createListBorrowEbook = await ListBorrowEbook.create({
+        bookId: bookData.ebookId,
+        transactionEbookId: createTransaction.id
+      })
+
       if (!createTransaction) {
+        return res.status(404).send("Failed Transaction");
+      } else if (!createListBorrowEbook) {
         return res.status(404).send("Failed Transaction");
       }
 
