@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
 export default class TableApproval extends Component {
   state = {
     currentPage: this.props.page,
-    currentLimit: this.props.limit
-  }
+    currentLimit: this.props.limit,
+  };
 
   onPaginationUpdate = () => {
     const { onPaginationUpdated } = this.props;
@@ -16,7 +16,6 @@ export default class TableApproval extends Component {
       });
     }
   };
-
 
   left = () => {
     const { currentPage } = this.state;
@@ -59,7 +58,7 @@ export default class TableApproval extends Component {
     const {
       columns,
       isLoading,
-      source: { data, totalPage }
+      source: { data, totalPage },
     } = this.props;
     const { currentLimit, currentPage } = this.state;
     return (
@@ -71,27 +70,42 @@ export default class TableApproval extends Component {
                 {columns.map((column, index) => {
                   return (
                     <React.Fragment key={index}>
-                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">{column.displayName}</th>
+                      <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
+                        {column.displayName}
+                      </th>
                     </React.Fragment>
-                  )
+                  );
                 })}
               </tr>
             </thead>
             <tbody>
-              {isLoading ? null : data.map((item, index) => {
-                return (
-                  <tr key={index}
-                  >
-                    {columns.map((column, innerIndex) => {
-                      return (
-                        <React.Fragment key={innerIndex}>
-                          {column.name === "actions" ? <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{column.customRender(item)}</th> : column.customRender ? <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{column.customRender(item)}</th> : <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">{item[column.name]}</th>}
-                        </React.Fragment>
-                      )
-                    })}
-                  </tr>
-                )
-              })}
+              {isLoading
+                ? null
+                : data.map((item, index) => {
+                    return (
+                      <tr key={index}>
+                        {columns.map((column, innerIndex) => {
+                          return (
+                            <React.Fragment key={innerIndex}>
+                              {column.name === 'actions' ? (
+                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
+                                  {column.customRender(item)}
+                                </th>
+                              ) : column.customRender ? (
+                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
+                                  {column.customRender(item)}
+                                </th>
+                              ) : (
+                                <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
+                                  {item[column.name]}
+                                </th>
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                      </tr>
+                    );
+                  })}
             </tbody>
           </table>
         </div>
@@ -133,6 +147,6 @@ export default class TableApproval extends Component {
           </nav>
         </div>
       </React.Fragment>
-    )
+    );
   }
 }

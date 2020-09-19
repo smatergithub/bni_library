@@ -10,13 +10,26 @@ const Repository = props => {
   const [loading, setLoading] = React.useState(false);
   const [selectedRepo, setSelectedRepo] = React.useState(null);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
-  const [filterOptions, seFilterOptions] = React.useState({
+  const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const paginationOptions = pagination => {
-    console.log('pagination', pagination);
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   const retrieveDataRepository = filterOptions => {
@@ -133,7 +146,8 @@ const Repository = props => {
             source={repositorys}
             isLoading={loading}
             limit={filterOptions.limit}
-            onPaginationUpdated={pagination => paginationOptions(pagination)}
+            onPaginationUpdated={paginationOptions}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData msg="Data Belum tersedia !" />
