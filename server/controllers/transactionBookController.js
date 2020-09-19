@@ -232,13 +232,17 @@ module.exports = {
         isGiveRating: false
       });
 
+      console.log("test", bookData.bookId)
       const updateBorrowBook = ListBorrowBook.findByPk(bookData.bookId)
         .then(response => {
+          console.log("data response", response);
           response.update({
             bookId: response.bookId,
-            transactionBookId: createTransaction.id
+            transactionBookId: createTransaction.id,
+            userId: createTransaction.userId
           })
         }).catch(err => { });
+
 
       if (!createTransaction) {
         return res.status(404).send("Failed Transaction");
@@ -247,6 +251,7 @@ module.exports = {
         return res.status(404).send("Failed Transaction");
       }
 
+      // console.log("ggwp", updateBorrowBook)
 
       return res.status(201).json({
         message: "Process Succesfully create Transaction Borrow Book",

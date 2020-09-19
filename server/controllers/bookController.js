@@ -89,7 +89,7 @@ module.exports = {
     // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let { limit, page } = req.body;
     let paramQuerySQL = {
-      include: ['book', 'transactionBook'],
+      include: ['book', 'transactionBook', "user"],
     };
 
 
@@ -178,7 +178,7 @@ module.exports = {
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response => {
-        console.log("response", response.id)
+        // console.log("response", response.id)
         const createListBorrowBook = ListBorrowBook.create({
           bookId: response.id
         })
@@ -224,9 +224,9 @@ module.exports = {
             condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
-          .then(response =>
+          .then(response => {
             res.status(200).json({ message: 'successfully update book', data: response })
-          )
+          })
           .catch(err => res.status(404).send(err));
       })
       .catch(error => res.status(500).json({ test: error }));

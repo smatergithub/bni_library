@@ -8,7 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
     },
     bookId: DataTypes.STRING,
-    transactionBookId: DataTypes.STRING
+    transactionBookId: DataTypes.STRING,
+    userId: DataTypes.STRING
   }, {});
   listBorrowBook.associate = function (models) {
     // associations can be defined here
@@ -21,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     listBorrowBook.belongsTo(models.transactionBook, {
       foreignKey: 'transactionBookId',
       as: 'transactionBook'
+    })
+
+    listBorrowBook.belongsTo(models.users, {
+      foreignKey: 'userId',
+      as: 'user'
     })
   };
   return listBorrowBook;
