@@ -154,15 +154,10 @@ function Ebooks(props) {
           {props.ebooks && props.ebooks.data.length === 0 && <NoData />}
           {props.ebooks &&
             props.ebooks.data.map((ebook, key) => {
-              let img = ebook.image.split('/').pop();
               let isAdd = wishlist.some(ws => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img
-                    className="hover:grow hover:shadow-lg h-64"
-                    // src={`http://localhost:2000/img/images/${img}`}
-                    src={ebook.image}
-                  />
+                  <img className="hover:grow hover:shadow-lg h-64" src={ebook.image} />
                   <div className="h-16 pt-2 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{ebook.judul}</h2>
 

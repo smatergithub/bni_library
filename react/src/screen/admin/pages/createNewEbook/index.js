@@ -20,10 +20,13 @@ function CreateNewEBook(props) {
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [ebook, setEbook] = React.useState(null);
+  let [ebookFile, setEbookFile] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
     if (!id) {
+      if (ebookFile) {
+      }
       formData['image'] = image;
       formData['isPromotion'] = promotionValue == 'true' ? true : false;
       formData['tahunTerbit'] = publishDate;
@@ -68,7 +71,7 @@ function CreateNewEBook(props) {
 
     reader.readAsDataURL(file);
   };
-  let uploadPdf = e => {
+  let uploadDocument = e => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -84,6 +87,18 @@ function CreateNewEBook(props) {
         }
       });
       // setSourceLink(file);
+    };
+
+    reader.readAsDataURL(file);
+  };
+  let uploadEbookPdf = e => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      setEbookFile(file);
     };
 
     reader.readAsDataURL(file);
@@ -138,7 +153,7 @@ function CreateNewEBook(props) {
               <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                 <p className="text-lg text-gray-800 font-medium pb-4">Informasi Ebook</p>
                 <input
-                  onChange={e => uploadPdf(e)}
+                  onChange={e => uploadDocument(e)}
                   type="file"
                   style={{
                     display: 'none',
@@ -250,23 +265,42 @@ function CreateNewEBook(props) {
                   <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                 </div>
 
-                <div className="mt-2 ">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Link File
-                  </label>
-                  <input
-                    name="sourceLink"
-                    defaultValue={ebook ? ebook.sourceLink : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.sourceLink && errors.sourceLink.message}
+                <div className="mt-2 flex">
+                  <div className="w-1/2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Link File
+                    </label>
+                    <input
+                      name="sourceLink"
+                      defaultValue={ebook ? ebook.sourceLink : ''}
+                      className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.sourceLink && errors.sourceLink.message}
+                    </div>
+                  </div>
+                  <div className="w-1/2">
+                    <div className="ml-5">
+                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                        Atau unggah file
+                      </label>
+                      <input
+                        onChange={e => uploadEbookPdf(e)}
+                        type="file"
+                        className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
+                        accept="image/png, image/jpeg"
+                        aria-label="Email"
+                      />
+                      <div className="text-red-700">
+                        {errors.dateEbook && errors.dateEbook.message}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
