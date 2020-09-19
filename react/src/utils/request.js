@@ -16,7 +16,6 @@ const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptio
           //place your reentry code
           window.location.replace('/auth/login');
           localStorage.clear('bni_UserRole');
-          localStorage.clear('bni_jwtToken');
         } else {
           throw responseOptions.fullResponse ? error.response : error.response.data;
         }
