@@ -15,27 +15,19 @@ function Books(props) {
   let [category, setCategory] = React.useState([]);
   let [selectedBook, setSelectedBook] = React.useState(null);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  const [pagination, setPagination] = React.useState({
+    limit: 2,
+    page: 1,
+    judul: '',
+    kategori: '',
+  });
 
   function getAllBook(params) {
-    let formData = {
-      page: 1,
-      limit: 5,
-      offset: 0,
-    };
-    if (params) {
-      formData = {
-        ...formData,
-        ...params,
-      };
-    }
-
-    props.getAllBook(formData).then(() => {
+    props.getAllBook(params).then(() => {
       setProcessing(false);
     });
   }
-  React.useEffect(() => {
-    setProcessing(true);
-    getAllBook();
+  function getCategory() {
     props.getCategory().then(res => {
       if (res.data.length > 0) {
         let categories = res.data
@@ -46,19 +38,55 @@ function Books(props) {
         setCategory(categories);
       }
     });
+  }
+  React.useEffect(() => {
+    setProcessing(true);
+    getAllBook(pagination);
+    getCategory();
   }, []);
 
+  function prev() {
+    if (props.books.activePage > 1) {
+      setPagination({
+        ...pagination,
+        page: props.books.activePage - 1,
+        judul: '',
+      });
+    }
+  }
+  function next() {
+    if (props.books.totalPage !== props.books.activePage) {
+      if (props.books.data.length !== 0) {
+        setPagination({
+          ...pagination,
+          page: props.books.activePage + 1,
+          judul: '',
+        });
+      }
+    }
+  }
+  React.useEffect(() => {
+    getAllBook(pagination);
+  }, [pagination]);
+
   function handleChange(value) {
-    getAllBook({ kategori: value });
+    setPagination({
+      ...pagination,
+      kategori: value,
+    });
   }
   function handleSearch(value) {
-    getAllBook({ judul: value });
+    setPagination({
+      ...pagination,
+      judul: value,
+    });
   }
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
   if (processing && props.books === null) return null;
   const { wishlist } = props;
+
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <main>
@@ -93,7 +121,8 @@ function Books(props) {
 
                 <div className="text-gray-800 px-1 bg-purple-white ">
                   <Search
-                    placeholder="input search title"
+                    placeholder="Masukkan Judul"
+                    id="searchBook"
                     enterButton="Cari"
                     size="large"
                     onSearch={value => handleSearch(value)}
@@ -102,8 +131,16 @@ function Books(props) {
                 <div
                   className="ml-10 cursor-pointer"
                   onClick={() => {
+                    document.getElementById('searchBook').value = '';
                     setCategory([]);
-                    getAllBook();
+                    getCategory();
+                    setPagination({
+                      ...pagination,
+                      limit: 2,
+                      page: 1,
+                      judul: '',
+                      kategori: '',
+                    });
                   }}
                 >
                   Reset Filter
@@ -164,6 +201,45 @@ function Books(props) {
               );
             })}
         </div>
+        {props.books && props.books.data.length !== 0 && (
+          <div className="flex justify-center  mt-10">
+            <nav className="relative z-0 inline-flex shadow-sm">
+              <div
+                onClick={prev}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Previous"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div
+                href="#"
+                className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
+              >
+                {props.books.activePage} of {props.books.totalPage}
+              </div>
+
+              <div
+                onClick={next}
+                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Next"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </nav>
+          </div>
+        )}
       </section>
       <Modal
         title="Authentication required"
