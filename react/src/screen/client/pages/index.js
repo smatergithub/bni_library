@@ -14,6 +14,7 @@ import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
 import Order from './order';
+import ListResearch from './listResearch';
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     path: '/riset',
     exact: false,
     main: <Research />,
+  },
+  {
+    path: '/daftar-riset',
+    exact: false,
+    main: <ListResearch />,
   },
   {
     path: '/about',
