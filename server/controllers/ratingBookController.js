@@ -39,6 +39,15 @@ module.exports = {
               });
             })
           })
+          Books.findByPk(dataTransactionRating[0].bookId).then(book => {
+            book.update({
+              countRating: createRating.rating,
+            }).then(response => {
+              return res.status(201).json({
+                message: "Process Succesfully input rating",
+              });
+            })
+          })
         }
         else {
           return res.status(200).json({
@@ -50,6 +59,7 @@ module.exports = {
         res.status(200).send(err);
       })
   },
+
   listBookbyRating: async (req, res) => {
     let paramQuerySQL = {
       include: ['book'],

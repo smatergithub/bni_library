@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   transactionEbook.associate = function (models) {
     // associations can be defined here
+
     transactionEbook.belongsTo(models.ebooks, {
       foreignKey: 'ebookId',
       as: 'ebook',
