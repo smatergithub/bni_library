@@ -11,7 +11,7 @@ require('dotenv').config();
 
 module.exports = {
   register: async (req, res) => {
-    Users.create({
+    Users.scope('withPassword').create({
       nama: req.body.nama,
       email: req.body.email,
       tanggalLahir: req.body.tanggalLahir,
@@ -46,7 +46,7 @@ module.exports = {
   },
 
   verificationAccount: async (req, res) => {
-    Users.findOne({
+    Users.scope('withPassword').findOne({
       where: { email: req.query.email },
     })
       .then(user => {
@@ -83,7 +83,7 @@ module.exports = {
   },
 
   login: async (req, res) => {
-    Users.findOne({
+    Users.scope('withPassword').findOne({
       where: {
         email: req.body.email,
       },
@@ -127,7 +127,7 @@ module.exports = {
   },
 
   resetPassword: async (req, res) => {
-    await Users.findOne({
+    await Users.scope('withPassword').findOne({
       where: {
         email: req.body.email,
       },
@@ -159,7 +159,7 @@ module.exports = {
   },
 
   updatePassword: async (req, res) => {
-    Users.findOne({
+    Users.scope('withPassword').findOne({
       where: { email: req.query.email },
     })
       .then(user => {

@@ -39,11 +39,19 @@ module.exports = {
         user.rows.forEach(item => {
           let dataUser = {
             id: item.id,
+            npp: item.npp,
             nama: item.nama,
+            phoneNumber: item.phoneNumber,
+            tanggalLahir: item.tanggalLahir,
+            wilayah: item.wilayah,
+            singkatan: item.singkatan,
+            kdunit: item.kdunit,
+            unitBesaran: item.unitBesaran,
+            unit: item.unit,
+            jenjang: item.jenjang,
+            jabatan: item.jabatan,
             alamat: item.alamat,
             email: item.email,
-            phoneNumber: item.phoneNumber,
-            wilayah: item.wilayah,
             isAdmin: item.isAdmin,
             superAdmin: item.superAdmin,
           };

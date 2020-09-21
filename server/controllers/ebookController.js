@@ -233,8 +233,9 @@ module.exports = {
             penerbit: row[9],
             lokasiPerpustakaan: row[10],
             status: row[11],
-            image: row[12],
-            sourceLink: row[13],
+            condition: row[12],
+            image: row[13],
+            sourceLink: row[14],
             isPromotion: false,
           };
 
@@ -242,8 +243,13 @@ module.exports = {
         });
 
         Ebooks.bulkCreate(Databooks)
-          .then(() => {
-            res.status(200).json({
+          .then((response) => {
+            response.map(item => {
+              return ListBorrowEbook.create({
+                ebookId: item.id
+              })
+            })
+            return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
           })

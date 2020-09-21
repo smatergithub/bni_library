@@ -28,7 +28,16 @@ module.exports = (sequelize, DataTypes) => {
       isAdmin: DataTypes.BOOLEAN,
       superAdmin: DataTypes.BOOLEAN,
     },
-    {}
+    {
+      defaultScope: {
+        attributes: { exclude: ['password'] },
+      },
+      scopes: {
+        withPassword: {
+          attributes: {},
+        }
+      }
+    }
   );
   users.associate = function (models) {
     // associations can be defined here
