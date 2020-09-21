@@ -16,12 +16,11 @@ function ListReserach(props) {
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0  py-3 mt-16">
-              <a
-                className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
-                href="#"
-              >
-                Semua Riset Wilayah
-              </a>
+              <Link to="/auth/register">
+                <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                  Upload Riset
+                </button>
+              </Link>
 
               <div className="flex items-center" id="buku-nav-content">
                 <div className="pl-3 text-gray-800 inline-block no-underline hover:text-black"></div>
@@ -109,9 +108,11 @@ function ListReserach(props) {
                         bottom: '10px',
                       }}
                     >
-                      <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
-                        Detail
-                      </button>
+                      <Link to="/detail-riset">
+                        <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
+                          Detail
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

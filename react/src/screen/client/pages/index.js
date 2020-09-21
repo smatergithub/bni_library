@@ -15,6 +15,7 @@ import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
 import Order from './order';
 import ListResearch from './listResearch';
+import DetailResearch from './detailResearch';
 
 const routes = [
   {
@@ -41,6 +42,11 @@ const routes = [
     path: '/daftar-riset',
     exact: false,
     main: <ListResearch />,
+  },
+  {
+    path: '/detail-riset',
+    exact: false,
+    main: <DetailResearch />,
   },
   {
     path: '/about',
