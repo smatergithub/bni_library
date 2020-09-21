@@ -30,7 +30,7 @@ router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
 router.post('/ebook', [AuthJWT.isAdmin], EbookController.list);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
-router.post('/ebook/create', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
+router.post('/ebook/create', [AuthJWT.isAdmin], UploadImage.single("image"), UploadDocument.single("fileEbook"), EbookController.add);
 router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.update);
 router.post('/ebook/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), EbookController.uploadEbook);
 router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);
@@ -41,7 +41,7 @@ router.post('/repository', [AuthJWT.verifyToken], RepositoryController.add);
 router.put('/repository/:id', [AuthJWT.verifyToken], RepositoryController.update);
 router.delete('/repository/:id', [AuthJWT.verifyToken], RepositoryController.delete);
 
-router.get('/wilayah', [AuthJWT.isAdmin], WilayahController.list);
+router.post('/wilayah', [AuthJWT.isAdmin], WilayahController.list);
 router.get('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.getById);
 router.post('/wilayah', [AuthJWT.isAdmin], WilayahController.add);
 router.put('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.update);

@@ -1,20 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  getUsersListToAdmin,
-  toggleUserIntoAdmin,
-  deleteUser,
-  getMe,
-} from '../../../../redux/action/user';
+import { getWilayah, DeleteWilayahAction, EditWilayahAction, CreateNewWilayahAction } from "../../../../redux/action/wilayah";
 import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
+import { Link } from "react-router-dom";
 
-const Ebooks = props => {
+const Wilayah = props => {
   const [loading, setLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
-  const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
+  const [showModalDetail, setShowModalDetail] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
@@ -25,7 +21,7 @@ const Ebooks = props => {
   const retrieveDataWilayah = filterOptions => {
     setLoading(true);
     props
-      .getUsersListToAdmin(filterOptions)
+      .getWilayah(filterOptions)
       .then(res => {
         if (res) {
           setLoading(false);
@@ -60,44 +56,23 @@ const Ebooks = props => {
     retrieveDataWilayah(filterOptions);
   }, [filterOptions]);
 
-  function onAdminAction(data, id) {
-    props.toogleIsAdmin(data, id).then(res => {
-      if (res.resp) {
-        retrieveDataWilayah(filterOptions);
-      }
-    });
-  }
 
   const getDetailWilayah = (id, MakeAdmin) => {
-    const { users } = props;
-    let detailData = users.data.filter(item => item.id === id);
+    const { wilayah } = props;
+    let detailData = wilayah.data.filter(item => item.id === id);
     setDetailData(detailData[0]);
-    if (MakeAdmin === 'isAdmin') {
-      setShowModalMakeAdmin(true);
+    if (MakeAdmin === 'edit') {
+      // console.log("test")
     } else {
       setShowModalDeletion(true);
     }
   };
 
-  const makeUserIntoAdmin = () => {
-    setLoading(true);
-    props
-      .toggleUserIntoAdmin(detailData.id)
-      .then(response => {
-        retrieveDataWilayah(filterOptions);
-        setLoading(false);
-        setShowModalMakeAdmin(false);
-      })
-      .catch(err => {
-        console.log('err', err);
-        ToastError('Tidak Bisa Akses Fitur Ini');
-      });
-  };
 
-  const handleDeleteUser = () => {
+  const handleDeleteWilayah = () => {
     setLoading(true);
     props
-      .deleteUser(detailData.id)
+      .DeleteWilayahAction(detailData.id)
       .then(response => {
         retrieveDataWilayah(filterOptions);
         setLoading(false);
@@ -110,31 +85,16 @@ const Ebooks = props => {
   };
 
   if (loading) return null;
-  const { users } = props;
+  const { wilayah } = props;
 
   const columns = [
     {
-      name: 'nama',
-      displayName: 'Nama',
+      name: 'codeWilayah',
+      displayName: 'Code Wilayah',
     },
     {
-      name: 'alamat',
-      displayName: 'Alamat',
-    },
-    {
-      name: 'email',
-      displayName: 'email',
-    },
-    {
-      name: 'phoneNumber',
-      displayName: 'Nomor Telepon',
-    },
-    {
-      name: 'isAdmin',
-      displayName: 'Admin',
-      customRender: rowData => {
-        return rowData.isAdmin ? 'Aktif' : 'Tidak Aktif';
-      },
+      name: 'wilayah',
+      displayName: 'Wilayah',
     },
     {
       name: 'actions',
@@ -148,9 +108,9 @@ const Ebooks = props => {
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
                   style={{ marginRight: '5px' }}
-                  onClick={() => getDetailWilayah(rowData.id, 'isAdmin')}
+                  onClick={() => getDetailWilayah(rowData.id, 'edit')}
                 >
-                  {rowData.isAdmin !== true ? ' Make Admin' : ' Make User'}
+                  edit
                 </button>
                 <button
                   className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -170,12 +130,21 @@ const Ebooks = props => {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
-
-        {users.data !== undefined ? (
+        <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1>
+        <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
+          <Link to="/admin/add-new-wilayah">
+            <button
+              type="button"
+              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            >
+              <i className="fas fa-plus mr-3" /> Tambah Wilayah
+            </button>
+          </Link>
+        </div>
+        {wilayah.data !== undefined ? (
           <Table
             columns={columns}
-            source={users}
+            source={wilayah}
             isLoading={loading}
             limit={filterOptions.limit}
             page={filterOptions.page}
@@ -191,36 +160,24 @@ const Ebooks = props => {
           setDetailData({});
           setShowModalDeletion(false);
         }}
-        handleSubmit={handleDeleteUser}
+        handleSubmit={handleDeleteWilayah}
       >
-        <div className="my-5">Anda yakin untuk menghapus User ini?</div>
+        <div className="my-5">Anda yakin untuk menghapus wilayah ini?</div>
       </Modal>
-      <Modal
-        title="Konfirmasi"
-        open={showModalMakeAdmin}
-        onCLose={() => {
-          setDetailData({});
-          setShowModalMakeAdmin(false);
-        }}
-        handleSubmit={makeUserIntoAdmin}
-      >
-        <div className="my-5">Anda yakin untuk Menjadikan User ini Admin ?</div>
-      </Modal>
+
     </div>
   );
 };
 
 let mapStateToProps = state => {
   return {
-    users: state.users.users,
-    role: state.users.role,
-    me: state.users.me,
+    wilayah: state.wilayah.wilayah
   };
 };
 
 export default connect(mapStateToProps, {
-  getUsersListToAdmin,
-  toggleUserIntoAdmin,
-  deleteUser,
-  getMe,
-})(Ebooks);
+  getWilayah,
+  DeleteWilayahAction,
+  EditWilayahAction,
+  CreateNewWilayahAction
+})(Wilayah);

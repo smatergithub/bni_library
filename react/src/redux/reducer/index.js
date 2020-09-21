@@ -9,6 +9,7 @@ import repositorys from './modules/repositorys';
 import wishlist from './modules/wishlist';
 import dashboard from './modules/dashboard';
 import transactions from './modules/transactions';
+import wilayah from "./modules/wilayah";
 
 const rootReducer = combineReducers({
   users,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   wishlist,
   dashboard,
   transactions,
+  wilayah
 });
 
 export default rootReducer;

@@ -77,22 +77,42 @@ const Books = props => {
     {
       name: 'judul',
       displayName: 'Judul',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.judul;
+        return data
+      },
     },
     {
       name: 'pengarang',
       displayName: 'Pengarang',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.pengarang;
+        return data
+      },
     },
     {
       name: 'tahunTerbit',
       displayName: 'Tahun Terbit',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.tahunTerbit;
+        return data
+      },
     },
     {
       name: 'stockBuku',
       displayName: 'Stock Buku',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.stockBuku;
+        return data
+      },
     },
     {
       name: 'status',
       displayName: 'Status',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.status;
+        return data
+      },
     },
     {
       name: 'actions',
@@ -151,8 +171,8 @@ const Books = props => {
             searchDefaultValue={filterOptions.judul}
           />
         ) : (
-          <NoData />
-        )}
+            <NoData />
+          )}
       </main>
       <Modal
         title="Konfirmasi"

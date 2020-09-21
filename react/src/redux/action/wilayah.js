@@ -6,13 +6,8 @@ import { WILAYAHS, DETAIL_WILAYAH } from '../type';
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewWilayahAction = wilayah => () => {
-  var formdata = new FormData();
-  for (var key in wilayah) {
-    formdata.append(key, wilayah[key]);
-  }
-
-  return WilayahApi.create(formdata)
+export const CreateNewWilayahAction = (data) => () => {
+  return WilayahApi.create(data)
     .then(res => {
       if (res) {
         return {
@@ -27,12 +22,8 @@ export const CreateNewWilayahAction = wilayah => () => {
     });
 };
 
-export const EditWilayahAction = (id, wilayah) => () => {
-  var formdata = new FormData();
-  for (var key in wilayah) {
-    formdata.append(key, wilayah[key]);
-  }
-  return WilayahApi.update(id, formdata)
+export const EditWilayahAction = (id, data) => () => {
+  return WilayahApi.update(id, data)
     .then(res => {
       if (res) {
         return {

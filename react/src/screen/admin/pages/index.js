@@ -16,6 +16,7 @@ import CreateNewEbook from './createNewEbook';
 import CreateNewRepo from './createNewRepo';
 import Repository from './repository';
 import User from './users';
+import Wilayah from "./wilayah";
 import Approval from './approval';
 import History from './history';
 
@@ -59,6 +60,11 @@ const routes = [
     path: '/admin/users',
     exact: false,
     main: () => <User />,
+  },
+  {
+    path: '/admin/wilayah',
+    exact: false,
+    main: () => <Wilayah />,
   },
   {
     path: '/admin/add-new-book',
