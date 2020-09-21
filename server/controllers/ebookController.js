@@ -165,6 +165,8 @@ module.exports = {
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
+    let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
+
     return Ebooks.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
@@ -179,12 +181,12 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
+      fileEbook: req.file ? locationFileEbook : null,
       sourceLink: req.body.sourceLink,
       condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response => {
-        // console.log("response", response.id)
         const createListBorrowEbook = ListBorrowEbook.create({
           EbookId: response.id
         })
@@ -197,7 +199,6 @@ module.exports = {
           message: "Process Succesfully create Ebook",
           data: response
         });
-        // res.status(201).json({ message: 'successfully create ebook', data: response })
       })
 
 
@@ -271,6 +272,8 @@ module.exports = {
           ? req.body.image
           : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
+        let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
+
         return ebook
           .update({
             kategori: req.body.kategori,
@@ -286,6 +289,7 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
+            fileEbook: req.file ? locationFileEbook : null,
             sourceLink: req.body.sourceLink,
             condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,

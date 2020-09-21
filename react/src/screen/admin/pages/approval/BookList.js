@@ -69,7 +69,14 @@ function BookList(props) {
     },
     {
       name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
+      displayName: 'Tanggal Peminjam',
+      customRender: rowData => {
+        return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
+      },
+    },
+    {
+      name: 'tahunTerbit',
+      displayName: 'Tanggal Pengembalian',
       customRender: rowData => {
         return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
       },
@@ -78,6 +85,34 @@ function BookList(props) {
     {
       name: 'nama',
       displayName: 'Peminjam',
+      customRender: rowData => {
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
+      },
+    },
+    {
+      name: 'nama',
+      displayName: 'NPP Peminjam',
+      customRender: rowData => {
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
+      },
+    },
+    {
+      name: 'nama',
+      displayName: 'Jabatan',
+      customRender: rowData => {
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
+      },
+    },
+    {
+      name: 'nama',
+      displayName: 'No Handphone',
+      customRender: rowData => {
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
+      },
+    },
+    {
+      name: 'nama',
+      displayName: "Email",
       customRender: rowData => {
         return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
       },

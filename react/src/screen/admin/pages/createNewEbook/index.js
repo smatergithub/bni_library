@@ -16,7 +16,7 @@ function CreateNewEBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
   let [image, setImage] = React.useState(null);
-  let [promotionValue, setPromotionValue] = React.useState(null);
+  let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [ebook, setEbook] = React.useState(null);
@@ -28,10 +28,10 @@ function CreateNewEBook(props) {
       if (ebookFile) {
       }
       formData['image'] = image;
-      formData['isPromotion'] = promotionValue == 'true' ? true : false;
+      formData['condition'] = conditionValue == 'Baik' ? "Baik" : "Weeding";
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
-      formData['status'] = statusValue == 'true' ? 'Ada' : 'Dipinjam';
+      formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
       props.CreateNewEbookAction(formData).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -42,12 +42,12 @@ function CreateNewEBook(props) {
       });
     } else {
       formData['image'] = image ? image : ebook.image;
-      formData['isPromotion'] =
-        promotionValue !== null ? (promotionValue == 'true' ? true : false) : ebook.isPromotion;
+      formData['condition'] =
+        conditionValue !== null ? (conditionValue == 'Baik' ? "Baik" : "Weeding") : ebook.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['status'] =
-        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Dipinjam') : ebook.status;
+        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Kosong') : ebook.status;
 
       props.EditEbookAction(id, formData).then(res => {
         if (res.resp) {
@@ -117,19 +117,19 @@ function CreateNewEBook(props) {
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
-  function onChangePromotion(value) {
-    setPromotionValue(value[0] ? 'true' : 'false');
+  function onChangeCondition(value) {
+    setConditionValue(value[0] ? 'Baik' : 'Weeding');
   }
   function onChangeStatus(value) {
-    setStatusValue(value[0] ? 'true' : 'false');
+    setStatusValue(value[0] ? 'Ada' : 'Kosong');
   }
   const optionsStatus = [
-    { label: 'Ada', value: true },
-    { label: 'Dipinjam', value: false },
+    { label: 'Ada', value: "Ada" },
+    { label: 'Kosong', value: "Kosong" },
   ];
-  const optionsPromotion = [
-    { label: 'Ya', value: true },
-    { label: 'Tidak', value: false },
+  const optionsCondition = [
+    { label: 'Baik', value: "Baik" },
+    { label: 'Weeding', value: "Weeding" },
   ];
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -265,8 +265,8 @@ function CreateNewEBook(props) {
                   <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                 </div>
 
-                <div className="mt-2 flex">
-                  <div className="w-1/2">
+                <div className="mt-2 ">
+                  <div >
                     <label className="block text-sm text-gray-600" htmlFor="cus_email">
                       Link File
                     </label>
@@ -336,12 +336,12 @@ function CreateNewEBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Diskon
+                    Kondisi
                   </label>
                   <Checkbox.Group
-                    options={optionsPromotion}
-                    value={promotionValue}
-                    onChange={onChangePromotion}
+                    options={optionsCondition}
+                    value={conditionValue}
+                    onChange={optionsCondition}
                   />
                   <div className="text-red-700"></div>
                 </div>
