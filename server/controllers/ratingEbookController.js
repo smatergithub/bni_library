@@ -3,6 +3,11 @@ const RatingEbook = require("../models").ratingEbook;
 const sequelize = require('sequelize')
 const Ebooks = require('../models/').ebooks;
 
+
+//status
+//dipinjam
+//dikembalikan
+
 module.exports = {
   inputRatingEbook: async (req, res) => {
     var userId = req.userId;
@@ -33,6 +38,15 @@ module.exports = {
           TransactionEbook.findByPk(dataTransactionRating[0].id).then(transaksi => {
             transaksi.update({
               isGiveRating: true
+            }).then(response => {
+              return res.status(201).json({
+                message: "Process Succesfully input rating",
+              });
+            })
+          })
+          Ebooks.findByPk(dataTransactionRating[0].ebookId).then(ebook => {
+            ebook.update({
+              countRating: createRating.rating,
             }).then(response => {
               return res.status(201).json({
                 message: "Process Succesfully input rating",

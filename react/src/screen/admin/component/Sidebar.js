@@ -39,6 +39,13 @@ const routes = [
     notif: false,
   },
   {
+    path: '/admin/wilayah',
+    name: 'Daftar Wilayah',
+    icon: 'fas fa-id-badge',
+    params: 'wilayah',
+    notif: false,
+  },
+  {
     path: '/admin/users',
     name: 'Daftar User',
     icon: 'fas fa-id-badge',

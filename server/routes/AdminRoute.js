@@ -19,7 +19,7 @@ router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserLi
 //routing admin panel feature
 
 
-router.get("/dashboard", [AuthJWT.isAdmin], DashboardController.dashboardSummary)
+router.get("/dashboard", DashboardController.dashboardSummary)
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
