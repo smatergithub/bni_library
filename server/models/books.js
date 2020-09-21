@@ -26,7 +26,9 @@ module.exports = (sequelize, DataTypes) => {
       condition: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
-    {}
+    {
+
+    }
   );
   books.associate = function (models) {
     books.hasMany(models.transactionBook, {
