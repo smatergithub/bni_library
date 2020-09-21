@@ -1,5 +1,5 @@
 const Books = require('../models').books;
-const ListBorrowBook = require("../models").listBorrowBook
+const ListBorrowBook = require('../models').listBorrowBook;
 // const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -73,14 +73,20 @@ module.exports = {
   },
 
   getBookById: async (req, res) => {
-    return await Books.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', 'user'],
+      where: {
+        bookId: req.params.id,
+      },
+    };
+    return await ListBorrowBook.findAll(paramQuerySQL)
       .then(book => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(book[0]);
       })
       .catch(error => res.status(500).send(error));
   },
@@ -89,9 +95,8 @@ module.exports = {
     // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let { limit, page } = req.body;
     let paramQuerySQL = {
-      include: ['book', 'transactionBook', "user"],
+      include: ['book', 'transactionBook', 'user'],
     };
-
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -205,16 +210,16 @@ module.exports = {
       .then(response => {
         // console.log("response", response.id)
         const createListBorrowBook = ListBorrowBook.create({
-          bookId: response.id
-        })
+          bookId: response.id,
+        });
 
         if (!createListBorrowBook) {
-          return res.status(404).send("Failed create Book");
+          return res.status(404).send('Failed create Book');
         }
 
         return res.status(201).json({
-          message: "Process Succesfully create Book",
-          data: response
+          message: 'Process Succesfully create Book',
+          data: response,
         });
       })
       .catch(err => res.status(500).send(err));
@@ -250,7 +255,7 @@ module.exports = {
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response => {
-            res.status(200).json({ message: 'successfully update book', data: response })
+            res.status(200).json({ message: 'successfully update book', data: response });
           })
           .catch(err => res.status(404).send(err));
       })
@@ -297,9 +302,9 @@ module.exports = {
           .then(response => {
             response.map(item => {
               return ListBorrowBook.create({
-                bookId: item.id
-              })
-            })
+                bookId: item.id,
+              });
+            });
             return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
