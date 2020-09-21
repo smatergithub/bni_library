@@ -14,6 +14,9 @@ import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
 import Order from './order';
+import ListResearch from './listResearch';
+import DetailResearch from './detailResearch';
+import AddNewResearch from './createNewRepo';
 
 const routes = [
   {
@@ -35,6 +38,21 @@ const routes = [
     path: '/riset',
     exact: false,
     main: <Research />,
+  },
+  {
+    path: '/daftar-riset',
+    exact: false,
+    main: <ListResearch />,
+  },
+  {
+    path: '/detail-riset',
+    exact: false,
+    main: <DetailResearch />,
+  },
+  {
+    path: '/tambah-riset',
+    exact: false,
+    main: <AddNewResearch />,
   },
   {
     path: '/about',

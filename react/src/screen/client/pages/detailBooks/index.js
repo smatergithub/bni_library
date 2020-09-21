@@ -39,6 +39,7 @@ function DetailBooks(props) {
   }
   if (processing && books == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <section className="py-16 lg:py-24 w-full">
@@ -61,7 +62,7 @@ function DetailBooks(props) {
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
-                    src={books.image}
+                    src={books.book.image}
                     alt=""
                     style={{
                       height: 440,
@@ -71,7 +72,7 @@ function DetailBooks(props) {
                 </div>
               </div>
               <div className="w-3/5 px-5">
-                <div className="text-lg font-bold">{books.judul}</div>
+                <div className="text-lg font-bold">{books.book.judul}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
                   style={{
@@ -88,10 +89,10 @@ function DetailBooks(props) {
                   </div>
                   <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
-                <div> Paperback | {books.bahasa}</div>
-                <div>{`By (author) ${books.pengarang}`}</div>
+                <div> Paperback | {books.book.bahasa}</div>
+                <div>{`By (author) ${books.book.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
-                <div>{books.description}</div>
+                <div>{books.book.description}</div>
               </div>
             </div>
             <div class="w-2/6  bg-white px-10 py-10 m-2">
@@ -103,11 +104,11 @@ function DetailBooks(props) {
                 }}
               ></div>
 
-              <div> Author : {books.pengarang}</div>
-              <div> ISBN : {books.isbn}</div>
+              <div> Author : {books.book.pengarang}</div>
+              <div> ISBN : {books.book.isbn}</div>
               <div> Format : Hardback</div>
-              <div> Publishers : {books.penerbit}</div>
-              <div> Publication date : {books.tahunTerbit}</div>
+              <div> Publishers : {books.book.penerbit}</div>
+              <div> Publication date : {books.book.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div> Condition : New</div>
@@ -116,7 +117,7 @@ function DetailBooks(props) {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
                   } else {
-                    props.history.push(`/order?id=${books.id}&type=book`);
+                    props.history.push(`/order?id=${books.book.id}&type=book`);
                   }
                 }}
                 className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
@@ -128,7 +129,7 @@ function DetailBooks(props) {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
                   } else {
-                    onWishlistClick(books);
+                    onWishlistClick(books.book);
                   }
                 }}
                 className={`w-full  ${

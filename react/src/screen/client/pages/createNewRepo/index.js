@@ -3,15 +3,59 @@ import React from 'react';
 function CreateNewRepo() {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
-      <main className="w-full flex-grow p-6">
-        <div className="flex flex-wrap justify-center">
+      <main className="w-full flex-grow p-6 ">
+        <div className="flex flex-wrap justify-center pt-24">
           <div className="w-full lg:w-1/2 mt-6 pl-0 lg:pl-2">
             <h1 className="w-full text-3xl text-black pb-6">Buat Repository Riset BNI</h1>
             <div className="leading-loose">
               <form className="p-10 bg-white rounded shadow-xl">
-                <div className="">
+                <div className="pt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_name">
                     Nama Lengkap
+                  </label>
+                  <input
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    type="text"
+                    required=""
+                    aria-label="Name"
+                  />
+                </div>
+                <div className="pt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
+                    Penyunting
+                  </label>
+                  <input
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    type="text"
+                    required=""
+                    aria-label="Name"
+                  />
+                </div>
+                <div className="pt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
+                    Penerjemah
+                  </label>
+                  <input
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    type="text"
+                    required=""
+                    aria-label="Name"
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Judul Penelitian
+                  </label>
+                  <input
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    aria-label="Email"
+                  />
+                </div>
+                <div className="pt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
+                    Jenis Skripsi
                   </label>
                   <input
                     className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
@@ -31,9 +75,21 @@ function CreateNewRepo() {
                     aria-label="Email"
                   />
                 </div>
+
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Judul Penelitian
+                    Kota
+                  </label>
+                  <input
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    aria-label="Email"
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Tahun
                   </label>
                   <input
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
