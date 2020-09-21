@@ -16,7 +16,7 @@ function ListReserach(props) {
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0  py-3 mt-16">
-              <Link to="/auth/register">
+              <Link to="/tambah-riset">
                 <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                   Upload Riset
                 </button>

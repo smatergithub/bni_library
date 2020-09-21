@@ -16,6 +16,7 @@ import DetailEbooks from './detailEbooks';
 import Order from './order';
 import ListResearch from './listResearch';
 import DetailResearch from './detailResearch';
+import AddNewResearch from './createNewRepo';
 
 const routes = [
   {
@@ -47,6 +48,11 @@ const routes = [
     path: '/detail-riset',
     exact: false,
     main: <DetailResearch />,
+  },
+  {
+    path: '/tambah-riset',
+    exact: false,
+    main: <AddNewResearch />,
   },
   {
     path: '/about',

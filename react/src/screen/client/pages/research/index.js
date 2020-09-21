@@ -15,7 +15,7 @@ function Reserach(props) {
               ini melakukan penelitian di BNI, tentunya mereka adalah Mahasiswa jenjang S1 dan S2.
               Jika ingin melakukan penelitian melengkapi kentuntuan di bawah.
             </p>
-            <Link to="/auth/register">
+            <Link to="/tambah-riset">
               <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                 Upload Riset
               </button>
