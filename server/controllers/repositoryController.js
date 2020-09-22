@@ -73,6 +73,7 @@ module.exports = {
   },
 
   add: async (req, res) => {
+    // console.log('')
     UploadMultipleDocument(req, res, err => {
       if (err) throw err;
       return Repositorys.create({
