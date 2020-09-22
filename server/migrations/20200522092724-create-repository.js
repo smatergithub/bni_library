@@ -8,44 +8,59 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
+      name: {
+        type: Sequelize.STRING,
+      },
+      title: {
+        type: Sequelize.STRING,
+      },
+      category: {
+        type: Sequelize.STRING,
+      },
       university: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
-      titleRepository: {
-        type: Sequelize.STRING
+      editor: {
+        type: Sequelize.STRING,
       },
-      typeRepository: {
-        type: Sequelize.STRING
+      translateBy: {
+        type: Sequelize.STRING,
+      },
+      description: {
+        type: Sequelize.STRING,
+      },
+      releaseYear: {
+        type: Sequelize.STRING,
       },
       bab1: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       bab2: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       bab3: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       bab4: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       bab5: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       abstrack: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('repositories');
-  }
+  },
 };
