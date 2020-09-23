@@ -265,8 +265,8 @@ function CreateNewEBook(props) {
                   <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                 </div>
 
-                <div className="mt-2 ">
-                  <div >
+                <div className="mt-2 flex ">
+                  <div className="w-1/2">
                     <label className="block text-sm text-gray-600" htmlFor="cus_email">
                       Link File
                     </label>

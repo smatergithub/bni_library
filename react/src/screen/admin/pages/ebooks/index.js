@@ -85,18 +85,42 @@ const Ebooks = props => {
     {
       name: 'judul',
       displayName: 'Judul',
-    },
-    {
-      name: 'kategori',
-      displayName: 'Kategori',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.judul;
+        return data
+      },
     },
     {
       name: 'pengarang',
       displayName: 'Pengarang',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.pengarang;
+        return data
+      },
     },
     {
-      name: 'penerbit',
-      displayName: 'Penerbit',
+      name: 'tahunTerbit',
+      displayName: 'Tahun Terbit',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.tahunTerbit;
+        return data
+      },
+    },
+    {
+      name: 'stockBuku',
+      displayName: 'Stock Buku',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.stockBuku;
+        return data
+      },
+    },
+    {
+      name: 'status',
+      displayName: 'Status',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.status;
+        return data
+      },
     },
     {
       name: 'actions',
@@ -105,7 +129,7 @@ const Ebooks = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Link to={`/admin/edit-ebook?id=${rowData.id}`}>
+              <Link to={`/admin/edit-ebook?id=${rowData.ebook}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -117,7 +141,7 @@ const Ebooks = props => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailEbook(rowData.id)}
+                onClick={() => getDetailEbook(rowData.ebook)}
               >
                 Delete
               </button>
@@ -154,8 +178,8 @@ const Ebooks = props => {
             searchDefaultValue={filterOptions.judul}
           />
         ) : (
-          <NoData msg="Data belum tersedia !" />
-        )}
+            <NoData msg="Data belum tersedia !" />
+          )}
       </main>
       <Modal
         title="Konfirmasi"

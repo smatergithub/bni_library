@@ -138,29 +138,6 @@ module.exports = {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
 
-        // let data = book.rows.map(item => {
-        //   return {
-        //     bookId: item.bookId,
-        //     ...item.book,
-        //     // ...item.transactionBook,
-        //     // user: {
-        //     //   id: item.user.id,
-        //     //   npp: item.user.npp,
-        //     //   nama: item.user.nama,
-        //     //   phoneNumber: item.user.phoneNumber,
-        //     //   tanggalLahir: item.user.tanggalLahir,
-        //     //   wilayah: item.user.wilayah,
-        //     //   singkatan: item.user.singkatan,
-        //     //   kdunit: item.user.kdunit,
-        //     //   unitBesaran: item.user.unitBesaran,
-        //     //   unit: item.user.unit,
-        //     //   jenjang: item.user.jenjang,
-        //     //   jabatan: item.user.jabatan,
-        //     //   alamat: item.alamat,
-        //     //   email: item.email,
-        //     // }
-        //   }
-        // })
 
         res.status(200).json({
           count: book.count,

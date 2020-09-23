@@ -1,5 +1,6 @@
 const Ebooks = require('../models/').ebooks;
 const ListBorrowEbook = require("../models").listBorrowEbook
+const UploadFile = require("../models").uploadFile
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 require('dotenv').config();
@@ -72,44 +73,30 @@ module.exports = {
   },
 
   getEbookById: async (req, res) => {
-    return await Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        bookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
             message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
-    let paramQuerySQL = {};
-
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
-    if (kategori != '' && typeof kategori !== 'undefined') {
-      paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
-        },
-      };
-    }
-
-    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
-      paramQuerySQL.where = {
-        tahunTerbit: {
-          [Op.like]: '%' + tahunTerbit + '%',
-        },
-      };
-    }
+    // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
+    let { limit, page } = req.body;
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+    };
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -121,19 +108,32 @@ module.exports = {
     }
 
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['createdAt'].includes(order.toLowerCase())
-    ) {
-      paramQuerySQL.order = [[order, sort]];
-    }
+    // if (
+    //   order != '' &&
+    //   typeof order !== 'undefined' &&
+    //   ['createdAt'].includes(order.toLowerCase())
+    // ) {
+    //   paramQuerySQL.order = [[order, sort]];
+    // }
+    // if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+    //   sort = 'DESC';
+    // }
 
-    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-      sort = 'DESC';
-    }
-
-    return await Ebooks.findAndCountAll(paramQuerySQL)
+    // return await Books.findAndCountAll(paramQuerySQL)
+    //   .then(book => {
+    //     let totalPage = Math.ceil(book.count / req.body.limit);
+    //     let page = Math.ceil(req.body.page);
+    //     res.status(200).json({
+    //       count: book.count,
+    //       totalPage: totalPage,
+    //       activePage: page,
+    //       data: book.rows,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     res.status(500).send(err);
+    //   });
+    return await ListBorrowEbook.findAndCountAll(paramQuerySQL)
       .then(ebook => {
         let totalPage = Math.ceil(ebook.count / req.body.limit);
         let page = Math.ceil(req.body.page);
@@ -165,7 +165,7 @@ module.exports = {
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
-    let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
+
 
     return Ebooks.create({
       kategori: req.body.kategori,
@@ -181,7 +181,7 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
-      fileEbook: req.file ? locationFileEbook : null,
+      fileEbook: req.body.fileEbook,
       sourceLink: req.body.sourceLink,
       condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
@@ -203,6 +203,26 @@ module.exports = {
 
 
       .catch(err => res.status(500).send(err));
+  },
+
+  uploadSingleEbook: async (req, res) => {
+    if (!req.file) {
+      res.send({
+        status: false,
+        message: 'No file uploaded'
+      });
+    }
+    let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
+    UploadFile.create({
+      locationFile: locationFileEbook
+    })
+      .then(response => {
+        return res.status(201).json({
+          message: "Process Succesfully Upload file",
+          data: response
+        });
+      }).catch(error => res.status(500).send(error));
+
   },
 
   uploadEbook: async (req, res) => {
@@ -278,8 +298,6 @@ module.exports = {
           ? req.body.image
           : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
-        let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
-
         return ebook
           .update({
             kategori: req.body.kategori,
@@ -295,7 +313,7 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
-            fileEbook: req.file ? locationFileEbook : null,
+            fileEbook: req.body.fileEbook,
             sourceLink: req.body.sourceLink,
             condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
