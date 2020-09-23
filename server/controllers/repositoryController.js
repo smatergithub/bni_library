@@ -45,12 +45,12 @@ module.exports = {
 
     return Repositorys.findAndCountAll(paramQuerySQL)
       .then(repository => {
-        let activePage = Math.ceil(repository.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let totalPage = Math.ceil(repository.count / paramQuerySQL.limit);
+
         res.status(200).json({
-          count: repository.count,
-          totalPage: activePage,
-          activePage: page,
+          totalPage: totalPage,
+          activePage: Number(page),
+          test: 1,
           data: repository.rows,
         });
       })

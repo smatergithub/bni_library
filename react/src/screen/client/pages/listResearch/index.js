@@ -1,11 +1,67 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Input, Select } from 'antd';
 import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import queryString from 'query-string';
+import { getRepositorysByUser } from '../../../../redux/action/repositorys';
 const { Search } = Input;
 
 function ListReserach(props) {
+  const parsed = queryString.parse(props.location.search);
+  let { kategori } = parsed;
+  let [processing, setProcessing] = React.useState(false);
+  let [research, setResearch] = React.useState(null);
+  const [pagination, setPagination] = React.useState({
+    limit: 8,
+    page: 1,
+    judul: '',
+    kategori: kategori,
+  });
   let { history } = props;
+  function getAllResearch(params) {
+    props.getRepositorysByUser(params).then(res => {
+      setResearch(res.data);
+
+      setProcessing(false);
+    });
+  }
+  React.useEffect(() => {
+    if (kategori) {
+      setProcessing(true);
+      getAllResearch(pagination);
+      // setPagination({
+      //   ...pagination,
+      //   kategori: kategori,
+      // });
+    } else {
+      history.push('/riset');
+    }
+  }, []);
+  function prev() {
+    if (research.activePage > 1) {
+      setPagination({
+        ...pagination,
+        page: research.activePage - 1,
+        judul: '',
+      });
+    }
+  }
+  function next() {
+    if (research.totalPage !== research.activePage) {
+      if (research.data.length !== 0) {
+        setPagination({
+          ...pagination,
+          page: research.activePage + 1,
+          judul: '',
+        });
+      }
+    }
+  }
+  React.useEffect(() => {
+    getAllResearch(pagination);
+  }, [pagination]);
+  if (!research && processing) return null;
   return (
     <main>
       <Helmet>
@@ -120,44 +176,45 @@ function ListReserach(props) {
             </section>
           </div>
         </div>
+        {research && research.data.length !== 0 && (
+          <div className="flex justify-center  mt-10">
+            <nav className="relative z-0 inline-flex shadow-sm">
+              <div
+                onClick={prev}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Previous"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div
+                href="#"
+                className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
+              >
+                {research.count} of {research.totalPage}
+              </div>
 
-        <div className="flex justify-center  mt-10">
-          <nav className="relative z-0 inline-flex shadow-sm">
-            <div
-              // onClick={prev}
-              className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-              aria-label="Previous"
-            >
-              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  clipRule="evenodd"
-                  d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div
-              href="#"
-              className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
-            >
-              1 of 3
-            </div>
-
-            <div
-              // onClick={next}
-              className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-              aria-label="Next"
-            >
-              <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path
-                  clipRule="evenodd"
-                  d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-          </nav>
-        </div>
+              <div
+                onClick={next}
+                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Next"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </nav>
+          </div>
+        )}
 
         {/* <Modal
           title="Authentication required"
@@ -174,4 +231,4 @@ function ListReserach(props) {
   );
 }
 
-export default ListReserach;
+export default connect(null, { getRepositorysByUser })(withRouter(ListReserach));
