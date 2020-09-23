@@ -7,6 +7,7 @@ import {
   CreateNewEbookAction,
   getDetailEbook,
   EditEbookAction,
+  UploadSingleEbookFIle,
 } from '../../../../redux/action/ebooks';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 import { ToastError, ToastSuccess } from '../../../../component';
@@ -71,6 +72,7 @@ function CreateNewEBook(props) {
 
     reader.readAsDataURL(file);
   };
+
   let uploadDocument = e => {
     e.preventDefault();
 
@@ -91,18 +93,29 @@ function CreateNewEBook(props) {
 
     reader.readAsDataURL(file);
   };
+
   let uploadEbookPdf = e => {
-    e.preventDefault();
 
     let reader = new FileReader();
-    let file = e.target.files[0];
+    let locationFile = e.target.files[0];
 
     reader.onloadend = () => {
-      setEbookFile(file);
+      props.UploadSingleEbookFIle({ locationFile }).then(res => {
+        if (res) {
+          ToastSuccess(res.msg);
+          // setEbookFile(file);
+          console.log(res)
+          // setEbookFile(res.resp);
+        } else {
+          ToastError(res.msg);
+        }
+      });
+
     };
 
-    reader.readAsDataURL(file);
+    reader.readAsDataURL(locationFile);
   };
+
   React.useEffect(() => {
     if (id) {
       props.getDetailEbook(id).then(res => {
@@ -294,7 +307,7 @@ function CreateNewEBook(props) {
                         onChange={e => uploadEbookPdf(e)}
                         type="file"
                         className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                        accept="image/png, image/jpeg"
+                        //accept="image/png, image/jpeg"
                         aria-label="Email"
                       />
                       <div className="text-red-700">
@@ -411,4 +424,5 @@ export default connect(null, {
   UploadEbookFIle,
   getDetailEbook,
   EditEbookAction,
+  UploadSingleEbookFIle
 })(CreateNewEBook);
