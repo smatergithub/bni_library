@@ -28,7 +28,7 @@ export default class RepositoryApi {
     return Request.postWithAuth(url, body, true);
   }
   static listByUser(param) {
-    const url = `/api/repository?page=${param.page}&limit=${param.limit}&category=${param.kategori}`;
+    const url = `/api/repository?page=${param.page}&limit=${param.limit}&category=${param.kategori}&title=${param.title}`;
     return Request.getWithAuth(url);
   }
 }

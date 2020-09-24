@@ -117,7 +117,6 @@ export const CreateNewRepositoryUserAction = research => () => {
     });
 };
 export const getRepositorysByUser = param => () => {
-  console.log(param);
   return RepositoryApi.listByUser(param)
     .then(res => {
       if (res) {

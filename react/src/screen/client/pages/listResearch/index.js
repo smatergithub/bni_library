@@ -4,6 +4,7 @@ import { Input, Select } from 'antd';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
+import { NoData } from '../../../../component';
 import { getRepositorysByUser } from '../../../../redux/action/repositorys';
 const { Search } = Input;
 
@@ -15,7 +16,7 @@ function ListReserach(props) {
   const [pagination, setPagination] = React.useState({
     limit: 8,
     page: 1,
-    judul: '',
+    title: '',
     kategori: kategori,
   });
   let { history } = props;
@@ -38,12 +39,18 @@ function ListReserach(props) {
       history.push('/riset');
     }
   }, []);
+  function handleSearch(value) {
+    setPagination({
+      ...pagination,
+      title: value,
+    });
+  }
   function prev() {
     if (research.activePage > 1) {
       setPagination({
         ...pagination,
         page: research.activePage - 1,
-        judul: '',
+        title: '',
       });
     }
   }
@@ -53,7 +60,7 @@ function ListReserach(props) {
         setPagination({
           ...pagination,
           page: research.activePage + 1,
-          judul: '',
+          title: '',
         });
       }
     }
@@ -83,17 +90,24 @@ function ListReserach(props) {
 
                 <div className="text-gray-800 px-1 bg-purple-white ">
                   <Search
-                    placeholder="input search title"
+                    placeholder="Cari Riset"
                     enterButton="Cari"
                     size="large"
                     id="searchEBook"
                     allowClear
-                    // onSearch={value => handleSearch(value)}
+                    onSearch={value => handleSearch(value)}
                   />
                 </div>
                 <div
                   className="ml-10 cursor-pointer"
-                  // onClick={}
+                  onClick={() => {
+                    setPagination({
+                      ...pagination,
+                      limit: 8,
+                      page: 1,
+                      title: '',
+                    });
+                  }}
                 >
                   Reset Filter
                 </div>
@@ -102,77 +116,90 @@ function ListReserach(props) {
           </nav>
           <div className="container mx-auto flex items-center  pt-4 pb-12 mt-5">
             <section className="bg-gray-200 py-12 w-full">
-              <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="md:flex shadow-lg  mx-6  my-5 max-w-lg md:max-w-4xl h-64">
-                  <img
-                    className="h-full w-full md:w-1/3  object-cover rounded-lg rounded-r-none pb-5/6"
-                    src="https://ik.imagekit.io/q5edmtudmz/FB_IMG_15658659197157667_wOd8n5yFyXI.jpg"
-                    alt="bag"
-                  />
-                  <div className="w-full md:w-2/3 px-4 py-4 bg-white rounded-lg relative">
-                    <div className="items-center ">
-                      <h2 className="text-xl text-gray-800 font-medium mr-auto">
-                        Rounding corners separa tely Ro unding corners separately
-                      </h2>
-                      <div className="text-gray-500 font-semibold tracking-tighter">
-                        12 Agustus 2020
-                      </div>
-                    </div>
-                    <div className="flex items-center  text-gray-700">
-                      <i
-                        className="fas fa-user"
-                        style={{
-                          marginTop: 4,
-                        }}
-                      ></i>
-                      <div className="pt-2 ml-2 text-sm">Darvin Sinaga</div>
-                    </div>
-                    <div className="flex items-center  text-gray-700">
-                      <i
-                        className="fas fa-university"
-                        style={{
-                          marginTop: 4,
-                        }}
-                      ></i>
-                      <div className="pt-2 ml-2 text-sm">Universitas Indonesia</div>
-                    </div>
-                    <div className="flex items-center  text-gray-700">
-                      <i
-                        className="fas fa-filter"
-                        style={{
-                          marginTop: 4,
-                        }}
-                      ></i>
-                      <div className="pt-2 ml-2 text-sm">Skripsi</div>
-                    </div>
-                    <div className="flex items-center  text-gray-700">
-                      <i
-                        className="fas fa-file"
-                        style={{
-                          marginTop: 4,
-                        }}
-                      ></i>
-                      <div className="ml-2 text-sm mt-2 px-2 py-1 border-radi bg-green-400  rounded text-white">
-                        Tersedia 5 File
-                      </div>
-                    </div>
+              {research && research.data.length === 0 && <NoData />}
+              {research &&
+                research.data.length !== 0 &&
+                research.data.map((item, key) => {
+                  let countFile = 0;
+                  for (key in item) {
+                    if (key.indexOf('bab') - 1 == -1) {
+                      countFile++;
+                    }
+                  }
+                  return (
+                    <div key={key} className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+                      <div className="md:flex shadow-lg  mx-6  my-5 max-w-lg md:max-w-4xl h-64">
+                        <img
+                          className="h-full w-full md:w-1/3  object-cover rounded-lg rounded-r-none pb-5/6"
+                          src="https://ik.imagekit.io/q5edmtudmz/FB_IMG_15658659197157667_wOd8n5yFyXI.jpg"
+                          alt="bag"
+                        />
+                        <div className="w-full md:w-2/3 px-4 py-4 bg-white rounded-lg relative">
+                          <div className="items-center ">
+                            <h2 className="text-xl text-gray-800 font-medium mr-auto">
+                              {item.title}
+                            </h2>
+                            <div className="text-gray-500 font-semibold tracking-tighter">
+                              {item.releaseYear}
+                            </div>
+                          </div>
+                          <div className="flex items-center  text-gray-700">
+                            <i
+                              className="fas fa-user"
+                              style={{
+                                marginTop: 4,
+                              }}
+                            ></i>
+                            <div className="pt-2 ml-2 text-sm">{item.name}</div>
+                          </div>
+                          <div className="flex items-center  text-gray-700">
+                            <i
+                              className="fas fa-university"
+                              style={{
+                                marginTop: 4,
+                              }}
+                            ></i>
+                            <div className="pt-2 ml-2 text-sm">{item.university}</div>
+                          </div>
+                          <div className="flex items-center  text-gray-700">
+                            <i
+                              className="fas fa-filter"
+                              style={{
+                                marginTop: 4,
+                              }}
+                            ></i>
+                            <div className="pt-2 ml-2 text-sm">Jenis Skripsi</div>
+                          </div>
+                          <div className="flex items-center  text-gray-700">
+                            <i
+                              className="fas fa-file"
+                              style={{
+                                marginTop: 4,
+                              }}
+                            ></i>
+                            <div className="ml-2 text-sm mt-2 px-2 py-1 border-radi bg-green-400  rounded text-white">
+                              {`Tersedia ${countFile} File`}
+                            </div>
+                          </div>
 
-                    <div
-                      className="flex items-center justify-end  absolute w-full "
-                      style={{
-                        right: '1em',
-                        bottom: '10px',
-                      }}
-                    >
-                      <Link to="/detail-riset">
-                        <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
-                          Detail
-                        </button>
-                      </Link>
+                          <div
+                            className="flex items-center justify-end  absolute w-full "
+                            style={{
+                              right: '1em',
+                              bottom: '10px',
+                            }}
+                          >
+                            <Link to="/detail-riset">
+                              <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
+                                Detail
+                              </button>
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
+                  );
+                })}
             </section>
           </div>
         </div>
@@ -196,7 +223,7 @@ function ListReserach(props) {
                 href="#"
                 className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
               >
-                {research.count} of {research.totalPage}
+                {research.activePage} of {research.totalPage}
               </div>
 
               <div

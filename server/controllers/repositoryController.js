@@ -6,13 +6,18 @@ const Op = Sequelize.Op;
 module.exports = {
   list: async (req, res) => {
     // queryStrings
-    let { q, order, category, sort, limit, page } = req.query;
+    let { q, order, title, category, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
     if (category != '' && typeof category !== 'undefined') {
       paramQuerySQL.where = {
-        category: {
-          [Op.like]: '%' + category + '%',
+        [Op.and]: {
+          category: {
+            [Op.like]: '%' + category + '%',
+          },
+          title: {
+            [Op.like]: '%' + title + '%',
+          },
         },
       };
     }
@@ -50,7 +55,6 @@ module.exports = {
         res.status(200).json({
           totalPage: totalPage,
           activePage: Number(page),
-          test: 1,
           data: repository.rows,
         });
       })
