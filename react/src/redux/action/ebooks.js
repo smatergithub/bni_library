@@ -46,6 +46,27 @@ export const UploadEbookFIle = book => () => {
     });
 };
 
+export const UploadSingleEbookFIle = book => () => {
+  var formdata = new FormData();
+  for (var key in book) {
+    formdata.append(key, book[key]);
+  }
+
+  return EbookApi.uploadSingleEbookFile(formdata)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'ebook Berhasil di tambahkan',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const EditEbookAction = (id, Ebook) => () => {
   var formdata = new FormData();
   for (var key in Ebook) {

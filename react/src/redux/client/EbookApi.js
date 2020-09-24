@@ -9,6 +9,11 @@ export default class EbookApi {
     const url = '/api/admin/ebook/upload';
     return Request.postWithAuth(url, body, false, true);
   }
+
+  static uploadSingleEbookFile(body) {
+    const url = '/api/admin/ebook/uploadEbook';
+    return Request.postWithAuth(url, body, false, true);
+  }
   static update(id, body) {
     const url = `/api/admin/ebook/${id}`;
     return Request.putWithAuth(url, body, false, true);
