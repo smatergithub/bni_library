@@ -122,7 +122,7 @@ function ListReserach(props) {
                 research.data.map((item, key) => {
                   let countFile = 0;
                   for (key in item) {
-                    if (key.indexOf('bab') - 1 == -1) {
+                    if (item[key] && key.indexOf('bab') - 1 == -1) {
                       countFile++;
                     }
                   }
@@ -168,7 +168,7 @@ function ListReserach(props) {
                                 marginTop: 4,
                               }}
                             ></i>
-                            <div className="pt-2 ml-2 text-sm">Jenis Skripsi</div>
+                            <div className="pt-2 ml-2 text-sm">Jenis Riset : {item.type}</div>
                           </div>
                           <div className="flex items-center  text-gray-700">
                             <i

@@ -141,7 +141,7 @@ function CreateNewRepo(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Jenis Skripsi
+                    Kategori Riset
                   </label>
                   <Checkbox.Group
                     style={{
@@ -175,6 +175,21 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="city"
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    aria-label="Email"
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Jenis Riset
+                  </label>
+                  <input
+                    name="type"
                     className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
