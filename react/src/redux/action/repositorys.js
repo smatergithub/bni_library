@@ -132,3 +132,19 @@ export const getRepositorysByUser = param => () => {
       return { resp: false, msg: msg };
     });
 };
+export const getDetailRepositoryByUser = id => () => {
+  return RepositoryApi.detailResearchByUser(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

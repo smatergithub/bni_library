@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
+import { getDetailRepositoryByUser } from '../../../../redux/action/repositorys';
 
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
@@ -27,14 +28,20 @@ function DetailResearch(props) {
 
   React.useEffect(() => {
     let { id } = parsed;
-    // setProcessing(true);
-    setResearch(researchMock);
+    setProcessing(true);
+    props.getDetailRepositoryByUser(id).then(res => {
+      if (res.resp) {
+        setProcessing(false);
+        setResearch(res.data);
+      }
+    });
   }, []);
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
 
   if (processing && research == null) return null;
+  console.log(research);
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
@@ -53,12 +60,12 @@ function DetailResearch(props) {
         </div>
         {research !== null && (
           <div class="flex  w-full">
-            <div class="flex  text-gray-700 bg-white px-20 py-10  m-2">
-              <div className="w-2/6 ">
+            <div class="flex w-full text-gray-700 bg-white px-20 py-10  m-2">
+              <div className="w-4/12 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${research.image.split('/').pop()}`}
-                    src={research.image}
+                    src={img}
                     alt=""
                     style={{
                       height: 310,
@@ -67,15 +74,15 @@ function DetailResearch(props) {
                   />
                 </div>
               </div>
-              <div className="w-4/6 px-5">
-                <div className="text-lg font-bold">{research.judul}</div>
+              <div className="w-8/12 px-5">
+                <div className="text-lg font-bold">{research.title}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
                   style={{
                     height: 1,
                   }}
                 ></div>
-                <div className="flex mt-3 ">
+                {/* <div className="flex mt-3 ">
                   <div className="flex items-center">
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />
@@ -84,80 +91,81 @@ function DetailResearch(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div>
                   <div> 4.48 (606,907 ratings by Goodreads)</div>
-                </div>
+                </div> */}
                 <div> Paperback | {research.bahasa}</div>
-                <div>{`By (author) ${research.pengarang}`}</div>
+                <div>{`By (author) ${research.name}`}</div>
                 <div className="py-1 font-bold">Description:</div>
                 <div>{research.description}</div>
               </div>
             </div>
           </div>
         )}
+        {research !== null && (
+          <div className="flex mt-5  w-full">
+            <div className="flex w-3/6 text-gray-700 bg-white px-20 py-10  m-2">
+              <div className="w-full px-5">
+                <div className="text-lg font-bold">Pengarang</div>
+                <div
+                  className="bg-gray-400 w-full mt-2"
+                  style={{
+                    height: 1,
+                  }}
+                ></div>
+                <div> Nama : {research.name}</div>
+                <div> Jenis : {research.type} </div>
+                <div> Penyunting : {research.editor} </div>
+                <div> Penerjemah : {research.translateBy} </div>
+              </div>
+            </div>
 
-        <div className="flex mt-5  w-full">
-          <div className="flex w-3/6 text-gray-700 bg-white px-20 py-10  m-2">
-            <div className="w-full px-5">
-              <div className="text-lg font-bold">Pengarang</div>
+            <div class="w-3/6  bg-white px-10 py-10 m-2">
+              <div className="text-lg font-bold">Penerbit</div>
               <div
-                className="bg-gray-400 w-full mt-2"
+                className="bg-gray-400 w-full mt-2 mb-2"
                 style={{
                   height: 1,
                 }}
               ></div>
-              <div> Nama : Budi Andriyoga</div>
-              <div> Jenis : Skripsi </div>
-              <div> Penyunting : Sakuragun </div>
-              <div> Penerjemah : Gennady </div>
+              <div> Nama : {research.university}</div>
+              <div> Kota : {research.city} </div>
+              <div> Tahun : {research.releaseYear}</div>
             </div>
-          </div>
+            <div class="w-3/6  bg-white px-10 py-10 m-2">
+              <div className="text-lg font-bold">Preview</div>
+              <div
+                className="bg-gray-400 w-full mt-2 mb-2"
+                style={{
+                  height: 1,
+                }}
+              ></div>
 
-          <div class="w-3/6  bg-white px-10 py-10 m-2">
-            <div className="text-lg font-bold">Penerbit</div>
-            <div
-              className="bg-gray-400 w-full mt-2 mb-2"
-              style={{
-                height: 1,
-              }}
-            ></div>
-            <div> Nama : Universitas Indonesia</div>
-            <div> Kota : Jakarta </div>
-            <div> Tahun : 2010</div>
-          </div>
-          <div class="w-3/6  bg-white px-10 py-10 m-2">
-            <div className="text-lg font-bold">Preview</div>
-            <div
-              className="bg-gray-400 w-full mt-2 mb-2"
-              style={{
-                height: 1,
-              }}
-            ></div>
-
-            <div className="flex mt-3 ">
-              <div className="flex items-center">
-                <i className="fas fa-link text-yellow-700" />
+              <div className="flex mt-3 ">
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700" />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
               </div>
-              <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-            </div>
-            <div className="flex mt-3 ">
-              <div className="flex items-center">
-                <i className="fas fa-link text-yellow-700" />
+              <div className="flex mt-3 ">
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700" />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
               </div>
-              <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-            </div>
-            <div className="flex mt-3 ">
-              <div className="flex items-center">
-                <i className="fas fa-link text-yellow-700 " />
+              <div className="flex mt-3 ">
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700 " />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
               </div>
-              <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-            </div>
-            <div className="flex mt-3 ">
-              <div className="flex items-center">
-                <i className="fas fa-link text-yellow-700 cursor-pointer" />
+              <div className="flex mt-3 ">
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700 cursor-pointer" />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
               </div>
-              <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
             </div>
           </div>
-        </div>
+        )}
       </section>
       {/* <Modal
         title="Authentication required"
@@ -172,4 +180,4 @@ function DetailResearch(props) {
     </div>
   );
 }
-export default withRouter(connect(null, {})(DetailResearch));
+export default withRouter(connect(null, { getDetailRepositoryByUser })(DetailResearch));

@@ -31,4 +31,9 @@ export default class RepositoryApi {
     const url = `/api/repository?page=${param.page}&limit=${param.limit}&category=${param.kategori}&title=${param.title}`;
     return Request.getWithAuth(url);
   }
+
+  static detailResearchByUser(id) {
+    const url = `/api/repository/${id}`;
+    return Request.getWithAuth(url);
+  }
 }

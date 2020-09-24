@@ -189,7 +189,7 @@ function ListReserach(props) {
                               bottom: '10px',
                             }}
                           >
-                            <Link to="/detail-riset">
+                            <Link to={`/detail-riset?id=${item.id}`}>
                               <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
                                 Detail
                               </button>
