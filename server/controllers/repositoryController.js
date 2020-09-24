@@ -6,13 +6,18 @@ const Op = Sequelize.Op;
 module.exports = {
   list: async (req, res) => {
     // queryStrings
-    let { q, order, category, sort, limit, page } = req.query;
+    let { q, order, title, category, sort, limit, page } = req.query;
 
     let paramQuerySQL = {};
     if (category != '' && typeof category !== 'undefined') {
       paramQuerySQL.where = {
-        category: {
-          [Op.like]: '%' + category + '%',
+        [Op.and]: {
+          category: {
+            [Op.like]: '%' + category + '%',
+          },
+          title: {
+            [Op.like]: '%' + title + '%',
+          },
         },
       };
     }
@@ -45,12 +50,11 @@ module.exports = {
 
     return Repositorys.findAndCountAll(paramQuerySQL)
       .then(repository => {
-        let activePage = Math.ceil(repository.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
+        let totalPage = Math.ceil(repository.count / paramQuerySQL.limit);
+
         res.status(200).json({
-          count: repository.count,
-          totalPage: activePage,
-          activePage: page,
+          totalPage: totalPage,
+          activePage: Number(page),
           data: repository.rows,
         });
       })
@@ -85,6 +89,8 @@ module.exports = {
         translateBy: req.body.translateBy,
         description: req.body.description,
         releaseYear: req.body.releaseYear,
+        type: req.body.type,
+        city: req.body.city,
         bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
         bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
         bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,
@@ -118,6 +124,8 @@ module.exports = {
               translateBy: req.body.translateBy,
               description: req.body.description,
               releaseYear: req.body.releaseYear,
+              type: req.body.type,
+              city: req.body.city,
               bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
               bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
               bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,
