@@ -15,6 +15,19 @@ export const signIn = user => dispatch => {
       return { resp: false, msg: msg };
     });
 };
+export const logout = () => dispatch => {
+  return UserApi.logout()
+    .then(res => {
+      if (res) {
+        dispatch({ type: SIGN_OUT });
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
 export const signUp = user => () => {
   return UserApi.register(user)
     .then(res => {
@@ -112,10 +125,6 @@ export const updateMe = data => () => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
-};
-
-export const signOut = () => dispatch => {
-  return dispatch({ type: SIGN_OUT });
 };
 
 export const getUsersListToAdmin = param => dispatch => {

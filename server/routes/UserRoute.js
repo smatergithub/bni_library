@@ -33,6 +33,7 @@ router.post(
   AuthenticationController.register
 );
 router.post('/login', AuthenticationController.login);
+router.get('/logout', AuthenticationController.logout);
 router.post('/verification', AuthenticationController.verificationAccount);
 router.post('/resetPassword', AuthenticationController.resetPassword);
 router.post('/updatePassword', AuthenticationController.updatePassword);

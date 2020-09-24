@@ -5,6 +5,10 @@ export default class UsersApi {
     const url = '/api/login';
     return Request.post(url, userData);
   }
+  static logout() {
+    const url = '/api/logout';
+    return Request.getWithAuth(url);
+  }
   static register(userData) {
     const url = '/api/register';
     return Request.post(url, userData);

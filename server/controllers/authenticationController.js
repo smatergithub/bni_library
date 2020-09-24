@@ -11,15 +11,16 @@ require('dotenv').config();
 
 module.exports = {
   register: async (req, res) => {
-    Users.scope('withPassword').create({
-      nama: req.body.nama,
-      email: req.body.email,
-      tanggalLahir: req.body.tanggalLahir,
-      password: bcrypt.hashSync(req.body.password, 8),
-      isVerified: false,
-      isAdmin: false,
-      superAdmin: false,
-    })
+    Users.scope('withPassword')
+      .create({
+        nama: req.body.nama,
+        email: req.body.email,
+        tanggalLahir: req.body.tanggalLahir,
+        password: bcrypt.hashSync(req.body.password, 8),
+        isVerified: false,
+        isAdmin: false,
+        superAdmin: false,
+      })
       .then(user => {
         var expireDate = new Date();
         expireDate.setDate(expireDate.getDate() + 1 / 24);
@@ -46,9 +47,10 @@ module.exports = {
   },
 
   verificationAccount: async (req, res) => {
-    Users.scope('withPassword').findOne({
-      where: { email: req.query.email },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: { email: req.query.email },
+      })
       .then(user => {
         if (user.isVerified) {
           return res.status(404).json({ message: 'Email Already verified' });
@@ -83,11 +85,12 @@ module.exports = {
   },
 
   login: async (req, res) => {
-    Users.scope('withPassword').findOne({
-      where: {
-        email: req.body.email,
-      },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: {
+          email: req.body.email,
+        },
+      })
       .then(user => {
         if (!user) {
           return res.status(404).send({ message: 'User Not found.' });
@@ -127,41 +130,43 @@ module.exports = {
   },
 
   resetPassword: async (req, res) => {
-    await Users.scope('withPassword').findOne({
-      where: {
-        email: req.body.email,
-      },
-    }).then(user => {
-      console.log('user', user);
-      VerificationToken.findOne({
+    await Users.scope('withPassword')
+      .findOne({
         where: {
-          userId: user.id,
+          email: req.body.email,
         },
-      }).then(verificationToken => {
-        var expireDate = new Date();
-        expireDate.setDate(expireDate.getDate() + 1 / 24);
-        verificationToken
-          .update({
-            resetToken: cryptoRandomString({ length: 20 }),
-            expiredDateResetToken: expireDate,
-          })
-          .then(response => {
-            res.status(200).json({
-              resetToken: response.resetToken,
-              expiredDateResetToken: response.expiredDateResetToken,
+      })
+      .then(user => {
+        VerificationToken.findOne({
+          where: {
+            userId: user.id,
+          },
+        }).then(verificationToken => {
+          var expireDate = new Date();
+          expireDate.setDate(expireDate.getDate() + 1 / 24);
+          verificationToken
+            .update({
+              resetToken: cryptoRandomString({ length: 20 }),
+              expiredDateResetToken: expireDate,
+            })
+            .then(response => {
+              res.status(200).json({
+                resetToken: response.resetToken,
+                expiredDateResetToken: response.expiredDateResetToken,
+              });
+            })
+            .catch(err => {
+              res.status(500).send({ message: err.message });
             });
-          })
-          .catch(err => {
-            res.status(500).send({ message: err.message });
-          });
+        });
       });
-    });
   },
 
   updatePassword: async (req, res) => {
-    Users.scope('withPassword').findOne({
-      where: { email: req.query.email },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: { email: req.query.email },
+      })
       .then(user => {
         VerificationToken.destroy({
           where: {
@@ -196,5 +201,9 @@ module.exports = {
       .catch(err => {
         return res.status(500).json({ message: err });
       });
+  },
+  logout: async (req, res) => {
+    res.cookie('access_token', { maxAge: 0 });
+    res.status(200).send({ message: 'success' });
   },
 };
