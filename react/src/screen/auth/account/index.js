@@ -1,5 +1,7 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Switch, Route, Link } from 'react-router-dom';
+import { logout } from '../../../redux/action/user';
 import Sidebar from './component/Sidebar';
 import Profile from './profile';
 import BorrowedBook from './borrowedBook';
@@ -31,9 +33,13 @@ const routes = [
 
 function Accounts(props) {
   const { match } = props;
-  function logout() {
-    localStorage.clear();
-    window.location.replace('/');
+  function logoutUser() {
+    props.logout().then(res => {
+      if (res.resp) {
+        localStorage.removeItem('bni_UserRole');
+        window.location.replace('/');
+      }
+    });
   }
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   return (
@@ -46,7 +52,7 @@ function Accounts(props) {
         </Link>
         <button
           className="lg:mx-0 hover:underline text-red-900 font-extrabold text-lg  rounded-sm h-10 px-5"
-          onClick={() => logout()}
+          onClick={() => logoutUser()}
         >
           LOGOUT
         </button>
@@ -77,4 +83,4 @@ function Accounts(props) {
     </div>
   );
 }
-export default Accounts;
+export default connect(null, { logout })(Accounts);

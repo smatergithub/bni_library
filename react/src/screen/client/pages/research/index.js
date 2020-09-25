@@ -1,8 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Modal } from '../../../../component';
 
 function Reserach(props) {
+  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let { history } = props;
+  function redirectToLogin() {
+    history.push('/auth/login');
+  }
+  let isUserLogged = localStorage.getItem('bni_UserRole') === null;
+
   return (
     <React.Fragment>
       <div className="pt-24">
@@ -15,11 +22,25 @@ function Reserach(props) {
               ini melakukan penelitian di BNI, tentunya mereka adalah Mahasiswa jenjang S1 dan S2.
               Jika ingin melakukan penelitian melengkapi kentuntuan di bawah.
             </p>
-            <Link to="/tambah-riset">
-              <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+
+            {!isUserLogged ? (
+              <Link to="/tambah-riset">
+                <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                  Upload Riset
+                </button>
+              </Link>
+            ) : (
+              <button
+                onClick={() => {
+                  if (isUserLogged) {
+                    setShowModalDeletion(true);
+                  }
+                }}
+                className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+              >
                 Upload Riset
               </button>
-            </Link>
+            )}
           </div>
 
           <div className="w-full md:w-2/5 py-6 text-center">
@@ -55,14 +76,31 @@ function Reserach(props) {
                       Kumpulan riset Mahasiswa yang melakukan dengan subjek di kantor pusat atau
                       divisi yang ada dalam satuan BNI
                     </p>
-                    <Link to="/daftar-riset?kategori=pusat">
-                      <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+
+                    {!isUserLogged ? (
+                      <Link to="/daftar-riset?kategori=pusat">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
                         Selengkapnya{' '}
                         <span>
                           <i className={`fas fa-arrow-right ml-3`} />
                         </span>
                       </button>
-                    </Link>
+                    )}
                   </div>
                 </div>
 
@@ -85,14 +123,30 @@ function Reserach(props) {
                       Kumpulan riset mahasiswa yang melakukan penelitian dengan subjek dikantor
                       wilayah atau ke unit yang ada dalam satuan BNI
                     </p>
-                    <Link to="/daftar-riset?kategori=wilayah">
-                      <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    {!isUserLogged ? (
+                      <Link to="/daftar-riset?kategori=wilayah">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
                         Selengkapnya{' '}
                         <span>
                           <i className={`fas fa-arrow-right ml-3`} />
                         </span>
                       </button>
-                    </Link>
+                    )}
                   </div>
                 </div>
               </div>
@@ -100,6 +154,16 @@ function Reserach(props) {
           </section>
         </div>
       </div>
+      <Modal
+        title="Authentication required"
+        open={showModalDeletion}
+        onCLose={() => {
+          setShowModalDeletion(false);
+        }}
+        handleSubmit={redirectToLogin}
+      >
+        <div className="my-5">Silahkan Login terlebih dahulu</div>
+      </Modal>
     </React.Fragment>
   );
 }

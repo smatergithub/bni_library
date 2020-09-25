@@ -39,7 +39,7 @@ function Profile(props) {
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Akun | Ebni</title>
+        <title>Akun | BNI</title>
       </Helmet>
       <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         Informasi Kontak

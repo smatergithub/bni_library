@@ -242,17 +242,6 @@ function ListReserach(props) {
             </nav>
           </div>
         )}
-
-        {/* <Modal
-          title="Authentication required"
-          open={showModalDeletion}
-          onCLose={() => {
-            setShowModalDeletion(false);
-          }}
-          handleSubmit={redirectToLogin}
-        >
-          <div className="my-5">Silahkan Login terlebih dahulu</div>
-        </Modal> */}
       </section>
     </main>
   );

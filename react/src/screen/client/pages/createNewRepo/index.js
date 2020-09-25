@@ -31,7 +31,7 @@ function CreateNewRepo(props) {
     props.CreateNewRepositoryUserAction(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
-        // props.history.push('/admin/repository');
+        props.history.push('/riset-sukses');
       } else {
         ToastError(res.msg);
       }

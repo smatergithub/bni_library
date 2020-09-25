@@ -17,6 +17,7 @@ import Order from './order';
 import ListResearch from './listResearch';
 import DetailResearch from './detailResearch';
 import AddNewResearch from './createNewRepo';
+import AddNewResearchSuccess from './researchSuccess';
 
 const routes = [
   {
@@ -48,6 +49,11 @@ const routes = [
     path: '/detail-riset',
     exact: false,
     main: <DetailResearch />,
+  },
+  {
+    path: '/riset-sukses',
+    exact: false,
+    main: <AddNewResearchSuccess />,
   },
   {
     path: '/tambah-riset',
