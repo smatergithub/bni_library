@@ -25,7 +25,7 @@ function Reserach(props) {
 
             {!isUserLogged ? (
               <Link to="/tambah-riset">
-                <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                   Upload Riset
                 </button>
               </Link>
@@ -36,7 +36,7 @@ function Reserach(props) {
                     setShowModalDeletion(true);
                   }
                 }}
-                className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
               >
                 Upload Riset
               </button>
@@ -79,7 +79,7 @@ function Reserach(props) {
 
                     {!isUserLogged ? (
                       <Link to="/daftar-riset?kategori=pusat">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                           Selengkapnya{' '}
                           <span>
                             <i className={`fas fa-arrow-right ml-3`} />
@@ -93,7 +93,7 @@ function Reserach(props) {
                             setShowModalDeletion(true);
                           }
                         }}
-                        className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                       >
                         Selengkapnya{' '}
                         <span>
@@ -125,7 +125,7 @@ function Reserach(props) {
                     </p>
                     {!isUserLogged ? (
                       <Link to="/daftar-riset?kategori=wilayah">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                           Selengkapnya{' '}
                           <span>
                             <i className={`fas fa-arrow-right ml-3`} />
@@ -139,7 +139,7 @@ function Reserach(props) {
                             setShowModalDeletion(true);
                           }
                         }}
-                        className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                       >
                         Selengkapnya{' '}
                         <span>

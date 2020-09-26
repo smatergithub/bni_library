@@ -42,7 +42,7 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
                   </button>
                   <button
                     onClick={() => handleSubmit()}
-                    className="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400"
+                    className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
                   >
                     Submit
                   </button>
