@@ -21,23 +21,12 @@ module.exports = (sequelize, DataTypes) => {
       lokasiPerpustakaan: DataTypes.STRING,
       status: DataTypes.STRING,
       sourceLink: DataTypes.STRING,
-      previewLink: DataTypes.STRING,
       fileEbook: DataTypes.STRING,
       image: DataTypes.STRING,
       countRating: DataTypes.INTEGER,
       condition: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
-    {
-      defaultScope: {
-        attributes: { exclude: ['sourceLink'] },
-      },
-      scopes: {
-        withSourceLink: {
-          attributes: {},
-        }
-      }
-    }
   );
   ebooks.associate = function (models) {
     // associations can be defined here
