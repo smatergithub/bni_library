@@ -12,20 +12,19 @@ module.exports = {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
 
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
+        [Op.and]: {
+          kategori: {
+            [Op.like]: '%' + kategori + '%',
+          },
+          judul: {
+            [Op.like]: '%' + judul + '%',
+          },
         },
       };
     }
+
 
     if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
       paramQuerySQL.where = {

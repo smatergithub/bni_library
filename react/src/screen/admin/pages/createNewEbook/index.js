@@ -27,6 +27,7 @@ function CreateNewEBook(props) {
   function onSubmit(formData) {
     if (!id) {
       if (ebookFile) {
+        formData['fileEbook'] = ebookFile;
       }
       formData['image'] = image;
       formData['condition'] = conditionValue == 'Baik' ? "Baik" : "Weeding";
@@ -103,9 +104,7 @@ function CreateNewEBook(props) {
       props.UploadSingleEbookFIle({ locationFile }).then(res => {
         if (res) {
           ToastSuccess(res.msg);
-          // setEbookFile(file);
-          console.log(res)
-          // setEbookFile(res.resp);
+          setEbookFile(res.resp);
         } else {
           ToastError(res.msg);
         }

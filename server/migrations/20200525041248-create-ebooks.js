@@ -44,6 +44,9 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      previewLink: {
+        type: Sequelize.STRING,
+      },
       fileEbook: {
         type: Sequelize.STRING,
       },
