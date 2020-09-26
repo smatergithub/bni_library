@@ -93,7 +93,7 @@ function Ebooks(props) {
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Ebook | Ebni</title>
+        <title>Ebook | E-BNI</title>
       </Helmet>
       <section className="bg-white py-8 ">
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
@@ -190,7 +190,7 @@ function Ebooks(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}
                   >
                     Detail

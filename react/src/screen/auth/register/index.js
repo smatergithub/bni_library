@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
+import { DatePicker, Input } from 'antd';
 import { Helmet } from 'react-helmet';
-import DatePicker from 'react-datepicker';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
 
+const dateFormat = 'DD/MM/YYYY';
 function Register(props) {
   let { history } = props;
   const [formData, setFormData] = useState({
@@ -36,22 +39,26 @@ function Register(props) {
     });
     // console.log(formData);
   }
+  function handleDate(e, date) {
+    console.log(date);
+    setDateBorn(date);
+  }
 
   return (
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Registrasi | Ebni</title>
+        <title>Registrasi | E-BNI</title>
       </Helmet>
       <section className="absolute w-full h-full">
         <div
-          className="absolute top-0 w-full h-full bg-gray-900"
+          className="absolute top-0 w-full h-full bg-orange-500"
           // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
         ></div>
         <div className="container mx-auto px-4 h-full">
           <div className="flex content-center items-center justify-center h-full">
-            <div className="w-full lg:w-5/12 px-4">
-              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300 border-0">
+            <div className="w-full lg:w-4/12 px-4">
+              <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
                 <div className="rounded-t mb-0 px-6 py-6">
                   <div className="text-center mb-3">
                     <h4 className="text-gray-600 text-sm font-bold">Register</h4>
@@ -88,7 +95,7 @@ function Register(props) {
                         <input
                           type="text"
                           onChange={e => setFormData({ ...formData, nama: e.target.value })}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                           placeholder="Nama"
                           style={{
                             transition: 'all 0.15s ease 0s',
@@ -105,7 +112,7 @@ function Register(props) {
                         <input
                           type="email"
                           onChange={e => setFormData({ ...formData, email: e.target.value })}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                           placeholder="Email"
                           style={{
                             transition: 'all 0.15s ease 0s',
@@ -120,10 +127,18 @@ function Register(props) {
                           Tanggal Lahir
                         </label>
                         <DatePicker
+                          style={{
+                            height: 45,
+                          }}
+                          defaultValue={moment('15/01/2010', dateFormat)}
+                          format={dateFormat}
+                          onChange={handleDate}
+                        />
+                        {/* <DatePicker
                           selected={dateBorn}
                           onChange={setDateBorn}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                        />
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                        /> */}
                       </div>
                       <div className="relative w-full mb-3">
                         <label
@@ -132,14 +147,15 @@ function Register(props) {
                         >
                           Password
                         </label>
-                        <input
-                          type="password"
-                          onChange={e => setFormData({ ...formData, password: e.target.value })}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                          placeholder="Password"
+                        <Input.Password
                           style={{
-                            transition: 'all 0.15s ease 0s',
+                            height: 45,
                           }}
+                          onChange={e => setFormData({ ...formData, password: e.target.value })}
+                          placeholder="input password"
+                          iconRender={visible =>
+                            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                          }
                         />
                       </div>
                       <div className="relative w-full mb-3">
@@ -149,22 +165,23 @@ function Register(props) {
                         >
                           Konfirmasi Password
                         </label>
-                        <input
+                        <Input.Password
+                          style={{
+                            height: 45,
+                          }}
                           onChange={e =>
                             setFormData({ ...formData, confirmPassword: e.target.value })
                           }
-                          type="password"
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                          placeholder="Password"
-                          style={{
-                            transition: 'all 0.15s ease 0s',
-                          }}
+                          placeholder="input password"
+                          iconRender={visible =>
+                            visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                          }
                         />
                       </div>
 
                       <div className="text-center mt-10">
                         <button
-                          className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                          className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                           type="submit"
                           style={{
                             transition: 'all 0.15s ease 0s',

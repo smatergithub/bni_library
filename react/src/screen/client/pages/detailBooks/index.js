@@ -45,7 +45,7 @@ function DetailBooks(props) {
       <section className="py-16 lg:py-24 w-full">
         <Helmet>
           <meta charSet="utf-8" />
-          <title>Detail Buku | Ebni</title>
+          <title>Detail Buku | E-BNI</title>
         </Helmet>
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
@@ -120,9 +120,9 @@ function DetailBooks(props) {
                     props.history.push(`/order?id=${books.book.id}&type=book`);
                   }
                 }}
-                className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
               >
-                Pesan Sekarang
+                Pinjam Sekarang
               </button>
               <button
                 onClick={() => {

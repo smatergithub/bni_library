@@ -85,7 +85,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="name"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     required=""
                     aria-label="Name"
@@ -100,7 +100,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="editor"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     required=""
                     aria-label="Name"
@@ -115,7 +115,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="translateBy"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     required=""
                     aria-label="Name"
@@ -130,7 +130,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="title"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -159,7 +159,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="university"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -175,7 +175,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="city"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -190,7 +190,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="type"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -284,7 +284,7 @@ function CreateNewRepo(props) {
                   </label>
                   <textarea
                     name="description"
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none border"
                     rows="6"
                     ref={register({
                       required: 'Field tidak boleh kosong',

@@ -92,7 +92,7 @@ function Books(props) {
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Buku | Ebni</title>
+        <title>Buku | E-BNI</title>
       </Helmet>
       <section className="bg-white py-8 ">
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
@@ -121,6 +121,9 @@ function Books(props) {
 
                 <div className="text-gray-800 px-1 bg-purple-white ">
                   <Search
+                    style={{
+                      borderRadius: '10px',
+                    }}
                     placeholder="Masukkan Judul"
                     id="searchBook"
                     enterButton="Cari"
@@ -187,7 +190,7 @@ function Books(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
                     onClick={() => history.push(`/detail-book?id=${book.id}`)}
                   >
                     Detail

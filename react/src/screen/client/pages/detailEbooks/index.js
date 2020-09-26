@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
@@ -39,6 +40,10 @@ function DetailEbooks(props) {
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Detail Ebook | E-BNI</title>
+      </Helmet>
       <section className="py-16 lg:py-24 w-full">
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
@@ -113,9 +118,9 @@ function DetailEbooks(props) {
                     props.history.push(`/order?id=${ebooks.id}&type=ebook`);
                   }
                 }}
-                className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
               >
-                Pesan Sekarang
+                Pinjam Sekarang
               </button>
               <button
                 className={`w-full  ${

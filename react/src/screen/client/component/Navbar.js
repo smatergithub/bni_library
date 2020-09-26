@@ -141,8 +141,10 @@ function NavBar(props) {
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
-                      className={`relative inline-block text-sm text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
-                        selectedMenu === rt.params ? 'border-b-2 border-gray-900' : ''
+                      className={`relative inline-block text-sm ${
+                        selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
+                      } no-underline hover:text-gray-500  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
                       } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
                       <div className="relative">
@@ -174,7 +176,7 @@ function NavBar(props) {
               )}
               {!props.isAuth && (
                 <Link to="/auth/login">
-                  <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
+                  <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
                     Masuk
                   </button>
                 </Link>
