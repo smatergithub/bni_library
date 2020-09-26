@@ -138,7 +138,6 @@ module.exports = {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
 
-
         res.status(200).json({
           count: book.count,
           totalPage: totalPage,
