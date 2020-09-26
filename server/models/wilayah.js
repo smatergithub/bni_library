@@ -8,7 +8,9 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV4,
     },
     codeWilayah: DataTypes.STRING,
-    wilayah: DataTypes.STRING
+    wilayah: DataTypes.STRING,
+    alamat: DataTypes.STRING,
+    linkGoogleMap: DataTypes.STRING,
   }, {});
   wilayah.associate = function (models) {
     // associations can be defined here

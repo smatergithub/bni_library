@@ -14,6 +14,12 @@ module.exports = {
       wilayah: {
         type: Sequelize.STRING
       },
+      alamat: {
+        type: Sequelize.STRING
+      },
+      linkGoogleMap: {
+        type: Sequelize.STRING
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

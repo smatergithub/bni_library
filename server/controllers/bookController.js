@@ -12,17 +12,15 @@ module.exports = {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
 
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
+        [Op.and]: {
+          kategori: {
+            [Op.like]: '%' + kategori + '%',
+          },
+          judul: {
+            [Op.like]: '%' + judul + '%',
+          },
         },
       };
     }
@@ -137,7 +135,6 @@ module.exports = {
       .then(book => {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
-
 
         res.status(200).json({
           count: book.count,

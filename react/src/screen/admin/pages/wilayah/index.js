@@ -1,11 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getWilayah, DeleteWilayahAction, EditWilayahAction, CreateNewWilayahAction } from "../../../../redux/action/wilayah";
+import {
+  getWilayah,
+  DeleteWilayahAction,
+  EditWilayahAction,
+  CreateNewWilayahAction,
+} from '../../../../redux/action/wilayah';
 import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+import CreateEditWilayahModal from './createEditWilayahModal';
 
 const Wilayah = props => {
   const [loading, setLoading] = React.useState(false);
@@ -56,7 +62,6 @@ const Wilayah = props => {
     retrieveDataWilayah(filterOptions);
   }, [filterOptions]);
 
-
   const getDetailWilayah = (id, MakeAdmin) => {
     const { wilayah } = props;
     let detailData = wilayah.data.filter(item => item.id === id);
@@ -67,7 +72,6 @@ const Wilayah = props => {
       setShowModalDeletion(true);
     }
   };
-
 
   const handleDeleteWilayah = () => {
     setLoading(true);
@@ -97,30 +101,32 @@ const Wilayah = props => {
       displayName: 'Wilayah',
     },
     {
+      name: 'alamat',
+      displayName: 'Alamat',
+    },
+    {
       name: 'actions',
       displayName: 'Actions',
       customRender: rowData => {
         return (
           <React.Fragment>
-            {!props.me ? null : props.me.superAdmin ? (
-              <React.Fragment>
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                  onClick={() => getDetailWilayah(rowData.id, 'edit')}
-                >
-                  edit
+            <React.Fragment>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailWilayah(rowData.id, 'edit')}
+              >
+                edit
                 </button>
-                <button
-                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  onClick={() => getDetailWilayah(rowData.id, 'delete')}
-                >
-                  Delete
+              <button
+                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                onClick={() => getDetailWilayah(rowData.id, 'delete')}
+              >
+                Delete
                 </button>{' '}
-              </React.Fragment>
-            ) : null}
+            </React.Fragment>
           </React.Fragment>
         );
       },
@@ -132,14 +138,16 @@ const Wilayah = props => {
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1>
         <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
-          <Link to="/admin/add-new-wilayah">
-            <button
-              type="button"
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-            >
-              <i className="fas fa-plus mr-3" /> Tambah Wilayah
-            </button>
-          </Link>
+          <button
+            type="button"
+            className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            onClick={() => {
+              setDetailData({});
+              setShowModalDetail(true);
+            }}
+          >
+            <i className="fas fa-plus mr-3" /> Tambah Wilayah
+          </button>
         </div>
         {wilayah.data !== undefined ? (
           <Table
@@ -164,14 +172,21 @@ const Wilayah = props => {
       >
         <div className="my-5">Anda yakin untuk menghapus wilayah ini?</div>
       </Modal>
-
+      <CreateEditWilayahModal
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </div>
   );
 };
 
 let mapStateToProps = state => {
   return {
-    wilayah: state.wilayah.wilayah
+    wilayah: state.wilayah.wilayah,
   };
 };
 
@@ -179,5 +194,5 @@ export default connect(mapStateToProps, {
   getWilayah,
   DeleteWilayahAction,
   EditWilayahAction,
-  CreateNewWilayahAction
+  CreateNewWilayahAction,
 })(Wilayah);

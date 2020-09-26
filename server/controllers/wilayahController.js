@@ -78,7 +78,9 @@ module.exports = {
 
     return Wilayah.create({
       codeWilayah: req.body.codeWilayah,
-      wilayah: req.body.wilayah
+      wilayah: req.body.wilayah,
+      alamat: req.body.alamat,
+      linkGoogleMap: req.body.linkGoogleMap
     })
       .then(response =>
         res.status(201).json({ message: 'successfully create wilayah', data: response })
@@ -95,7 +97,9 @@ module.exports = {
         return wilayah
           .update({
             codeWilayah: req.body.codeWilayah,
-            wilayah: req.body.wilayah
+            wilayah: req.body.wilayah,
+            alamat: req.body.alamat,
+            linkGoogleMap: req.body.linkGoogleMap,
           })
           .then(response =>
             res.status(200).json({ message: 'successfully update wilayah', data: response })
