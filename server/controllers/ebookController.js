@@ -1,7 +1,9 @@
 const Ebooks = require('../models/').ebooks;
-const ListBorrowEbook = require("../models").listBorrowEbook
-const UploadFile = require("../models").uploadFile
+const ListBorrowEbook = require('../models').listBorrowEbook;
+const UploadFile = require('../models').uploadFile;
 const Sequelize = require('sequelize');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const fetch = require('node-fetch');
 const Op = Sequelize.Op;
 require('dotenv').config();
 
@@ -24,7 +26,6 @@ module.exports = {
         },
       };
     }
-
 
     if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
       paramQuerySQL.where = {
@@ -70,7 +71,55 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+  getEbookPreviewById: async (req, res) => {
+    return Ebooks.findByPk(req.params.id)
+      .then(ebook => {
+        if (!ebook) {
+          return res.status(404).send({
+            message: 'Ebook Not Found',
+          });
+        } else {
+          async function copyPages() {
+            // Fetch first existing PDF document
+            const url1 = 'http://localhost:2000/img/document/locationFile-1601189004125.pdf';
+            const firstDonorPdfBytes = await fetch(url1).then(res => res.arrayBuffer());
 
+            // // Fetch second existing PDF document
+            // const url2 = 'https://pdf-lib.js.org/assets/with_large_page_count.pdf';
+            // const secondDonorPdfBytes = await fetch(url2).then(res => res.arrayBuffer());
+
+            // // Load a PDFDocument from each of the existing PDFs
+            const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
+            // const secondDonorPdfDoc = await PDFDocument.load(secondDonorPdfBytes);
+
+            // Create a new PDFDocument
+            const pdfDoc = await PDFDocument.create();
+
+            // Copy the 1st page from the first donor document, and
+            // the 743rd page from the second donor document
+            const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [2]);
+            // const [secondDonorPage] = await pdfDoc.copyPages(secondDonorPdfDoc, [742]);
+
+            // Add the first copied page
+            pdfDoc.addPage(firstDonorPage);
+
+            // Insert the second copied page to index 0, so it will be the
+            // first page in `pdfDoc`
+            // pdfDoc.insertPage(0, secondDonorPage);
+
+            // Serialize the PDFDocument to bytes (a Uint8Array)
+            const pdfBytes = await pdfDoc.save();
+            res.type('pdf');
+            var array = Array.from(pdfBytes);
+            console.log(ebook.sourceLink);
+
+            res.status(200).send(array);
+          }
+          copyPages();
+        }
+      })
+      .catch(error => res.status(500).send(error));
+  },
   getEbookById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
       .then(ebook => {
@@ -164,8 +213,6 @@ module.exports = {
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
-
-
     return Ebooks.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
@@ -187,19 +234,18 @@ module.exports = {
     })
       .then(response => {
         const createListBorrowEbook = ListBorrowEbook.create({
-          EbookId: response.id
-        })
+          EbookId: response.id,
+        });
 
         if (!createListBorrowEbook) {
-          return res.status(404).send("Failed create Ebook");
+          return res.status(404).send('Failed create Ebook');
         }
 
         return res.status(201).json({
-          message: "Process Succesfully create Ebook",
-          data: response
+          message: 'Process Succesfully create Ebook',
+          data: response,
         });
       })
-
 
       .catch(err => res.status(500).send(err));
   },
@@ -208,20 +254,20 @@ module.exports = {
     if (!req.file) {
       res.send({
         status: false,
-        message: 'No file uploaded'
+        message: 'No file uploaded',
       });
     }
     let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
     UploadFile.create({
-      locationFile: locationFileEbook
+      locationFile: locationFileEbook,
     })
       .then(response => {
         return res.status(201).json({
-          message: "Process Succesfully Upload file",
-          data: response
+          message: 'Process Succesfully Upload file',
+          data: response,
         });
-      }).catch(error => res.status(500).send(error));
-
+      })
+      .catch(error => res.status(500).send(error));
   },
 
   uploadEbook: async (req, res) => {
@@ -262,12 +308,12 @@ module.exports = {
         });
 
         Ebooks.bulkCreate(Databooks)
-          .then((response) => {
+          .then(response => {
             response.map(item => {
               return ListBorrowEbook.create({
-                ebookId: item.id
-              })
-            })
+                ebookId: item.id,
+              });
+            });
             return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });

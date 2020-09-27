@@ -111,8 +111,9 @@ function CreateNewEBook(props) {
     if (ebookFile) {
       return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
         if (res) {
+          console.log(res);
           if (type === 'add') {
-            formData['sourceLink'] = res.resp;
+            formData['sourceLink'] = res.data.data.locationFile;
             props.CreateNewEbookAction(formData).then(res => {
               if (res.resp) {
                 ToastSuccess(res.msg);
@@ -122,7 +123,7 @@ function CreateNewEBook(props) {
               }
             });
           } else {
-            formData['sourceLink'] = res.resp;
+            formData['sourceLink'] = res.data.data.locationFile;
             props.EditEbookAction(id, formData).then(res => {
               if (res.resp) {
                 ToastSuccess(res.msg);

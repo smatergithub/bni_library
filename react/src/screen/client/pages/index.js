@@ -13,6 +13,7 @@ import Home from './home';
 import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
+import EbookPreview from './ebookPreview';
 import Order from './order';
 import ListResearch from './listResearch';
 import DetailResearch from './detailResearch';
@@ -69,6 +70,11 @@ const routes = [
     path: '/books',
     exact: false,
     main: <Books />,
+  },
+  {
+    path: '/ebook-preview',
+    exact: false,
+    main: <EbookPreview />,
   },
   {
     path: '/ebooks',

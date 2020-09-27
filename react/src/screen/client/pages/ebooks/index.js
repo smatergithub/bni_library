@@ -211,12 +211,13 @@ function Ebooks(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    onClick={() => {
-                      setShowPreview({
-                        open: true,
-                        file: null,
-                      });
-                    }}
+                    // onClick={() => {
+                    //   setShowPreview({
+                    //     open: true,
+                    //     file: null,
+                    //   });
+                    // }}
+                    onClick={() => history.push(`/ebook-preview?id=${ebook.id}`)}
                     className={`w-full bg-white text-gray-800
                   rounded-lg my-1 py-2 px-10 border mt-2  border-gray-600
                 `}
