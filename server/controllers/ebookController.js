@@ -230,7 +230,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header

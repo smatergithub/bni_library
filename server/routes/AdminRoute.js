@@ -16,6 +16,8 @@ router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
 router.post('/manage-user/userIntoAdmin/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
 router.post('/manage-user/delete/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.deleteUser);
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList)
+
+
 //routing admin panel feature
 
 
