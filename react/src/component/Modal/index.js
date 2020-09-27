@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Modal({ open, title, onCLose, handleSubmit, children, large, usingForDetail }) {
+export default function Modal({ open, title, onCLose, handleSubmit, children, large, usingForDetail, usingAnotherButton }) {
   return (
     <>
       {open ? (
@@ -32,20 +32,24 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
                   </div>
                 </div>
                 {children}
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={() => onCLose()}
-                    className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                  >
-                    Close
+                {usingAnotherButton ? null :
+                  <div className="flex justify-end pt-2">
+                    <button
+                      onClick={() => onCLose()}
+                      className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                    >
+                      Close
                   </button>
-                  {usingForDetail ? null : <button
-                    onClick={() => handleSubmit()}
-                    className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
-                  >
-                    Submit
-                  </button>}
-                </div>
+                    {usingForDetail ? null : <button
+                      onClick={() => handleSubmit()}
+                      className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
+                    >
+                      Submit
+                  </button>
+                    }
+                  </div>
+                }
+
               </div>
             </div>
           </div>

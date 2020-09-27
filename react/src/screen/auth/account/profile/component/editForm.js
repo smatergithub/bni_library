@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
 // import { moment } from 'moment';
 import DatePicker from 'react-datepicker';
-import { updateMe } from '../../../../../redux/action/user';
+import { Input, Select } from 'antd';
+import { updateMe, getWilayah } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
+const { Option } = Select;
 
 function EditUser(props) {
+  const [dataWilayah, setDataWilayah] = React.useState([]);
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
@@ -25,8 +28,21 @@ function EditUser(props) {
         ToastError(res.msg);
       }
     });
-    // console.log(formData);
   }
+
+  const getWilayah = () => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
+        return { label: item.wilayah, value: item.id }
+      })
+      setDataWilayah(data)
+    })
+  }
+
+  React.useEffect(() => {
+    getWilayah();
+  }, [])
+
   let { user } = props;
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg pl-10 relative">
@@ -74,7 +90,17 @@ function EditUser(props) {
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Wilayah
               </label>
-              <input
+              <Select
+                defaultValue={user.wilayah}
+                style={{ width: 120 }}
+                ref={register()}
+                className="category"
+              >
+                {dataWilayah.map(op => {
+                  return <Option value={op.label}>{op.label}</Option>;
+                })}
+              </Select>
+              {/* <input
                 defaultValue={user.wilayah}
                 ref={register()}
                 type="text"
@@ -83,7 +109,7 @@ function EditUser(props) {
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
-              />
+              /> */}
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
@@ -190,4 +216,4 @@ const mapStateToProps = state => {
     user: state.users.me,
   };
 };
-export default connect(mapStateToProps, { updateMe })(EditUser);
+export default connect(mapStateToProps, { updateMe, getWilayah })(EditUser);

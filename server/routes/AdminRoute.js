@@ -44,7 +44,7 @@ router.post('/repository', [AuthJWT.verifyToken], RepositoryController.add);
 router.put('/repository/:id', [AuthJWT.verifyToken], RepositoryController.update);
 router.delete('/repository/:id', [AuthJWT.verifyToken], RepositoryController.delete);
 
-router.post('/wilayah', [AuthJWT.isAdmin], WilayahController.list);
+router.post('/wilayah', WilayahController.list);
 router.get('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.getById);
 router.post('/wilayah/create', [AuthJWT.isAdmin], WilayahController.add);
 router.put('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.update);
