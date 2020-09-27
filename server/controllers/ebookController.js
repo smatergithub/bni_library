@@ -72,20 +72,14 @@ module.exports = {
   },
 
   getEbookById: async (req, res) => {
-    let paramQuerySQL = {
-      include: ['ebook', 'transactionEbook', 'user'],
-      where: {
-        bookId: req.params.id,
-      },
-    };
-    return await ListBorrowEbook.findAll(paramQuerySQL)
+    return Ebooks.findByPk(req.params.id)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'ebook Not Found',
+            message: 'Ebook Not Found',
           });
         }
-        return res.status(200).send(ebook[0]);
+        return res.status(200).send(ebook);
       })
       .catch(error => res.status(500).send(error));
   },
@@ -149,14 +143,20 @@ module.exports = {
   },
 
   getById: async (req, res) => {
-    return Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        ebookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'Ebook Not Found',
+            message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },
