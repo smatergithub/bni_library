@@ -5,11 +5,13 @@ import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
+import ModalDetailBook from "./modalDetailBook";
 
 const Books = props => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
+  const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
@@ -30,10 +32,13 @@ const Books = props => {
       });
   };
 
-  const getDetailDataBook = id => {
-    const { books } = props;
-    let detailData = books.data.filter(item => item.id === id);
-    setDetailData(detailData[0]);
+  const getDetailDataBook = data => {
+    setDetailData(data);
+    setShowModalDetail(true);
+  };
+
+  const getDetailDataDeleteBook = data => {
+    setDetailData(data);
     setShowModalDeletion(true);
   };
 
@@ -98,14 +103,14 @@ const Books = props => {
         return data
       },
     },
-    {
-      name: 'stockBuku',
-      displayName: 'Stock Buku',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.stockBuku;
-        return data
-      },
-    },
+    // {
+    //   name: 'stockBuku',
+    //   displayName: 'Stock Buku',
+    //   customRender: rowData => {
+    //     let data = rowData.book && rowData.book.stockBuku;
+    //     return data
+    //   },
+    // },
     {
       name: 'status',
       displayName: 'Status',
@@ -121,6 +126,14 @@ const Books = props => {
         return (
           <React.Fragment>
             <React.Fragment>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailDataBook(rowData)}
+              >
+                detail
+                </button>
               <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -133,7 +146,7 @@ const Books = props => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailDataBook(rowData.book.id)}
+                onClick={() => getDetailDataDeleteBook(rowData.book)}
               >
                 Delete
               </button>
@@ -185,6 +198,14 @@ const Books = props => {
       >
         <div className="my-5">Anda yakin untuk menghapus Buku ini?</div>
       </Modal>
+      <ModalDetailBook
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </div>
   );
 };

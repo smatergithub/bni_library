@@ -331,10 +331,15 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-        return ebook
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            ebook
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          })
+        })
+
       })
       .catch(error => res.status(500).send(error));
   },
