@@ -67,7 +67,7 @@ const Wilayah = props => {
     let detailData = wilayah.data.filter(item => item.id === id);
     setDetailData(detailData[0]);
     if (MakeAdmin === 'edit') {
-      // console.log("test")
+      setShowModalDetail(true)
     } else {
       setShowModalDeletion(true);
     }

@@ -3,11 +3,11 @@ import Request from '../../utils/request';
 export default class WilayahApi {
   static create(body) {
     const url = '/api/admin/wilayah/create';
-    return Request.postWithAuth(url, body, false, true);
+    return Request.postWithAuth(url, body, false, false);
   }
   static update(id, body) {
     const url = `/api/admin/wilayah/${id}`;
-    return Request.putWithAuth(url, body, false, true);
+    return Request.putWithAuth(url, body, false, false);
   }
   static list(body) {
     const url = `/api/admin/wilayah`;

@@ -276,7 +276,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header
@@ -377,10 +377,15 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-        return ebook
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            ebook
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          })
+        })
+
       })
       .catch(error => res.status(500).send(error));
   },
