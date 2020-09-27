@@ -66,3 +66,8 @@
 .ant-space-vertical {
   width: 100% !important;
 }
+.react-pdf__Document.custom-pdf {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

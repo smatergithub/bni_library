@@ -11,7 +11,7 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
           >
             <div
               className={`modal-container bg-white ${
-                large ? '' : 'w-11/12 md:max-w-md'
+                large ? 'w-11/12 max-w-5xl' : 'w-11/12 md:max-w-md'
               } rounded shadow-lg  overflow-y-auto`}
               style={{
                 width: '90% !important',

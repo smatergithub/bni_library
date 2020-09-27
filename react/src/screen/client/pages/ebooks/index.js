@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import { getCategory } from 'redux/action/bookUser';
+import pdfFile from '../../../../assets/test.pdf';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -14,7 +16,12 @@ function Ebooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-
+  let [showPreview, setShowPreview] = React.useState({
+    open: false,
+    file: null,
+  });
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     limit: 8,
@@ -42,6 +49,7 @@ function Ebooks(props) {
     });
   }
   React.useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     setProcessing(true);
     getAllEbook(pagination);
     getEbookCategory();
@@ -66,6 +74,11 @@ function Ebooks(props) {
       }
     }
   }
+  function onDocumentLoadSuccess({ numPages }) {
+    // setNumPages(numPages);
+    console.log(numPages);
+  }
+
   React.useEffect(() => {
     getAllEbook(pagination);
   }, [pagination]);
@@ -96,6 +109,14 @@ function Ebooks(props) {
         <title>Ebook | E-BNI</title>
       </Helmet>
       <section className="bg-white py-8 ">
+        {/* <div>
+          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <p>
+            Page {pageNumber} of {numPages}
+          </p>
+        </div> */}
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0  py-3 mt-16">
@@ -190,7 +211,20 @@ function Ebooks(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                    onClick={() => {
+                      setShowPreview({
+                        open: true,
+                        file: null,
+                      });
+                    }}
+                    className={`w-full bg-white text-gray-800
+                  rounded-lg my-1 py-2 px-10 border mt-2  border-gray-600
+                `}
+                  >
+                    Lihat Preview
+                  </button>
+                  <button
+                    className="w-full bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}
                   >
                     Detail
@@ -247,6 +281,76 @@ function Ebooks(props) {
           handleSubmit={redirectToLogin}
         >
           <div className="my-5">Silahkan Login terlebih dahulu</div>
+        </Modal>
+        <Modal
+          title="Preview"
+          large={true}
+          open={showPreview.open}
+          onCLose={() => {
+            setShowPreview({
+              open: false,
+              file: null,
+            });
+          }}
+          handleSubmit={() => {
+            setShowPreview({
+              open: false,
+              file: null,
+            });
+          }}
+        >
+          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess} className="custom-pdf">
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <div className="flex justify-center  mt-10">
+            <nav className="relative z-0 inline-flex shadow-sm">
+              <div
+                onClick={() => {
+                  if (pageNumber < 2) {
+                    return;
+                  } else {
+                    setPageNumber(pageNumber - 1);
+                  }
+                }}
+                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Previous"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+              <div
+                href="#"
+                className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
+              >
+                {pageNumber} of {10}
+              </div>
+
+              <div
+                onClick={() => {
+                  if (pageNumber > 9) {
+                    return;
+                  } else {
+                    setPageNumber(pageNumber + 1);
+                  }
+                }}
+                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                aria-label="Next"
+              >
+                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    clipRule="evenodd"
+                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </div>
+            </nav>
+          </div>
         </Modal>
       </section>
     </main>
