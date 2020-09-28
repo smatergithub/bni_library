@@ -81,27 +81,31 @@ module.exports = {
         } else {
           async function copyPages() {
             // Fetch first existing PDF document
-            const url1 = 'http://localhost:2000/img/document/locationFile-1601189004125.pdf';
-            const firstDonorPdfBytes = await fetch(url1).then(res => res.arrayBuffer());
 
-            // // Fetch second existing PDF document
-            // const url2 = 'https://pdf-lib.js.org/assets/with_large_page_count.pdf';
-            // const secondDonorPdfBytes = await fetch(url2).then(res => res.arrayBuffer());
-
-            // // Load a PDFDocument from each of the existing PDFs
+            const firstDonorPdfBytes = await fetch(ebook.sourceLink).then(res => res.arrayBuffer());
             const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
-            // const secondDonorPdfDoc = await PDFDocument.load(secondDonorPdfBytes);
 
             // Create a new PDFDocument
+
             const pdfDoc = await PDFDocument.create();
-
-            // Copy the 1st page from the first donor document, and
-            // the 743rd page from the second donor document
-            const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [2]);
-            // const [secondDonorPage] = await pdfDoc.copyPages(secondDonorPdfDoc, [742]);
-
-            // Add the first copied page
-            pdfDoc.addPage(firstDonorPage);
+            if (firstDonorPdfDoc.getPageCount() > 10) {
+              // Copy the 1st page from the first donor document, and
+              for (let i = 0; i < 10; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else if (firstDonorPdfDoc.getPageCount() > 5) {
+              for (let i = 0; i < 2; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else {
+              const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [0]);
+              // Add the first copied page
+              pdfDoc.addPage(firstDonorPage);
+            }
 
             // Insert the second copied page to index 0, so it will be the
             // first page in `pdfDoc`
@@ -383,9 +387,8 @@ module.exports = {
               .destroy()
               .then(() => res.status(200).send({ message: 'succesfully delete' }))
               .catch(error => res.status(404).send(error));
-          })
-        })
-
+          });
+        });
       })
       .catch(error => res.status(500).send(error));
   },

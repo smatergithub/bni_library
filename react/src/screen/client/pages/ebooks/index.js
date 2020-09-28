@@ -8,7 +8,7 @@ import { NoData, Modal } from '../../../../component';
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import { getCategory } from 'redux/action/bookUser';
-import pdfFile from '../../../../assets/test.pdf';
+import Preview from './component/preview';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -211,13 +211,13 @@ function Ebooks(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    // onClick={() => {
-                    //   setShowPreview({
-                    //     open: true,
-                    //     file: null,
-                    //   });
-                    // }}
-                    onClick={() => history.push(`/ebook-preview?id=${ebook.id}`)}
+                    onClick={() => {
+                      setShowPreview({
+                        open: true,
+                        file: ebook.id,
+                      });
+                    }}
+                    // onClick={() => history.push(`/ebook-preview?id=${ebook.id}`)}
                     className={`w-full bg-white text-gray-800
                   rounded-lg my-1 py-2 px-10 border mt-2  border-gray-600
                 `}
@@ -300,58 +300,7 @@ function Ebooks(props) {
             });
           }}
         >
-          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess} className="custom-pdf">
-            <Page pageNumber={pageNumber} />
-          </Document>
-          <div className="flex justify-center  mt-10">
-            <nav className="relative z-0 inline-flex shadow-sm">
-              <div
-                onClick={() => {
-                  if (pageNumber < 2) {
-                    return;
-                  } else {
-                    setPageNumber(pageNumber - 1);
-                  }
-                }}
-                className="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                aria-label="Previous"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    clipRule="evenodd"
-                    d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div
-                href="#"
-                className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
-              >
-                {pageNumber} of {10}
-              </div>
-
-              <div
-                onClick={() => {
-                  if (pageNumber > 9) {
-                    return;
-                  } else {
-                    setPageNumber(pageNumber + 1);
-                  }
-                }}
-                className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
-                aria-label="Next"
-              >
-                <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    clipRule="evenodd"
-                    d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-            </nav>
-          </div>
+          <Preview id={showPreview.file} />
         </Modal>
       </section>
     </main>

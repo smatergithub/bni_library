@@ -1,15 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { getEbookPreview } from '../../../../redux/action/ebookUser';
-import pdfFile from '../../../../assets/test.pdf';
-import ebooks from 'redux/reducer/modules/ebooks';
 
 function EbookPreview(props) {
   const parsed = queryString.parse(props.location.search);
-  const [ebook, setEbook] = React.useState(null);
+  const [ebook, setEbook] = useState(null);
   function onDocumentLoadSuccess({ numPages }) {
     // setNumPages(numPages);
     console.log(numPages);
