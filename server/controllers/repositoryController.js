@@ -1,6 +1,7 @@
 const Repositorys = require('../models/').repository;
 const UploadMultipleDocument = require('../middelwares/uploadMultipleDocument');
 const Sequelize = require('sequelize');
+const fetch = require('node-fetch');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const Op = Sequelize.Op;
 

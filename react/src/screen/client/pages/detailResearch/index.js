@@ -4,30 +4,24 @@ import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
+import Preview from './component/preview';
 import { getDetailRepositoryByUser } from '../../../../redux/action/repositorys';
 
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 
-let researchMock = {
-  judul: 'Rounding corners separa tely Ro unding corners separately',
-  image: img,
-  pengarang: 'Bustomi',
-  description:
-    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s,',
-  bahasa: 'Indonesia',
-  tahunterbit: '12/12/2020',
-  penerbit: '233',
-  isbn: '',
-};
 function DetailResearch(props) {
   const parsed = queryString.parse(props.location.search);
+  let { id } = parsed;
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [research, setResearch] = React.useState(null);
+  let [showPreview, setShowPreview] = React.useState({
+    open: false,
+    file: null,
+  });
 
   React.useEffect(() => {
-    let { id } = parsed;
     setProcessing(true);
     props.getDetailRepositoryByUser(id).then(res => {
       if (res.resp) {
@@ -155,7 +149,16 @@ function DetailResearch(props) {
               ></div>
               {pdfList.map((pdf, key) => {
                 return (
-                  <div key={key} className="flex mt-3 ">
+                  <div
+                    key={key}
+                    className="flex mt-3"
+                    onClick={() => {
+                      setShowPreview({
+                        open: true,
+                        file: pdf.type,
+                      });
+                    }}
+                  >
                     <div className="flex items-center">
                       <i className="fas fa-link text-yellow-700" />
                     </div>
@@ -170,16 +173,25 @@ function DetailResearch(props) {
           </div>
         )}
       </section>
-      {/* <Modal
-        title="Authentication required"
-        open={showModalDeletion}
+      <Modal
+        title="Preview"
+        large={true}
+        open={showPreview.open}
         onCLose={() => {
-          setShowModalDeletion(false);
+          setShowPreview({
+            open: false,
+            file: null,
+          });
         }}
-        handleSubmit={redirectToLogin}
+        handleSubmit={() => {
+          setShowPreview({
+            open: false,
+            file: null,
+          });
+        }}
       >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
-      </Modal> */}
+        <Preview id={id} type={showPreview.file} />
+      </Modal>
     </div>
   );
 }

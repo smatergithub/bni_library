@@ -36,4 +36,8 @@ export default class RepositoryApi {
     const url = `/api/repository/${id}`;
     return Request.getWithAuth(url);
   }
+  static getPreviewResearchByUser(id, type) {
+    const url = `/api/repository/preview/${id}?type=${type}`;
+    return Request.getWithAuth(url);
+  }
 }
