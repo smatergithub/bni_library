@@ -41,8 +41,23 @@ function DetailResearch(props) {
   }
 
   if (processing && research == null) return null;
-  console.log(research);
-  let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+  let pdfList = [];
+  if (research !== null) {
+    if (pdfList.abstrack) {
+      pdfList.push({
+        url: pdfList.abstrack,
+        type: 'abstrack',
+      });
+    }
+    for (let pdf in research) {
+      if (research[pdf] && pdf.indexOf('bab') - 1 == -1) {
+        pdfList.push({
+          url: research[pdf],
+          type: pdf,
+        });
+      }
+    }
+  }
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <section className="py-16 lg:py-24 w-full">
@@ -138,31 +153,19 @@ function DetailResearch(props) {
                   height: 1,
                 }}
               ></div>
-
-              <div className="flex mt-3 ">
-                <div className="flex items-center">
-                  <i className="fas fa-link text-yellow-700" />
-                </div>
-                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-              </div>
-              <div className="flex mt-3 ">
-                <div className="flex items-center">
-                  <i className="fas fa-link text-yellow-700" />
-                </div>
-                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-              </div>
-              <div className="flex mt-3 ">
-                <div className="flex items-center">
-                  <i className="fas fa-link text-yellow-700 " />
-                </div>
-                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-              </div>
-              <div className="flex mt-3 ">
-                <div className="flex items-center">
-                  <i className="fas fa-link text-yellow-700 cursor-pointer" />
-                </div>
-                <div className="text-blue-600 ml-3 underline cursor-pointer"> BAB 1</div>
-              </div>
+              {pdfList.map((pdf, key) => {
+                return (
+                  <div key={key} className="flex mt-3 ">
+                    <div className="flex items-center">
+                      <i className="fas fa-link text-yellow-700" />
+                    </div>
+                    <div className="text-blue-600 ml-3 underline cursor-pointer capitalize">
+                      {' '}
+                      {pdf.type}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
