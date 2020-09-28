@@ -5,6 +5,17 @@ const fetch = require('node-fetch');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const Op = Sequelize.Op;
 
+function generateFileLocation(file) {
+  return `${process.env.SERVER_BACKEND}/img/documentRepository/${file}`;
+}
+var LINK = function() {
+  return (
+    '_' +
+    Math.random()
+      .toString(10)
+      .substr(2, 9)
+  );
+};
 module.exports = {
   list: async (req, res) => {
     // queryStrings
@@ -12,6 +23,15 @@ module.exports = {
 
     let paramQuerySQL = {};
     if (category != '' && typeof category !== 'undefined') {
+      paramQuerySQL.attributes = [
+        'id',
+        'name',
+        'title',
+        'category',
+        'university',
+        'releaseYear',
+        'type',
+      ];
       paramQuerySQL.where = {
         [Op.and]: {
           category: {
@@ -73,6 +93,25 @@ module.exports = {
             message: 'repository Not Found',
           });
         }
+        if (repository.abstrack) {
+          repository[abstrack] = LINK();
+        }
+        if (repository.bab1) {
+          repository['bab1'] = LINK();
+        }
+        if (repository.bab2) {
+          repository['bab2'] = LINK();
+        }
+        if (repository.bab3) {
+          repository['bab3'] = LINK();
+        }
+        if (repository.bab4) {
+          repository['bab4'] = LINK();
+        }
+        if (repository.bab5) {
+          repository['bab5'] = LINK();
+        }
+
         return res.status(200).send(repository);
       })
       .catch(error => res.status(500).send(error));
@@ -132,9 +171,6 @@ module.exports = {
   },
   add: async (req, res) => {
     // console.log('')
-    function generateFileLocation(file) {
-      return `${process.env.SERVER_BACKEND}/img/documentRepository/${file}`;
-    }
 
     UploadMultipleDocument(req, res, err => {
       if (err) throw err;
@@ -202,11 +238,26 @@ module.exports = {
               releaseYear: req.body.releaseYear,
               type: req.body.type,
               city: req.body.city,
-              bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
-              bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
-              bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,
-              bab4: req.files['bab4'] !== undefined ? req.files['bab4'][0].path : null,
-              bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
+              bab1:
+                req.files['bab1'] !== undefined
+                  ? generateFileLocation(req.files['bab1'][0].filename)
+                  : null,
+              bab2:
+                req.files['bab2'] !== undefined
+                  ? generateFileLocation(req.files['bab2'][0].filename)
+                  : null,
+              bab3:
+                req.files['bab3'] !== undefined
+                  ? generateFileLocation(req.files['bab3'][0].filename)
+                  : null,
+              bab4:
+                req.files['bab4'] !== undefined
+                  ? generateFileLocation(req.files['bab4'][0].filename)
+                  : null,
+              bab5:
+                req.files['bab5'] !== undefined
+                  ? generateFileLocation(req.files['bab5'][0].filename)
+                  : null,
               abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
             })
             .then(response =>
