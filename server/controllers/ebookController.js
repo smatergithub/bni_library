@@ -115,7 +115,6 @@ module.exports = {
             const pdfBytes = await pdfDoc.save();
             res.type('pdf');
             var array = Array.from(pdfBytes);
-            console.log(ebook.sourceLink);
 
             res.status(200).send(array);
           }
