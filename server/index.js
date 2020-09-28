@@ -13,7 +13,7 @@ global.__locationdir = __dirname;
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require('./routes/AdminRoute');
 var corsOptions = {
-  origin: 'http://localhost:2001',
+  origin: 'http://localhost:3000',
 };
 
 const app = express();

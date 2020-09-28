@@ -23,6 +23,7 @@ router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
 router.post('/ebook/list', EbookController.getEbookList);
 router.get('/ebook/detail/:id', EbookController.getEbookById);
+router.get('/ebook/preview/:id', EbookController.getEbookPreviewById);
 
 router.get('/categoryEbook', DataSourceFilterEbookController.getCategory);
 router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);

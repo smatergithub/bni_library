@@ -1,17 +1,14 @@
-@import "./var.scss";
-
 @import url("https://fonts.googleapis.com/css?family=Karla:400,700&display=swap");
-
 .font-family-karla {
   font-family: karla;
 }
 
 .bg-sidebar {
-  background: $main;
+  background: #43425d;
 }
 
 .cta-btn {
-  color: $main;
+  color: #43425d;
 }
 
 .upgrade-btn {
@@ -19,55 +16,68 @@
 }
 
 .active-nav-link {
-  background: $main-light;
+  background: #4d4f5c;
 }
 
 .nav-item:hover {
-  background: $main-light;
+  background: #4d4f5c;
 }
+
 .nav-item-profile-active {
-  background: $main-light;
+  background: #4d4f5c;
 }
+
 .nav-item-profile:hover {
   background: #e2e8f0;
 }
+
 .account-link:hover {
-  background: $main-light;
+  background: #4d4f5c;
 }
 
-.katalog-hover {
-  .katalog-dropdown {
-    visibility: hidden;
-  }
-  &:hover {
-    .katalog-dropdown {
-      visibility: visible;
-    }
-  }
+.katalog-hover .katalog-dropdown {
+  visibility: hidden;
+}
+
+.katalog-hover:hover .katalog-dropdown {
+  visibility: visible;
 }
 
 .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
   height: 40px !important;
 }
+
 .ant-select-single.ant-select-show-arrow .ant-select-selection-item,
 .ant-select-single.ant-select-show-arrow .ant-select-selection-placeholder {
   margin-top: 4px !important;
 }
+
 .ant-btn-primary {
-  border-color: $main !important;
-  background-color: $main !important;
+  border-color: #43425d !important;
+  background-color: #43425d !important;
 }
+
 .ant-picker.ant-picker-focused {
   width: 100% !important;
 }
+
 .ant-picker {
   width: 100% !important;
 }
+
 .ant-space-vertical {
   width: 100% !important;
 }
+
 .react-pdf__Document.custom-pdf {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
+/*# sourceMappingURL=index.css.map */

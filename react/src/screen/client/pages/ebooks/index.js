@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { Document, Page, pdfjs } from 'react-pdf';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import { getCategory } from 'redux/action/bookUser';
+import Preview from './component/preview';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -14,7 +16,12 @@ function Ebooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-
+  let [showPreview, setShowPreview] = React.useState({
+    open: false,
+    file: null,
+  });
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     limit: 8,
@@ -42,6 +49,7 @@ function Ebooks(props) {
     });
   }
   React.useEffect(() => {
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     setProcessing(true);
     getAllEbook(pagination);
     getEbookCategory();
@@ -66,6 +74,11 @@ function Ebooks(props) {
       }
     }
   }
+  function onDocumentLoadSuccess({ numPages }) {
+    // setNumPages(numPages);
+    console.log(numPages);
+  }
+
   React.useEffect(() => {
     getAllEbook(pagination);
   }, [pagination]);
@@ -96,6 +109,14 @@ function Ebooks(props) {
         <title>Ebook | E-BNI</title>
       </Helmet>
       <section className="bg-white py-8 ">
+        {/* <div>
+          <Document file={pdfFile} onLoadSuccess={onDocumentLoadSuccess}>
+            <Page pageNumber={pageNumber} />
+          </Document>
+          <p>
+            Page {pageNumber} of {numPages}
+          </p>
+        </div> */}
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0  py-3 mt-16">
@@ -190,7 +211,21 @@ function Ebooks(props) {
                     <i className="far fa-star text-yellow-700" />
                   </div> */}
                   <button
-                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                    onClick={() => {
+                      setShowPreview({
+                        open: true,
+                        file: ebook.id,
+                      });
+                    }}
+                    // onClick={() => history.push(`/ebook-preview?id=${ebook.id}`)}
+                    className={`w-full bg-white text-gray-800
+                  rounded-lg my-1 py-2 px-10 border mt-2  border-gray-600
+                `}
+                  >
+                    Lihat Preview
+                  </button>
+                  <button
+                    className="w-full bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}
                   >
                     Detail
@@ -247,6 +282,25 @@ function Ebooks(props) {
           handleSubmit={redirectToLogin}
         >
           <div className="my-5">Silahkan Login terlebih dahulu</div>
+        </Modal>
+        <Modal
+          title="Preview"
+          large={true}
+          open={showPreview.open}
+          onCLose={() => {
+            setShowPreview({
+              open: false,
+              file: null,
+            });
+          }}
+          handleSubmit={() => {
+            setShowPreview({
+              open: false,
+              file: null,
+            });
+          }}
+        >
+          <Preview id={showPreview.file} />
         </Modal>
       </section>
     </main>

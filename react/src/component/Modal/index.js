@@ -1,17 +1,24 @@
 import React from 'react';
 
-export default function Modal({ open, title, onCLose, handleSubmit, children, large, usingForDetail, usingAnotherButton }) {
+export default function Modal({
+  open,
+  title,
+  onCLose,
+  handleSubmit,
+  children,
+  large,
+  usingForDetail,
+  usingAnotherButton,
+}) {
   return (
     <>
       {open ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-
-          >
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div
-              className={`modal-container bg-white ${large ? '' : 'w-11/12 md:max-w-md'
-                } rounded shadow-lg  overflow-y-auto`}
+              className={`modal-container bg-white ${
+                large ? 'w-11/12 max-w-5xl' : 'w-11/12 md:max-w-md'
+              } rounded shadow-lg  overflow-y-auto`}
               style={{
                 width: '90% !important',
               }}
@@ -32,24 +39,24 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
                   </div>
                 </div>
                 {children}
-                {usingAnotherButton ? null :
+                {usingAnotherButton ? null : (
                   <div className="flex justify-end pt-2">
                     <button
                       onClick={() => onCLose()}
                       className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                     >
                       Close
-                  </button>
-                    {usingForDetail ? null : <button
-                      onClick={() => handleSubmit()}
-                      className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
-                    >
-                      Submit
-                  </button>
-                    }
+                    </button>
+                    {usingForDetail ? null : (
+                      <button
+                        onClick={() => handleSubmit()}
+                        className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
+                      >
+                        Submit
+                      </button>
+                    )}
                   </div>
-                }
-
+                )}
               </div>
             </div>
           </div>

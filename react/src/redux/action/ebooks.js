@@ -57,6 +57,7 @@ export const UploadSingleEbookFIle = book => () => {
       if (res) {
         return {
           resp: true,
+          data: res,
           msg: 'ebook Berhasil di tambahkan',
         };
       }

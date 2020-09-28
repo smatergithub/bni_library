@@ -26,39 +26,43 @@ function CreateNewEBook(props) {
 
   function onSubmit(formData) {
     if (!id) {
-      if (ebookFile) {
-        formData['fileEbook'] = ebookFile;
-      }
       formData['image'] = image;
-      formData['condition'] = conditionValue == 'Baik' ? "Baik" : "Weeding";
+      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Weeding';
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
-      props.CreateNewEbookAction(formData).then(res => {
-        if (res.resp) {
-          ToastSuccess(res.msg);
-          props.history.push('/admin/ebooks');
-        } else {
-          ToastError(res.msg);
-        }
-      });
+      if (ebookFile) {
+        uploadPdfAndGetLink(formData, 'add');
+      } else {
+        props.CreateNewEbookAction(formData).then(res => {
+          if (res.resp) {
+            ToastSuccess(res.msg);
+            props.history.push('/admin/ebooks');
+          } else {
+            ToastError(res.msg);
+          }
+        });
+      }
     } else {
       formData['image'] = image ? image : ebook.image;
       formData['condition'] =
-        conditionValue !== null ? (conditionValue == 'Baik' ? "Baik" : "Weeding") : ebook.condition;
+        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : ebook.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['status'] =
         statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Kosong') : ebook.status;
-
-      props.EditEbookAction(id, formData).then(res => {
-        if (res.resp) {
-          ToastSuccess(res.msg);
-          props.history.push('/admin/ebooks');
-        } else {
-          ToastError(res.msg);
-        }
-      });
+      if (ebookFile) {
+        uploadPdfAndGetLink(formData, 'edit', id);
+      } else {
+        props.EditEbookAction(id, formData).then(res => {
+          if (res.resp) {
+            ToastSuccess(res.msg);
+            props.history.push('/admin/ebooks');
+          } else {
+            ToastError(res.msg);
+          }
+        });
+      }
     }
   }
   let uploadImage = e => {
@@ -96,24 +100,45 @@ function CreateNewEBook(props) {
   };
 
   let uploadEbookPdf = e => {
-
     let reader = new FileReader();
     let locationFile = e.target.files[0];
+    setEbookFile(locationFile);
 
-    reader.onloadend = () => {
-      props.UploadSingleEbookFIle({ locationFile }).then(res => {
+    reader.readAsDataURL(locationFile);
+  };
+
+  function uploadPdfAndGetLink(formData, type, id) {
+    if (ebookFile) {
+      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
         if (res) {
-          ToastSuccess(res.msg);
-          setEbookFile(res.resp);
+          console.log(res);
+          if (type === 'add') {
+            formData['sourceLink'] = res.data.data.locationFile;
+            props.CreateNewEbookAction(formData).then(res => {
+              if (res.resp) {
+                ToastSuccess(res.msg);
+                props.history.push('/admin/ebooks');
+              } else {
+                ToastError(res.msg);
+              }
+            });
+          } else {
+            formData['sourceLink'] = res.data.data.locationFile;
+            props.EditEbookAction(id, formData).then(res => {
+              if (res.resp) {
+                ToastSuccess(res.msg);
+                props.history.push('/admin/ebooks');
+              } else {
+                ToastError(res.msg);
+              }
+            });
+          }
         } else {
           ToastError(res.msg);
         }
       });
-
-    };
-
-    reader.readAsDataURL(locationFile);
-  };
+    }
+  }
 
   React.useEffect(() => {
     if (id) {
@@ -136,21 +161,21 @@ function CreateNewEBook(props) {
     setStatusValue(value[0] ? 'Ada' : 'Kosong');
   }
   const optionsStatus = [
-    { label: 'Ada', value: "Ada" },
-    { label: 'Kosong', value: "Kosong" },
+    { label: 'Ada', value: 'Ada' },
+    { label: 'Kosong', value: 'Kosong' },
   ];
   const optionsCondition = [
-    { label: 'Baik', value: "Baik" },
-    { label: 'Weeding', value: "Weeding" },
+    { label: 'Baik', value: 'Baik' },
+    { label: 'Weeding', value: 'Weeding' },
   ];
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
         <h1 className="w-full text-3xl text-black pb-6">Biografi Ebook</h1>
 
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap relative">
           {!id && (
-            <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
+            <div className="w-2/12 absolute" style={{ right: '3em', top: '-5em' }}>
               <button
                 type="button"
                 onClick={() => exportFile.current.click()}
@@ -180,7 +205,7 @@ function CreateNewEBook(props) {
                     Judul
                   </label>
                   <input
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     name="judul"
                     aria-label="Name"
@@ -198,7 +223,7 @@ function CreateNewEBook(props) {
                   <input
                     name="pengarang"
                     defaultValue={ebook ? ebook.pengarang : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -215,7 +240,7 @@ function CreateNewEBook(props) {
                   <input
                     name="kategori"
                     defaultValue={ebook ? ebook.kategori : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -232,7 +257,7 @@ function CreateNewEBook(props) {
                   <input
                     name="bahasa"
                     defaultValue={ebook ? ebook.bahasa : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -249,7 +274,7 @@ function CreateNewEBook(props) {
                   <input
                     name="isbn"
                     defaultValue={ebook ? ebook.isbn : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -266,7 +291,7 @@ function CreateNewEBook(props) {
                   <input
                     name="penerbit"
                     defaultValue={ebook ? ebook.penerbit : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -285,7 +310,7 @@ function CreateNewEBook(props) {
                     <input
                       name="sourceLink"
                       defaultValue={ebook ? ebook.sourceLink : ''}
-                      className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                       type="text"
                       required=""
                       ref={register({
@@ -323,7 +348,7 @@ function CreateNewEBook(props) {
                   <input
                     name="lokasiPerpustakaan"
                     defaultValue={ebook ? ebook.lokasiPerpustakaan : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -388,7 +413,7 @@ function CreateNewEBook(props) {
                   <textarea
                     name="description"
                     defaultValue={ebook ? ebook.description : ''}
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none border"
                     rows="6"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -423,5 +448,5 @@ export default connect(null, {
   UploadEbookFIle,
   getDetailEbook,
   EditEbookAction,
-  UploadSingleEbookFIle
+  UploadSingleEbookFIle,
 })(CreateNewEBook);
