@@ -131,6 +131,10 @@ module.exports = {
   },
   add: async (req, res) => {
     // console.log('')
+    function generateFileLocation(file) {
+      return `${process.env.SERVER_BACKEND}/img/documentRepository/${file}`;
+    }
+
     UploadMultipleDocument(req, res, err => {
       if (err) throw err;
       return Repositorys.create({
@@ -144,12 +148,30 @@ module.exports = {
         releaseYear: req.body.releaseYear,
         type: req.body.type,
         city: req.body.city,
-        bab1: req.files['bab1'] !== undefined ? req.files['bab1'][0].path : null,
-        bab2: req.files['bab2'] !== undefined ? req.files['bab2'][0].path : null,
-        bab3: req.files['bab3'] !== undefined ? req.files['bab3'][0].path : null,
-        bab4: req.files['bab4'] !== undefined ? req.files['bab4'][0].path : null,
-        bab5: req.files['bab5'] !== undefined ? req.files['bab5'][0].path : null,
-        abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
+        bab1:
+          req.files['bab1'] !== undefined
+            ? generateFileLocation(req.files['bab1'][0].filename)
+            : null,
+        bab2:
+          req.files['bab2'] !== undefined
+            ? generateFileLocation(req.files['bab2'][0].filename)
+            : null,
+        bab3:
+          req.files['bab3'] !== undefined
+            ? generateFileLocation(req.files['bab3'][0].filename)
+            : null,
+        bab4:
+          req.files['bab4'] !== undefined
+            ? generateFileLocation(req.files['bab4'][0].filename)
+            : null,
+        bab5:
+          req.files['bab5'] !== undefined
+            ? generateFileLocation(req.files['bab5'][0].filename)
+            : null,
+        abstrack:
+          req.files['abstrack'] !== undefined
+            ? generateFileLocation(req.files['abstrack'][0].filename)
+            : null,
       })
         .then(response =>
           res.status(201).json({ message: 'Succesfully Create Repository', data: response })
