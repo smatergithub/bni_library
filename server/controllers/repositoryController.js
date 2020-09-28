@@ -1,6 +1,7 @@
 const Repositorys = require('../models/').repository;
 const UploadMultipleDocument = require('../middelwares/uploadMultipleDocument');
 const Sequelize = require('sequelize');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const Op = Sequelize.Op;
 
 module.exports = {
@@ -75,7 +76,59 @@ module.exports = {
       })
       .catch(error => res.status(500).send(error));
   },
+  getPreviewById: async (req, res) => {
+    let { type } = req.query;
+    return Repositorys.findByPk(req.params.id)
+      .then(repository => {
+        if (!repository) {
+          return res.status(404).send({
+            message: 'repository Not Found',
+          });
+        } else {
+          async function copyPages() {
+            // Fetch first existing PDF document
 
+            const firstDonorPdfBytes = await fetch(repository[type]).then(res => res.arrayBuffer());
+            const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
+
+            // Create a new PDFDocument
+
+            const pdfDoc = await PDFDocument.create();
+            if (firstDonorPdfDoc.getPageCount() > 10) {
+              // Copy the 1st page from the first donor document, and
+              for (let i = 0; i < 10; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else if (firstDonorPdfDoc.getPageCount() > 5) {
+              for (let i = 0; i < 2; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else {
+              const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [0]);
+              // Add the first copied page
+              pdfDoc.addPage(firstDonorPage);
+            }
+
+            // Insert the second copied page to index 0, so it will be the
+            // first page in `pdfDoc`
+            // pdfDoc.insertPage(0, secondDonorPage);
+
+            // Serialize the PDFDocument to bytes (a Uint8Array)
+            const pdfBytes = await pdfDoc.save();
+            res.type('pdf');
+            var array = Array.from(pdfBytes);
+
+            res.status(200).send(array);
+          }
+          copyPages();
+        }
+      })
+      .catch(error => res.status(500).send(error));
+  },
   add: async (req, res) => {
     // console.log('')
     UploadMultipleDocument(req, res, err => {
