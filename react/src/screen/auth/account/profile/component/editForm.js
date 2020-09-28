@@ -10,12 +10,18 @@ const { Option } = Select;
 
 function EditUser(props) {
   const [dataWilayah, setDataWilayah] = React.useState([]);
+  const [codeWilayah, setCodeWilayah] = React.useState([]);
+  const [alamat, setAlamat] = React.useState([]);
+  const [linkMap, setLinkMap] = React.useState([]);
+  const [selectedAlamat, setSelectedAlamat] = React.useState({})
+  const [selectedLinkMap, setSelectedLinkMap] = React.useState({});
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
   function onSubmit(formData) {
     formData.tanggalLahir = dateBorn;
-
+    formData.alamat = selectedAlamat.label
+    debugger;
     props.updateMe(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
@@ -38,10 +44,42 @@ function EditUser(props) {
       setDataWilayah(data)
     })
   }
+  const getCodeWilayahAndAlamat = () => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
+        return { label: item.codeWilayah, value: item.id }
+      })
+      let alamat = response.data.data.map(item => {
+        return { label: item.alamat, value: item.id }
+      })
+      let linkMap = response.data.data.map(item => {
+        return { label: item.linkGoogleMap, value: item.id }
+      })
+      console.log("alamat", alamat)
+      setAlamat(alamat);
+      setCodeWilayah(data)
+      setLinkMap(linkMap)
+    })
+  }
 
   React.useEffect(() => {
     getWilayah();
+    getCodeWilayahAndAlamat();
   }, [])
+
+  function handleChange(value) {
+    let data = alamat.filter(item => item.value === value);
+    let lokasiMap = linkMap.filter(item => item.value === value);
+    setSelectedLinkMap(lokasiMap[0]);
+    setSelectedAlamat(data[0])
+  }
+
+  const ParserHTML = (htmlDocument) => {
+    return {
+      __html: htmlDocument,
+    };
+  };
+
 
   let { user } = props;
   return (
@@ -92,39 +130,32 @@ function EditUser(props) {
               </label>
               <Select
                 defaultValue={user.wilayah}
-                style={{ width: 120 }}
+                style={{ width: '100%' }}
                 ref={register()}
-                className="category"
+                className="wilayah"
+                name="wilayah"
               >
                 {dataWilayah.map(op => {
                   return <Option value={op.label}>{op.label}</Option>;
                 })}
               </Select>
-              {/* <input
-                defaultValue={user.wilayah}
-                ref={register()}
-                type="text"
-                name="wilayah"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              /> */}
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Singkatan
               </label>
-              <input
+
+              <Select
                 defaultValue={user.singkatan}
+                style={{ width: '100%' }}
                 ref={register()}
+                className="singkatan"
                 name="singkatan"
-                type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
+              >
+                {codeWilayah.map(op => {
+                  return <Option value={op.label}>{op.label}</Option>;
+                })}
+              </Select>
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Unit</label>
@@ -171,18 +202,22 @@ function EditUser(props) {
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Alamat</label>
-              <input
+              <Select
                 defaultValue={user.alamat}
-                ref={register()}
+                style={{ width: '100%' }}
+                onChange={handleChange}
+                className="alamat"
                 name="alamat"
-                type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                placeholder="Password"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
+              >
+                {alamat.map(op => {
+                  return <Option value={op.value}>{op.label}</Option>;
+                })}
+              </Select>
             </div>
+            {selectedLinkMap ? <div className="relative w-full mb-3">
+              <div style={{ width: '100%  ' }} dangerouslySetInnerHTML={ParserHTML(selectedLinkMap.label)}></div>
+            </div> : null}
+
 
             <div className="mt-10">
               <button
