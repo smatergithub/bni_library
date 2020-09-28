@@ -124,14 +124,20 @@ module.exports = {
       .catch(error => res.status(500).send(error));
   },
   getEbookById: async (req, res) => {
-    return Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        ebookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'Ebook Not Found',
+            message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },

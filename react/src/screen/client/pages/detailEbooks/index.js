@@ -109,7 +109,9 @@ function DetailEbooks(props) {
               <div> Publication date : {ebooks.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
-              <div> Condition : New</div>
+              <div>Peminjam : {ebooks.user ? ebooks.user.name : "Tidak Ada Peminjam"}</div>
+              {ebooks.user ? <div>Unit : {ebooks.user ? ebooks.user.unit : ""}</div> : null}
+              {ebooks.user ? <div>Alamat : {ebooks.user ? ebooks.user.alamat : ""}</div> : null}
               <button
                 onClick={() => {
                   if (!isUserLogged) {
@@ -123,11 +125,9 @@ function DetailEbooks(props) {
                 Pinjam Sekarang
               </button>
               <button
-                className={`w-full  ${
-                  isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
-                }  rounded-lg my-1 py-2 px-10 border ${
-                  isWishlistClick ? 'border-red-600' : 'border-gray-600'
-                }`}
+                className={`w-full  ${isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
+                  }  rounded-lg my-1 py-2 px-10 border ${isWishlistClick ? 'border-red-600' : 'border-gray-600'
+                  }`}
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
