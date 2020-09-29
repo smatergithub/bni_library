@@ -13,7 +13,7 @@ function BorrowedEbook(props) {
   React.useEffect(() => {
     props.getMe().then(res => {
       if (res.resp) {
-        props.getBorrowedEbookItem(res.data.id).then(res => {
+        props.getBorrowedEbookItem(res.data.id, 'borrowed=true').then(res => {
           if (res.resp) {
             setBorrowItem(res.data);
           }

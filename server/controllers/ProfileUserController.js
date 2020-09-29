@@ -196,16 +196,37 @@ module.exports = {
 
   listBorrowEbookUser: async (req, res) => {
     var userId = req.params.id;
-    let { q, order, sort, limit, page } = req.query;
+    let { q, order, sort, limit, page, rating, borrowed } = req.query;
     let paramQuerySQL = {};
-
-    paramQuerySQL.where = {
-      [Op.and]: {
-        userId: {
-          [Op.like]: '%' + userId + '%',
+    if (borrowed != '' && borrowed == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          status: {
+            [Op.like]: '%' + 'Dipinjam' + '%',
+          },
         },
-      },
-    };
+      };
+    } else if (rating != '' && rating == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          isGiveRating: false,
+        },
+      };
+    } else {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+        },
+      };
+    }
     paramQuerySQL.include = ['ebook'];
 
     //limit
