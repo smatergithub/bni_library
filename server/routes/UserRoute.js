@@ -46,6 +46,11 @@ router.get(
   ProfileUserController.listBorrowBookUser
 );
 router.get(
+  '/profile/listBorrowEBook',
+  [AuthJWT.verifyToken],
+  ProfileUserController.listBorrowEbookUser
+);
+router.get(
   '/profile/listHistoryBorrowBook',
   [AuthJWT.verifyToken],
   ProfileUserController.listHistoryBorrowBookUser

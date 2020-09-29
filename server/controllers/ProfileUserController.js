@@ -172,7 +172,7 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
-      where: { isBorrowed: true },
+      // where: { isBorrowed: true },
       where: { status: "Dipinjam" },
       include: ['ebook', 'user'],
     };
