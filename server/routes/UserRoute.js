@@ -41,12 +41,16 @@ router.post('/updatePassword', AuthenticationController.updatePassword);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get(
-  '/profile/listBorrowBook',
+  '/profile/listBorrowBook/:id',
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowBookUser
 );
 router.get(
+<<<<<<< HEAD
   '/profile/listBorrowEBook',
+=======
+  '/profile/listBorrowEbook/:id',
+>>>>>>> fca1fb6af7dcc45a8f593728bbd60685e7a55542
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowEbookUser
 );
@@ -78,7 +82,7 @@ router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRa
 router.post('/repository', [AuthJWT.verifyToken], Repository.add);
 router.get('/repository', [AuthJWT.verifyToken], Repository.list);
 router.get('/repository/:id', [AuthJWT.verifyToken], Repository.getById);
-
+router.get('/repository/preview/:id', [AuthJWT.verifyToken], Repository.getPreviewById);
 router.get('/ratingBook/list', RatingBookController.listBookbyRating);
 router.get('/ratingEbook/list', RatingEbookController.listEbookbyRating);
 module.exports = router;

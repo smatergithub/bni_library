@@ -10,10 +10,9 @@ const path = require('path');
 
 var storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __basedir + "/server/public/images/");
+    cb(null, __basedir + '/server/public/images/');
   },
   filename: (req, file, cb) => {
-    console.log(file.originalname);
     cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
   },
 });
@@ -33,6 +32,6 @@ const Upload = multer({
     fileSize: 1024 * 1024 * 5,
   },
   fileFilter: fileFilter,
-})
+});
 
 module.exports = Upload;

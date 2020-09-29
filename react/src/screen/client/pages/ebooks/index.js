@@ -20,8 +20,7 @@ function Ebooks(props) {
     open: false,
     file: null,
   });
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     limit: 8,

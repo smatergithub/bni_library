@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { DatePicker, Space, Checkbox } from 'antd';
 import { ToastError, ToastSuccess } from '../../../../component';
@@ -299,7 +300,7 @@ function CreateNewRepo(props) {
 
                 <div className="mt-6">
                   <button
-                    className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
+                    className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
                     type="submit"
                   >
                     SUBMIT
@@ -314,4 +315,4 @@ function CreateNewRepo(props) {
   );
 }
 
-export default connect(null, { CreateNewRepositoryUserAction })(CreateNewRepo);
+export default connect(null, { CreateNewRepositoryUserAction })(withRouter(CreateNewRepo));
