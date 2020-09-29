@@ -41,9 +41,14 @@ router.post('/updatePassword', AuthenticationController.updatePassword);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get(
-  '/profile/listBorrowBook',
+  '/profile/listBorrowBook/:id',
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowBookUser
+);
+router.get(
+  '/profile/listBorrowEbook/:id',
+  [AuthJWT.verifyToken],
+  ProfileUserController.listBorrowEbookUser
 );
 router.get(
   '/profile/listHistoryBorrowBook',
