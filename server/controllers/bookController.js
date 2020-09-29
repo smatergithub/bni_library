@@ -149,14 +149,20 @@ module.exports = {
   },
 
   getById: async (req, res) => {
-    return await Books.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', 'user'],
+      where: {
+        bookId: req.params.id,
+      },
+    };
+    return await ListBorrowBook.findAll(paramQuerySQL)
       .then(book => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(book[0]);
       })
       .catch(error => res.status(500).send(error));
   },
@@ -242,7 +248,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header
@@ -303,10 +309,15 @@ module.exports = {
         if (!book) {
           return res.status(404).send({ message: 'Book not found' });
         }
-        return book
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            book
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          })
+        })
+
       })
       .catch(error => res.status(500).send(error));
   },

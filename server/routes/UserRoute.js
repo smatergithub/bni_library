@@ -23,6 +23,7 @@ router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
 router.post('/ebook/list', EbookController.getEbookList);
 router.get('/ebook/detail/:id', EbookController.getEbookById);
+router.get('/ebook/preview/:id', EbookController.getEbookPreviewById);
 
 router.get('/categoryEbook', DataSourceFilterEbookController.getCategory);
 router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);
@@ -77,7 +78,7 @@ router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRa
 router.post('/repository', [AuthJWT.verifyToken], Repository.add);
 router.get('/repository', [AuthJWT.verifyToken], Repository.list);
 router.get('/repository/:id', [AuthJWT.verifyToken], Repository.getById);
-
+router.get('/repository/preview/:id', [AuthJWT.verifyToken], Repository.getPreviewById);
 router.get('/ratingBook/list', RatingBookController.listBookbyRating);
 router.get('/ratingEbook/list', RatingEbookController.listEbookbyRating);
 module.exports = router;

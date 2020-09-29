@@ -6,11 +6,13 @@ import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import Table from '../../component/Table';
+import ModalDetailEbook from "./ModalDetailEBook";
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
-  const [detailData, setDetailData] = useState(null);
+  const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
+  const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
@@ -31,17 +33,24 @@ const Ebooks = props => {
       });
   };
 
-  const getDetailEbook = id => {
-    setDetailData(id);
+
+
+  const getDetailDataEbook = data => {
+    setDetailData(data);
+    setShowModalDetail(true);
+  };
+
+
+  const getDetailDataDeleteEbook = data => {
+    setDetailData(data);
     setShowModalDeletion(true);
   };
 
   const handleActionDeleteEbook = () => {
     setLoading(true);
     props
-      .DeleteEbookAction(detailData)
+      .DeleteEbookAction(detailData.id)
       .then(response => {
-        console.log(response);
         if (response.resp) {
           ToastSuccess(response.msg);
         } else {
@@ -107,14 +116,6 @@ const Ebooks = props => {
       },
     },
     {
-      name: 'stockBuku',
-      displayName: 'Stock Buku',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.stockBuku;
-        return data
-      },
-    },
-    {
       name: 'status',
       displayName: 'Status',
       customRender: rowData => {
@@ -129,7 +130,15 @@ const Ebooks = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Link to={`/admin/edit-ebook?id=${rowData.ebook}`}>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailDataEbook(rowData)}
+              >
+                detail
+                </button>
+              <Link to={`/admin/edit-ebook?id=${rowData}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -141,7 +150,7 @@ const Ebooks = props => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailEbook(rowData.ebook)}
+                onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
               >
                 Delete
               </button>
@@ -192,6 +201,14 @@ const Ebooks = props => {
       >
         <div className="my-5">Anda yakin untuk menghapus Ebook ini?</div>
       </Modal>
+      <ModalDetailEbook
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </div>
   );
 };

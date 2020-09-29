@@ -15,10 +15,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       alamat: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT,
       },
       linkGoogleMap: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT,
       },
       createdAt: {
         allowNull: false,

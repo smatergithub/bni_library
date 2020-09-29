@@ -1,5 +1,6 @@
 import { SIGN_IN, SIGN_OUT, USERS, ME } from '../type';
 import UserApi from '../client/UserApi';
+import WilayahApi from "../client/wilayahApi";
 
 export const signIn = user => dispatch => {
   return UserApi.login(user)
@@ -215,6 +216,24 @@ export const toogleIsAdmin = (userData, id) => () => {
         return {
           resp: true,
           msg: '',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+
+export const getWilayah = () => () => {
+  return WilayahApi.list()
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
         };
       }
     })

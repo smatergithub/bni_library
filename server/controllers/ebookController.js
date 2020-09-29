@@ -1,7 +1,9 @@
 const Ebooks = require('../models/').ebooks;
-const ListBorrowEbook = require("../models").listBorrowEbook
-const UploadFile = require("../models").uploadFile
+const ListBorrowEbook = require('../models').listBorrowEbook;
+const UploadFile = require('../models').uploadFile;
 const Sequelize = require('sequelize');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const fetch = require('node-fetch');
 const Op = Sequelize.Op;
 require('dotenv').config();
 
@@ -24,7 +26,6 @@ module.exports = {
         },
       };
     }
-
 
     if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
       paramQuerySQL.where = {
@@ -70,12 +71,63 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+  getEbookPreviewById: async (req, res) => {
+    return Ebooks.findByPk(req.params.id)
+      .then(ebook => {
+        if (!ebook) {
+          return res.status(404).send({
+            message: 'Ebook Not Found',
+          });
+        } else {
+          async function copyPages() {
+            // Fetch first existing PDF document
 
+            const firstDonorPdfBytes = await fetch(ebook.sourceLink).then(res => res.arrayBuffer());
+            const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
+
+            // Create a new PDFDocument
+
+            const pdfDoc = await PDFDocument.create();
+            if (firstDonorPdfDoc.getPageCount() > 10) {
+              // Copy the 1st page from the first donor document, and
+              for (let i = 0; i < 10; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else if (firstDonorPdfDoc.getPageCount() > 5) {
+              for (let i = 0; i < 2; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else {
+              const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [0]);
+              // Add the first copied page
+              pdfDoc.addPage(firstDonorPage);
+            }
+
+            // Insert the second copied page to index 0, so it will be the
+            // first page in `pdfDoc`
+            // pdfDoc.insertPage(0, secondDonorPage);
+
+            // Serialize the PDFDocument to bytes (a Uint8Array)
+            const pdfBytes = await pdfDoc.save();
+            res.type('pdf');
+            var array = Array.from(pdfBytes);
+
+            res.status(200).send(array);
+          }
+          copyPages();
+        }
+      })
+      .catch(error => res.status(500).send(error));
+  },
   getEbookById: async (req, res) => {
     let paramQuerySQL = {
       include: ['ebook', 'transactionEbook', 'user'],
       where: {
-        bookId: req.params.id,
+        ebookId: req.params.id,
       },
     };
     return await ListBorrowEbook.findAll(paramQuerySQL)
@@ -149,22 +201,26 @@ module.exports = {
   },
 
   getById: async (req, res) => {
-    return Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        ebookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'Ebook Not Found',
+            message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },
 
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
-
-
 
     return Ebooks.create({
       kategori: req.body.kategori,
@@ -187,19 +243,18 @@ module.exports = {
     })
       .then(response => {
         const createListBorrowEbook = ListBorrowEbook.create({
-          EbookId: response.id
-        })
+          EbookId: response.id,
+        });
 
         if (!createListBorrowEbook) {
-          return res.status(404).send("Failed create Ebook");
+          return res.status(404).send('Failed create Ebook');
         }
 
         return res.status(201).json({
-          message: "Process Succesfully create Ebook",
-          data: response
+          message: 'Process Succesfully create Ebook',
+          data: response,
         });
       })
-
 
       .catch(err => res.status(500).send(err));
   },
@@ -208,20 +263,20 @@ module.exports = {
     if (!req.file) {
       res.send({
         status: false,
-        message: 'No file uploaded'
+        message: 'No file uploaded',
       });
     }
     let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
     UploadFile.create({
-      locationFile: locationFileEbook
+      locationFile: locationFileEbook,
     })
       .then(response => {
         return res.status(201).json({
-          message: "Process Succesfully Upload file",
-          data: response
+          message: 'Process Succesfully Upload file',
+          data: response,
         });
-      }).catch(error => res.status(500).send(error));
-
+      })
+      .catch(error => res.status(500).send(error));
   },
 
   uploadEbook: async (req, res) => {
@@ -230,7 +285,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header
@@ -262,12 +317,12 @@ module.exports = {
         });
 
         Ebooks.bulkCreate(Databooks)
-          .then((response) => {
+          .then(response => {
             response.map(item => {
               return ListBorrowEbook.create({
-                ebookId: item.id
-              })
-            })
+                ebookId: item.id,
+              });
+            });
             return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
@@ -331,10 +386,14 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-        return ebook
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            ebook
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          });
+        });
       })
       .catch(error => res.status(500).send(error));
   },
