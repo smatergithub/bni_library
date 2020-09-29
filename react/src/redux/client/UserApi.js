@@ -45,12 +45,12 @@ export default class UsersApi {
     const url = `/api/profile/updateProfile`;
     return Request.postWithAuth(url, userData, true);
   }
-  static getBorrowedBookItem(id) {
-    const url = `/api/profile/listBorrowBook/${id}`;
+  static getBorrowedBookItem(id, params) {
+    const url = `/api/profile/listBorrowBook/${id}?${params}`;
     return Request.getWithAuth(url);
   }
-  static getBorrowedEbookItem(id) {
-    const url = `/api/profile/listBorrowEbook/${id}`;
+  static getBorrowedEbookItem(id, params) {
+    const url = `/api/profile/listBorrowEbook/${id}?${params}`;
     return Request.getWithAuth(url);
   }
   static createBookFeeback(userData) {

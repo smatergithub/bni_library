@@ -143,8 +143,8 @@ export const getUsersListToAdmin = param => dispatch => {
       return { resp: false, msg: msg };
     });
 };
-export const getBorrowedBookItem = id => () => {
-  return UserApi.getBorrowedBookItem(id)
+export const getBorrowedBookItem = (id, params) => () => {
+  return UserApi.getBorrowedBookItem(id, params)
     .then(res => {
       if (res) {
         return {
@@ -159,8 +159,8 @@ export const getBorrowedBookItem = id => () => {
       return { resp: false, msg: msg };
     });
 };
-export const getBorrowedEbookItem = id => () => {
-  return UserApi.getBorrowedEbookItem(id)
+export const getBorrowedEbookItem = (id, params) => () => {
+  return UserApi.getBorrowedEbookItem(id, params)
     .then(res => {
       if (res) {
         return {

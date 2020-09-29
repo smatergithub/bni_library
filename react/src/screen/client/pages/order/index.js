@@ -34,7 +34,6 @@ function OrderBook(props) {
     props.getMe().then(res => {
       if (res.resp) {
         let userId = res.data.id;
-        console.log(userId);
         if (type === 'book') {
           props.getBookById(id).then(res => {
             setProcessing(false);
@@ -44,7 +43,7 @@ function OrderBook(props) {
               setBooks(null);
             }
           });
-          props.getBorrowedBookItem(userId).then(res => {
+          props.getBorrowedBookItem(userId, 'rating=true').then(res => {
             if (res.data.length !== 0) {
               let checkIsBorrowed = res.data.data.some(
                 book => book.status === 'Dikembalikan' && !book.isGiveRating

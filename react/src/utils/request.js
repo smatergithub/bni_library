@@ -12,7 +12,7 @@ const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptio
     axios(requestOptions)
       .then(response => (responseOptions.fullResponse ? response : response.data))
       .catch(error => {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || 403) {
           //place your reentry code
           window.location.replace('/auth/login');
           localStorage.clear('bni_UserRole');
