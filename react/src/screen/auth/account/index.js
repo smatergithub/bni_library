@@ -43,8 +43,8 @@ function Accounts(props) {
   }
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   return (
-    <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-5">
-      <div className="pl-4 flex items-center  justify-between  w-full">
+    <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
+      <div className="pl-4 flex items-center bg-orange-400 justify-between  w-full">
         <Link to={isAdmin ? '/admin/dashboard' : '/'}>
           <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
             BNI
@@ -56,6 +56,14 @@ function Accounts(props) {
         >
           LOGOUT
         </button>
+      </div>
+      <div
+        className="px-5 pt-5 mb-5 cursor-pointer hover:text-gray-800 text-lg"
+        onClick={() => window.location.replace('/')}
+        style={{ width: '20em' }}
+      >
+        {' '}
+        <i className="fas fa-arrow-left"></i> Ke Beranda
       </div>
       <section className="bg-gray-100 py-12 w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
