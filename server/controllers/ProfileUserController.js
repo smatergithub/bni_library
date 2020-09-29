@@ -1,7 +1,8 @@
 const Users = require('../models').users;
 const TransactionBook = require('../models').transactionBook;
 const TransactionEbook = require('../models').transactionEbook;
-
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 module.exports = {
   profileUser: async (req, res) => {
     var userId = req.userId;
@@ -82,13 +83,22 @@ module.exports = {
   },
 
   listBorrowBookUser: async (req, res) => {
-    var userId = req.userId;
+    var userId = req.params.id;
+
     let { q, order, sort, limit, page } = req.query;
-    let paramQuerySQL = {
-      where: { userId: userId },
-      where: { status: "Dipinjam" },
-      include: ['book', 'user'],
+    let paramQuerySQL = {};
+
+    paramQuerySQL.where = {
+      [Op.and]: {
+        userId: {
+          [Op.like]: '%' + userId + '%',
+        },
+        // Status: {
+        //   [Op.like]: '%' + 'Dipinjam' + '%',
+        // },
+      },
     };
+    paramQuerySQL.include = ['book'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -129,7 +139,7 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
-      where: { status: "Dikembalikan" },
+      where: { status: 'Dikembalikan' },
       include: ['book', 'user'],
     };
 
@@ -168,14 +178,18 @@ module.exports = {
   },
 
   listBorrowEbookUser: async (req, res) => {
-    var userId = req.userId;
+    var userId = req.params.id;
     let { q, order, sort, limit, page } = req.query;
-    let paramQuerySQL = {
-      where: { userId: userId },
-      where: { isBorrowed: true },
-      where: { status: "Dipinjam" },
-      include: ['ebook', 'user'],
+    let paramQuerySQL = {};
+
+    paramQuerySQL.where = {
+      [Op.and]: {
+        userId: {
+          [Op.like]: '%' + userId + '%',
+        },
+      },
     };
+    paramQuerySQL.include = ['ebook'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -217,7 +231,7 @@ module.exports = {
     let paramQuerySQL = {
       where: { userId: userId },
       where: { isBorrowed: true },
-      where: { status: "Dikembalikan" },
+      where: { status: 'Dikembalikan' },
       include: ['ebook', 'user'],
     };
 

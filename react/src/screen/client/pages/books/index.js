@@ -29,13 +29,15 @@ function Books(props) {
   }
   function getCategory() {
     props.getCategory().then(res => {
-      if (res.data.length > 0) {
-        let categories = res.data
-          .map(e => e['label'])
-          .map((e, i, final) => final.indexOf(e) === i && i)
-          .filter(e => res.data[e])
-          .map(e => res.data[e]);
-        setCategory(categories);
+      if (res.resp) {
+        if (res.data.length > 0) {
+          let categories = res.data
+            .map(e => e['label'])
+            .map((e, i, final) => final.indexOf(e) === i && i)
+            .filter(e => res.data[e])
+            .map(e => res.data[e]);
+          setCategory(categories);
+        }
       }
     });
   }
@@ -85,6 +87,7 @@ function Books(props) {
     props.history.push('/auth/login');
   }
   if (processing && props.books === null) return null;
+  console.log(props.books);
   const { wishlist } = props;
 
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';

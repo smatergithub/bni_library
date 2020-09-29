@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
-import { getBorrowedBookItem } from '../../../../redux/action/user';
+import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
 
 function Borrowed(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -11,9 +11,13 @@ function Borrowed(props) {
   let [bookBorrowSelected, setBookBorrowSelected] = React.useState(null);
 
   React.useEffect(() => {
-    props.getBorrowedBookItem().then(res => {
+    props.getMe().then(res => {
       if (res.resp) {
-        setBorrowItem(res.data);
+        props.getBorrowedBookItem(res.data.id).then(res => {
+          if (res.resp) {
+            setBorrowItem(res.data);
+          }
+        });
       }
     });
   }, []);
@@ -128,4 +132,4 @@ function Borrowed(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedBookItem })(Borrowed);
+export default connect(null, { getBorrowedBookItem, getMe })(Borrowed);

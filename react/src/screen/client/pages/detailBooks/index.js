@@ -37,6 +37,7 @@ function DetailBooks(props) {
       props.addBookWishlist(book);
     }
   }
+
   if (processing && books == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
 
