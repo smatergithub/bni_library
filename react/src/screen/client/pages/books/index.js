@@ -174,12 +174,12 @@ function Books(props) {
                           }
                         }}
                       >
-                        <i className="far fa-heart text-3xl cursor-pointer"></i>
+                        <i className="fas fa-cart-plus text-3xl cursor-pointer"></i>
                       </div>
                     )}
                     {isAdd && (
                       <div onClick={() => props.removeBookWishlist(book)}>
-                        <i className="fas fa-heart text-3xl text-red-400"></i>
+                        <i className="fas fa-cart-plus text-3xl text-green-500"></i>
                       </div>
                     )}
                   </div>
