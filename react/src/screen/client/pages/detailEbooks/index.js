@@ -102,11 +102,11 @@ function DetailEbooks(props) {
                 }}
               ></div>
 
-              <div> Author : {ebooks.pengarang}</div>
-              <div> ISBN : {ebooks.isbn}</div>
+              <div> Author : {ebooks.ebook.pengarang}</div>
+              <div> ISBN : {ebooks.ebook.isbn}</div>
               <div> Format : Hardback</div>
-              <div> Publishers : {ebooks.penerbit}</div>
-              <div> Publication date : {ebooks.tahunTerbit}</div>
+              <div> Publishers : {ebooks.ebook.penerbit}</div>
+              <div> Publication date : {ebooks.ebook.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div>Peminjam : {ebooks.user ? ebooks.user.name : "Tidak Ada Peminjam"}</div>
@@ -117,7 +117,7 @@ function DetailEbooks(props) {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
                   } else {
-                    props.history.push(`/order?id=${ebooks.id}&type=ebook`);
+                    props.history.push(`/order?id=${ebooks.ebook.id}&type=ebook`);
                   }
                 }}
                 className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"

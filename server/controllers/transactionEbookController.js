@@ -177,14 +177,7 @@ module.exports = {
 
     const { ebooks } = req.body;
     var userId = req.userId;
-    // const checkTransaction = await TransactionEbook.findAll({
-    //   where: { userId: userId },
-    //   where: { status: "Borrowed" },
-    // })
 
-    // if (checkTransaction) {
-    //   return res.status(404).json({ message: "already borrow ebook before" });
-    // }
 
     ebooks.forEach(async (ebookData) => {
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
@@ -229,16 +222,23 @@ module.exports = {
         isGiveRating: false
       });
 
-      const createListBorrowEbook = await ListBorrowEbook.create({
-        bookId: bookData.ebookId,
-        transactionEbookId: createTransaction.id
-      })
 
       if (!createTransaction) {
         return res.status(404).send("Failed Transaction");
-      } else if (!createListBorrowEbook) {
-        return res.status(404).send("Failed Transaction");
       }
+      ListBorrowEbook.findAll({
+        where: {
+          ebookId: ebookData.ebookId
+        }
+      })
+        .then(response => {
+          response[0].update({
+            ebookId: response.ebookId,
+            transactionEbookId: createTransaction.id,
+            userId: createTransaction.userId
+          })
+
+        }).catch(err => { });
 
       return res.status(201).json({
         message: "Process Succesfully create Transaction Borrow Ebook",

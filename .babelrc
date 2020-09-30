@@ -3,7 +3,9 @@
     [
       "module-resolver",
       {
-        "root": ["."],
+        "root": [
+          "."
+        ],
         "alias": {
           "components": "./src/components",
           "modules": "./src/modules",
@@ -15,5 +17,7 @@
       }
     ]
   ],
-  "presets": ["next/babel"]
+  "presets": [
+    "next/babel"
+  ]
 }

@@ -61,7 +61,6 @@ module.exports = {
             expiredDateToken: { [Op.lt]: Sequelize.fn('CURDATE') },
           },
         });
-
         var recordToken = VerificationToken.findOne({
           where: { token: req.query.token, userId: user.id },
         });
