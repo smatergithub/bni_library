@@ -53,7 +53,7 @@ function Register(props) {
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-orange-500"
-          // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
+        // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
         ></div>
         <div className="container mx-auto px-4 h-full">
           <div className="flex content-center items-center justify-center h-full">
@@ -103,21 +103,27 @@ function Register(props) {
                         />
                       </div>
                       <div className="relative w-full mb-3">
-                        <label
-                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                          for="grid-password"
-                        >
+                        <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                           Email
-                        </label>
+                      </label>
                         <input
-                          type="email"
-                          onChange={e => setFormData({ ...formData, email: e.target.value })}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                          onChange={e => setFormData({ ...formData, email: e.target.value + "@bni.co.id" })}
+                          type="text"
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                           placeholder="Email"
                           style={{
                             transition: 'all 0.15s ease 0s',
                           }}
                         />
+                        <div
+                          className="absolute tracking-wide text-gray-600 text-lg"
+                          style={{
+                            right: '1em',
+                            top: '2em',
+                          }}
+                        >
+                          @bni.co.id
+                      </div>
                       </div>
                       <div className="relative w-full mb-3">
                         <label
