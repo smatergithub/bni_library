@@ -1,8 +1,8 @@
 {
   "development": {
     "username": "root",
-    "password": "root",
-    "database": "ebni_development",
+    "password": "",
+    "database": "ebni1_development",
     "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false,

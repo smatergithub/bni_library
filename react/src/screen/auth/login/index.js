@@ -13,8 +13,12 @@ function Login(props) {
     if (user.email.trim().length === 0 && user.password.trim().length === 0) {
       return ToastError('Email atau password tidak boleh kosong');
     } else {
+      let data = {
+        email: user.email + "@bni.co.id",
+        password: user.password
+      }
       props
-        .signIn(user)
+        .signIn(data)
         .then(res => {
           if (res.resp) {
             props.getMe().then(res => {
@@ -44,7 +48,7 @@ function Login(props) {
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-orange-500"
-          // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
+        // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
         ></div>
         <div className="container mx-auto px-4 h-full">
           <div className="flex content-center items-center justify-center h-full">
@@ -65,7 +69,7 @@ function Login(props) {
                       </label>
                       <input
                         onChange={e => setUser({ ...user, email: e.target.value })}
-                        type="email"
+                        type="text"
                         className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                         placeholder="Email"
                         style={{

@@ -46,11 +46,7 @@ router.get(
   ProfileUserController.listBorrowBookUser
 );
 router.get(
-<<<<<<< HEAD
-  '/profile/listBorrowEBook',
-=======
   '/profile/listBorrowEbook/:id',
->>>>>>> fca1fb6af7dcc45a8f593728bbd60685e7a55542
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowEbookUser
 );
