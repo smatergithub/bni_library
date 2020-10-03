@@ -6,7 +6,7 @@ import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import Table from '../../component/Table';
-import ModalDetailEbook from "./ModalDetailEBook";
+import ModalDetailEbook from './ModalDetailEBook';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -33,13 +33,10 @@ const Ebooks = props => {
       });
   };
 
-
-
   const getDetailDataEbook = data => {
     setDetailData(data);
     setShowModalDetail(true);
   };
-
 
   const getDetailDataDeleteEbook = data => {
     setDetailData(data);
@@ -96,7 +93,7 @@ const Ebooks = props => {
       displayName: 'Judul',
       customRender: rowData => {
         let data = rowData.ebook && rowData.ebook.judul;
-        return data
+        return data;
       },
     },
     {
@@ -104,7 +101,7 @@ const Ebooks = props => {
       displayName: 'Pengarang',
       customRender: rowData => {
         let data = rowData.ebook && rowData.ebook.pengarang;
-        return data
+        return data;
       },
     },
     {
@@ -112,7 +109,7 @@ const Ebooks = props => {
       displayName: 'Tahun Terbit',
       customRender: rowData => {
         let data = rowData.ebook && rowData.ebook.tahunTerbit;
-        return data
+        return data;
       },
     },
     {
@@ -120,7 +117,7 @@ const Ebooks = props => {
       displayName: 'Status',
       customRender: rowData => {
         let data = rowData.ebook && rowData.ebook.status;
-        return data
+        return data;
       },
     },
     {
@@ -137,7 +134,7 @@ const Ebooks = props => {
                 onClick={() => getDetailDataEbook(rowData)}
               >
                 detail
-                </button>
+              </button>
               <Link to={`/admin/edit-ebook?id=${rowData}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -169,7 +166,7 @@ const Ebooks = props => {
           <Link to="/admin/add-new-ebook">
             <button
               type="button"
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-plus mr-3" /> Ebook Baru
             </button>
@@ -187,8 +184,8 @@ const Ebooks = props => {
             searchDefaultValue={filterOptions.judul}
           />
         ) : (
-            <NoData msg="Data belum tersedia !" />
-          )}
+          <NoData msg="Data belum tersedia !" />
+        )}
       </main>
       <Modal
         title="Konfirmasi"

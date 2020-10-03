@@ -200,7 +200,7 @@ class Table extends Component {
           </div>
         </div>
         <table className="min-w-full bg-white">
-          <thead className="bg-gray-800 text-white">
+          <thead className="bg-orange-500 text-white">
             <tr>
               {columns.map((column, index) => {
                 return (

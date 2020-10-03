@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       tanggalLahir: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       wilayah: {
         type: Sequelize.STRING,

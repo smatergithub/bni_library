@@ -7,7 +7,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'DD-MM-YYYY';
 function Register(props) {
   let { history } = props;
   const [formData, setFormData] = useState({

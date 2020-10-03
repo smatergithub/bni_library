@@ -25,7 +25,7 @@ function CreateNewBook(props) {
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['condition'] = conditionValue == 'Baik' ? "Baik" : "Weeding";
+      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Weeding';
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
@@ -40,7 +40,7 @@ function CreateNewBook(props) {
     } else {
       formData['image'] = image ? image : book.image;
       formData['condition'] =
-        conditionValue !== null ? (conditionValue == 'Baik' ? "Baik" : "Weeding") : book.condition;
+        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : book.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['status'] =
@@ -110,12 +110,12 @@ function CreateNewBook(props) {
     reader.readAsDataURL(file);
   };
   const optionsStatus = [
-    { label: 'Ada', value: "Ada" },
-    { label: 'Kosong', value: "Kosong" },
+    { label: 'Ada', value: 'Ada' },
+    { label: 'Kosong', value: 'Kosong' },
   ];
   const optionsCondition = [
-    { label: 'Baik', value: "Baik" },
-    { label: 'Weeding', value: "Weeding" },
+    { label: 'Baik', value: 'Baik' },
+    { label: 'Weeding', value: 'Weeding' },
   ];
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -127,7 +127,7 @@ function CreateNewBook(props) {
             <button
               type="button"
               onClick={() => exportFile.current.click()}
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-upload mr-3" /> Import Books
             </button>

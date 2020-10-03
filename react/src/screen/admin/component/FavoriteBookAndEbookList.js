@@ -20,7 +20,7 @@ function FavoriteBookAndEbookList({
               </div>
               <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                 <button
-                  className="bg-gray-800 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                  className="bg-orange-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
                   type="button"
                   onClick={() => goToBookDetail()}
                   style={{
@@ -55,11 +55,13 @@ function FavoriteBookAndEbookList({
                   {isLoading
                     ? null
                     : mockBookFavorite !== null
-                      ? mockBookFavorite.map(book => {
+                    ? mockBookFavorite.map(book => {
                         return (
                           <tr>
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
-                              {book.title.length > 10 ? book.title.substring(0, 10) + "..." : book.title}
+                              {book.title.length > 10
+                                ? book.title.substring(0, 10) + '...'
+                                : book.title}
                             </th>
                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
                               {book.tahunTerbit}
@@ -74,14 +76,14 @@ function FavoriteBookAndEbookList({
                           </tr>
                         );
                       })
-                      : null}
+                    : null}
                 </tbody>
               </table>
             ) : (
-                <div>
-                  <NoData msg="Belum ada data buku favorit" />
-                </div>
-              )}
+              <div>
+                <NoData msg="Belum ada data buku favorit" />
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -94,7 +96,7 @@ function FavoriteBookAndEbookList({
               </div>
               <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                 <button
-                  className="bg-gray-800 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
+                  className="bg-orange-500 text-white active:bg-indigo-600 text-xs font-bold uppercase px-3 py-1 rounded outline-none focus:outline-none mr-1 mb-1"
                   type="button"
                   style={{
                     transition: 'all .15s ease',
@@ -129,11 +131,13 @@ function FavoriteBookAndEbookList({
                   {isLoading
                     ? null
                     : mockEbook !== null && mockEbook !== undefined
-                      ? mockEbook.map(ebook => {
+                    ? mockEbook.map(ebook => {
                         return (
                           <tr className="p-4">
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2 ">
-                              {ebook.judul.length > 15 ? ebook.judul.substring(0, 15) + "..." : ebook.judul}
+                              {ebook.judul.length > 15
+                                ? ebook.judul.substring(0, 15) + '...'
+                                : ebook.judul}
                             </th>
                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2">
                               {ebook.pengarang}
@@ -156,12 +160,12 @@ function FavoriteBookAndEbookList({
                           </tr>
                         );
                       })
-                      : null}
+                    : null}
                 </tbody>
               </table>
             ) : (
-                <NoData msg="Belum ada data ebook " />
-              )}
+              <NoData msg="Belum ada data ebook " />
+            )}
           </div>
         </div>
       </div>

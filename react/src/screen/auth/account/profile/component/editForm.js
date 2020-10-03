@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-// import { moment } from 'moment';
-import DatePicker from 'react-datepicker';
+import { moment } from 'moment';
+import { DatePicker } from 'antd';
+
 import { Input, Select } from 'antd';
 import { updateMe, getWilayah } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
 const { Option } = Select;
+const dateFormat = 'DD-MM-YYYY';
 
 function EditUser(props) {
   const [dataWilayah, setDataWilayah] = React.useState([]);
@@ -21,7 +23,7 @@ function EditUser(props) {
   function onSubmit(formData) {
     formData.tanggalLahir = dateBorn;
     formData.alamat = selectedAlamat.label;
-    formData.mapUrl = selectedLinkMap.label;
+    formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
     props.updateMe(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
@@ -91,6 +93,9 @@ function EditUser(props) {
       __html: htmlDocument,
     };
   };
+  function handleDate(e, date) {
+    setDateBorn(date);
+  }
 
   let { user } = props;
   if (!user) return null;
@@ -131,9 +136,14 @@ function EditUser(props) {
                 Tanggal Lahir
               </label>
               <DatePicker
-                selected={dateBorn}
-                onChange={setDateBorn}
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                style={{
+                  height: 45,
+                }}
+                // defaultValue={moment('15/01/2010', dateFormat)}
+                // value={moment().format(dateFormat)}
+                placeholder={user.tanggalLahir}
+                format={dateFormat}
+                onChange={handleDate}
               />
             </div>
             <div className="relative w-full mb-3">
