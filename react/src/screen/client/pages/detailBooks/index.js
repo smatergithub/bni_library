@@ -113,7 +113,7 @@ function DetailBooks(props) {
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div> Condition : {books.book.condition}</div>
-              <div>Peminjam : {books.user ? books.user.name : "Tidak Ada Peminjam"}</div>
+              <div>Peminjam : {books.user ? books.user.nama : "Tidak Ada Peminjam"}</div>
               {books.user ? <div>Unit : {books.user ? books.user.unit : ""}</div> : null}
               {books.user ? <div>Alamat : {books.user ? books.user.alamat : ""}</div> : null}
               <button

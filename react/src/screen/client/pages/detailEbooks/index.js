@@ -109,7 +109,7 @@ function DetailEbooks(props) {
               <div> Publication date : {ebooks.ebook.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
-              <div>Peminjam : {ebooks.user ? ebooks.user.name : "Tidak Ada Peminjam"}</div>
+              <div>Peminjam : {ebooks.user ? ebooks.user.nama : "Tidak Ada Peminjam"}</div>
               {ebooks.user ? <div>Unit : {ebooks.user ? ebooks.user.unit : ""}</div> : null}
               {ebooks.user ? <div>Alamat : {ebooks.user ? ebooks.user.alamat : ""}</div> : null}
               <button

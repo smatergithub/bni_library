@@ -2,6 +2,11 @@ const TransactionBook = require("../models").transactionBook;
 const RatingBook = require("../models").ratingBook;
 const sequelize = require('sequelize')
 const Books = require('../models').books;
+const ListBorrowBook = require("../models").listBorrowBook
+
+//status
+//dipinjam
+//dikembalikan
 
 module.exports = {
   inputRatingBook: async (req, res) => {
@@ -11,7 +16,7 @@ module.exports = {
         userId: userId
       }
     })
-      .then(transaction => {
+      .then(async (transaction) => {
         let dataTransactionReturned = transaction.filter(x => x.status === "Dikembalikan");
         let dataTransactionRating = dataTransactionReturned.filter(x => x.isGiveRating === false);
         if (!dataTransactionRating) {
@@ -29,34 +34,41 @@ module.exports = {
           return res.status(404).send("Failed rating");
         }
 
-        if (createRating) {
-          TransactionBook.findByPk(dataTransactionRating[0].id).then(transaksi => {
-            transaksi.update({
-              isGiveRating: true
-            }).then(response => {
-              return res.status(201).json({
-                message: "Process Succesfully input rating",
-              });
-            })
-          })
-          Books.findByPk(dataTransactionRating[0].bookId).then(book => {
-            book.update({
-              countRating: createRating.rating,
-            }).then(response => {
-              return res.status(201).json({
-                message: "Process Succesfully input rating",
-              });
-            })
-          })
-        }
-        else {
-          return res.status(200).json({
-            message: "no rating input ",
-          });
-        }
+        await TransactionBook.findByPk(dataTransactionRating[0].id).then(transaksi => {
+          transaksi.update({
+            isGiveRating: true
+          }).then(response => {
+            return res.status(201).json({
+              message: "Process Succesfully input rating",
+            });
+          }).catch(err => { });
+        }).catch(err => { });
+
+        await Books.findByPk(dataTransactionRating[0].bookId).then(book => {
+          book.update({
+            countRating: book.countRating + req.body.rating,
+          }).then(response => {
+            return res.status(201).json({
+              message: "Process Succesfully input rating",
+            });
+          }).catch(err => { });
+        }).catch(err => { });
+
+        await ListBorrowBook.findAll({ where: { transactionBookId: dataTransactionRating[0].id } }).then(listBorrow => {
+          listBorrow[0].update({
+            transactionBookId: null,
+          }).then(response => {
+            return res.status(201).json({
+              message: "Process Succesfully input rating",
+            });
+          }).catch(err => { });
+        }).catch(err => { });
+
       })
       .catch(err => {
-        res.status(200).send(err);
+        return res.status(200).json({
+          message: "no rating input ",
+        });
       })
   },
 
