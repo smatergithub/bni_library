@@ -1,7 +1,20 @@
 import React from 'react';
 
 function Information({ user, changePages }) {
+  React.useEffect(() => {
+    if (user && user.mapUrl) {
+      setTimeout(() => {
+        document.getElementsByTagName('iframe')[0].style.width = '100%';
+        document.getElementsByTagName('iframe')[0].style.height = '150';
+      }, 3000);
+    }
+  }, []);
   if (user === null) return null;
+  const ParserHTML = htmlDocument => {
+    return {
+      __html: htmlDocument,
+    };
+  };
   return (
     <div class="bg-white rounded-lg shadow-lg pl-10 relative">
       <div class="px-4 py-8 flex">
@@ -18,7 +31,7 @@ function Information({ user, changePages }) {
           <div class="mt-1 text-sm text-gray-700">{user.unit}</div>
         </div>
         <button
-          className="absolute lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm h-10 px-5"
+          className="absolute lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm h-10 px-5"
           style={{
             right: '2em',
           }}
@@ -27,6 +40,14 @@ function Information({ user, changePages }) {
           UBAH
         </button>
       </div>
+      {user.mapUrl ? (
+        <div className="relative w-full mb-3">
+          <div
+            style={{ width: '100% !important' }}
+            dangerouslySetInnerHTML={ParserHTML(user.mapUrl)}
+          ></div>
+        </div>
+      ) : null}
     </div>
   );
 }

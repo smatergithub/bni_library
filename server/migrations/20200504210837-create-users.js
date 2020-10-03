@@ -50,6 +50,9 @@ module.exports = {
       imageUrl: {
         type: Sequelize.STRING,
       },
+      mapUrl: {
+        type: Sequelize.TEXT,
+      },
 
       password: {
         type: Sequelize.STRING,
