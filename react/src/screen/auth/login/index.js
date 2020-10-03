@@ -10,13 +10,18 @@ function Login(props) {
 
   function onLogin(e) {
     e.preventDefault();
+    let email = user.email.split('@');
     if (user.email.trim().length === 0 && user.password.trim().length === 0) {
-      return ToastError('Email atau password tidak boleh kosong');
+      ToastError('Email atau password tidak boleh kosong');
+    } else if (email.length === 2 && email[1] !== 'bni.co.id') {
+      ToastError('Anda belum menginput alamat email BNI Anda');
     } else {
       let data = {
-        email: user.email + "@bni.co.id",
-        password: user.password
-      }
+        email:
+          email.length === 2 && email[1] === 'bni.co.id' ? user.email : user.email + '@bni.co.id',
+        password: user.password,
+      };
+
       props
         .signIn(data)
         .then(res => {
@@ -33,6 +38,8 @@ function Login(props) {
           }
         })
         .catch(err => {
+          console.log(err);
+          debugger;
           let msg = err.message || 'Something wrong';
           ToastError(msg);
         });
@@ -43,12 +50,12 @@ function Login(props) {
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Login | Ebni</title>
+        <title>Login | E-BNI</title>
       </Helmet>
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-orange-500"
-        // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
+          // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
         ></div>
         <div className="container mx-auto px-4 h-full">
           <div className="flex content-center items-center justify-center h-full">
