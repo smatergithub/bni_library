@@ -134,7 +134,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 type="text"
                 name="note"
                 className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
-                placeholder="Nama"
+                placeholder="note"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
