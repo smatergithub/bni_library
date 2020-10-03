@@ -96,7 +96,6 @@ module.exports = {
         }
 
         var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
         if (!passwordIsValid) {
           return res.status(404).send({
             message: 'Invalid Password!',
