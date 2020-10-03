@@ -185,6 +185,7 @@ function Books(props) {
                   </div>
 
                   <div className="pt-1 text-gray-900">{book.pengarang}</div>
+
                   {/* <div className="flex items-center">
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />

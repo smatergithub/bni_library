@@ -29,13 +29,14 @@ export default function Modal({ open, title, handleSubmit }) {
                   <div className="flex justify-between items-center pb-3">
                     <p className="text-2xl text-center font-bold">{title}</p>
                   </div>
-                  <p
+                  <div
+                    className="px-10 pb-20 text-lg"
                     style={{
                       textAlign: 'center',
                     }}
                   >
                     Silahkan isi rating terlebih dahulu untuk dapat memesan buku selanjutnya
-                  </p>
+                  </div>
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -61,8 +62,9 @@ export default function Modal({ open, title, handleSubmit }) {
                   </label>
                   <ReactStars count={6} onChange={ratingChanged} size={40} activeColor="#ffd700" />
                   <button
-                    className={`${note.trim().length === 0 || rating === null ? 'bg-gray-400' : 'bg-gray-900'
-                      } text-white active:bg-gray-700 text-sm mt-10 font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full`}
+                    className={`${
+                      note.trim().length === 0 || rating === null ? 'bg-gray-400' : 'bg-orange-500'
+                    } text-white active:bg-gray-700 text-sm mt-10 font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full`}
                     type="submit"
                     disabled={note.trim().length === 0 || rating === null}
                     style={{
