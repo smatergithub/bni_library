@@ -62,7 +62,7 @@ function OrderBook(props) {
               setEbooks(null);
             }
           });
-          props.getBorrowedEbookItem(userId, 'borrowed=true').then(res => {
+          props.getBorrowedEbookItem(userId, 'rating=true').then(res => {
             if (res.data.length !== 0) {
               let checkIsBorrowed = res.data.data.some(
                 ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
