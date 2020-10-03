@@ -139,10 +139,10 @@ function OrderBook(props) {
         {books === null && type === 'book' && <NoData msg="Buku tidak di temukan" />}
         {ebooks === null && type === 'ebook' && <NoData msg="Ebook tidak di temukan" />}
         {type === 'ebook' && ebooks !== null && (
-          <Form type="ebook" data={ebooks.ebook} onOrderItem={onOrderItem} pemijam={ebooks.user} />
+          <Form type="ebook" data={ebooks.ebook} onOrderItem={onOrderItem} user={null} />
         )}
         {type === 'book' && books !== null && (
-          <Form type="book" data={books.book} onOrderItem={onOrderItem} pemijam={books.user} />
+          <Form type="book" data={books.book} onOrderItem={onOrderItem} user={books.user} />
         )}
       </section>
       <Modal

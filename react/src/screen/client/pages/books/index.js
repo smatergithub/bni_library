@@ -87,7 +87,7 @@ function Books(props) {
     props.history.push('/auth/login');
   }
   if (processing && props.books === null) return null;
-  console.log(props.books);
+
   const { wishlist } = props;
 
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
@@ -142,7 +142,7 @@ function Books(props) {
                     getCategory();
                     setPagination({
                       ...pagination,
-                      limit: 2,
+                      limit: 8,
                       page: 1,
                       judul: '',
                       kategori: '',

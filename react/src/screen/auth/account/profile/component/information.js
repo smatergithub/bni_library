@@ -8,7 +8,7 @@ function Information({ user, changePages }) {
         document.getElementsByTagName('iframe')[0].style.height = '150';
       }, 3000);
     }
-  }, []);
+  });
   if (user === null) return null;
   const ParserHTML = htmlDocument => {
     return {
