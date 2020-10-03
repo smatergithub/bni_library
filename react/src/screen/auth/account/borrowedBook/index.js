@@ -32,9 +32,9 @@ function Borrowed(props) {
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Buku | Ebni</title>
+        <title>Buku | E-BNI</title>
       </Helmet>
-      <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+      <div className="bg-orange-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         PINJAMAN
       </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">

@@ -33,6 +33,7 @@ const routes = [
 
 function Accounts(props) {
   const { match } = props;
+
   function logoutUser() {
     props.logout().then(res => {
       if (res.resp) {
@@ -59,11 +60,11 @@ function Accounts(props) {
       </div>
       <div
         className="px-5 pt-5 mb-5 cursor-pointer hover:text-gray-800 text-lg"
-        onClick={() => window.location.replace('/')}
+        onClick={() => window.location.replace(`${isAdmin ? '/admin/dashboard' : '/'}`)}
         style={{ width: '20em' }}
       >
         {' '}
-        <i className="fas fa-arrow-left"></i> Ke Beranda
+        <i className="fas fa-arrow-left"></i> {isAdmin ? 'Ke Dashboard' : 'Ke Beranda'}
       </div>
       <section className="bg-gray-100 py-12 w-full">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">

@@ -31,6 +31,7 @@ module.exports = {
           alamat: user.alamat,
           email: user.email,
           imageUrl: user.imageUrl,
+          mapUrl: user.mapUrl,
           isAdmin: user.isAdmin,
           superAdmin: user.superAdmin,
         };
@@ -41,6 +42,8 @@ module.exports = {
 
   updateProfile: async (req, res) => {
     var userId = req.userId;
+    console.log('==================');
+    console.log(req.body.mapUrl);
     Users.findOne({
       where: {
         id: userId,
@@ -65,6 +68,7 @@ module.exports = {
           email: req.body.email,
           alamat: req.body.alamat,
           imageUrl: req.body.imageUrl,
+          mapUrl: req.body.mapUrl,
           isAdmin: req.body.isAdmin,
           superAdmin: req.body.superAdmin,
         };
@@ -74,6 +78,7 @@ module.exports = {
             res.status(200).json({ message: 'Succesfully Update' });
           })
           .catch(err => {
+            console.log(err);
             res.status(404).json({ message: 'failed Update' });
           });
       })

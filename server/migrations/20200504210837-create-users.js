@@ -18,7 +18,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       tanggalLahir: {
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
       },
       wilayah: {
         type: Sequelize.STRING,
@@ -49,6 +49,9 @@ module.exports = {
       },
       imageUrl: {
         type: Sequelize.STRING,
+      },
+      mapUrl: {
+        type: Sequelize.TEXT,
       },
 
       password: {

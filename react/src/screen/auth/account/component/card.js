@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
-  console.log("data", data);
+  console.log('data', data);
   return (
     <div className="w-full mb-5 py-5 flex">
       <div className="w-1/6 h-48 flex items-center justify-center">
@@ -19,7 +19,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
       <div className="w-1/6 h-48 flex flex-col items-center justify-between py-10">
         <button
           onClick={() => onDetailClick()}
-          className="lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm h-10 px-5"
+          className="lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm h-10 px-5"
           style={{
             right: '2em',
           }}

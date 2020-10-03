@@ -5,7 +5,7 @@ import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
-import ModalDetailBook from "./modalDetailBook";
+import ModalDetailBook from './modalDetailBook';
 
 const Books = props => {
   const [loading, setLoading] = React.useState(false);
@@ -84,7 +84,7 @@ const Books = props => {
       displayName: 'Judul',
       customRender: rowData => {
         let data = rowData.book && rowData.book.judul;
-        return data
+        return data;
       },
     },
     {
@@ -92,7 +92,7 @@ const Books = props => {
       displayName: 'Pengarang',
       customRender: rowData => {
         let data = rowData.book && rowData.book.pengarang;
-        return data
+        return data;
       },
     },
     {
@@ -100,7 +100,7 @@ const Books = props => {
       displayName: 'Tahun Terbit',
       customRender: rowData => {
         let data = rowData.book && rowData.book.tahunTerbit;
-        return data
+        return data;
       },
     },
     // {
@@ -116,7 +116,7 @@ const Books = props => {
       displayName: 'Status',
       customRender: rowData => {
         let data = rowData.book && rowData.book.status;
-        return data
+        return data;
       },
     },
     {
@@ -133,7 +133,7 @@ const Books = props => {
                 onClick={() => getDetailDataBook(rowData)}
               >
                 detail
-                </button>
+              </button>
               <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -167,7 +167,7 @@ const Books = props => {
           <Link to="/admin/add-new-book">
             <button
               type="button"
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-plus mr-3" /> Buku Baru
             </button>
@@ -184,8 +184,8 @@ const Books = props => {
             searchDefaultValue={filterOptions.judul}
           />
         ) : (
-            <NoData />
-          )}
+          <NoData />
+        )}
       </main>
       <Modal
         title="Konfirmasi"

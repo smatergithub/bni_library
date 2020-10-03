@@ -131,7 +131,7 @@ const Repository = props => {
         <Link to="/admin/new-repository">
           <button
             type="button"
-            className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
           >
             <i className="fas fa-plus mr-3" /> Repository Baru
           </button>

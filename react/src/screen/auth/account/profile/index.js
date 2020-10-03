@@ -39,9 +39,9 @@ function Profile(props) {
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Akun | BNI</title>
+        <title>Akun | E-BNI</title>
       </Helmet>
-      <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+      <div className="bg-orange-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         Informasi Kontak
       </div>
       {!isEditUser ? (

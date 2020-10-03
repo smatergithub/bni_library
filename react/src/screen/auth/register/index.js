@@ -7,7 +7,7 @@ import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { ToastError, ToastSuccess } from '../../../component';
 import { signUp } from '../../../redux/action/user';
 
-const dateFormat = 'DD/MM/YYYY';
+const dateFormat = 'DD-MM-YYYY';
 function Register(props) {
   let { history } = props;
   const [formData, setFormData] = useState({
@@ -25,18 +25,33 @@ function Register(props) {
   function onFormSubmit(e) {
     e.preventDefault();
     formData.tanggalLahir = dateBorn;
-    props.signUp(formData).then(res => {
-      if (res.resp) {
-        ToastSuccess(res.msg);
+    let checkemail = formData.email.split('@');
 
-        setIsRequestSuccess(true);
-        setToken(res.token);
-        setEmail(res.email);
-        // history.push('/auth/login');
-      } else {
-        ToastError(res.msg);
-      }
-    });
+    if (formData.email.trim().length === 0 && formData.password.trim().length === 0) {
+      ToastError('Email atau password tidak boleh kosong');
+    } else if (formData.password !== formData.confirmPassword) {
+      ToastError('Konfirmasi Password tidak sesuai !');
+    } else if (checkemail.length === 2 && checkemail[1] !== 'bni.co.id') {
+      ToastError('Anda belum menginput alamat email BNI Anda');
+    } else {
+      formData.email =
+        checkemail.length === 2 && checkemail[1] === 'bni.co.id'
+          ? formData.email
+          : formData.email + '@bni.co.id';
+
+      props.signUp(formData).then(res => {
+        if (res.resp) {
+          ToastSuccess(res.msg);
+
+          setIsRequestSuccess(true);
+          setToken(res.token);
+          setEmail(res.email);
+          // history.push('/auth/login');
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    }
     // console.log(formData);
   }
   function handleDate(e, date) {
@@ -53,7 +68,7 @@ function Register(props) {
       <section className="absolute w-full h-full">
         <div
           className="absolute top-0 w-full h-full bg-orange-500"
-        // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
+          // style="background-image: url(./assets/img/register_bg_2.png); background-size: 100%; background-repeat: no-repeat;"
         ></div>
         <div className="container mx-auto px-4 h-full">
           <div className="flex content-center items-center justify-center h-full">
@@ -105,9 +120,9 @@ function Register(props) {
                       <div className="relative w-full mb-3">
                         <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                           Email
-                      </label>
+                        </label>
                         <input
-                          onChange={e => setFormData({ ...formData, email: e.target.value + "@bni.co.id" })}
+                          onChange={e => setFormData({ ...formData, email: e.target.value })}
                           type="text"
                           className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                           placeholder="Email"
@@ -123,7 +138,7 @@ function Register(props) {
                           }}
                         >
                           @bni.co.id
-                      </div>
+                        </div>
                       </div>
                       <div className="relative w-full mb-3">
                         <label

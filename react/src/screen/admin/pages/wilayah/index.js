@@ -67,7 +67,7 @@ const Wilayah = props => {
     let detailData = wilayah.data.filter(item => item.id === id);
     setDetailData(detailData[0]);
     if (MakeAdmin === 'edit') {
-      setShowModalDetail(true)
+      setShowModalDetail(true);
     } else {
       setShowModalDeletion(true);
     }
@@ -118,14 +118,14 @@ const Wilayah = props => {
                 onClick={() => getDetailWilayah(rowData.id, 'edit')}
               >
                 edit
-                </button>
+              </button>
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 onClick={() => getDetailWilayah(rowData.id, 'delete')}
               >
                 Delete
-                </button>{' '}
+              </button>{' '}
             </React.Fragment>
           </React.Fragment>
         );
@@ -140,7 +140,7 @@ const Wilayah = props => {
         <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
           <button
             type="button"
-            className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => {
               setDetailData({});
               setShowModalDetail(true);

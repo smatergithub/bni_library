@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
       npp: DataTypes.STRING,
       nama: DataTypes.STRING,
       phoneNumber: DataTypes.STRING,
-      tanggalLahir: DataTypes.DATE,
+      tanggalLahir: DataTypes.STRING,
       wilayah: DataTypes.STRING,
       singkatan: DataTypes.STRING,
       kdunit: DataTypes.STRING,
@@ -22,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       jabatan: DataTypes.STRING,
       alamat: DataTypes.STRING,
       email: DataTypes.STRING,
+      mapUrl: DataTypes.STRING,
       imageUrl: DataTypes.STRING,
       password: DataTypes.STRING,
       isVerified: DataTypes.BOOLEAN,
@@ -35,16 +36,16 @@ module.exports = (sequelize, DataTypes) => {
       scopes: {
         withPassword: {
           attributes: {},
-        }
-      }
+        },
+      },
     }
   );
-  users.associate = function (models) {
+  users.associate = function(models) {
     // associations can be defined here
     users.hasMany(models.transactionBook, {
       foreignKey: 'userId',
-      as: 'users'
-    })
+      as: 'users',
+    });
   };
   return users;
 };

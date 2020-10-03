@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-// import { moment } from 'moment';
-import DatePicker from 'react-datepicker';
+import { moment } from 'moment';
+import { DatePicker } from 'antd';
+
 import { Input, Select } from 'antd';
 import { updateMe, getWilayah } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
 const { Option } = Select;
+const dateFormat = 'DD-MM-YYYY';
 
 function EditUser(props) {
   const [dataWilayah, setDataWilayah] = React.useState([]);
   const [codeWilayah, setCodeWilayah] = React.useState([]);
   const [alamat, setAlamat] = React.useState([]);
   const [linkMap, setLinkMap] = React.useState([]);
-  const [selectedAlamat, setSelectedAlamat] = React.useState({})
-  const [selectedLinkMap, setSelectedLinkMap] = React.useState({});
+  const [selectedAlamat, setSelectedAlamat] = React.useState({});
+  const [selectedLinkMap, setSelectedLinkMap] = React.useState(null);
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
   function onSubmit(formData) {
     formData.tanggalLahir = dateBorn;
-    formData.alamat = selectedAlamat.label
-    debugger;
+    formData.alamat = selectedAlamat.label;
+    formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
     props.updateMe(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
@@ -35,53 +37,68 @@ function EditUser(props) {
       }
     });
   }
+  React.useEffect(() => {
+    if (props.user.mapUrl) {
+      setTimeout(() => {
+        document.getElementsByTagName('iframe')[0].style.width = '100%';
+        document.getElementsByTagName('iframe')[0].style.height = '150';
+      }, 3000);
+    }
+  }, []);
 
   const getWilayah = () => {
     props.getWilayah().then(response => {
       let data = response.data.data.map(item => {
-        return { label: item.wilayah, value: item.id }
-      })
-      setDataWilayah(data)
-    })
-  }
+        return { label: item.wilayah, value: item.id };
+      });
+      setDataWilayah(data);
+    });
+  };
   const getCodeWilayahAndAlamat = () => {
     props.getWilayah().then(response => {
       let data = response.data.data.map(item => {
-        return { label: item.codeWilayah, value: item.id }
-      })
+        return { label: item.codeWilayah, value: item.id };
+      });
       let alamat = response.data.data.map(item => {
-        return { label: item.alamat, value: item.id }
-      })
+        return { label: item.alamat, value: item.id };
+      });
       let linkMap = response.data.data.map(item => {
-        return { label: item.linkGoogleMap, value: item.id }
-      })
-      console.log("alamat", alamat)
+        return { label: item.linkGoogleMap, value: item.id };
+      });
+
       setAlamat(alamat);
-      setCodeWilayah(data)
-      setLinkMap(linkMap)
-    })
-  }
+      setCodeWilayah(data);
+      setLinkMap(linkMap);
+    });
+  };
 
   React.useEffect(() => {
     getWilayah();
     getCodeWilayahAndAlamat();
-  }, [])
+  }, []);
 
   function handleChange(value) {
     let data = alamat.filter(item => item.value === value);
     let lokasiMap = linkMap.filter(item => item.value === value);
     setSelectedLinkMap(lokasiMap[0]);
-    setSelectedAlamat(data[0])
+    setSelectedAlamat(data[0]);
+    setTimeout(() => {
+      document.getElementsByTagName('iframe')[0].style.width = '100%';
+      document.getElementsByTagName('iframe')[0].style.height = '150';
+    }, 3000);
   }
 
-  const ParserHTML = (htmlDocument) => {
+  const ParserHTML = htmlDocument => {
     return {
       __html: htmlDocument,
     };
   };
-
+  function handleDate(e, date) {
+    setDateBorn(date);
+  }
 
   let { user } = props;
+  if (!user) return null;
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg pl-10 relative">
       <div class="px-4 py-8 flex">
@@ -94,7 +111,7 @@ function EditUser(props) {
                 defaultValue={user.nama}
                 type="text"
                 name="nama"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 placeholder="Nama"
                 style={{
                   transition: 'all 0.15s ease 0s',
@@ -107,7 +124,7 @@ function EditUser(props) {
                 defaultValue={user.email}
                 type="email"
                 disabled
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
                 placeholder="Email"
                 style={{
                   transition: 'all 0.15s ease 0s',
@@ -119,9 +136,14 @@ function EditUser(props) {
                 Tanggal Lahir
               </label>
               <DatePicker
-                selected={dateBorn}
-                onChange={setDateBorn}
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                style={{
+                  height: 45,
+                }}
+                // defaultValue={moment('15/01/2010', dateFormat)}
+                // value={moment().format(dateFormat)}
+                placeholder={user.tanggalLahir}
+                format={dateFormat}
+                onChange={handleDate}
               />
             </div>
             <div className="relative w-full mb-3">
@@ -164,7 +186,7 @@ function EditUser(props) {
                 ref={register()}
                 name="unit"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -179,7 +201,7 @@ function EditUser(props) {
                 ref={register()}
                 name="kdunit"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -194,7 +216,7 @@ function EditUser(props) {
                 ref={register()}
                 name="jabatan"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -214,10 +236,21 @@ function EditUser(props) {
                 })}
               </Select>
             </div>
-            {selectedLinkMap ? <div className="relative w-full mb-3">
-              <div style={{ width: '100%  ' }} dangerouslySetInnerHTML={ParserHTML(selectedLinkMap.label)}></div>
-            </div> : null}
-
+            {selectedLinkMap ? (
+              <div className="relative w-full mb-3">
+                <div
+                  style={{ width: '100% !important' }}
+                  dangerouslySetInnerHTML={ParserHTML(selectedLinkMap.label)}
+                ></div>
+              </div>
+            ) : user.mapUrl ? (
+              <div className="relative w-full mb-3">
+                <div
+                  style={{ width: '100% !important' }}
+                  dangerouslySetInnerHTML={ParserHTML(user.mapUrl)}
+                ></div>
+              </div>
+            ) : null}
 
             <div className="mt-10">
               <button
