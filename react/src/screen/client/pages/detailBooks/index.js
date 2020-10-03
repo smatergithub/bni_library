@@ -16,6 +16,7 @@ function DetailBooks(props) {
   let [books, setBooks] = React.useState(null);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [isWishlistClick, setIsWishlistClick] = React.useState(false);
+  let [showMore, setShowMore] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
@@ -58,16 +59,16 @@ function DetailBooks(props) {
         </div>
         {books !== null && (
           <div class="flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-20 py-10  m-2">
+            <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
               <div className="w-2/5 ">
-                <div className="bg-white rounded-lg  border-gray-300">
+                <div className="bg-red-400 rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={books.book.image}
                     alt=""
                     style={{
-                      height: 440,
-                      width: 300,
+                      height: 400,
+                      width: 350,
                     }}
                   />
                 </div>
@@ -93,11 +94,38 @@ function DetailBooks(props) {
                 <div> Paperback | {books.book.bahasa}</div>
                 <div>{`By (author) ${books.book.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
-                <div>{books.book.description}</div>
+                <div>
+                  {books.book.description.length > 505
+                    ? books.book.description.slice(
+                        0,
+                        showMore ? books.book.description.length : 500
+                      )
+                    : null}
+                </div>
+
+                {books.book.description.length > 505 && (
+                  <div
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-blue-400 underline cursor-pointer"
+                  >
+                    {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
+                  </div>
+                )}
               </div>
             </div>
-            <div class="w-2/6  bg-white px-10 py-10 m-2">
+            <div class="w-2/6  bg-white px-10 py-10 m-2 relative">
               <div className="text-lg font-bold">Book Details</div>
+              <div
+                className={`font-bold absolute  ${
+                  books.book.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
+                } text-white py-1 px-3 rounded`}
+                style={{
+                  right: '2em',
+                  top: '2em',
+                }}
+              >
+                {books.book.stockBuku == 0 ? 'Tidak Tersedia' : 'Tesedia'}
+              </div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"
                 style={{
@@ -113,35 +141,49 @@ function DetailBooks(props) {
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
               <div> Condition : {books.book.condition}</div>
-              <div>Peminjam : {books.user ? books.user.nama : "Tidak Ada Peminjam"}</div>
-              {books.user ? <div>Unit : {books.user ? books.user.unit : ""}</div> : null}
-              {books.user ? <div>Alamat : {books.user ? books.user.alamat : ""}</div> : null}
-              <button
-                onClick={() => {
-                  if (!isUserLogged) {
-                    setShowModalDeletion(true);
-                  } else {
-                    props.history.push(`/order?id=${books.book.id}&type=book`);
-                  }
+              <div className="text-lg font-bold pt-5">Peminjam</div>
+              <div
+                className="bg-gray-400 w-full mt-2 mb-2"
+                style={{
+                  height: 1,
                 }}
-                className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-              >
-                Pinjam Sekarang
-              </button>
-              <button
-                onClick={() => {
-                  if (!isUserLogged) {
-                    setShowModalDeletion(true);
-                  } else {
-                    onWishlistClick(books.book);
-                  }
-                }}
-                className={`w-full  ${isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
-                  }  rounded-lg my-1 py-2 px-10 border ${isWishlistClick ? 'border-red-600' : 'border-gray-600'
-                  }`}
-              >
-                {isWishlistClick ? 'Hapus Wishlist' : 'Tambah Wishlist'}
-              </button>
+              ></div>
+              <div>Peminjam : {books.user ? books.user.nama : 'Tidak Ada Peminjam'}</div>
+              {books.user ? <div>Unit : {books.user ? books.user.unit : ''}</div> : null}
+              {books.user ? <div>Alamat : {books.user ? books.user.alamat : ''}</div> : null}
+
+              {books.book.stockBuku != 0 && (
+                <>
+                  <button
+                    onClick={() => {
+                      if (!isUserLogged) {
+                        setShowModalDeletion(true);
+                      } else {
+                        props.history.push(`/order?id=${books.book.id}&type=book`);
+                      }
+                    }}
+                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                  >
+                    Pinjam Sekarang
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (!isUserLogged) {
+                        setShowModalDeletion(true);
+                      } else {
+                        onWishlistClick(books.book);
+                      }
+                    }}
+                    className={`w-full  ${
+                      isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
+                    }  rounded-lg my-1 py-2 px-10 border ${
+                      isWishlistClick ? 'border-red-600' : 'border-gray-600'
+                    }`}
+                  >
+                    {isWishlistClick ? 'Hapus Wishlist' : 'Tambah Wishlist'}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         )}

@@ -87,7 +87,7 @@ function Books(props) {
     props.history.push('/auth/login');
   }
   if (processing && props.books === null) return null;
-  console.log(props.books);
+
   const { wishlist } = props;
 
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
@@ -142,7 +142,7 @@ function Books(props) {
                     getCategory();
                     setPagination({
                       ...pagination,
-                      limit: 2,
+                      limit: 8,
                       page: 1,
                       judul: '',
                       kategori: '',
@@ -185,6 +185,7 @@ function Books(props) {
                   </div>
 
                   <div className="pt-1 text-gray-900">{book.pengarang}</div>
+
                   {/* <div className="flex items-center">
                     <i className="fas fa-star text-yellow-700" />
                     <i className="fas fa-star text-yellow-700" />

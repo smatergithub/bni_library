@@ -26,6 +26,7 @@ module.exports = {
         },
       };
     }
+    paramQuerySQL.attributes = { exclude: ['sourceLink'] };
 
     if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
       paramQuerySQL.where = {
@@ -137,6 +138,7 @@ module.exports = {
             message: 'ebook Not Found',
           });
         }
+        ebook[0]['ebook'].sourceLink = '';
         return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));

@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { ToastError } from '../../../../component';
-function FormOrder({ data, type, onOrderItem }) {
+function FormOrder({ data, type, onOrderItem, user }) {
   const parsed = queryString.parse(window.location.search);
   const { handleSubmit, register, errors } = useForm();
   let [startDate, setStartDate] = React.useState(null);
@@ -24,13 +24,19 @@ function FormOrder({ data, type, onOrderItem }) {
       formData['startDate'] = startDate;
       formData['endDate'] = endDate;
       if (type === 'book') {
-        formData['books'] = [
-          {
-            bookId: id,
-            quantity: formData.quantity,
-          },
-        ];
-        onOrderItem(formData);
+        if (Number(formData.quantity) > data.stockBuku) {
+          ToastError('Stock buku tidak cukup!');
+        } else if (data.stockBuku == 0) {
+          ToastError('Buku tidak tersedia!');
+        } else {
+          formData['books'] = [
+            {
+              bookId: id,
+              quantity: formData.quantity,
+            },
+          ];
+          onOrderItem(formData);
+        }
       } else if (type === 'ebook') {
         formData['ebooks'] = [
           {
@@ -79,22 +85,46 @@ function FormOrder({ data, type, onOrderItem }) {
           <div>{`By (author) ${data.pengarang}`}</div>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             {type === 'book' && (
-              <div className="relative w-full mb-3">
-                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
-                  Jumlah Buku
-                </label>
-                <input
-                  ref={register()}
-                  // defaultValue={user.nama}
-                  type="text"
-                  name="quantity"
-                  className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
-                  placeholder="Nama"
+              <React.Fragment>
+                <div className="text-lg font-bold">Peminjam</div>
+                <div
+                  className="bg-gray-400 w-full mt-2"
                   style={{
-                    transition: 'all 0.15s ease 0s',
+                    height: 1,
                   }}
-                />
-              </div>
+                ></div>
+                <div className="mt-3">Peminjam : {user ? user.nama : '-'}</div>
+                {user ? <div>Unit : {user ? user.unit : ''}</div> : null}
+                {user ? <div>Alamat : {user ? user.alamat : ''}</div> : null}
+                <div
+                  className={`font-bold w-32 my-5 ${
+                    data.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
+                  } text-white py-1 px-3 rounded`}
+                  style={{
+                    right: '2em',
+                    top: '2em',
+                  }}
+                >
+                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tesedia'}
+                </div>
+
+                <div className="relative w-full mb-3">
+                  <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
+                    Jumlah Buku
+                  </label>
+                  <input
+                    ref={register()}
+                    // defaultValue={user.nama}
+                    type="number"
+                    name="quantity"
+                    className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
+                    placeholder="Jumlah Buku"
+                    style={{
+                      transition: 'all 0.15s ease 0s',
+                    }}
+                  />
+                </div>
+              </React.Fragment>
             )}
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Note</label>
@@ -104,7 +134,7 @@ function FormOrder({ data, type, onOrderItem }) {
                 type="text"
                 name="note"
                 className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
-                placeholder="Nama"
+                placeholder="note"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
