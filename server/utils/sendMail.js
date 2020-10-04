@@ -14,7 +14,7 @@ module.exports = {
     const template = fs.readFileSync('./server/utils/template.html', 'utf8');
     const transporter = await nodemailer.createTransport(config);
     const mail = {
-      to: 'darvinsinaga12@gmail.com',
+      to: payload.email,
       from: 'e.bni.library@gmail.com',
       subject: '[BNI LIBRARY] - Email Konfirmasi !',
       html: mustache.render(unescape(template), { ...payload }),
@@ -32,7 +32,7 @@ module.exports = {
     const template = fs.readFileSync('./server/utils/template.html', 'utf8');
     const transporter = await nodemailer.createTransport(config);
     const mail = {
-      to: 'darvinsinaga12@gmail.com',
+      to: payload.email,
       from: 'e.bni.library@gmail.com',
       subject: '[BNI LIBRARY] - Password Reset!',
       html: mustache.render(unescape(template), { ...payload }),

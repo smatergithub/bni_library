@@ -32,8 +32,9 @@ module.exports = {
         })
           .then(verification => {
             send.sendMailRegister({
-              link: `http://localhost:3000/auth/activation?email=${req.body.email}&token=${verification.token} `,
+              link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
               name: req.body.nama,
+              email: req.body.email,
               btn_title: 'Verif email address',
               text:
                 'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
@@ -155,8 +156,9 @@ module.exports = {
               })
               .then(response => {
                 send.sendResetPasswordLink({
-                  link: `http://localhost:3000/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
+                  link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
                   name: '',
+                  email: req.body.email,
                   btn_title: 'Password Reset',
                   text:
                     'You requested a password reset. Please use the button below to continue the process.',
