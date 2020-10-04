@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { Document, Page, pdfjs } from 'react-pdf';
+import ReactStars from 'react-rating-stars-component';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
@@ -202,13 +203,24 @@ function Ebooks(props) {
                   </div>
 
                   <div className="pt-1 text-gray-900">{ebook.pengarang}</div>
-                  {/* <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
-                  </div> */}
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        ebook.totalRead
+                          ? ebook.countRating
+                            ? ebook.countRating / ebook.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span>
+                      <i className="fas fa-eye text-yellow-700" />{' '}
+                      {ebook.totalRead ? ebook.totalRead : 0}
+                    </span>
+                  </div>
                   <button
                     onClick={() => {
                       setShowPreview({

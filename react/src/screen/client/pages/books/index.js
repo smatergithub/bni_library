@@ -2,6 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import ReactStars from 'react-rating-stars-component';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
@@ -185,14 +186,24 @@ function Books(props) {
                   </div>
 
                   <div className="pt-1 text-gray-900">{book.pengarang}</div>
-
-                  {/* <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
-                  </div> */}
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        book.totalRead
+                          ? book.countRating
+                            ? book.countRating / book.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span>
+                      <i className="fas fa-eye text-yellow-700" />{' '}
+                      {book.totalRead ? book.totalRead : 0}
+                    </span>
+                  </div>
                   <button
                     className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
                     onClick={() => history.push(`/detail-book?id=${book.id}`)}
