@@ -23,18 +23,17 @@ module.exports = (sequelize, DataTypes) => {
       status: DataTypes.STRING,
       image: DataTypes.STRING,
       countRating: DataTypes.INTEGER,
+      totalRead: DataTypes.INTEGER,
       condition: DataTypes.STRING,
       isPromotion: DataTypes.BOOLEAN,
     },
-    {
-
-    }
+    {}
   );
-  books.associate = function (models) {
+  books.associate = function(models) {
     books.hasMany(models.transactionBook, {
       foreignKey: 'bookId',
-      as: 'transactionBook'
-    })
+      as: 'transactionBook',
+    });
   };
   return books;
 };

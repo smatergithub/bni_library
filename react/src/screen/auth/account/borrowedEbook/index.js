@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactStars from 'react-rating-stars-component';
 import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
@@ -13,7 +14,7 @@ function BorrowedEbook(props) {
   React.useEffect(() => {
     props.getMe().then(res => {
       if (res.resp) {
-        props.getBorrowedEbookItem(res.data.id, 'rating=true').then(res => {
+        props.getBorrowedEbookItem(res.data.id, 'borrowed=true').then(res => {
           if (res.resp) {
             setBorrowItem(res.data);
           }
@@ -73,12 +74,12 @@ function BorrowedEbook(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={ebooks.image}
                     alt=""
                     style={{
-                      height: 440,
+                      height: 240,
                       width: 300,
+                      objectFit: 'cover',
                     }}
                   />
                 </div>
@@ -92,14 +93,21 @@ function BorrowedEbook(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        ebooks.totalRead
+                          ? ebooks.countRating
+                            ? ebooks.countRating / ebooks.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3"> {ebooks.totalRead ? ebooks.totalRead : 0} Views</span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
                 <div> Paperback | {ebooks.bahasa}</div>
                 <div>{`By (author) ${ebooks.pengarang}`}</div>

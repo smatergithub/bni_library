@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
+import ReactStars from 'react-rating-stars-component';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
@@ -79,14 +80,24 @@ function DetailEbooks(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        ebooks.ebook.totalRead
+                          ? ebooks.ebook.countRating
+                            ? ebooks.ebook.countRating / ebooks.ebook.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3">
+                      {' '}
+                      {ebooks.ebook.totalRead ? ebooks.ebook.totalRead : 0} Views
+                    </span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
                 <div> Paperback | {ebooks.ebook.bahasa}</div>
                 <div>{`By (author) ${ebooks.ebook.pengarang}`}</div>

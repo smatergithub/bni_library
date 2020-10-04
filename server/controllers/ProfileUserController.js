@@ -42,8 +42,6 @@ module.exports = {
 
   updateProfile: async (req, res) => {
     var userId = req.userId;
-    console.log('==================');
-    console.log(req.body.mapUrl);
     Users.findOne({
       where: {
         id: userId,

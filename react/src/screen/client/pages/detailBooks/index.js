@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
+import ReactStars from 'react-rating-stars-component';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
 
-let img =
-  'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 function DetailBooks(props) {
   const parsed = queryString.parse(props.location.search);
   let { history } = props;
@@ -82,14 +81,24 @@ function DetailBooks(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        books.book.totalRead
+                          ? books.book.countRating
+                            ? books.book.countRating / books.book.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3">
+                      {' '}
+                      {books.book.totalRead ? books.book.totalRead : 0} Views
+                    </span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
                 <div> Paperback | {books.book.bahasa}</div>
                 <div>{`By (author) ${books.book.pengarang}`}</div>

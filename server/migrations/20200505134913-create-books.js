@@ -53,6 +53,9 @@ module.exports = {
       countRating: {
         type: Sequelize.INTEGER,
       },
+      totalRead: {
+        type: Sequelize.INTEGER,
+      },
       isPromotion: {
         type: Sequelize.BOOLEAN,
       },
