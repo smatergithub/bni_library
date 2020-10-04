@@ -33,6 +33,18 @@ const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
         >
           {type === 'wishlist' ? 'PESAN' : 'DETAIL'}
         </button>
+        {type === 'borrow' && data.sourceLink && (
+          <a
+            href={data.sourceLink}
+            className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm h-10 px-5 py-3"
+            style={{
+              right: '2em',
+            }}
+            download
+          >
+            UNDUH
+          </a>
+        )}
         {type === 'wishlist' && (
           <div className="text-red-500 cursor-pointer" onClick={() => onRemoveItem()}>
             HAPUS
