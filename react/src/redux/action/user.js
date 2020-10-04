@@ -241,3 +241,28 @@ export const getWilayah = () => () => {
       return { resp: false, msg: msg };
     });
 };
+
+export const forgotPassword = data => () => {
+  return UserApi.forgotPassword(data)
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const resetPassword = data => () => {
+  return UserApi.resetPassword(data)
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

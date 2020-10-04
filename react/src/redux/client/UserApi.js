@@ -61,4 +61,12 @@ export default class UsersApi {
     const url = `/api/ratingEbook`;
     return Request.postWithAuth(url, userData, false, false);
   }
+  static forgotPassword(userData) {
+    const url = `/api/resetPassword`;
+    return Request.post(url, userData);
+  }
+  static resetPassword(userData) {
+    const url = `/api/updatePassword`;
+    return Request.post(url, userData);
+  }
 }

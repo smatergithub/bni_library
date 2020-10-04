@@ -1,12 +1,36 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
+import { connect } from 'react-redux';
+import { forgotPassword } from 'redux/action/user';
+import { ToastError } from 'component';
 
-function ForgotPassword() {
+function ForgotPassword(props) {
+  const [email, setEmail] = React.useState('');
+  const [sendSuccess, setSendSuccess] = React.useState(false);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if (email.trim().length == 0) {
+      ToastError('Email tidak boleh kosong');
+    } else if (
+      /^(([^<>()%[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
+        `${email}`
+      ) === false
+    ) {
+      ToastError('Email tidak valid');
+    } else {
+      props.forgotPassword({ email }).then(res => {
+        if (res.resp) {
+          setSendSuccess(true);
+        }
+      });
+    }
+  }
   return (
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Lupa Sandi | Ebni</title>
+        <title>Lupa Sandi | E-BNI</title>
       </Helmet>
       <section className="absolute w-full h-full">
         <div
@@ -25,43 +49,65 @@ function ForgotPassword() {
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form>
-                    <div className="mt-10 mb-10 text-center">
-                      <div className="text-gray-700 mt-5">
-                        Masukkan email yang telah terdaftar untuk menerima kode untuk melakukan
-                        pembuatan password baru.
+                  {sendSuccess && (
+                    <div>
+                      <div className="py-5 text-lg text-center">
+                        {' '}
+                        Silahkan periksa email anda untuk menerima kode untuk melakukan pembuatan
+                        password baru
                       </div>
-                    </div>
-                    <div className="relative w-full mb-3">
-                      <label
-                        className="block uppercase text-gray-700 text-xs font-bold mb-2"
-                        for="grid-password"
-                      >
-                        Email
-                      </label>
-
-                      <input
-                        type="email"
-                        className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border w-full"
-                        placeholder="Email"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      />
-                    </div>
-
-                    <div className="text-center mt-12">
                       <button
-                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="button"
+                        onClick={() => window.location.replace('/')}
+                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        type="submit"
                         style={{
                           transition: 'all 0.15s ease 0s',
                         }}
                       >
-                        KIRIM
+                        Ke Beranda
                       </button>
                     </div>
-                  </form>
+                  )}
+                  {!sendSuccess && (
+                    <form onSubmit={e => handleSubmit(e)}>
+                      <div className="mt-10 mb-10 text-center">
+                        <div className="text-gray-700 mt-5">
+                          Masukkan email yang telah terdaftar untuk menerima kode untuk melakukan
+                          pembuatan password baru.
+                        </div>
+                      </div>
+                      <div className="relative w-full mb-3">
+                        <label
+                          className="block uppercase text-gray-700 text-xs font-bold mb-2"
+                          for="grid-password"
+                        >
+                          Email
+                        </label>
+
+                        <input
+                          type="email"
+                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm focus:outline-none border w-full"
+                          placeholder="Email"
+                          onChange={e => setEmail(e.target.value)}
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        />
+                      </div>
+
+                      <div className="text-center mt-12">
+                        <button
+                          className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                          type="submit"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        >
+                          KIRIM
+                        </button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
@@ -71,4 +117,4 @@ function ForgotPassword() {
     </main>
   );
 }
-export default ForgotPassword;
+export default connect(null, { forgotPassword })(ForgotPassword);
