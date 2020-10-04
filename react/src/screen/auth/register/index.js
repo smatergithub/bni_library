@@ -170,7 +170,7 @@ function Register(props) {
                             height: 45,
                           }}
                           onChange={e => setFormData({ ...formData, password: e.target.value })}
-                          placeholder="input password"
+                          placeholder="Password"
                           iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
@@ -190,7 +190,7 @@ function Register(props) {
                           onChange={e =>
                             setFormData({ ...formData, confirmPassword: e.target.value })
                           }
-                          placeholder="input password"
+                          placeholder="Confirm Password"
                           iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }

@@ -144,28 +144,35 @@ module.exports = {
           where: {
             userId: user.id,
           },
-        }).then(verificationToken => {
-          var expireDate = new Date();
-          expireDate.setDate(expireDate.getDate() + 1 / 24);
-          verificationToken
-            .update({
-              resetToken: cryptoRandomString({ length: 20 }),
-              expiredDateResetToken: expireDate,
-            })
-            .then(response => {
-              send.sendResetPasswordLink({
-                link: `http://localhost:3000/auth/reset-password?token=${response.resetToken} `,
-                name: '',
-                btn_title: 'Password Reset',
-                text:
-                  'You requested a password reset. Please use the button below to continue the process.',
+        })
+          .then(verificationToken => {
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1 / 24);
+            verificationToken
+              .update({
+                resetToken: cryptoRandomString({ length: 20 }),
+                expiredDateResetToken: expireDate,
+              })
+              .then(response => {
+                send.sendResetPasswordLink({
+                  link: `http://localhost:3000/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
+                  name: '',
+                  btn_title: 'Password Reset',
+                  text:
+                    'You requested a password reset. Please use the button below to continue the process.',
+                });
+                res.status(200).json({ message: 'success' });
+              })
+              .catch(err => {
+                res.status(200).send({ message: 'success' });
               });
-              res.status(200).json({ message: 'success' });
-            })
-            .catch(err => {
-              res.status(200).send({ message: 'success' });
-            });
-        });
+          })
+          .catch(err => {
+            res.status(200).send({ message: 'success' });
+          });
+      })
+      .catch(err => {
+        res.status(200).send({ message: 'success' });
       });
   },
 

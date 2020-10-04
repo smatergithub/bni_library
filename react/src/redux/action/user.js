@@ -254,8 +254,8 @@ export const forgotPassword = data => () => {
       return { resp: false, msg: msg };
     });
 };
-export const resetPassword = data => () => {
-  return UserApi.resetPassword(data)
+export const resetPassword = (data, query) => () => {
+  return UserApi.resetPassword(data, query)
     .then(res => {
       if (res) {
         return { resp: true, msg: '' };

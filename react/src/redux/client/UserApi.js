@@ -65,8 +65,8 @@ export default class UsersApi {
     const url = `/api/resetPassword`;
     return Request.post(url, userData);
   }
-  static resetPassword(userData) {
-    const url = `/api/updatePassword`;
+  static resetPassword(userData, query) {
+    const url = `/api/updatePassword${query}`;
     return Request.post(url, userData);
   }
 }

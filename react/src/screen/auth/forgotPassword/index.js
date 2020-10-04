@@ -53,8 +53,8 @@ function ForgotPassword(props) {
                     <div>
                       <div className="py-5 text-lg text-center">
                         {' '}
-                        Silahkan periksa email anda untuk menerima kode untuk melakukan pembuatan
-                        password baru
+                        Silahkan periksa email anda, jika email terdaftar ke sistem maka akan
+                        menerima kode untuk melakukan pembuatan password baru
                       </div>
                       <button
                         onClick={() => window.location.replace('/')}
