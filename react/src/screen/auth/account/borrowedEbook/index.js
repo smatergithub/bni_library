@@ -74,7 +74,6 @@ function BorrowedEbook(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={ebooks.image}
                     alt=""
                     style={{
