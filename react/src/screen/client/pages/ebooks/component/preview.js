@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import queryString from 'query-string';
+import Loader from 'react-loader-spinner';
 import { withRouter } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { getEbookPreview } from '../../../../../redux/action/ebookUser';
@@ -10,14 +11,17 @@ function EbookPreview(props) {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = React.useState(0);
   const [ebook, setEbook] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
   function onDocumentLoadSuccess({ numPages }) {
     setTotalPages(numPages);
   }
   React.useEffect(() => {
+    setLoading(true);
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     let { id } = props;
     props.getEbookPreview(id).then(res => {
       if (res.resp) {
+        setLoading(false);
         setEbook(res.data);
       }
       console.log(res);
@@ -25,6 +29,11 @@ function EbookPreview(props) {
   }, []);
   return (
     <div className="w-full">
+      {loading && (
+        <div className="w-full mx-auto">
+          <Loader type="ThreeDots" color="#2BAD60" height="100" width="100" />
+        </div>
+      )}
       {ebook && (
         <React.Fragment>
           <Document
@@ -64,7 +73,7 @@ function EbookPreview(props) {
 
               <div
                 onClick={() => {
-                  if (pageNumber > totalPages) {
+                  if (pageNumber > totalPages - 1) {
                     return;
                   } else {
                     setPageNumber(pageNumber + 1);

@@ -21,7 +21,7 @@ function Home() {
                     Ada beberapa pilihan buku yang bisa kamu pinjam dan di antar gratis!
                   </p>
                   <Link to="/books">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-blue-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
                       Buku
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -29,7 +29,7 @@ function Home() {
                     </button>
                   </Link>
                   <Link to="/ebooks">
-                    <button className="ml-4  hover:underline bg-gray-800 text-white  rounded-lg  py-2 px-6 shadow-lg">
+                    <button className="ml-4  hover:underline bg-orange-500 text-white  rounded-lg  py-2 px-6 shadow-lg">
                       Ebook
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -38,7 +38,7 @@ function Home() {
                   </Link>
                 </div>
                 <div>
-                  <div className="w-48 h-24 bg-blue-600 rounded-full">
+                  <div className="w-48 h-24 bg-orange-500 rounded-full">
                     <img src={require('../../../../assets/home.svg')} />
                   </div>
                 </div>
@@ -50,7 +50,7 @@ function Home() {
                     Buat kamu yang mau riset di BNI, Detailnya ada di FaQ ya..
                   </p>
                   <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-blue-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya..
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -59,7 +59,7 @@ function Home() {
                   </Link>
                 </div>
                 <div>
-                  <div className="w-48 h-24 bg-blue-600 ml-2 rounded-full">
+                  <div className="w-48 h-24 bg-orange-500 ml-2 rounded-full">
                     <img src={require('../../../../assets/home2.svg')} />
                   </div>
                 </div>
@@ -93,7 +93,7 @@ function Home() {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                   <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -121,7 +121,7 @@ function Home() {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                   <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -149,7 +149,7 @@ function Home() {
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
                   <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
