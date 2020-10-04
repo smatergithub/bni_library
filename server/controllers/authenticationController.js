@@ -5,6 +5,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+const send = require('../utils/sendMail');
 const { setJWTCookieOption } = require('../utils/setCookies');
 
 require('dotenv').config();
@@ -30,11 +31,16 @@ module.exports = {
           expiredDateToken: expireDate,
         })
           .then(verification => {
+            send.sendMailRegister({
+              link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
+              name: req.body.nama,
+              email: req.body.email,
+              btn_title: 'Verif email address',
+              text:
+                'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
+            });
             res.status(201).send({
               message: 'account was registered successfully!',
-              verificationToken: verification.token,
-              email: req.body.email,
-              expiredDateToken: verification.expiredDateToken,
             });
           })
           .catch(err => {
@@ -139,24 +145,36 @@ module.exports = {
           where: {
             userId: user.id,
           },
-        }).then(verificationToken => {
-          var expireDate = new Date();
-          expireDate.setDate(expireDate.getDate() + 1 / 24);
-          verificationToken
-            .update({
-              resetToken: cryptoRandomString({ length: 20 }),
-              expiredDateResetToken: expireDate,
-            })
-            .then(response => {
-              res.status(200).json({
-                resetToken: response.resetToken,
-                expiredDateResetToken: response.expiredDateResetToken,
+        })
+          .then(verificationToken => {
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1 / 24);
+            verificationToken
+              .update({
+                resetToken: cryptoRandomString({ length: 20 }),
+                expiredDateResetToken: expireDate,
+              })
+              .then(response => {
+                send.sendResetPasswordLink({
+                  link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
+                  name: '',
+                  email: req.body.email,
+                  btn_title: 'Password Reset',
+                  text:
+                    'You requested a password reset. Please use the button below to continue the process.',
+                });
+                res.status(200).json({ message: 'success' });
+              })
+              .catch(err => {
+                res.status(200).send({ message: 'success' });
               });
-            })
-            .catch(err => {
-              res.status(500).send({ message: err.message });
-            });
-        });
+          })
+          .catch(err => {
+            res.status(200).send({ message: 'success' });
+          });
+      })
+      .catch(err => {
+        res.status(200).send({ message: 'success' });
       });
   },
 

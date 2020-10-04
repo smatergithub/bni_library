@@ -19,8 +19,6 @@ function Register(props) {
   });
   let [dateBorn, setDateBorn] = React.useState(null);
   let [isRegisterSuccess, setIsRequestSuccess] = React.useState(false);
-  let [token, setToken] = React.useState('');
-  let [email, setEmail] = React.useState('');
 
   function onFormSubmit(e) {
     e.preventDefault();
@@ -44,8 +42,6 @@ function Register(props) {
           ToastSuccess(res.msg);
 
           setIsRequestSuccess(true);
-          setToken(res.token);
-          setEmail(res.email);
           // history.push('/auth/login');
         } else {
           ToastError(res.msg);
@@ -55,7 +51,6 @@ function Register(props) {
     // console.log(formData);
   }
   function handleDate(e, date) {
-    console.log(date);
     setDateBorn(date);
   }
 
@@ -76,25 +71,27 @@ function Register(props) {
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
                 <div className="rounded-t mb-0 px-6 py-6">
                   <div className="text-center mb-3">
-                    <h4 className="text-gray-600 text-sm font-bold">Register</h4>
+                    <h4 className="text-gray-600 text-2xl font-bold">Registrasi</h4>
                   </div>
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
                   {isRegisterSuccess && (
                     <div>
-                      Klik link ini untuk aktivasi akun{' '}
-                      <span
+                      <div className="py-5 text-lg text-center">
+                        {' '}
+                        Silahkan periksa email anda untuk melakukan proses aktivasi selanjutnya.
+                      </div>
+                      <button
+                        onClick={() => window.location.replace('/')}
+                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded  hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        type="submit"
                         style={{
-                          color: 'red',
-                          cursor: 'pointer',
+                          transition: 'all 0.15s ease 0s',
                         }}
-                        onClick={() =>
-                          props.history.push(`/auth/activation?email=${email}&token=${token}`)
-                        }
                       >
-                        click here!
-                      </span>
+                        Ke Beranda
+                      </button>
                     </div>
                   )}
 
@@ -173,7 +170,7 @@ function Register(props) {
                             height: 45,
                           }}
                           onChange={e => setFormData({ ...formData, password: e.target.value })}
-                          placeholder="input password"
+                          placeholder="Password"
                           iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
@@ -193,7 +190,7 @@ function Register(props) {
                           onChange={e =>
                             setFormData({ ...formData, confirmPassword: e.target.value })
                           }
-                          placeholder="input password"
+                          placeholder="Confirm Password"
                           iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
@@ -210,6 +207,12 @@ function Register(props) {
                         >
                           Daftar
                         </button>
+                      </div>
+                      <div
+                        className="mt-5 text-center text-orange-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
+                        onClick={() => history.push('/')}
+                      >
+                        Beranda
                       </div>
                     </form>
                   )}
