@@ -1,6 +1,6 @@
-
 const Books = require('../models/').books;
 const TransactionBook = require('../models').transactionBook;
+const ListBorrowBook = require("../models").listBorrowBook
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -231,9 +231,26 @@ module.exports = {
         isGiveRating: false
       });
 
+
+
       if (!createTransaction) {
         return res.status(404).send("Failed Transaction");
       }
+
+
+      ListBorrowBook.findAll({
+        where: {
+          bookId: bookData.bookId
+        }
+      })
+        .then(response => {
+          response[0].update({
+            bookId: response.bookId,
+            transactionBookId: createTransaction.id,
+            userId: createTransaction.userId
+          })
+
+        }).catch(err => { });
 
       return res.status(201).json({
         message: "Process Succesfully create Transaction Borrow Book",

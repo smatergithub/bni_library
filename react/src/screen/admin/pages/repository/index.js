@@ -10,13 +10,26 @@ const Repository = props => {
   const [loading, setLoading] = React.useState(false);
   const [selectedRepo, setSelectedRepo] = React.useState(null);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
-  const [filterOptions, seFilterOptions] = React.useState({
+  const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const paginationOptions = pagination => {
-    console.log('pagination', pagination);
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   const retrieveDataRepository = filterOptions => {
@@ -118,7 +131,7 @@ const Repository = props => {
         <Link to="/admin/new-repository">
           <button
             type="button"
-            className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
           >
             <i className="fas fa-plus mr-3" /> Repository Baru
           </button>
@@ -133,7 +146,8 @@ const Repository = props => {
             source={repositorys}
             isLoading={loading}
             limit={filterOptions.limit}
-            onPaginationUpdated={pagination => paginationOptions(pagination)}
+            onPaginationUpdated={paginationOptions}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData msg="Data Belum tersedia !" />

@@ -1,7 +1,8 @@
 const Users = require('../models').users;
 const TransactionBook = require('../models').transactionBook;
 const TransactionEbook = require('../models').transactionEbook;
-
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 module.exports = {
   profileUser: async (req, res) => {
     var userId = req.userId;
@@ -30,6 +31,7 @@ module.exports = {
           alamat: user.alamat,
           email: user.email,
           imageUrl: user.imageUrl,
+          mapUrl: user.mapUrl,
           isAdmin: user.isAdmin,
           superAdmin: user.superAdmin,
         };
@@ -64,6 +66,7 @@ module.exports = {
           email: req.body.email,
           alamat: req.body.alamat,
           imageUrl: req.body.imageUrl,
+          mapUrl: req.body.mapUrl,
           isAdmin: req.body.isAdmin,
           superAdmin: req.body.superAdmin,
         };
@@ -73,6 +76,7 @@ module.exports = {
             res.status(200).json({ message: 'Succesfully Update' });
           })
           .catch(err => {
+            console.log(err);
             res.status(404).json({ message: 'failed Update' });
           });
       })
@@ -82,13 +86,39 @@ module.exports = {
   },
 
   listBorrowBookUser: async (req, res) => {
-    var userId = req.userId;
-    let { q, order, sort, limit, page } = req.query;
-    let paramQuerySQL = {
-      where: { userId: userId },
-      where: { status: "Dipinjam" },
-      include: ['book', 'user'],
-    };
+    var userId = req.params.id;
+    let { q, order, sort, page, limit, rating, borrowed } = req.query;
+    let paramQuerySQL = {};
+    if (borrowed != '' && borrowed == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          status: {
+            [Op.like]: '%' + 'Dipinjam' + '%',
+          },
+        },
+      };
+    } else if (rating != '' && rating == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          isGiveRating: false,
+        },
+      };
+    } else {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+        },
+      };
+    }
+    paramQuerySQL.include = ['book'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -129,7 +159,7 @@ module.exports = {
     let { q, order, sort, limit, page } = req.query;
     let paramQuerySQL = {
       where: { userId: userId },
-      where: { status: "Dikembalikan" },
+      where: { status: 'Dikembalikan' },
       include: ['book', 'user'],
     };
 
@@ -168,14 +198,39 @@ module.exports = {
   },
 
   listBorrowEbookUser: async (req, res) => {
-    var userId = req.userId;
-    let { q, order, sort, limit, page } = req.query;
-    let paramQuerySQL = {
-      where: { userId: userId },
-      where: { isBorrowed: true },
-      where: { status: "Dipinjam" },
-      include: ['ebook', 'user'],
-    };
+    var userId = req.params.id;
+    let { q, order, sort, limit, page, rating, borrowed } = req.query;
+    let paramQuerySQL = {};
+    if (borrowed != '' && borrowed == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          status: {
+            [Op.like]: '%' + 'Dipinjam' + '%',
+          },
+        },
+      };
+    } else if (rating != '' && rating == 'true') {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+          isGiveRating: false,
+        },
+      };
+    } else {
+      paramQuerySQL.where = {
+        [Op.and]: {
+          userId: {
+            [Op.like]: '%' + userId + '%',
+          },
+        },
+      };
+    }
+    paramQuerySQL.include = ['ebook'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -217,7 +272,7 @@ module.exports = {
     let paramQuerySQL = {
       where: { userId: userId },
       where: { isBorrowed: true },
-      where: { status: "Dikembalikan" },
+      where: { status: 'Dikembalikan' },
       include: ['ebook', 'user'],
     };
 

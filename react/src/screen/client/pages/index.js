@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { logout } from '../../../redux/action/user';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
@@ -14,6 +15,10 @@ import Accounts from '../../auth/account';
 import DetailBooks from './detailBooks';
 import DetailEbooks from './detailEbooks';
 import Order from './order';
+import ListResearch from './listResearch';
+import DetailResearch from './detailResearch';
+import AddNewResearch from './createNewRepo';
+import AddNewResearchSuccess from './researchSuccess';
 
 const routes = [
   {
@@ -35,6 +40,26 @@ const routes = [
     path: '/riset',
     exact: false,
     main: <Research />,
+  },
+  {
+    path: '/daftar-riset',
+    exact: false,
+    main: <ListResearch />,
+  },
+  {
+    path: '/detail-riset',
+    exact: false,
+    main: <DetailResearch />,
+  },
+  {
+    path: '/riset-sukses',
+    exact: false,
+    main: <AddNewResearchSuccess />,
+  },
+  {
+    path: '/tambah-riset',
+    exact: false,
+    main: <AddNewResearch />,
   },
   {
     path: '/about',
@@ -82,10 +107,18 @@ const routes = [
 function HomeUser(props) {
   let { user } = props;
   const { match } = props;
+  function logoutUser() {
+    props.logout().then(res => {
+      if (res.resp) {
+        localStorage.removeItem('bni_UserRole');
+        window.location.replace('/auth/login');
+      }
+    });
+  }
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div>
-      <NavBar url={match.params.id} props={props} isAuth={isUserLogged} />
+      <NavBar url={match.params.id} props={props} isAuth={isUserLogged} logout={logoutUser} />
 
       {routes.map((route, index) => (
         <Route key={index} path={route.path} exact={route.exact} component={() => route.main} />
@@ -100,4 +133,4 @@ HomeUser.propTypes = {
 let mapState = state => {
   return { user: state.user };
 };
-export default connect(mapState)(HomeUser);
+export default connect(mapState, { logout })(HomeUser);

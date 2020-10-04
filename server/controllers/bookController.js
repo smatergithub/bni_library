@@ -1,4 +1,5 @@
 const Books = require('../models').books;
+const ListBorrowBook = require('../models').listBorrowBook;
 // const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
@@ -11,17 +12,15 @@ module.exports = {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
 
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
+        [Op.and]: {
+          kategori: {
+            [Op.like]: '%' + kategori + '%',
+          },
+          judul: {
+            [Op.like]: '%' + judul + '%',
+          },
         },
       };
     }
@@ -72,44 +71,30 @@ module.exports = {
   },
 
   getBookById: async (req, res) => {
-    return await Books.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', 'user'],
+      where: {
+        bookId: req.params.id,
+      },
+    };
+    return await ListBorrowBook.findAll(paramQuerySQL)
       .then(book => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(book[0]);
       })
       .catch(error => res.status(500).send(error));
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
-    let paramQuerySQL = {};
-
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
-    if (kategori != '' && typeof kategori !== 'undefined') {
-      paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
-        },
-      };
-    }
-
-    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
-      paramQuerySQL.where = {
-        tahunTerbit: {
-          [Op.like]: '%' + tahunTerbit + '%',
-        },
-      };
-    }
+    // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
+    let { limit, page } = req.body;
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', 'user'],
+    };
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -121,22 +106,36 @@ module.exports = {
     }
 
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['createdAt'].includes(order.toLowerCase())
-    ) {
-      paramQuerySQL.order = [[order, sort]];
-    }
+    // if (
+    //   order != '' &&
+    //   typeof order !== 'undefined' &&
+    //   ['createdAt'].includes(order.toLowerCase())
+    // ) {
+    //   paramQuerySQL.order = [[order, sort]];
+    // }
+    // if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+    //   sort = 'DESC';
+    // }
 
-    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-      sort = 'DESC';
-    }
-
-    return await Books.findAndCountAll(paramQuerySQL)
+    // return await Books.findAndCountAll(paramQuerySQL)
+    //   .then(book => {
+    //     let totalPage = Math.ceil(book.count / req.body.limit);
+    //     let page = Math.ceil(req.body.page);
+    //     res.status(200).json({
+    //       count: book.count,
+    //       totalPage: totalPage,
+    //       activePage: page,
+    //       data: book.rows,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     res.status(500).send(err);
+    //   });
+    return await ListBorrowBook.findAndCountAll(paramQuerySQL)
       .then(book => {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
+
         res.status(200).json({
           count: book.count,
           totalPage: totalPage,
@@ -150,14 +149,20 @@ module.exports = {
   },
 
   getById: async (req, res) => {
-    return await Books.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['book', 'transactionBook', 'user'],
+      where: {
+        bookId: req.params.id,
+      },
+    };
+    return await ListBorrowBook.findAll(paramQuerySQL)
       .then(book => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
           });
         }
-        return res.status(200).send(book);
+        return res.status(200).send(book[0]);
       })
       .catch(error => res.status(500).send(error));
   },
@@ -165,7 +170,7 @@ module.exports = {
   add: async (req, res) => {
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
-    return Books.create({
+    Books.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
       pengarang: req.body.pengarang,
@@ -179,11 +184,24 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
+      condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
-      .then(response =>
-        res.status(201).json({ message: 'successfully create book', data: response })
-      )
+      .then(response => {
+        // console.log("response", response.id)
+        const createListBorrowBook = ListBorrowBook.create({
+          bookId: response.id,
+        });
+
+        if (!createListBorrowBook) {
+          return res.status(404).send('Failed create Book');
+        }
+
+        return res.status(201).json({
+          message: 'Process Succesfully create Book',
+          data: response,
+        });
+      })
       .catch(err => res.status(500).send(err));
   },
 
@@ -213,11 +231,12 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
+            condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
-          .then(response =>
-            res.status(200).json({ message: 'successfully update book', data: response })
-          )
+          .then(response => {
+            res.status(200).json({ message: 'successfully update book', data: response });
+          })
           .catch(err => res.status(404).send(err));
       })
       .catch(error => res.status(500).json({ test: error }));
@@ -229,7 +248,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header
@@ -251,7 +270,8 @@ module.exports = {
             penerbit: row[9],
             lokasiPerpustakaan: row[10],
             status: row[11],
-            image: row[12],
+            condition: row[12],
+            image: row[13],
             isPromotion: false,
           };
 
@@ -259,8 +279,13 @@ module.exports = {
         });
 
         Books.bulkCreate(Databooks)
-          .then(() => {
-            res.status(200).json({
+          .then(response => {
+            response.map(item => {
+              return ListBorrowBook.create({
+                bookId: item.id,
+              });
+            });
+            return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
           })
@@ -284,10 +309,15 @@ module.exports = {
         if (!book) {
           return res.status(404).send({ message: 'Book not found' });
         }
-        return book
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            book
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          })
+        })
+
       })
       .catch(error => res.status(500).send(error));
   },

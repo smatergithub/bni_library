@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { verifySignUp, AuthJWT } = require('../middelwares');
+const { AuthJWT } = require('../middelwares');
 const UploadDocument = require("../middelwares/uploadDocument");
 const UploadImage = require("../middelwares/uploadImage");
 const BookController = require('../controllers/BookController');
@@ -9,15 +9,19 @@ const UserManageController = require('../controllers/UserManageController');
 const RepositoryController = require('../controllers/RepositoryController');
 const TransactionBookController = require('../controllers/TransactionBookController');
 const TransactionEbookController = require('../controllers/TransactionEbookController');
+const WilayahController = require("../controllers/wilayahController");
 const DashboardController = require("../controllers/dashboardController");
 
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
-router.post('/manage-user/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
+router.post('/manage-user/userIntoAdmin/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.toggleUserIsAdmin);
+router.post('/manage-user/delete/:id', [AuthJWT.isAdmin, AuthJWT.isSuperAdmin], UserManageController.deleteUser);
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList)
+
+
 //routing admin panel feature
 
 
-router.get("/dashboard", [AuthJWT.isAdmin], DashboardController.dashboardSummary)
+router.get("/dashboard", DashboardController.dashboardSummary)
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
@@ -30,14 +34,21 @@ router.post('/ebook', [AuthJWT.isAdmin], EbookController.list);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
 router.post('/ebook/create', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.add);
 router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single("image"), EbookController.update);
+router.post('/ebook/uploadEbook', [AuthJWT.isAdmin], UploadDocument.single("locationFile"), EbookController.uploadSingleEbook);
 router.post('/ebook/upload', [AuthJWT.isAdmin], UploadDocument.single("file"), EbookController.uploadEbook);
 router.delete('/ebook/:id', [AuthJWT.isAdmin], EbookController.delete);
 
-router.get('/repository', [AuthJWT.isAdmin], RepositoryController.list);
-router.get('/repository/:id', [AuthJWT.isAdmin], RepositoryController.getById);
-router.post('/repository', [AuthJWT.isAdmin], RepositoryController.add);
-router.put('/repository/:id', [AuthJWT.isAdmin], RepositoryController.update);
-router.delete('/repository/:id', [AuthJWT.isAdmin], RepositoryController.delete);
+router.get('/repository', [AuthJWT.verifyToken], RepositoryController.list);
+router.get('/repository/:id', [AuthJWT.verifyToken], RepositoryController.getById);
+router.post('/repository', [AuthJWT.verifyToken], RepositoryController.add);
+router.put('/repository/:id', [AuthJWT.verifyToken], RepositoryController.update);
+router.delete('/repository/:id', [AuthJWT.verifyToken], RepositoryController.delete);
+
+router.post('/wilayah', WilayahController.list);
+router.get('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.getById);
+router.post('/wilayah/create', [AuthJWT.isAdmin], WilayahController.add);
+router.put('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.update);
+router.delete('/wilayah/:id', [AuthJWT.isAdmin], WilayahController.delete);
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);

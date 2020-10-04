@@ -16,7 +16,7 @@ function CreateNewBook(props) {
   let { id } = parsed;
   const { handleSubmit, register, errors } = useForm();
   let [image, setImage] = React.useState(null);
-  let [promotionValue, setPromotionValue] = React.useState(null);
+  let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [book, setBook] = React.useState(null);
@@ -25,10 +25,10 @@ function CreateNewBook(props) {
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['isPromotion'] = promotionValue == 'true' ? true : false;
+      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Weeding';
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
-      formData['status'] = statusValue == 'true' ? 'Ada' : 'Dipinjam';
+      formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
       props.CreateNewBookAction(formData).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -39,12 +39,12 @@ function CreateNewBook(props) {
       });
     } else {
       formData['image'] = image ? image : book.image;
-      formData['isPromotion'] =
-        promotionValue !== null ? (promotionValue == 'true' ? true : false) : book.isPromotion;
+      formData['condition'] =
+        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : book.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['status'] =
-        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Dipinjam') : book.status;
+        statusValue !== null ? (statusValue === 'Ada' ? 'Ada' : 'Kosong') : book.status;
 
       props.EditBookAction(id, formData).then(res => {
         if (res.resp) {
@@ -82,11 +82,11 @@ function CreateNewBook(props) {
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
-  function onChangePromotion(value) {
-    setPromotionValue(value[0] ? 'true' : 'false');
+  function onChangeCondition(value) {
+    setConditionValue(value[0] ? 'Baik' : 'Weeding');
   }
   function onChangeStatus(value) {
-    setStatusValue(value[0] ? 'true' : 'false');
+    setStatusValue(value[0] ? 'Ada' : 'Kosong');
   }
   let uploadPdf = e => {
     e.preventDefault();
@@ -110,12 +110,12 @@ function CreateNewBook(props) {
     reader.readAsDataURL(file);
   };
   const optionsStatus = [
-    { label: 'Ada', value: true },
-    { label: 'Dipinjam', value: false },
+    { label: 'Ada', value: 'Ada' },
+    { label: 'Kosong', value: 'Kosong' },
   ];
-  const optionsPromotion = [
-    { label: 'Ya', value: true },
-    { label: 'Tidak', value: false },
+  const optionsCondition = [
+    { label: 'Baik', value: 'Baik' },
+    { label: 'Weeding', value: 'Weeding' },
   ];
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -127,7 +127,7 @@ function CreateNewBook(props) {
             <button
               type="button"
               onClick={() => exportFile.current.click()}
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-upload mr-3" /> Import Books
             </button>
@@ -296,12 +296,12 @@ function CreateNewBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Diskon
+                    Kondisi
                   </label>
                   <Checkbox.Group
-                    options={optionsPromotion}
-                    value={promotionValue}
-                    onChange={onChangePromotion}
+                    options={optionsCondition}
+                    value={conditionValue}
+                    onChange={onChangeCondition}
                   />
                   <div className="text-red-700"></div>
                 </div>

@@ -14,6 +14,7 @@ import {
   getBorrowedBookItem,
   createBookFeeback,
   createEbookFeeback,
+  getMe,
 } from '../../../../redux/action/user';
 import { orderBook, orderEbook } from '../../../../redux/action/transaction';
 import Form from './form';
@@ -27,48 +28,66 @@ function OrderBook(props) {
   let [ebooks, setEbooks] = React.useState(null);
   let [isBorrowReview, setIsBorrowReview] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
-  React.useEffect(() => {
+  let [isUserhaveActiveBook, setIsUserHaveActiveBook] = React.useState(false);
+  let [isUserhaveActiveEbook, setIsUserHaveActiveEbook] = React.useState(false);
+
+  function getBorrowInfo() {
     let { id } = parsed;
+    props.getMe().then(res => {
+      if (res.resp) {
+        let userId = res.data.id;
+        if (type === 'book') {
+          props.getBookById(id).then(res => {
+            setProcessing(false);
+            if (res.resp) {
+              setBooks(res.data);
+            } else {
+              setBooks(null);
+            }
+          });
+          props.getBorrowedBookItem(userId, 'rating=true').then(res => {
+            if (res.data.length !== 0) {
+              if (res.data.data.length !== 0) {
+                setIsUserHaveActiveBook(true);
+              }
+
+              let checkIsBorrowed = res.data.data.some(
+                book => book.status === 'Dikembalikan' && !book.isGiveRating
+              );
+              setIsBorrowReview(checkIsBorrowed);
+            } else {
+              setIsBorrowReview(false);
+            }
+          });
+        } else {
+          props.getEbookById(id).then(res => {
+            setProcessing(false);
+            if (res.resp) {
+              setEbooks(res.data);
+            } else {
+              setEbooks(null);
+            }
+          });
+          props.getBorrowedEbookItem(userId, 'rating=true').then(res => {
+            if (res.data.length !== 0) {
+              if (res.data.data.length !== 0) {
+                setIsUserHaveActiveEbook(true);
+              }
+              let checkIsBorrowed = res.data.data.some(
+                ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+              );
+              setIsBorrowReview(checkIsBorrowed);
+            } else {
+              setIsBorrowReview(false);
+            }
+          });
+        }
+      }
+    });
+  }
+  React.useEffect(() => {
     setProcessing(true);
-    if (type === 'book') {
-      props.getBookById(id).then(res => {
-        setProcessing(false);
-        if (res.resp) {
-          setBooks(res.data);
-        } else {
-          setBooks(null);
-        }
-      });
-      props.getBorrowedBookItem().then(res => {
-        if (res.data.length !== 0) {
-          let checkIsBorrowed = res.data.data.some(
-            book => book.status === 'Dikembalikan' && !book.isGiveRating
-          );
-          setIsBorrowReview(checkIsBorrowed);
-        } else {
-          setIsBorrowReview(false);
-        }
-      });
-    } else {
-      props.getEbookById(id).then(res => {
-        setProcessing(false);
-        if (res.resp) {
-          setEbooks(res.data);
-        } else {
-          setEbooks(null);
-        }
-      });
-      props.getBorrowedEbookItem().then(res => {
-        if (res.data.length !== 0) {
-          let checkIsBorrowed = res.data.data.some(
-            ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
-          );
-          setIsBorrowReview(checkIsBorrowed);
-        } else {
-          setIsBorrowReview(false);
-        }
-      });
-    }
+    getBorrowInfo();
   }, []);
   function redirectProfile() {
     if (type === 'book') {
@@ -84,17 +103,30 @@ function OrderBook(props) {
       let { id, type } = parsed;
 
       if (type === 'book') {
-        props.orderBook(formData).then(res => {
-          if (res.resp) {
-            setShowModalDeletion(true);
-          }
-        });
+        if (isUserhaveActiveBook) {
+          ToastError(
+            'Maksimal peminjaman hanya 1 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
+          );
+        } else {
+          props.orderBook(formData).then(res => {
+            if (res.resp) {
+              setShowModalDeletion(true);
+            }
+          });
+        }
       } else if (type === 'ebook') {
-        props.orderEbook(formData).then(res => {
-          if (res.resp) {
-            setShowModalDeletion(true);
-          }
-        });
+        console.log(isUserhaveActiveEbook);
+        if (isUserhaveActiveEbook) {
+          ToastError(
+            'Maksimal peminjaman hanya 1 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
+          );
+        } else {
+          props.orderEbook(formData).then(res => {
+            if (res.resp) {
+              setShowModalDeletion(true);
+            }
+          });
+        }
       }
     }
   }
@@ -103,12 +135,14 @@ function OrderBook(props) {
       props.createBookFeeback(formData).then(res => {
         if (res.resp) {
           setIsBorrowReview(false);
+          getBorrowInfo();
         }
       });
     } else {
       props.createEbookFeeback(formData).then(res => {
         if (res.resp) {
           setIsBorrowReview(false);
+          getBorrowInfo();
         }
       });
     }
@@ -119,7 +153,7 @@ function OrderBook(props) {
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Order | Ebni</title>
+        <title>Order | E-BNI</title>
       </Helmet>
       <section className="py-16 lg:py-24 w-full">
         <div
@@ -133,10 +167,10 @@ function OrderBook(props) {
         {books === null && type === 'book' && <NoData msg="Buku tidak di temukan" />}
         {ebooks === null && type === 'ebook' && <NoData msg="Ebook tidak di temukan" />}
         {type === 'ebook' && ebooks !== null && (
-          <Form type="ebook" data={ebooks} onOrderItem={onOrderItem} />
+          <Form type="ebook" data={ebooks.ebook} onOrderItem={onOrderItem} user={null} />
         )}
         {type === 'book' && books !== null && (
-          <Form type="book" data={books} onOrderItem={onOrderItem} />
+          <Form type="book" data={books.book} onOrderItem={onOrderItem} user={books.user} />
         )}
       </section>
       <Modal
@@ -169,5 +203,6 @@ export default withRouter(
     getBorrowedBookItem,
     createBookFeeback,
     createEbookFeeback,
+    getMe,
   })(OrderBook)
 );

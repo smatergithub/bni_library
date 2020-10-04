@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -12,11 +13,12 @@ global.__locationdir = __dirname;
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require('./routes/AdminRoute');
 var corsOptions = {
-  origin: 'http://localhost:2001',
+  origin: 'http://localhost:3000',
 };
 
 const app = express();
 
+app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());

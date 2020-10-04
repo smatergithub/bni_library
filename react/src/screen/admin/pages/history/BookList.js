@@ -81,7 +81,7 @@ function BookList(props) {
       name: 'nama',
       displayName: 'Peminjam',
       customRender: rowData => {
-        return <React.Fragment>{rowData.user.nama}</React.Fragment>;
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ''}</React.Fragment>;
       },
     },
     {
@@ -113,8 +113,8 @@ function BookList(props) {
                   Return Book
                 </button>
               ) : (
-                '-'
-              )}
+                  '-'
+                )}
             </React.Fragment>
           </React.Fragment>
         );
@@ -123,10 +123,9 @@ function BookList(props) {
   ];
 
   if (loading) return null;
-
   return (
     <React.Fragment>
-      {historyBooks !== null && historyBooks.data.length !== 0 ? (
+      {historyBooks !== null && historyBooks !== undefined && historyBooks.data.length !== 0 ? (
         <TableApproval
           columns={columns}
           source={historyBooks}
@@ -136,8 +135,8 @@ function BookList(props) {
           onPaginationUpdated={onPaginationUpdated}
         />
       ) : (
-        <NoData msg="Belum ada request dari user!" />
-      )}
+          <NoData msg="Belum ada request dari user!" />
+        )}
     </React.Fragment>
   );
 }

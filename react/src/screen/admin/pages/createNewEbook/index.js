@@ -7,6 +7,7 @@ import {
   CreateNewEbookAction,
   getDetailEbook,
   EditEbookAction,
+  UploadSingleEbookFIle,
 } from '../../../../redux/action/ebooks';
 import { UploadEbookFIle } from '../../../../redux/action/ebooks';
 import { ToastError, ToastSuccess } from '../../../../component';
@@ -16,44 +17,52 @@ function CreateNewEBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
   let [image, setImage] = React.useState(null);
-  let [promotionValue, setPromotionValue] = React.useState(null);
+  let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [ebook, setEbook] = React.useState(null);
+  let [ebookFile, setEbookFile] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['isPromotion'] = promotionValue == 'true' ? true : false;
+      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Weeding';
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
-      formData['status'] = statusValue == 'true' ? 'Ada' : 'Dipinjam';
-      props.CreateNewEbookAction(formData).then(res => {
-        if (res.resp) {
-          ToastSuccess(res.msg);
-          props.history.push('/admin/ebooks');
-        } else {
-          ToastError(res.msg);
-        }
-      });
+      formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
+      if (ebookFile) {
+        uploadPdfAndGetLink(formData, 'add');
+      } else {
+        props.CreateNewEbookAction(formData).then(res => {
+          if (res.resp) {
+            ToastSuccess(res.msg);
+            props.history.push('/admin/ebooks');
+          } else {
+            ToastError(res.msg);
+          }
+        });
+      }
     } else {
       formData['image'] = image ? image : ebook.image;
-      formData['isPromotion'] =
-        promotionValue !== null ? (promotionValue == 'true' ? true : false) : ebook.isPromotion;
+      formData['condition'] =
+        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : ebook.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['status'] =
-        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Dipinjam') : ebook.status;
-
-      props.EditEbookAction(id, formData).then(res => {
-        if (res.resp) {
-          ToastSuccess(res.msg);
-          props.history.push('/admin/ebooks');
-        } else {
-          ToastError(res.msg);
-        }
-      });
+        statusValue !== null ? (statusValue === 'true' ? 'Ada' : 'Kosong') : ebook.status;
+      if (ebookFile) {
+        uploadPdfAndGetLink(formData, 'edit', id);
+      } else {
+        props.EditEbookAction(id, formData).then(res => {
+          if (res.resp) {
+            ToastSuccess(res.msg);
+            props.history.push('/admin/ebooks');
+          } else {
+            ToastError(res.msg);
+          }
+        });
+      }
     }
   }
   let uploadImage = e => {
@@ -68,7 +77,8 @@ function CreateNewEBook(props) {
 
     reader.readAsDataURL(file);
   };
-  let uploadPdf = e => {
+
+  let uploadDocument = e => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -88,6 +98,48 @@ function CreateNewEBook(props) {
 
     reader.readAsDataURL(file);
   };
+
+  let uploadEbookPdf = e => {
+    let reader = new FileReader();
+    let locationFile = e.target.files[0];
+    setEbookFile(locationFile);
+
+    reader.readAsDataURL(locationFile);
+  };
+
+  function uploadPdfAndGetLink(formData, type, id) {
+    if (ebookFile) {
+      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
+        if (res) {
+          console.log(res);
+          if (type === 'add') {
+            formData['sourceLink'] = res.data.data.locationFile;
+            props.CreateNewEbookAction(formData).then(res => {
+              if (res.resp) {
+                ToastSuccess(res.msg);
+                props.history.push('/admin/ebooks');
+              } else {
+                ToastError(res.msg);
+              }
+            });
+          } else {
+            formData['sourceLink'] = res.data.data.locationFile;
+            props.EditEbookAction(id, formData).then(res => {
+              if (res.resp) {
+                ToastSuccess(res.msg);
+                props.history.push('/admin/ebooks');
+              } else {
+                ToastError(res.msg);
+              }
+            });
+          }
+        } else {
+          ToastError(res.msg);
+        }
+      });
+    }
+  }
+
   React.useEffect(() => {
     if (id) {
       props.getDetailEbook(id).then(res => {
@@ -102,32 +154,32 @@ function CreateNewEBook(props) {
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
-  function onChangePromotion(value) {
-    setPromotionValue(value[0] ? 'true' : 'false');
+  function onChangeCondition(value) {
+    setConditionValue(value[0] ? 'Baik' : 'Weeding');
   }
   function onChangeStatus(value) {
-    setStatusValue(value[0] ? 'true' : 'false');
+    setStatusValue(value[0] ? 'Ada' : 'Kosong');
   }
   const optionsStatus = [
-    { label: 'Ada', value: true },
-    { label: 'Dipinjam', value: false },
+    { label: 'Ada', value: 'Ada' },
+    { label: 'Kosong', value: 'Kosong' },
   ];
-  const optionsPromotion = [
-    { label: 'Ya', value: true },
-    { label: 'Tidak', value: false },
+  const optionsCondition = [
+    { label: 'Baik', value: 'Baik' },
+    { label: 'Weeding', value: 'Weeding' },
   ];
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
         <h1 className="w-full text-3xl text-black pb-6">Biografi Ebook</h1>
 
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap relative">
           {!id && (
-            <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
+            <div className="w-2/12 absolute" style={{ right: '3em', top: '-5em' }}>
               <button
                 type="button"
                 onClick={() => exportFile.current.click()}
-                className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+                className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
               >
                 <i className="fas fa-upload mr-3" /> Import Ebook
               </button>
@@ -138,7 +190,7 @@ function CreateNewEBook(props) {
               <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                 <p className="text-lg text-gray-800 font-medium pb-4">Informasi Ebook</p>
                 <input
-                  onChange={e => uploadPdf(e)}
+                  onChange={e => uploadDocument(e)}
                   type="file"
                   style={{
                     display: 'none',
@@ -153,7 +205,7 @@ function CreateNewEBook(props) {
                     Judul
                   </label>
                   <input
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     name="judul"
                     aria-label="Name"
@@ -171,7 +223,7 @@ function CreateNewEBook(props) {
                   <input
                     name="pengarang"
                     defaultValue={ebook ? ebook.pengarang : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -188,7 +240,7 @@ function CreateNewEBook(props) {
                   <input
                     name="kategori"
                     defaultValue={ebook ? ebook.kategori : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -205,7 +257,7 @@ function CreateNewEBook(props) {
                   <input
                     name="bahasa"
                     defaultValue={ebook ? ebook.bahasa : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -222,7 +274,7 @@ function CreateNewEBook(props) {
                   <input
                     name="isbn"
                     defaultValue={ebook ? ebook.isbn : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -239,7 +291,7 @@ function CreateNewEBook(props) {
                   <input
                     name="penerbit"
                     defaultValue={ebook ? ebook.penerbit : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -250,23 +302,42 @@ function CreateNewEBook(props) {
                   <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                 </div>
 
-                <div className="mt-2 ">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Link File
-                  </label>
-                  <input
-                    name="sourceLink"
-                    defaultValue={ebook ? ebook.sourceLink : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.sourceLink && errors.sourceLink.message}
+                <div className="mt-2 flex ">
+                  <div className="w-1/2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Link File
+                    </label>
+                    <input
+                      name="sourceLink"
+                      defaultValue={ebook ? ebook.sourceLink : ''}
+                      className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.sourceLink && errors.sourceLink.message}
+                    </div>
+                  </div>
+                  <div className="w-1/2">
+                    <div className="ml-5">
+                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                        Atau unggah file
+                      </label>
+                      <input
+                        onChange={e => uploadEbookPdf(e)}
+                        type="file"
+                        className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
+                        //accept="image/png, image/jpeg"
+                        aria-label="Email"
+                      />
+                      <div className="text-red-700">
+                        {errors.dateEbook && errors.dateEbook.message}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -277,7 +348,7 @@ function CreateNewEBook(props) {
                   <input
                     name="lokasiPerpustakaan"
                     defaultValue={ebook ? ebook.lokasiPerpustakaan : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     ref={register({
@@ -302,12 +373,12 @@ function CreateNewEBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Diskon
+                    Kondisi
                   </label>
                   <Checkbox.Group
-                    options={optionsPromotion}
-                    value={promotionValue}
-                    onChange={onChangePromotion}
+                    options={optionsCondition}
+                    value={conditionValue}
+                    onChange={optionsCondition}
                   />
                   <div className="text-red-700"></div>
                 </div>
@@ -342,7 +413,7 @@ function CreateNewEBook(props) {
                   <textarea
                     name="description"
                     defaultValue={ebook ? ebook.description : ''}
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none border"
                     rows="6"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -377,4 +448,5 @@ export default connect(null, {
   UploadEbookFIle,
   getDetailEbook,
   EditEbookAction,
+  UploadSingleEbookFIle,
 })(CreateNewEBook);

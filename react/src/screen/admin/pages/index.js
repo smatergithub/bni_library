@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { signOut, getMe } from '../../../redux/action/user';
+import { logout, getMe } from '../../../redux/action/user';
 
 import Sidebar from '../component/Sidebar';
 import Header from '../component/Header';
@@ -16,6 +16,7 @@ import CreateNewEbook from './createNewEbook';
 import CreateNewRepo from './createNewRepo';
 import Repository from './repository';
 import User from './users';
+import Wilayah from './wilayah';
 import Approval from './approval';
 import History from './history';
 
@@ -61,6 +62,11 @@ const routes = [
     main: () => <User />,
   },
   {
+    path: '/admin/wilayah',
+    exact: false,
+    main: () => <Wilayah />,
+  },
+  {
     path: '/admin/add-new-book',
     exact: false,
     main: props => <CreateNewBook {...props} />,
@@ -97,9 +103,12 @@ function HomeAdmin(props) {
   function createNewBook() {
     history.push('/admin/add-new-book');
   }
-  function logout() {
-    localStorage.clear();
-    props.signOut();
+  function logoutUser() {
+    props.logout().then(res => {
+      if (res.resp) {
+        localStorage.removeItem('bni_UserRole');
+      }
+    });
   }
   function updateProfile() {
     history.push('/profile/home');
@@ -123,7 +132,7 @@ function HomeAdmin(props) {
       <div className="w-full flex flex-col h-screen overflow-y-hidden">
         <Switch>
           <div>
-            <Header logout={logout} updateProfile={updateProfile} />
+            <Header logout={logoutUser} updateProfile={updateProfile} />
             {routes.map((route, index) => (
               // Render more <Route>s with the same paths as
               // above, but different components this time.
@@ -146,4 +155,4 @@ HomeAdmin.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-export default connect(mapState, { signOut, getMe })(HomeAdmin);
+export default connect(mapState, { logout, getMe })(HomeAdmin);

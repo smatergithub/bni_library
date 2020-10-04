@@ -37,3 +37,8 @@ export const TRANSACTION_EBOOKS = 'TRANSACTION_EBOOKS';
 // ===========> type for dashboard action here <===========
 
 export const DASHBOARD = 'DASHBOARD';
+
+// ===========> type for ebooks action here <===========
+
+export const WILAYAHS = 'WILAYAHS';
+export const DETAIL_WILAYAH = 'DETAIL_WILAYAH';

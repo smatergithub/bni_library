@@ -5,20 +5,23 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+const send = require('../utils/sendMail');
+const { setJWTCookieOption } = require('../utils/setCookies');
 
 require('dotenv').config();
 
 module.exports = {
   register: async (req, res) => {
-    Users.create({
-      nama: req.body.nama,
-      email: req.body.email,
-      tanggalLahir: req.body.tanggalLahir,
-      password: bcrypt.hashSync(req.body.password, 8),
-      isVerified: false,
-      isAdmin: false,
-      superAdmin: false,
-    })
+    Users.scope('withPassword')
+      .create({
+        nama: req.body.nama,
+        email: req.body.email,
+        tanggalLahir: req.body.tanggalLahir,
+        password: bcrypt.hashSync(req.body.password, 8),
+        isVerified: false,
+        isAdmin: false,
+        superAdmin: false,
+      })
       .then(user => {
         var expireDate = new Date();
         expireDate.setDate(expireDate.getDate() + 1 / 24);
@@ -28,11 +31,16 @@ module.exports = {
           expiredDateToken: expireDate,
         })
           .then(verification => {
+            send.sendMailRegister({
+              link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
+              name: req.body.nama,
+              email: req.body.email,
+              btn_title: 'Verif email address',
+              text:
+                'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
+            });
             res.status(201).send({
               message: 'account was registered successfully!',
-              verificationToken: verification.token,
-              email: req.body.email,
-              expiredDateToken: verification.expiredDateToken,
             });
           })
           .catch(err => {
@@ -45,9 +53,10 @@ module.exports = {
   },
 
   verificationAccount: async (req, res) => {
-    Users.findOne({
-      where: { email: req.query.email },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: { email: req.query.email },
+      })
       .then(user => {
         if (user.isVerified) {
           return res.status(404).json({ message: 'Email Already verified' });
@@ -58,7 +67,6 @@ module.exports = {
             expiredDateToken: { [Op.lt]: Sequelize.fn('CURDATE') },
           },
         });
-
         var recordToken = VerificationToken.findOne({
           where: { token: req.query.token, userId: user.id },
         });
@@ -82,18 +90,18 @@ module.exports = {
   },
 
   login: async (req, res) => {
-    Users.findOne({
-      where: {
-        email: req.body.email,
-      },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: {
+          email: req.body.email,
+        },
+      })
       .then(user => {
         if (!user) {
           return res.status(404).send({ message: 'User Not found.' });
         }
 
         var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-
         if (!passwordIsValid) {
           return res.status(404).send({
             message: 'Invalid Password!',
@@ -111,10 +119,13 @@ module.exports = {
             expiresIn: 86400, // 24 hours
           }
         );
+        res.cookie('access_token', token, setJWTCookieOption());
         res.status(200).send({
           email: user.email,
-          accessToken: token,
+
           role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
+          isAdmin: user.isAdmin,
+          superAdmin: user.superAdmin,
         });
       })
       .catch(err => {
@@ -123,41 +134,55 @@ module.exports = {
   },
 
   resetPassword: async (req, res) => {
-    await Users.findOne({
-      where: {
-        email: req.body.email,
-      },
-    }).then(user => {
-      console.log('user', user);
-      VerificationToken.findOne({
+    await Users.scope('withPassword')
+      .findOne({
         where: {
-          userId: user.id,
+          email: req.body.email,
         },
-      }).then(verificationToken => {
-        var expireDate = new Date();
-        expireDate.setDate(expireDate.getDate() + 1 / 24);
-        verificationToken
-          .update({
-            resetToken: cryptoRandomString({ length: 20 }),
-            expiredDateResetToken: expireDate,
-          })
-          .then(response => {
-            res.status(200).json({
-              resetToken: response.resetToken,
-              expiredDateResetToken: response.expiredDateResetToken,
-            });
+      })
+      .then(user => {
+        VerificationToken.findOne({
+          where: {
+            userId: user.id,
+          },
+        })
+          .then(verificationToken => {
+            var expireDate = new Date();
+            expireDate.setDate(expireDate.getDate() + 1 / 24);
+            verificationToken
+              .update({
+                resetToken: cryptoRandomString({ length: 20 }),
+                expiredDateResetToken: expireDate,
+              })
+              .then(response => {
+                send.sendResetPasswordLink({
+                  link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
+                  name: '',
+                  email: req.body.email,
+                  btn_title: 'Password Reset',
+                  text:
+                    'You requested a password reset. Please use the button below to continue the process.',
+                });
+                res.status(200).json({ message: 'success' });
+              })
+              .catch(err => {
+                res.status(200).send({ message: 'success' });
+              });
           })
           .catch(err => {
-            res.status(500).send({ message: err.message });
+            res.status(200).send({ message: 'success' });
           });
+      })
+      .catch(err => {
+        res.status(200).send({ message: 'success' });
       });
-    });
   },
 
   updatePassword: async (req, res) => {
-    Users.findOne({
-      where: { email: req.query.email },
-    })
+    Users.scope('withPassword')
+      .findOne({
+        where: { email: req.query.email },
+      })
       .then(user => {
         VerificationToken.destroy({
           where: {
@@ -192,5 +217,9 @@ module.exports = {
       .catch(err => {
         return res.status(500).json({ message: err });
       });
+  },
+  logout: async (req, res) => {
+    res.cookie('access_token', { maxAge: 0 });
+    res.status(200).send({ message: 'success' });
   },
 };

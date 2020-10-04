@@ -5,14 +5,17 @@ import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
+import ModalDetailBook from './modalDetailBook';
 
 const Books = props => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
+  const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const mappingDataSourceBookList = filterOptions => {
@@ -29,10 +32,13 @@ const Books = props => {
       });
   };
 
-  const getDetailDataBook = id => {
-    const { books } = props;
-    let detailData = books.data.filter(item => item.id === id);
-    setDetailData(detailData[0]);
+  const getDetailDataBook = data => {
+    setDetailData(data);
+    setShowModalDetail(true);
+  };
+
+  const getDetailDataDeleteBook = data => {
+    setDetailData(data);
     setShowModalDeletion(true);
   };
 
@@ -53,10 +59,19 @@ const Books = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -67,22 +82,42 @@ const Books = props => {
     {
       name: 'judul',
       displayName: 'Judul',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.judul;
+        return data;
+      },
     },
     {
       name: 'pengarang',
       displayName: 'Pengarang',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.pengarang;
+        return data;
+      },
     },
     {
       name: 'tahunTerbit',
       displayName: 'Tahun Terbit',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.tahunTerbit;
+        return data;
+      },
     },
-    {
-      name: 'stockBuku',
-      displayName: 'Stock Buku',
-    },
+    // {
+    //   name: 'stockBuku',
+    //   displayName: 'Stock Buku',
+    //   customRender: rowData => {
+    //     let data = rowData.book && rowData.book.stockBuku;
+    //     return data
+    //   },
+    // },
     {
       name: 'status',
       displayName: 'Status',
+      customRender: rowData => {
+        let data = rowData.book && rowData.book.status;
+        return data;
+      },
     },
     {
       name: 'actions',
@@ -91,7 +126,15 @@ const Books = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Link to={`/admin/edit-book?id=${rowData.id}`}>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailDataBook(rowData)}
+              >
+                detail
+              </button>
+              <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -103,7 +146,7 @@ const Books = props => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailDataBook(rowData.id)}
+                onClick={() => getDetailDataDeleteBook(rowData.book)}
               >
                 Delete
               </button>
@@ -124,7 +167,7 @@ const Books = props => {
           <Link to="/admin/add-new-book">
             <button
               type="button"
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-plus mr-3" /> Buku Baru
             </button>
@@ -138,6 +181,7 @@ const Books = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData />
@@ -154,6 +198,14 @@ const Books = props => {
       >
         <div className="my-5">Anda yakin untuk menghapus Buku ini?</div>
       </Modal>
+      <ModalDetailBook
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </div>
   );
 };

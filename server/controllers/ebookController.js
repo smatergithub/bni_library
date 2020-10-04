@@ -1,5 +1,9 @@
 const Ebooks = require('../models/').ebooks;
+const ListBorrowEbook = require('../models').listBorrowEbook;
+const UploadFile = require('../models').uploadFile;
 const Sequelize = require('sequelize');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const fetch = require('node-fetch');
 const Op = Sequelize.Op;
 require('dotenv').config();
 
@@ -10,20 +14,19 @@ module.exports = {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
 
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
+        [Op.and]: {
+          kategori: {
+            [Op.like]: '%' + kategori + '%',
+          },
+          judul: {
+            [Op.like]: '%' + judul + '%',
+          },
         },
       };
     }
+    paramQuerySQL.attributes = { exclude: ['sourceLink'] };
 
     if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
       paramQuerySQL.where = {
@@ -69,46 +72,84 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+  getEbookPreviewById: async (req, res) => {
+    return Ebooks.findByPk(req.params.id)
+      .then(ebook => {
+        if (!ebook) {
+          return res.status(404).send({
+            message: 'Ebook Not Found',
+          });
+        } else {
+          async function copyPages() {
+            // Fetch first existing PDF document
 
+            const firstDonorPdfBytes = await fetch(ebook.sourceLink).then(res => res.arrayBuffer());
+            const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
+
+            // Create a new PDFDocument
+
+            const pdfDoc = await PDFDocument.create();
+            if (firstDonorPdfDoc.getPageCount() > 10) {
+              // Copy the 1st page from the first donor document, and
+              for (let i = 0; i < 10; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else if (firstDonorPdfDoc.getPageCount() > 5) {
+              for (let i = 0; i < 2; i++) {
+                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
+                // Add the first copied page
+                pdfDoc.addPage(firstDonorPage);
+              }
+            } else {
+              const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [0]);
+              // Add the first copied page
+              pdfDoc.addPage(firstDonorPage);
+            }
+
+            // Insert the second copied page to index 0, so it will be the
+            // first page in `pdfDoc`
+            // pdfDoc.insertPage(0, secondDonorPage);
+
+            // Serialize the PDFDocument to bytes (a Uint8Array)
+            const pdfBytes = await pdfDoc.save();
+            res.type('pdf');
+            var array = Array.from(pdfBytes);
+
+            res.status(200).send(array);
+          }
+          copyPages();
+        }
+      })
+      .catch(error => res.status(500).send(error));
+  },
   getEbookById: async (req, res) => {
-    return await Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        ebookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
             message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        ebook[0]['ebook'].sourceLink = '';
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },
 
   list: async (req, res) => {
-    let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
-    let paramQuerySQL = {};
-
-    if (judul != '' && typeof judul !== 'undefined') {
-      paramQuerySQL.where = {
-        judul: {
-          [Op.like]: '%' + judul + '%',
-        },
-      };
-    }
-    if (kategori != '' && typeof kategori !== 'undefined') {
-      paramQuerySQL.where = {
-        kategori: {
-          [Op.like]: '%' + kategori + '%',
-        },
-      };
-    }
-
-    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
-      paramQuerySQL.where = {
-        tahunTerbit: {
-          [Op.like]: '%' + tahunTerbit + '%',
-        },
-      };
-    }
+    // let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
+    let { limit, page } = req.body;
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+    };
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -120,19 +161,32 @@ module.exports = {
     }
 
     // order by
-    if (
-      order != '' &&
-      typeof order !== 'undefined' &&
-      ['createdAt'].includes(order.toLowerCase())
-    ) {
-      paramQuerySQL.order = [[order, sort]];
-    }
+    // if (
+    //   order != '' &&
+    //   typeof order !== 'undefined' &&
+    //   ['createdAt'].includes(order.toLowerCase())
+    // ) {
+    //   paramQuerySQL.order = [[order, sort]];
+    // }
+    // if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
+    //   sort = 'DESC';
+    // }
 
-    if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-      sort = 'DESC';
-    }
-
-    return await Ebooks.findAndCountAll(paramQuerySQL)
+    // return await Books.findAndCountAll(paramQuerySQL)
+    //   .then(book => {
+    //     let totalPage = Math.ceil(book.count / req.body.limit);
+    //     let page = Math.ceil(req.body.page);
+    //     res.status(200).json({
+    //       count: book.count,
+    //       totalPage: totalPage,
+    //       activePage: page,
+    //       data: book.rows,
+    //     });
+    //   })
+    //   .catch(err => {
+    //     res.status(500).send(err);
+    //   });
+    return await ListBorrowEbook.findAndCountAll(paramQuerySQL)
       .then(ebook => {
         let totalPage = Math.ceil(ebook.count / req.body.limit);
         let page = Math.ceil(req.body.page);
@@ -149,22 +203,25 @@ module.exports = {
   },
 
   getById: async (req, res) => {
-    return Ebooks.findByPk(req.params.id)
+    let paramQuerySQL = {
+      include: ['ebook', 'transactionEbook', 'user'],
+      where: {
+        ebookId: req.params.id,
+      },
+    };
+    return await ListBorrowEbook.findAll(paramQuerySQL)
       .then(ebook => {
         if (!ebook) {
           return res.status(404).send({
-            message: 'Ebook Not Found',
+            message: 'ebook Not Found',
           });
         }
-        return res.status(200).send(ebook);
+        return res.status(200).send(ebook[0]);
       })
       .catch(error => res.status(500).send(error));
   },
 
   add: async (req, res) => {
-    // let path =
-    //   __basedir + "/server/public/images/" + req.file.filename;
-
     let location = `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
     return Ebooks.create({
@@ -181,13 +238,47 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
+      fileEbook: req.body.fileEbook,
       sourceLink: req.body.sourceLink,
+      condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
-      .then(response =>
-        res.status(201).json({ message: 'successfully create ebook', data: response })
-      )
+      .then(response => {
+        const createListBorrowEbook = ListBorrowEbook.create({
+          EbookId: response.id,
+        });
+
+        if (!createListBorrowEbook) {
+          return res.status(404).send('Failed create Ebook');
+        }
+
+        return res.status(201).json({
+          message: 'Process Succesfully create Ebook',
+          data: response,
+        });
+      })
+
       .catch(err => res.status(500).send(err));
+  },
+
+  uploadSingleEbook: async (req, res) => {
+    if (!req.file) {
+      res.send({
+        status: false,
+        message: 'No file uploaded',
+      });
+    }
+    let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
+    UploadFile.create({
+      locationFile: locationFileEbook,
+    })
+      .then(response => {
+        return res.status(201).json({
+          message: 'Process Succesfully Upload file',
+          data: response,
+        });
+      })
+      .catch(error => res.status(500).send(error));
   },
 
   uploadEbook: async (req, res) => {
@@ -196,7 +287,7 @@ module.exports = {
         return res.status(400).send('Please upload an excel file!');
       }
 
-      let path = __basedir + '/server/public/documentBook/' + req.file.filename;
+      let path = __basedir + '/server/public/document/' + req.file.filename;
 
       readXlsxFile(path).then(rows => {
         // skip header
@@ -218,8 +309,9 @@ module.exports = {
             penerbit: row[9],
             lokasiPerpustakaan: row[10],
             status: row[11],
-            image: row[12],
-            sourceLink: row[13],
+            condition: row[12],
+            image: row[13],
+            sourceLink: row[14],
             isPromotion: false,
           };
 
@@ -227,8 +319,13 @@ module.exports = {
         });
 
         Ebooks.bulkCreate(Databooks)
-          .then(() => {
-            res.status(200).json({
+          .then(response => {
+            response.map(item => {
+              return ListBorrowEbook.create({
+                ebookId: item.id,
+              });
+            });
+            return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
           })
@@ -272,7 +369,9 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
+            fileEbook: req.body.fileEbook,
             sourceLink: req.body.sourceLink,
+            condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>
@@ -289,10 +388,14 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-        return ebook
-          .destroy()
-          .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+        ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
+          listBorrow[0].destroy().then(() => {
+            ebook
+              .destroy()
+              .then(() => res.status(200).send({ message: 'succesfully delete' }))
+              .catch(error => res.status(404).send(error));
+          });
+        });
       })
       .catch(error => res.status(500).send(error));
   },

@@ -39,11 +39,19 @@ module.exports = {
         user.rows.forEach(item => {
           let dataUser = {
             id: item.id,
+            npp: item.npp,
             nama: item.nama,
+            phoneNumber: item.phoneNumber,
+            tanggalLahir: item.tanggalLahir,
+            wilayah: item.wilayah,
+            singkatan: item.singkatan,
+            kdunit: item.kdunit,
+            unitBesaran: item.unitBesaran,
+            unit: item.unit,
+            jenjang: item.jenjang,
+            jabatan: item.jabatan,
             alamat: item.alamat,
             email: item.email,
-            phoneNumber: item.phoneNumber,
-            wilayah: item.wilayah,
             isAdmin: item.isAdmin,
             superAdmin: item.superAdmin,
           };
@@ -63,6 +71,21 @@ module.exports = {
       });
   },
 
+  deleteUser: async (req, res) => {
+    return Users.findByPk(req.params.id).then(user => {
+      if (!user) {
+        return res.status(404).send({
+          message: 'user Not Found',
+        });
+      }
+      return user
+        .destroy()
+        .then(() => res.status(200).send({ message: 'succesfully delete' }))
+        .catch(error => res.status(404).send(error));
+    })
+      .catch(error => res.status(500).send(error));
+  },
+
   toggleUserIsAdmin: async (req, res) => {
     return Users.findByPk(req.params.id)
       .then(user => {
@@ -71,9 +94,10 @@ module.exports = {
             message: 'user Not Found',
           });
         }
+        let requestAdmin = user.isAdmin === true ? false : true
         return user
           .update({
-            isAdmin: req.body.isAdmin,
+            isAdmin: requestAdmin,
           })
           .then(() => res.status(200).send(user))
           .catch(error => res.status(404).send(error));

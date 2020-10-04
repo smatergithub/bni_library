@@ -6,14 +6,17 @@ import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import Table from '../../component/Table';
+import ModalDetailEbook from './ModalDetailEBook';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
-  const [detailData, setDetailData] = useState(null);
+  const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
+  const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const mappingDataSourceEbookList = filterOptions => {
@@ -30,17 +33,21 @@ const Ebooks = props => {
       });
   };
 
-  const getDetailEbook = id => {
-    setDetailData(id);
+  const getDetailDataEbook = data => {
+    setDetailData(data);
+    setShowModalDetail(true);
+  };
+
+  const getDetailDataDeleteEbook = data => {
+    setDetailData(data);
     setShowModalDeletion(true);
   };
 
   const handleActionDeleteEbook = () => {
     setLoading(true);
     props
-      .DeleteEbookAction(detailData)
+      .DeleteEbookAction(detailData.id)
       .then(response => {
-        console.log(response);
         if (response.resp) {
           ToastSuccess(response.msg);
         } else {
@@ -58,10 +65,19 @@ const Ebooks = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -75,18 +91,34 @@ const Ebooks = props => {
     {
       name: 'judul',
       displayName: 'Judul',
-    },
-    {
-      name: 'kategori',
-      displayName: 'Kategori',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.judul;
+        return data;
+      },
     },
     {
       name: 'pengarang',
       displayName: 'Pengarang',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.pengarang;
+        return data;
+      },
     },
     {
-      name: 'penerbit',
-      displayName: 'Penerbit',
+      name: 'tahunTerbit',
+      displayName: 'Tahun Terbit',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.tahunTerbit;
+        return data;
+      },
+    },
+    {
+      name: 'status',
+      displayName: 'Status',
+      customRender: rowData => {
+        let data = rowData.ebook && rowData.ebook.status;
+        return data;
+      },
     },
     {
       name: 'actions',
@@ -95,7 +127,15 @@ const Ebooks = props => {
         return (
           <React.Fragment>
             <React.Fragment>
-              <Link to={`/admin/edit-ebook?id=${rowData.id}`}>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailDataEbook(rowData)}
+              >
+                detail
+              </button>
+              <Link to={`/admin/edit-ebook?id=${rowData}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -107,7 +147,7 @@ const Ebooks = props => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailEbook(rowData.id)}
+                onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
               >
                 Delete
               </button>
@@ -126,7 +166,7 @@ const Ebooks = props => {
           <Link to="/admin/add-new-ebook">
             <button
               type="button"
-              className="w-full bg-gray-800 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-plus mr-3" /> Ebook Baru
             </button>
@@ -141,6 +181,7 @@ const Ebooks = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData msg="Data belum tersedia !" />
@@ -157,6 +198,14 @@ const Ebooks = props => {
       >
         <div className="my-5">Anda yakin untuk menghapus Ebook ini?</div>
       </Modal>
+      <ModalDetailEbook
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </div>
   );
 };

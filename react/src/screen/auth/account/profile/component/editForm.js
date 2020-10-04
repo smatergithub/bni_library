@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-// import { moment } from 'moment';
-import DatePicker from 'react-datepicker';
-import { updateMe } from '../../../../../redux/action/user';
+import { moment } from 'moment';
+import { DatePicker } from 'antd';
+
+import { Input, Select } from 'antd';
+import { updateMe, getWilayah } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
+const { Option } = Select;
+const dateFormat = 'DD-MM-YYYY';
 
 function EditUser(props) {
+  const [dataWilayah, setDataWilayah] = React.useState([]);
+  const [codeWilayah, setCodeWilayah] = React.useState([]);
+  const [alamat, setAlamat] = React.useState([]);
+  const [linkMap, setLinkMap] = React.useState([]);
+  const [selectedAlamat, setSelectedAlamat] = React.useState({});
+  const [selectedLinkMap, setSelectedLinkMap] = React.useState(null);
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
   function onSubmit(formData) {
     formData.tanggalLahir = dateBorn;
-
+    formData.alamat = selectedAlamat.label;
+    formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
     props.updateMe(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
@@ -25,9 +36,69 @@ function EditUser(props) {
         ToastError(res.msg);
       }
     });
-    // console.log(formData);
   }
+  React.useEffect(() => {
+    if (props.user.mapUrl) {
+      setTimeout(() => {
+        document.getElementsByTagName('iframe')[0].style.width = '100%';
+        document.getElementsByTagName('iframe')[0].style.height = '150';
+      }, 3000);
+    }
+  }, []);
+
+  const getWilayah = () => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
+        return { label: item.wilayah, value: item.id };
+      });
+      setDataWilayah(data);
+    });
+  };
+  const getCodeWilayahAndAlamat = () => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
+        return { label: item.codeWilayah, value: item.id };
+      });
+      let alamat = response.data.data.map(item => {
+        return { label: item.alamat, value: item.id };
+      });
+      let linkMap = response.data.data.map(item => {
+        return { label: item.linkGoogleMap, value: item.id };
+      });
+
+      setAlamat(alamat);
+      setCodeWilayah(data);
+      setLinkMap(linkMap);
+    });
+  };
+
+  React.useEffect(() => {
+    getWilayah();
+    getCodeWilayahAndAlamat();
+  }, []);
+
+  function handleChange(value) {
+    let data = alamat.filter(item => item.value === value);
+    let lokasiMap = linkMap.filter(item => item.value === value);
+    setSelectedLinkMap(lokasiMap[0]);
+    setSelectedAlamat(data[0]);
+    setTimeout(() => {
+      document.getElementsByTagName('iframe')[0].style.width = '100%';
+      document.getElementsByTagName('iframe')[0].style.height = '150';
+    }, 3000);
+  }
+
+  const ParserHTML = htmlDocument => {
+    return {
+      __html: htmlDocument,
+    };
+  };
+  function handleDate(e, date) {
+    setDateBorn(date);
+  }
+
   let { user } = props;
+  if (!user) return null;
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg pl-10 relative">
       <div class="px-4 py-8 flex">
@@ -40,7 +111,7 @@ function EditUser(props) {
                 defaultValue={user.nama}
                 type="text"
                 name="nama"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 placeholder="Nama"
                 style={{
                   transition: 'all 0.15s ease 0s',
@@ -53,7 +124,7 @@ function EditUser(props) {
                 defaultValue={user.email}
                 type="email"
                 disabled
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
                 placeholder="Email"
                 style={{
                   transition: 'all 0.15s ease 0s',
@@ -65,40 +136,48 @@ function EditUser(props) {
                 Tanggal Lahir
               </label>
               <DatePicker
-                selected={dateBorn}
-                onChange={setDateBorn}
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                style={{
+                  height: 45,
+                }}
+                // defaultValue={moment('15/01/2010', dateFormat)}
+                // value={moment().format(dateFormat)}
+                placeholder={user.tanggalLahir}
+                format={dateFormat}
+                onChange={handleDate}
               />
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Wilayah
               </label>
-              <input
+              <Select
                 defaultValue={user.wilayah}
+                style={{ width: '100%' }}
                 ref={register()}
-                type="text"
+                className="wilayah"
                 name="wilayah"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
+              >
+                {dataWilayah.map(op => {
+                  return <Option value={op.label}>{op.label}</Option>;
+                })}
+              </Select>
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Singkatan
               </label>
-              <input
+
+              <Select
                 defaultValue={user.singkatan}
+                style={{ width: '100%' }}
                 ref={register()}
+                className="singkatan"
                 name="singkatan"
-                type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
+              >
+                {codeWilayah.map(op => {
+                  return <Option value={op.label}>{op.label}</Option>;
+                })}
+              </Select>
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Unit</label>
@@ -107,7 +186,7 @@ function EditUser(props) {
                 ref={register()}
                 name="unit"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -122,7 +201,7 @@ function EditUser(props) {
                 ref={register()}
                 name="kdunit"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -137,7 +216,7 @@ function EditUser(props) {
                 ref={register()}
                 name="jabatan"
                 type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -145,18 +224,33 @@ function EditUser(props) {
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Alamat</label>
-              <input
+              <Select
                 defaultValue={user.alamat}
-                ref={register()}
+                style={{ width: '100%' }}
+                onChange={handleChange}
+                className="alamat"
                 name="alamat"
-                type="text"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
-                placeholder="Password"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
+              >
+                {alamat.map(op => {
+                  return <Option value={op.value}>{op.label}</Option>;
+                })}
+              </Select>
             </div>
+            {selectedLinkMap ? (
+              <div className="relative w-full mb-3">
+                <div
+                  style={{ width: '100% !important' }}
+                  dangerouslySetInnerHTML={ParserHTML(selectedLinkMap.label)}
+                ></div>
+              </div>
+            ) : user.mapUrl ? (
+              <div className="relative w-full mb-3">
+                <div
+                  style={{ width: '100% !important' }}
+                  dangerouslySetInnerHTML={ParserHTML(user.mapUrl)}
+                ></div>
+              </div>
+            ) : null}
 
             <div className="mt-10">
               <button
@@ -190,4 +284,4 @@ const mapStateToProps = state => {
     user: state.users.me,
   };
 };
-export default connect(mapStateToProps, { updateMe })(EditUser);
+export default connect(mapStateToProps, { updateMe, getWilayah })(EditUser);

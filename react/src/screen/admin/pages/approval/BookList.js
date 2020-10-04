@@ -3,12 +3,13 @@ import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import TableApproval from '../../component/TableApproval';
-
+import ModalDetailBook from "./modalDetailBook";
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
+  const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
@@ -51,6 +52,13 @@ function BookList(props) {
     });
   }
 
+
+  const getDetailDataBook = data => {
+    setDetailData(data);
+    setShowModalDetail(true);
+  };
+
+
   React.useEffect(() => {
     mappingDataSourceTransactionBookList(filterOptions);
   }, [filterOptions]);
@@ -69,17 +77,9 @@ function BookList(props) {
     },
     {
       name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
+      displayName: 'Tanggal Peminjam',
       customRender: rowData => {
         return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
-      },
-    },
-
-    {
-      name: 'nama',
-      displayName: 'Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.user.nama}</React.Fragment>;
       },
     },
     {
@@ -100,6 +100,14 @@ function BookList(props) {
         return (
           <React.Fragment>
             <React.Fragment>
+              <button
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getDetailDataBook(rowData)}
+              >
+                detail
+                </button>
               {rowData.status !== 'Dikembalikan' ? (
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -111,8 +119,8 @@ function BookList(props) {
                   Return Book
                 </button>
               ) : (
-                '-'
-              )}
+                  '-'
+                )}
             </React.Fragment>
           </React.Fragment>
         );
@@ -135,8 +143,16 @@ function BookList(props) {
           onPaginationUpdated={onPaginationUpdated}
         />
       ) : (
-        <NoData msg="Belum ada request dari user!" />
-      )}
+          <NoData msg="Belum ada request dari user!" />
+        )}
+      <ModalDetailBook
+        showModalDetail={showModalDetail}
+        detailData={detailData}
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalDetail(false);
+        }}
+      />
     </React.Fragment>
   );
 }

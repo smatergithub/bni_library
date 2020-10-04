@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
+import ReactStars from 'react-rating-stars-component';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
@@ -14,6 +16,7 @@ function DetailEbooks(props) {
   let [ebooks, setEbooks] = React.useState(null);
   let [isWishlistClick, setIsWishlistClick] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let [showMore, setShowMore] = React.useState(false);
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
@@ -39,6 +42,10 @@ function DetailEbooks(props) {
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Detail Ebook | E-BNI</title>
+      </Helmet>
       <section className="py-16 lg:py-24 w-full">
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
@@ -50,22 +57,22 @@ function DetailEbooks(props) {
         </div>
         {ebooks !== null && (
           <div class="flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-20 py-10  m-2">
+            <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${ebooks.image.split('/').pop()}`}
-                    src={ebooks.image}
+                    src={ebooks.ebook.image}
                     alt=""
                     style={{
-                      height: 440,
-                      width: 300,
+                      height: 400,
+                      width: 320,
                     }}
                   />
                 </div>
               </div>
               <div className="w-3/5 px-5">
-                <div className="text-lg font-bold">{ebooks.judul}</div>
+                <div className="text-lg font-bold">{ebooks.ebook.judul}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
                   style={{
@@ -73,19 +80,45 @@ function DetailEbooks(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        ebooks.ebook.totalRead
+                          ? ebooks.ebook.countRating
+                            ? ebooks.ebook.countRating / ebooks.ebook.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3">
+                      {' '}
+                      {ebooks.ebook.totalRead ? ebooks.ebook.totalRead : 0} Views
+                    </span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
-                <div> Paperback | {ebooks.bahasa}</div>
-                <div>{`By (author) ${ebooks.pengarang}`}</div>
+                <div> Paperback | {ebooks.ebook.bahasa}</div>
+                <div>{`By (author) ${ebooks.ebook.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
-                <div>{ebooks.description}</div>
+
+                <div>
+                  {ebooks.ebook.description.length > 505
+                    ? ebooks.ebook.description.slice(
+                        0,
+                        showMore ? ebooks.ebook.description.length : 500
+                      )
+                    : null}
+                </div>
+                {ebooks.ebook.description.length > 505 && (
+                  <div
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-blue-400 underline cursor-pointer"
+                  >
+                    {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
+                  </div>
+                )}
               </div>
             </div>
             <div class="w-2/6  bg-white px-10 py-10 m-2">
@@ -97,25 +130,34 @@ function DetailEbooks(props) {
                 }}
               ></div>
 
-              <div> Author : {ebooks.pengarang}</div>
-              <div> ISBN : {ebooks.isbn}</div>
+              <div> Author : {ebooks.ebook.pengarang}</div>
+              <div> ISBN : {ebooks.ebook.isbn}</div>
               <div> Format : Hardback</div>
-              <div> Publishers : {ebooks.penerbit}</div>
-              <div> Publication date : {ebooks.tahunTerbit}</div>
+              <div> Publishers : {ebooks.ebook.penerbit}</div>
+              <div> Publication date : {ebooks.ebook.tahunTerbit}</div>
               <div> Pages : 120</div>
               <div> Product dimensions : 172 x 223 x 24mm</div>
-              <div> Condition : New</div>
+              <div className="text-lg font-bold mt-5">Peminjam</div>
+              <div
+                className="bg-gray-400 w-full mt-2 mb-2"
+                style={{
+                  height: 1,
+                }}
+              ></div>
+              <div>Peminjam : {ebooks.user ? ebooks.user.nama : 'Tidak Ada Peminjam'}</div>
+              {ebooks.user ? <div>Unit : {ebooks.user ? ebooks.user.unit : ''}</div> : null}
+              {ebooks.user ? <div>Alamat : {ebooks.user ? ebooks.user.alamat : ''}</div> : null}
               <button
                 onClick={() => {
                   if (!isUserLogged) {
                     setShowModalDeletion(true);
                   } else {
-                    props.history.push(`/order?id=${ebooks.id}&type=ebook`);
+                    props.history.push(`/order?id=${ebooks.ebook.id}&type=ebook`);
                   }
                 }}
-                className="w-full bg-gray-800 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
               >
-                Pesan Sekarang
+                Pinjam Sekarang
               </button>
               <button
                 className={`w-full  ${

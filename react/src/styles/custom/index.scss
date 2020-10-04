@@ -32,7 +32,7 @@
   background: #e2e8f0;
 }
 .account-link:hover {
-  background: $main-light;
+  background: #ed8936;
 }
 
 .katalog-hover {
@@ -54,6 +54,20 @@
   margin-top: 4px !important;
 }
 .ant-btn-primary {
-  border-color: $main !important;
-  background-color: $main !important;
+  border-color: #ed8936 !important;
+  background-color: #ed8936 !important;
+}
+.ant-picker.ant-picker-focused {
+  width: 100% !important;
+}
+.ant-picker {
+  width: 100% !important;
+}
+.ant-space-vertical {
+  width: 100% !important;
+}
+.react-pdf__Document.custom-pdf {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

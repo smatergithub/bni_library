@@ -23,4 +23,21 @@ export default class RepositoryApi {
     const url = `/api/admin/repository/${id}`;
     return Request.deleteWithAuth(url);
   }
+  static createByUser(body) {
+    const url = '/api/repository';
+    return Request.postWithAuth(url, body, true);
+  }
+  static listByUser(param) {
+    const url = `/api/repository?page=${param.page}&limit=${param.limit}&category=${param.kategori}&title=${param.title}`;
+    return Request.getWithAuth(url);
+  }
+
+  static detailResearchByUser(id) {
+    const url = `/api/repository/${id}`;
+    return Request.getWithAuth(url);
+  }
+  static getPreviewResearchByUser(id, type) {
+    const url = `/api/repository/preview/${id}?type=${type}`;
+    return Request.getWithAuth(url);
+  }
 }

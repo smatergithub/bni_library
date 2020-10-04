@@ -72,6 +72,7 @@ const routes = [
 function NavBar(props) {
   let { history } = props;
   const [selectedMenu, setSelectedMenu] = useState(props.url);
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
 
   let badge =
     props.ebooks.length + props.books.length !== 0 ? (
@@ -83,7 +84,7 @@ function NavBar(props) {
           position: 'absolute',
           right: -10,
           top: -10,
-          backgroundColor: 'red',
+          backgroundColor: 'green',
           color: 'white',
           display: 'flex',
           justifyContent: 'center',
@@ -107,7 +108,7 @@ function NavBar(props) {
         <div className="pl-4 flex items-center">
           <Link to="/">
             <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
-              BNI
+              Digital Library BNI
             </div>
           </Link>
         </div>
@@ -141,8 +142,10 @@ function NavBar(props) {
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
-                      className={`relative inline-block text-sm text-gray-900 no-underline hover:text-gray-500  py-2 px-4 ${
-                        selectedMenu === rt.params ? 'border-b-2 border-gray-900' : ''
+                      className={`relative inline-block text-sm ${
+                        selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
+                      } no-underline hover:text-gray-500  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
                       } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
                       <div className="relative">
@@ -165,16 +168,46 @@ function NavBar(props) {
             })}
             <li className="ml-3">
               {props.isAuth && (
-                <Link to="/profile/home">
-                  <div className="cursor-pointer relative bg-gray-700 p-2  rounded-full w-8 h-8 flex justify-center content-center">
+                <React.Fragment>
+                  <div
+                    onClick={() => setShowHeaderMenu(!showHeaderMenu)}
+                    className="cursor-pointer relative bg-orange-500 p-2  rounded-full w-8 h-8 flex justify-center content-center"
+                  >
                     <i className="fas fa-user text-lg text-white"></i>
                     {badge}
                   </div>
-                </Link>
+                  {showHeaderMenu ? (
+                    <div
+                      onClick={() => setShowHeaderMenu(!showHeaderMenu)}
+                      style={{
+                        zIndex: '300000',
+                      }}
+                      className="absolute w-32 bg-white rounded-lg shadow-lg py-2 -ml-2"
+                    >
+                      <Link to="/profile/home">
+                        <div
+                          href="#"
+                          className="block px-4 py-2 account-link hover:text-white"
+                          // onClick={() => updateProfile()}
+                        >
+                          Akun
+                        </div>
+                      </Link>
+
+                      <a
+                        href="#"
+                        className="block px-4 py-2 account-link hover:text-white"
+                        onClick={() => props.logout()}
+                      >
+                        Keluar
+                      </a>
+                    </div>
+                  ) : null}
+                </React.Fragment>
               )}
               {!props.isAuth && (
                 <Link to="/auth/login">
-                  <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
+                  <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
                     Masuk
                   </button>
                 </Link>

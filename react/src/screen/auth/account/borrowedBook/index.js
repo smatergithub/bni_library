@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import ReactStars from 'react-rating-stars-component';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
-import { getBorrowedBookItem } from '../../../../redux/action/user';
+import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
 
 function Borrowed(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -11,9 +12,13 @@ function Borrowed(props) {
   let [bookBorrowSelected, setBookBorrowSelected] = React.useState(null);
 
   React.useEffect(() => {
-    props.getBorrowedBookItem().then(res => {
+    props.getMe().then(res => {
       if (res.resp) {
-        setBorrowItem(res.data);
+        props.getBorrowedBookItem(res.data.id, 'borrowed=true').then(res => {
+          if (res.resp) {
+            setBorrowItem(res.data);
+          }
+        });
       }
     });
   }, []);
@@ -28,9 +33,9 @@ function Borrowed(props) {
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Buku | Ebni</title>
+        <title>Buku | E-BNI</title>
       </Helmet>
-      <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+      <div className="bg-orange-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         PINJAMAN
       </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
@@ -66,16 +71,16 @@ function Borrowed(props) {
           handleSubmit={() => setShowModal(false)}
         >
           <div class="flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-20 py-10  m-2">
+            <div class="flex w-4/6 text-gray-700 bg-white px-20 py-5  m-2">
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={books.image}
                     alt=""
                     style={{
-                      height: 440,
+                      height: 240,
                       width: 300,
+                      objectFit: 'cover',
                     }}
                   />
                 </div>
@@ -89,14 +94,21 @@ function Borrowed(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        books.totalRead
+                          ? books.countRating
+                            ? books.countRating / books.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3"> {books.totalRead ? books.totalRead : 0} Views</span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
                 <div> Paperback | {books.bahasa}</div>
                 <div>{`By (author) ${books.pengarang}`}</div>
@@ -128,4 +140,4 @@ function Borrowed(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedBookItem })(Borrowed);
+export default connect(null, { getBorrowedBookItem, getMe })(Borrowed);

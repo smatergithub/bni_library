@@ -1,17 +1,23 @@
 import React from 'react';
 
-export default function Modal({ open, title, onCLose, handleSubmit, children, large }) {
+export default function Modal({
+  open,
+  title,
+  onCLose,
+  handleSubmit,
+  children,
+  large,
+  usingForDetail,
+  usingAnotherButton,
+}) {
   return (
     <>
       {open ? (
         <>
-          <div
-            className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none"
-            onClick={() => onCLose()}
-          >
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div
               className={`modal-container bg-white ${
-                large ? '' : 'w-11/12 md:max-w-md'
+                large ? 'w-11/12 max-w-5xl' : 'w-11/12 md:max-w-md'
               } rounded shadow-lg  overflow-y-auto`}
               style={{
                 width: '90% !important',
@@ -20,7 +26,7 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
               <div className="modal-content py-4 text-left px-6">
                 <div className="flex justify-between items-center pb-3">
                   <p className="text-2xl font-bold">{title}</p>
-                  <div className="modal-close cursor-pointer z-50">
+                  <div className="modal-close cursor-pointer z-50" onClick={() => onCLose()}>
                     <svg
                       className="fill-current text-black"
                       xmlns="http://www.w3.org/2000/svg"
@@ -33,20 +39,24 @@ export default function Modal({ open, title, onCLose, handleSubmit, children, la
                   </div>
                 </div>
                 {children}
-                <div className="flex justify-end pt-2">
-                  <button
-                    onClick={() => onCLose()}
-                    className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                  >
-                    Close
-                  </button>
-                  <button
-                    onClick={() => handleSubmit()}
-                    className="modal-close px-6 bg-gray-800  rounded-sm text-white hover:bg-indigo-400"
-                  >
-                    Submit
-                  </button>
-                </div>
+                {usingAnotherButton ? null : (
+                  <div className="flex justify-end pt-2">
+                    <button
+                      onClick={() => onCLose()}
+                      className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                    >
+                      Close
+                    </button>
+                    {usingForDetail ? null : (
+                      <button
+                        onClick={() => handleSubmit()}
+                        className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
+                      >
+                        Submit
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>

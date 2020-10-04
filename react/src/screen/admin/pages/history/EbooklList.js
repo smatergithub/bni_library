@@ -68,7 +68,7 @@ function EbookList(props) {
       name: 'nama',
       displayName: 'Peminjam',
       customRender: rowData => {
-        return <React.Fragment>{rowData.user.nama}</React.Fragment>;
+        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
       },
     },
     {
@@ -100,8 +100,8 @@ function EbookList(props) {
                   Return Ebook
                 </button>
               ) : (
-                '-'
-              )}
+                  '-'
+                )}
             </React.Fragment>
           </React.Fragment>
         );
@@ -123,8 +123,8 @@ function EbookList(props) {
           onPaginationUpdated={onPaginationUpdated}
         />
       ) : (
-        <NoData msg="Belum ada request Dari user!" />
-      )}
+          <NoData msg="Belum ada request Dari user!" />
+        )}
     </React.Fragment>
   );
 }

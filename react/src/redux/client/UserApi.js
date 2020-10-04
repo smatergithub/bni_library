@@ -5,6 +5,10 @@ export default class UsersApi {
     const url = '/api/login';
     return Request.post(url, userData);
   }
+  static logout() {
+    const url = '/api/logout';
+    return Request.getWithAuth(url);
+  }
   static register(userData) {
     const url = '/api/register';
     return Request.post(url, userData);
@@ -19,10 +23,14 @@ export default class UsersApi {
     return Request.getWithAuth(url);
   }
 
-  static toggleUserIntoAdmin(userData, id) {
-    console.log(id);
-    const url = `/api/admin/manage-user/${id}`;
-    return Request.postWithAuth(url, userData, false, false);
+  static toggleUserIntoAdmin(id) {
+    const url = `/api/admin/manage-user/userIntoAdmin/${id}`;
+    return Request.postWithAuth(url);
+  }
+
+  static deleteUserList(id) {
+    const url = `/api/admin/manage-user/delete/${id}`;
+    return Request.postWithAuth(url);
   }
 
   static dataSourceListUser() {
@@ -37,12 +45,12 @@ export default class UsersApi {
     const url = `/api/profile/updateProfile`;
     return Request.postWithAuth(url, userData, true);
   }
-  static getBorrowedBookItem() {
-    const url = `/api/profile/listBorrowBook`;
+  static getBorrowedBookItem(id, params) {
+    const url = `/api/profile/listBorrowBook/${id}?${params}`;
     return Request.getWithAuth(url);
   }
-  static getBorrowedEbookItem() {
-    const url = `/api/profile/listBorrowEbook`;
+  static getBorrowedEbookItem(id, params) {
+    const url = `/api/profile/listBorrowEbook/${id}?${params}`;
     return Request.getWithAuth(url);
   }
   static createBookFeeback(userData) {
@@ -52,5 +60,13 @@ export default class UsersApi {
   static createEbookFeeback(userData) {
     const url = `/api/ratingEbook`;
     return Request.postWithAuth(url, userData, false, false);
+  }
+  static forgotPassword(userData) {
+    const url = `/api/resetPassword`;
+    return Request.post(url, userData);
+  }
+  static resetPassword(userData, query) {
+    const url = `/api/updatePassword${query}`;
+    return Request.post(url, userData);
   }
 }

@@ -1,13 +1,25 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsersListToAdmin, toogleIsAdmin } from '../../../../redux/action/user';
+import {
+  getUsersListToAdmin,
+  toggleUserIntoAdmin,
+  deleteUser,
+  getMe,
+} from '../../../../redux/action/user';
 import Table from '../../component/Table';
+import Modal from '../../../../component/Modal';
+import { NoData } from '../../../../component';
+import { ToastError, ToastSuccess } from '../../../../component';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
+  const [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
+  const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
     limit: 5,
+    judul: '',
   });
 
   const retrieveDataUser = filterOptions => {
@@ -29,10 +41,19 @@ const Ebooks = props => {
   }, []);
 
   const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -46,6 +67,47 @@ const Ebooks = props => {
       }
     });
   }
+
+  const getDetailUser = (id, MakeAdmin) => {
+    const { users } = props;
+    let detailData = users.data.filter(item => item.id === id);
+    setDetailData(detailData[0]);
+    if (MakeAdmin === 'isAdmin') {
+      setShowModalMakeAdmin(true);
+    } else {
+      setShowModalDeletion(true);
+    }
+  };
+
+  const makeUserIntoAdmin = () => {
+    setLoading(true);
+    props
+      .toggleUserIntoAdmin(detailData.id)
+      .then(response => {
+        retrieveDataUser(filterOptions);
+        setLoading(false);
+        setShowModalMakeAdmin(false);
+      })
+      .catch(err => {
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
+
+  const handleDeleteUser = () => {
+    setLoading(true);
+    props
+      .deleteUser(detailData.id)
+      .then(response => {
+        retrieveDataUser(filterOptions);
+        setLoading(false);
+        setShowModalDeletion(false);
+      })
+      .catch(err => {
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
 
   if (loading) return null;
   const { users } = props;
@@ -68,29 +130,37 @@ const Ebooks = props => {
       displayName: 'Nomor Telepon',
     },
     {
+      name: 'isAdmin',
+      displayName: 'Admin',
+      customRender: rowData => {
+        return rowData.isAdmin ? 'Aktif' : 'Tidak Aktif';
+      },
+    },
+    {
       name: 'actions',
       displayName: 'Actions',
       customRender: rowData => {
         return (
           <React.Fragment>
-            <React.Fragment>
-              {props.me && props.me.id !== rowData.id ? (
-                props.me.superAdmin ? (
-                  <button
-                    className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                    type="button"
-                    style={{ marginRight: '5px' }}
-                    onClick={() => onAdminAction({ isAdmin: !rowData.isAdmin }, rowData.id)}
-                  >
-                    {!rowData.isAdmin ? 'Make as Admin' : 'Make as User'}
-                  </button>
-                ) : (
-                  '-'
-                )
-              ) : (
-                'You'
-              )}
-            </React.Fragment>
+            {!props.me ? null : props.me.superAdmin ? (
+              <React.Fragment>
+                <button
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                  onClick={() => getDetailUser(rowData.id, 'isAdmin')}
+                >
+                  {rowData.isAdmin !== true ? ' Make Admin' : ' Make User'}
+                </button>
+                <button
+                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  onClick={() => getDetailUser(rowData.id, 'delete')}
+                >
+                  Delete
+                </button>{' '}
+              </React.Fragment>
+            ) : null}
           </React.Fragment>
         );
       },
@@ -110,9 +180,32 @@ const Ebooks = props => {
             limit={filterOptions.limit}
             page={filterOptions.page}
             onPaginationUpdated={onPaginationUpdated}
+            searchDefaultValue={filterOptions.judul}
           />
         ) : null}
       </main>
+      <Modal
+        title="Konfirmasi"
+        open={showModalDeletion}
+        onCLose={() => {
+          setDetailData({});
+          setShowModalDeletion(false);
+        }}
+        handleSubmit={handleDeleteUser}
+      >
+        <div className="my-5">Anda yakin untuk menghapus User ini?</div>
+      </Modal>
+      <Modal
+        title="Konfirmasi"
+        open={showModalMakeAdmin}
+        onCLose={() => {
+          setDetailData({});
+          setShowModalMakeAdmin(false);
+        }}
+        handleSubmit={makeUserIntoAdmin}
+      >
+        <div className="my-5">Anda yakin untuk Menjadikan User ini Admin ?</div>
+      </Modal>
     </div>
   );
 };
@@ -120,8 +213,14 @@ const Ebooks = props => {
 let mapStateToProps = state => {
   return {
     users: state.users.users,
+    role: state.users.role,
     me: state.users.me,
   };
 };
 
-export default connect(mapStateToProps, { getUsersListToAdmin, toogleIsAdmin })(Ebooks);
+export default connect(mapStateToProps, {
+  getUsersListToAdmin,
+  toggleUserIntoAdmin,
+  deleteUser,
+  getMe,
+})(Ebooks);

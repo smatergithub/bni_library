@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import ReactStars from 'react-rating-stars-component';
 import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
-import { getBorrowedEbookItem } from '../../../../redux/action/user';
+import { getBorrowedEbookItem, getMe } from '../../../../redux/action/user';
 
 function BorrowedEbook(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -11,9 +12,13 @@ function BorrowedEbook(props) {
   let [ebookBorrowSelected, setEbookBorrowSelected] = React.useState(null);
 
   React.useEffect(() => {
-    props.getBorrowedEbookItem().then(res => {
+    props.getMe().then(res => {
       if (res.resp) {
-        setBorrowItem(res.data);
+        props.getBorrowedEbookItem(res.data.id, 'borrowed=true').then(res => {
+          if (res.resp) {
+            setBorrowItem(res.data);
+          }
+        });
       }
     });
   }, []);
@@ -28,9 +33,9 @@ function BorrowedEbook(props) {
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Ebook | Ebni</title>
+        <title>Ebook | E-BNI</title>
       </Helmet>
-      <div className="bg-gray-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+      <div className="bg-orange-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
         PINJAMAN
       </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
@@ -69,12 +74,12 @@ function BorrowedEbook(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={ebooks.image}
                     alt=""
                     style={{
-                      height: 440,
+                      height: 240,
                       width: 300,
+                      objectFit: 'cover',
                     }}
                   />
                 </div>
@@ -88,14 +93,21 @@ function BorrowedEbook(props) {
                   }}
                 ></div>
                 <div className="flex mt-3 ">
-                  <div className="flex items-center">
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="fas fa-star text-yellow-700" />
-                    <i className="far fa-star text-yellow-700" />
+                  <div className="flex items-center justify-between">
+                    <ReactStars
+                      count={6}
+                      value={
+                        ebooks.totalRead
+                          ? ebooks.countRating
+                            ? ebooks.countRating / ebooks.totalRead
+                            : 0
+                          : 0
+                      }
+                      size={20}
+                      activeColor="#ffd700"
+                    />
+                    <span className="ml-3"> {ebooks.totalRead ? ebooks.totalRead : 0} Views</span>
                   </div>
-                  <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div>
                 <div> Paperback | {ebooks.bahasa}</div>
                 <div>{`By (author) ${ebooks.pengarang}`}</div>
@@ -127,4 +139,4 @@ function BorrowedEbook(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedEbookItem })(BorrowedEbook);
+export default connect(null, { getBorrowedEbookItem, getMe })(BorrowedEbook);

@@ -44,6 +44,18 @@ module.exports = {
       image: {
         type: Sequelize.STRING,
       },
+      fileEbook: {
+        type: Sequelize.STRING,
+      },
+      condition: {
+        type: Sequelize.STRING,
+      },
+      countRating: {
+        type: Sequelize.INTEGER,
+      },
+      totalRead: {
+        type: Sequelize.INTEGER,
+      },
       sourceLink: {
         type: Sequelize.STRING,
       },

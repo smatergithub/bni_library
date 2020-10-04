@@ -1,13 +1,26 @@
 import { SIGN_IN, SIGN_OUT, USERS, ME } from '../type';
 import UserApi from '../client/UserApi';
+import WilayahApi from '../client/wilayahApi';
 
 export const signIn = user => dispatch => {
   return UserApi.login(user)
     .then(res => {
       if (res) {
-        localStorage.setItem('bni_jwtToken', res.accessToken);
         localStorage.setItem('bni_UserRole', res.role);
         dispatch({ type: SIGN_IN, payload: res });
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const logout = () => dispatch => {
+  return UserApi.logout()
+    .then(res => {
+      if (res) {
+        dispatch({ type: SIGN_OUT });
         return { resp: true, msg: '' };
       }
     })
@@ -50,6 +63,39 @@ export const verificationUser = param => () => {
       return { resp: false, msg: msg };
     });
 };
+
+export const toggleUserIntoAdmin = id => () => {
+  return UserApi.toggleUserIntoAdmin(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Account User Berhasil di Menjadi Admin',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const deleteUser = id => () => {
+  return UserApi.deleteUserList(id)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Account User Berhasil di dihapus',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const getMe = () => dispatch => {
   return UserApi.getMe()
     .then(res => {
@@ -82,10 +128,6 @@ export const updateMe = data => () => {
     });
 };
 
-export const signOut = () => dispatch => {
-  return dispatch({ type: SIGN_OUT });
-};
-
 export const getUsersListToAdmin = param => dispatch => {
   return UserApi.listUserAdmin(param)
     .then(res => {
@@ -102,8 +144,8 @@ export const getUsersListToAdmin = param => dispatch => {
       return { resp: false, msg: msg };
     });
 };
-export const getBorrowedBookItem = () => () => {
-  return UserApi.getBorrowedBookItem()
+export const getBorrowedBookItem = (id, params) => () => {
+  return UserApi.getBorrowedBookItem(id, params)
     .then(res => {
       if (res) {
         return {
@@ -118,8 +160,8 @@ export const getBorrowedBookItem = () => () => {
       return { resp: false, msg: msg };
     });
 };
-export const getBorrowedEbookItem = () => () => {
-  return UserApi.getBorrowedEbookItem()
+export const getBorrowedEbookItem = (id, params) => () => {
+  return UserApi.getBorrowedEbookItem(id, params)
     .then(res => {
       if (res) {
         return {
@@ -175,6 +217,48 @@ export const toogleIsAdmin = (userData, id) => () => {
           resp: true,
           msg: '',
         };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const getWilayah = () => () => {
+  return WilayahApi.list()
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const forgotPassword = data => () => {
+  return UserApi.forgotPassword(data)
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const resetPassword = (data, query) => () => {
+  return UserApi.resetPassword(data, query)
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: '' };
       }
     })
     .catch(err => {
