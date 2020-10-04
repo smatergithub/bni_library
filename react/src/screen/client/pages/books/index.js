@@ -189,6 +189,7 @@ function Books(props) {
                   <div className="flex items-center justify-between">
                     <ReactStars
                       count={6}
+                      // isHalf={false}
                       value={
                         book.totalRead
                           ? book.countRating

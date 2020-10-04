@@ -8,8 +8,6 @@ import { Modal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
 
-let img =
-  'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 function DetailBooks(props) {
   const parsed = queryString.parse(props.location.search);
   let { history } = props;

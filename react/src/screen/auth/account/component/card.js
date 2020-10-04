@@ -4,7 +4,15 @@ const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
   return (
     <div className="w-full mb-5 py-5 flex">
       <div className="w-1/6 h-48 flex items-center justify-center">
-        <img src="https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=100&h=80&q=80" />
+        <img
+          src={data.image}
+          style={{
+            height: 120,
+            width: 140,
+            backgroundSize: 'cover',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
       </div>
 
       <div className="w-4/6 h-48  flex  items-center justify-start ">
