@@ -30,7 +30,7 @@ function Faq() {
           </div>
         </div>
       </section>
-      <section className="pb-20 relative block bg-gray-900">
+      <section className="pb-20 relative block bg-orange-500">
         <div
           className="bottom-auto top-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden -mt-20"
           style={{
@@ -48,7 +48,7 @@ function Faq() {
             y="0"
           >
             <polygon
-              className="text-gray-900 fill-current"
+              className="text-orange-500 fill-current"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
@@ -57,7 +57,7 @@ function Faq() {
           <div className="flex flex-wrap text-center justify-center">
             <div className="w-full lg:w-6/12 px-4">
               <h2 className="text-4xl font-semibold text-white">Got Idea?</h2>
-              <p className="text-lg leading-relaxed mt-4 mb-4 text-gray-500">
+              <p className="text-lg leading-relaxed mt-4 mb-4 text-white">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum nunc vel
                 tincidunt posuere. Cras nunc urna, imperdiet molestie malesuada eget, faucibus ut
                 ligula
@@ -66,7 +66,7 @@ function Faq() {
           </div>
         </div>
       </section>
-      <section className="relative block py-24 lg:pt-0 bg-gray-900">
+      <section className="relative block py-24 lg:pt-0 bg-orange-500">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap justify-center lg:-mt-64 -mt-48">
             <div className="w-full lg:w-6/12 px-4">
@@ -124,7 +124,7 @@ function Faq() {
                   </div>
                   <div className="text-center mt-6">
                     <button
-                      className="bg-gray-900 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
+                      className="bg-green-600 w-full text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1"
                       type="button"
                       style={{
                         transition: 'all 0.15s ease 0s',

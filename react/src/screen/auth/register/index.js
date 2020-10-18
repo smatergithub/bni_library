@@ -29,13 +29,14 @@ function Register(props) {
       ToastError('Email atau password tidak boleh kosong');
     } else if (formData.password !== formData.confirmPassword) {
       ToastError('Konfirmasi Password tidak sesuai !');
-    } else if (checkemail.length === 2 && checkemail[1] !== 'bni.co.id') {
+    } else if (checkemail.length === 2 && checkemail[1] === 'bni.co.id') {
+      // user can input another email domain for testing, later the email must accept @bni.co.id only
       ToastError('Anda belum menginput alamat email BNI Anda');
     } else {
-      formData.email =
-        checkemail.length === 2 && checkemail[1] === 'bni.co.id'
-          ? formData.email
-          : formData.email + '@bni.co.id';
+      // formData.email =
+      // checkemail.length === 2 && checkemail[1] === 'bni.co.id'
+      //   ? formData.email
+      //   : formData.email + '@bni.co.id';
 
       props.signUp(formData).then(res => {
         if (res.resp) {
@@ -134,7 +135,7 @@ function Register(props) {
                             top: '2em',
                           }}
                         >
-                          @bni.co.id
+                          {/* @bni.co.id */}
                         </div>
                       </div>
                       <div className="relative w-full mb-3">
