@@ -18,7 +18,7 @@ function Login(props) {
       ToastError('Anda belum menginput alamat email BNI Anda');
     } else {
       let data = {
-        email: email,
+        email: user.email,
         // email.length === 2 && email[1] === 'bni.co.id' ? user.email : user.email + '@bni.co.id',
         password: user.password,
       };

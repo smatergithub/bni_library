@@ -67,7 +67,7 @@ function Accounts(props) {
         <i className="fas fa-arrow-left"></i> {isAdmin ? 'Ke Dashboard' : 'Ke Beranda'}
       </div>
       <section className="bg-gray-100 py-12 w-full">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex xs:flex-col md:flex-row">
           <Sidebar url={match.params.id} />
           <div
             className="w-full flex flex-col h-screen overflow-y-hidden"
