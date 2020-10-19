@@ -73,6 +73,21 @@ function NavBar(props) {
   let { history } = props;
   const [selectedMenu, setSelectedMenu] = useState(props.url);
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const ref = React.useRef(null);
+
+  const handleClick = e => {
+    if (ref.current && !ref.current.contains(e.target)) {
+      setShowMobileMenu(false);
+    }
+  };
+  React.useEffect(() => {
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  });
 
   let badge =
     props.ebooks.length + props.books.length !== 0 ? (
@@ -113,9 +128,11 @@ function NavBar(props) {
           </Link>
         </div>
 
-        <div className="block lg:hidden pr-4">
+        <div className="block lg:hidden relative pr-4">
           <button
+            ref={ref}
             id="nav-toggle"
+            onClick={() => setShowMobileMenu(!showMobileMenu)}
             className="flex items-center p-1 text-orange-800 hover:text-gray-900"
           >
             <svg
@@ -128,7 +145,62 @@ function NavBar(props) {
             </svg>
           </button>
         </div>
+        {showMobileMenu && (
+          <div className="bg-white w-full text-right lg:hidden">
+            {routes.map(rt => {
+              return (
+                <li className="mr-3">
+                  <Link
+                    to={rt.params === 'katalog' ? '' : `${rt.path}`}
+                    onClick={() => setSelectedMenu(rt.params)}
+                  >
+                    <div
+                      className={`relative inline-block text-sm ${
+                        selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
+                      } no-underline hover:text-gray-500  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
+                      } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
+                    >
+                      <div className="relative">
+                        {rt.name}{' '}
+                        {rt.params === 'katalog' ? (
+                          <i
+                            className="fas fa-caret-down absolute "
+                            style={{
+                              top: 6,
+                              right: -17,
+                            }}
+                          />
+                        ) : null}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
 
+            <li className="mr-3">
+              <Link to="/books">
+                <div
+                  href="#"
+                  className="relative inline-block text-sm no-underline hover:text-gray-500  py-2 px-4 text-gray-900 "
+                  role="menuitem"
+                >
+                  BUKU
+                </div>
+              </Link>
+              <Link to="/ebooks">
+                <div
+                  href="#"
+                  className="relative   py-2 text-sm text-sm no-underline hover:text-gray-500  py-2 px-4 text-gray-900 "
+                  role="menuitem"
+                >
+                  EBOOK
+                </div>
+              </Link>
+            </li>
+          </div>
+        )}
         <div
           className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20"
           id="nav-content"

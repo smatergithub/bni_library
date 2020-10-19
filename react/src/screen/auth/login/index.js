@@ -13,12 +13,13 @@ function Login(props) {
     let email = user.email.split('@');
     if (user.email.trim().length === 0 && user.password.trim().length === 0) {
       ToastError('Email atau password tidak boleh kosong');
-    } else if (email.length === 2 && email[1] !== 'bni.co.id') {
+    } else if (email.length === 2 && email[1] === 'bni.co.id_test') {
+      // user can input another email domain for testing, later the email must accept @bni.co.id only
       ToastError('Anda belum menginput alamat email BNI Anda');
     } else {
       let data = {
-        email:
-          email.length === 2 && email[1] === 'bni.co.id' ? user.email : user.email + '@bni.co.id',
+        email: user.email,
+        // email.length === 2 && email[1] === 'bni.co.id' ? user.email : user.email + '@bni.co.id',
         password: user.password,
       };
 
@@ -90,7 +91,7 @@ function Login(props) {
                           top: '2em',
                         }}
                       >
-                        @bni.co.id
+                        {/* @bni.co.id */}
                       </div>
                     </div>
                     <div className="relative w-full mb-3">

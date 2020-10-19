@@ -10,6 +10,7 @@ function BorrowedEbook(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
   let [showModal, setShowModal] = React.useState(false);
   let [ebookBorrowSelected, setEbookBorrowSelected] = React.useState(null);
+  let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
     props.getMe().then(res => {
@@ -67,11 +68,12 @@ function BorrowedEbook(props) {
             setShowModal(false);
           }}
           large
+          hideCloseBtn={true}
           handleSubmit={() => setShowModal(false)}
         >
-          <div class="flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-20 py-10  m-2">
-              <div className="w-2/5 ">
+          <div class="lg:flex  w-full">
+            <div class="lg:flex lg:w-4/6 text-gray-700 bg-white lg:px-20 py-10  m-2">
+              <div className="lg:w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
                     src={ebooks.image}
@@ -84,7 +86,7 @@ function BorrowedEbook(props) {
                   />
                 </div>
               </div>
-              <div className="w-3/5 px-5">
+              <div className="lg:w-3/5 px-5">
                 <div className="text-lg font-bold">{ebooks.judul}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
@@ -112,10 +114,22 @@ function BorrowedEbook(props) {
                 <div> Paperback | {ebooks.bahasa}</div>
                 <div>{`By (author) ${ebooks.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
-                <div>{ebooks.description}</div>
+                <div>
+                  {ebooks.description.length > 505
+                    ? ebooks.description.slice(0, showMore ? ebooks.description.length : 500)
+                    : null}
+                </div>
+                {ebooks.description.length > 505 && (
+                  <div
+                    onClick={() => setShowMore(!showMore)}
+                    className="text-blue-400 underline cursor-pointer"
+                  >
+                    {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
+                  </div>
+                )}
               </div>
             </div>
-            <div class="w-2/6  bg-white px-10 py-10 m-2">
+            <div class="lg:w-2/6  bg-white lg:px-10 lg:py-10 m-2">
               <div className="text-lg font-bold">Ebook Details</div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"

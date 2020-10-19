@@ -29,8 +29,8 @@ const routes = [
 const Sidebar = ({ url }) => {
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   return (
-    <div className="relative  h-screen w-64  sm:block">
-      <nav className="text-white text-base font-semibold">
+    <div className="relative xs:h-20   md:h-screen w-64  sm:block">
+      <nav className="text-white xs:flex md:block   text-base font-semibold">
         {isAdmin &&
           routes.map((rt, key) => {
             if (rt.type !== 'user') {
@@ -39,8 +39,8 @@ const Sidebar = ({ url }) => {
                   <div
                     className={
                       url === rt.params
-                        ? 'flex items-center  text-white  py-4 pl-6 nav-item-profile-active nav-item-profile'
-                        : 'flex items-center   text-gray-800 hover:text-white py-4 pl-6 nav-item-profile'
+                        ? 'flex items-center  text-white xs:py-4 xs:pl-6 md:py-4 md:pl-6  nav-item-profile-active nav-item-profile'
+                        : 'flex items-center   text-gray-800 hover:text-white  nav-item-profile xs:py-4 xs:pl-6 md:py-4 md:pl-6'
                     }
                   >
                     <i className={`${rt.icon} mr-3`} />
@@ -57,8 +57,8 @@ const Sidebar = ({ url }) => {
                 <div
                   className={
                     url === rt.params
-                      ? 'flex items-center  text-white  py-4 pl-6 nav-item-profile-active nav-item-profile'
-                      : 'flex items-center   text-gray-800 hover:text-white py-4 pl-6 nav-item-profile'
+                      ? 'flex items-center  text-white xs:py-4 xs:pl-6 md:py-4 md:pl-6 nav-item-profile-active nav-item-profile '
+                      : 'flex items-center   text-gray-800 hover:text-white xs:py-4 xs:pl-1 md:py-4 xs:text-center md:pl-6 nav-item-profile '
                   }
                 >
                   <i className={`${rt.icon} mr-3`} />

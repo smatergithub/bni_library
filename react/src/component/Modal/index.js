@@ -9,6 +9,7 @@ export default function Modal({
   large,
   usingForDetail,
   usingAnotherButton,
+  hideCloseBtn,
 }) {
   return (
     <>
@@ -41,16 +42,18 @@ export default function Modal({
                 {children}
                 {usingAnotherButton ? null : (
                   <div className="flex justify-end pt-2">
-                    <button
-                      onClick={() => onCLose()}
-                      className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                    >
-                      Close
-                    </button>
+                    {hideCloseBtn ? null : (
+                      <button
+                        onClick={() => onCLose()}
+                        className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
+                      >
+                        Close
+                      </button>
+                    )}
                     {usingForDetail ? null : (
                       <button
                         onClick={() => handleSubmit()}
-                        className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
+                        className="modal-close px-6 p-3 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
                       >
                         Submit
                       </button>

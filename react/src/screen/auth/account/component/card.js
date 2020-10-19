@@ -2,8 +2,8 @@ import React from 'react';
 
 const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
   return (
-    <div className="w-full mb-5 py-5 flex">
-      <div className="w-1/6 h-48 flex items-center justify-center">
+    <div className="w-full mb-5 py-5 lg:flex">
+      <div className="lg:w-1/6 h-48 flex items-center justify-center">
         <img
           src={data.image}
           style={{
@@ -15,7 +15,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
         />
       </div>
 
-      <div className="w-4/6 h-48  flex  items-center justify-start ">
+      <div className="w-4/6 h-48  lg:flex  items-center justify-start ">
         <div>
           <h4 className="text-xl font-bold leading-tight">{data.judul}</h4>
           <div className="mt-2 leading-relaxed">Pengarang : {data.pengarang}</div>
