@@ -49,8 +49,8 @@ function FormOrder({ data, type, onOrderItem, user }) {
   }
   return (
     <div class="flex  w-full">
-      <div class="flex w-full text-gray-700 bg-white px-20 py-20  m-2">
-        <div className="w-2/5 ">
+      <div class="lg:flex w-full text-gray-700 bg-white lg:px-20 lg:py-20  m-2">
+        <div className="lg:w-2/5 ">
           <div className="bg-white rounded-lg  border-gray-300">
             <img
               // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
@@ -63,7 +63,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
             />
           </div>
         </div>
-        <div className="w-3/5 px-5">
+        <div className="lg:w-3/5 px-5">
           <div className="text-lg font-bold">{data.judul}</div>
           <div
             className="bg-gray-400 w-full mt-2"
@@ -162,7 +162,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
             </div>
             <div className="mt-6">
               <button
-                className="w-64 px-14 py-2 text-white font-light tracking-wider bg-orange-500 rounded"
+                className="mobile:w-full xs:w-full md:w-full sm:w-full lg:w-64  px-14 py-2 text-white font-light tracking-wider bg-orange-500 rounded"
                 type="submit"
               >
                 ORDER
