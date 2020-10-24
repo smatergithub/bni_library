@@ -279,7 +279,7 @@ module.exports = {
         res.status(404).send(err);
       });
     return res.status(200).json({
-      message: 'Succesfully Return Book',
+      message: 'Succesfully Update Book',
     });
   },
 

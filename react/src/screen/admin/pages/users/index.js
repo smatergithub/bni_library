@@ -18,8 +18,8 @@ const Ebooks = props => {
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
     judul: '',
   });
 

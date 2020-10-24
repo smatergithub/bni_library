@@ -23,4 +23,9 @@ export default class WilayahApi {
     const url = `/api/admin/wilayah/${id}`;
     return Request.deleteWithAuth(url);
   }
+
+  static uploadWilayahFile(body) {
+    const url = '/api/admin/wilayah/upload';
+    return Request.postWithAuth(url, body, false, true);
+  }
 }

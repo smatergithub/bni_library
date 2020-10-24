@@ -99,13 +99,7 @@ function CreateNewEBook(props) {
     reader.readAsDataURL(file);
   };
 
-  let uploadEbookPdf = e => {
-    let reader = new FileReader();
-    let locationFile = e.target.files[0];
-    setEbookFile(locationFile);
 
-    reader.readAsDataURL(locationFile);
-  };
 
   function uploadPdfAndGetLink(formData, type, id) {
     if (ebookFile) {
@@ -320,23 +314,6 @@ function CreateNewEBook(props) {
                     />
                     <div className="text-red-700">
                       {errors.sourceLink && errors.sourceLink.message}
-                    </div>
-                  </div>
-                  <div className="w-1/2">
-                    <div className="ml-5">
-                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                        Atau unggah file
-                      </label>
-                      <input
-                        onChange={e => uploadEbookPdf(e)}
-                        type="file"
-                        className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                        //accept="image/png, image/jpeg"
-                        aria-label="Email"
-                      />
-                      <div className="text-red-700">
-                        {errors.dateEbook && errors.dateEbook.message}
-                      </div>
                     </div>
                   </div>
                 </div>

@@ -6,15 +6,18 @@ import { ToastSuccess, ToastError } from '../../../../component';
 import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/transaction';
 import ModalDetailEbook from "./ModalDetailEBook";
 import TableDevExtreme from "../../../../component/TableDevExtreme";
+import ModalEditApproval from "./ModalEditApproval";
+
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
   });
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
+  const [showModalEdit,setShowModalEdit] = useState(false);
 
   const mappingDataSourceTransactionEbookList = filterOptions => {
     setLoading(true);
@@ -34,16 +37,20 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList(filterOptions);
   }, []);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
+  // const onPaginationUpdated = pagination => {
+  //   setFilterOptions({
+  //     page: pagination.page,
+  //     limit: pagination.limit,
+  //   });
+  // };
+
+  const getEditTransactionEBook = (data) => {
+    setDetailData(data);
+    setShowModalEdit(true);
+  }
 
   const getDetailDataEbook = data => {
     setDetailData(data);
-    console.log("data", data)
     setShowModalDetail(true);
   };
 
@@ -71,8 +78,17 @@ function EbookList(props) {
       return {
         ...rowData,
         judul :rowData.ebook.judul,
+        nama :rowData.user ? rowData.user.nama : '',
         tahunTerbit : rowData.ebook.tahunTerbit,
         actions : ( <React.Fragment>
+           <button
+                className="bg-orange-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getEditTransactionEBook(rowData)}
+              >
+                Edit
+                </button>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -110,13 +126,56 @@ function EbookList(props) {
       {transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
          <TableDevExtreme
             columns={[
-              { name: 'code', title: 'Judul' },
-              { name: 'judul', title: 'Pengarang' },
-              { name: 'tahunTerbit', title: 'Tanggal Peminjam' },
-              { name: 'quantity', title: 'Jumlah Dipinjam' },
-              { name: 'status', title: 'tahunTerbit' },
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah ' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'status', title: 'Status' },
               { name: 'actions', title: 'Action' },
             ]}
+            columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              },{
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
             rows={adjustIntegrationTable(transactionEbooks.data)}
             />
       ) : (
@@ -128,6 +187,15 @@ function EbookList(props) {
         onCloseModal={() => {
           setDetailData({});
           setShowModalDetail(false);
+        }}
+      />
+      <ModalEditApproval
+        showModalDetail={showModalEdit}
+        detailData={detailData}
+        typeApproval="editTransactionEBook"
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalEdit(false);
         }}
       />
     </React.Fragment>

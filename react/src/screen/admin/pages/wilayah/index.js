@@ -5,8 +5,8 @@ import {
   DeleteWilayahAction,
   EditWilayahAction,
   CreateNewWilayahAction,
+  UploadWilayahFile,
 } from '../../../../redux/action/wilayah';
-import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
@@ -19,10 +19,11 @@ const Wilayah = props => {
   const [showModalDetail, setShowModalDetail] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
     judul: '',
   });
+    let exportFile = React.useRef(null);
 
   const retrieveDataWilayah = filterOptions => {
     setLoading(true);
@@ -42,20 +43,42 @@ const Wilayah = props => {
     retrieveDataWilayah(filterOptions);
   }, []);
 
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
+  // const onPaginationUpdated = pagination => {
+  //   if (pagination.judul) {
+  //     setFilterOptions({
+  //       judul: pagination.judul,
+  //       page: pagination.page,
+  //       limit: pagination.limit,
+  //     });
+  //   } else {
+  //     setFilterOptions({
+  //       page: pagination.page,
+  //       limit: pagination.limit,
+  //       judul: '',
+  //     });
+  //   }
+  // };
+
+  const uploadPdf = e => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      props.UploadWilayahFile({ file }).then(res => {
+        if (res) {
+          console.log('res', res);
+          ToastSuccess(res.msg);
+          props.history.push('/admin/wilayah');
+        } else {
+          ToastError(res.msg);
+        }
       });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
+      // setSourceLink(file);
+    };
+
+    reader.readAsDataURL(file);
   };
 
   React.useEffect(() => {
@@ -123,8 +146,10 @@ const Wilayah = props => {
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1>
-        <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
-          <button
+        <div className="absolute" style={{ right: '2em', top: '5em',display:'flex',flexDirection:'row',width:'392px' }}>
+
+            <button
+            style={{marginRight:'42px'}}
             type="button"
             className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => {
@@ -133,6 +158,25 @@ const Wilayah = props => {
             }}
           >
             <i className="fas fa-plus mr-3" /> Tambah Wilayah
+          </button>
+          <input
+                  onChange={e => uploadPdf(e)}
+                  type="file"
+                  style={{
+                    display: 'none',
+                  }}
+                  ref={exportFile}
+                  className=""
+                  accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                  aria-label="Email"
+                />
+          <button
+
+            type="button"
+            className="w-full white text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
+            onClick={() => exportFile.current.click()}
+          >
+           <span style={{color:'black'}}> <i className="fas fa-plus mr-3" /> Import Wilayah</span>
           </button>
         </div>
         {wilayah.data !== undefined ? (
@@ -181,4 +225,5 @@ export default connect(mapStateToProps, {
   DeleteWilayahAction,
   EditWilayahAction,
   CreateNewWilayahAction,
+  UploadWilayahFile
 })(Wilayah);

@@ -15,12 +15,20 @@ import {
   TableHeaderRow,
     PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  root : {
+    backgroundColor :'black',
+    color : 'white'
+  }
+});
 
 
 const TableDevExtreme = (props) => {
   const [pageSizes] = useState([5, 10, 15]);
-  const {rows,columns} = props;
-
+  const {rows,columns, columnExtensions = []} = props;
+  const classes = useStyles();
   return (
     <div className="min-w-full bg-white">
       <Grid
@@ -37,8 +45,8 @@ const TableDevExtreme = (props) => {
           defaultPageSize={5}
         />
         <IntegratedPaging />
-        <Table />
-        <TableHeaderRow  showSortingControls />
+        <Table  columnExtensions={columnExtensions} className={classes.root} />
+        <TableHeaderRow  showSortingControls className={classes.root} />
          <PagingPanel
           pageSizes={pageSizes}
         />

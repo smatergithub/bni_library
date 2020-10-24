@@ -15,8 +15,8 @@ const Ebooks = props => {
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
     judul: '',
   });
 
@@ -79,6 +79,8 @@ const Ebooks = props => {
         judul :rowData.ebook && rowData.ebook.judul,
         pengarang : rowData.ebook && rowData.ebook.pengarang,
         tahunTerbit : rowData.ebook && rowData.ebook.tahunTerbit,
+         nama : rowData.user && rowData.user.nama,
+        npp : rowData.user && rowData.user.npp,
         status : rowData.ebook && rowData.ebook.status,
         actions : (  <React.Fragment>
               <button
@@ -138,8 +140,42 @@ const Ebooks = props => {
               { name: 'judul', title: 'Judul' },
               { name: 'pengarang', title: 'Pengarang' },
               { name: 'tahunTerbit', title: 'tahunTerbit' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'Npp' },
               { name: 'actions', title: 'Action' },
             ]}
+            columnExtensions={[
+              {
+                columnName: "judul",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "pengarang",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
             rows={adjustIntegrationTable(ebooks.data)}
             />
           // <Table

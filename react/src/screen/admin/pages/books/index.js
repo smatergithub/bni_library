@@ -14,8 +14,8 @@ const Books = props => {
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
     judul: '',
   });
 
@@ -90,6 +90,8 @@ const Books = props => {
         tahunTerbit : rowData.book && rowData.book.tahunTerbit,
         status : rowData.book && rowData.book.status,
         stockBuku : rowData.book && rowData.book.stockBuku,
+        nama : rowData.user && rowData.user.nama,
+        npp : rowData.user && rowData.user.npp,
         actions : ( <React.Fragment>
             <React.Fragment>
               <button
@@ -145,8 +147,47 @@ const Books = props => {
               { name: 'pengarang', title: 'Pengarang' },
               { name: 'tahunTerbit', title: 'tahunTerbit' },
               { name: 'stockBuku', title: 'Stock Buku' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'Npp' },
               { name: 'actions', title: 'Action' },
             ]}
+            columnExtensions={[
+              {
+                columnName: "judul",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "pengarang",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+               {
+                columnName: "stockBuku",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
             rows={adjustIntegrationTable(books.data)}
             // source={books}
             // isLoading={loading}
