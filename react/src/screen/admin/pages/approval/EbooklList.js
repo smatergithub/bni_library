@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/transaction';
 import ModalDetailEbook from "./ModalDetailEBook";
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -63,36 +64,15 @@ function EbookList(props) {
     });
   }
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.tahunTerbit}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+    const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.ebook.judul,
+        tahunTerbit : rowData.ebook.tahunTerbit,
+        actions : ( <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -114,12 +94,13 @@ function EbookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
+
+
 
   if (loading) return null;
   const { transactionEbooks } = props;
@@ -127,14 +108,17 @@ function EbookList(props) {
   return (
     <React.Fragment>
       {transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={transactionEbooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Judul' },
+              { name: 'judul', title: 'Pengarang' },
+              { name: 'tahunTerbit', title: 'Tanggal Peminjam' },
+              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'status', title: 'tahunTerbit' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(transactionEbooks.data)}
+            />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
         )}

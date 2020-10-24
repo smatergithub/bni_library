@@ -238,7 +238,7 @@ module.exports = {
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
       status: req.body.status,
       image: location,
-      fileEbook: req.body.fileEbook,
+
       sourceLink: req.body.sourceLink,
       condition: req.body.condition,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
@@ -259,26 +259,6 @@ module.exports = {
       })
 
       .catch(err => res.status(500).send(err));
-  },
-
-  uploadSingleEbook: async (req, res) => {
-    if (!req.file) {
-      res.send({
-        status: false,
-        message: 'No file uploaded',
-      });
-    }
-    let locationFileEbook = `${process.env.SERVER_BACKEND}/img/document/${req.file.filename}`;
-    UploadFile.create({
-      locationFile: locationFileEbook,
-    })
-      .then(response => {
-        return res.status(201).json({
-          message: 'Process Succesfully Upload file',
-          data: response,
-        });
-      })
-      .catch(error => res.status(500).send(error));
   },
 
   uploadEbook: async (req, res) => {
@@ -369,7 +349,7 @@ module.exports = {
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
             status: req.body.status,
             image: req.file ? location : req.file,
-            fileEbook: req.body.fileEbook,
+
             sourceLink: req.body.sourceLink,
             condition: req.body.condition,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,

@@ -1,6 +1,5 @@
 const Books = require('../models').books;
 const ListBorrowBook = require('../models').listBorrowBook;
-// const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 require('dotenv').config();

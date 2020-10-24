@@ -260,6 +260,29 @@ module.exports = {
 
   },
 
+
+  updateTransactionBook: async (req, res) => {
+    const { transactionId } = req.params;
+
+    TransactionBook.findByPk(transactionId)
+      .then(transaction => {
+        transaction
+          .update({
+            startDate: req.body.startDate,
+            endDate: req.body.endDate
+          })
+          .catch(err => {
+            res.status(404).send(err);
+          });
+      })
+      .catch(err => {
+        res.status(404).send(err);
+      });
+    return res.status(200).json({
+      message: 'Succesfully Return Book',
+    });
+  },
+
   returnABook: async (req, res) => {
     const { transactionId } = req.params;
 

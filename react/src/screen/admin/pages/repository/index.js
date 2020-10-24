@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { getRepositorys, DeleteRepositoryAction } from '../../../../redux/action/repositorys';
 import Table from '../../component/Table';
 import { NoData, Modal, ToastSuccess, ToastError } from '../../../../component';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 import moment from 'moment';
 
 const Repository = props => {
@@ -68,37 +69,13 @@ const Repository = props => {
   if (loading) return null;
   const { repositorys } = props;
 
-  const columns = [
-    {
-      name: 'university',
-      displayName: 'University',
-    },
-    {
-      name: 'titleRepository',
-      displayName: 'Title Repository',
-    },
-    {
-      name: 'typeRepository',
-      displayName: 'Type Repository',
-    },
-    {
-      name: 'createdAt',
-      displayName: 'Created At',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <span>{moment(rowData.createdAt).format('DD MMM YYYY')}</span>
-          </React.Fragment>
-        );
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        createdAt : moment(rowData.createdAt).format('DD MMM YYYY'),
+        actions : (   <React.Fragment>
               <Link to={`/admin/edit-repository?id=${rowData.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -118,12 +95,12 @@ const Repository = props => {
               >
                 Delete
               </button>
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
+
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -141,14 +118,17 @@ const Repository = props => {
         <h1 className="w-full text-3xl text-black pb-6">Daftar Repository</h1>
 
         {repositorys.data !== undefined && repositorys.data.length !== 0 ? (
-          <Table
-            columns={columns}
-            source={repositorys}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            onPaginationUpdated={paginationOptions}
-            searchDefaultValue={filterOptions.judul}
-          />
+           <TableDevExtreme
+            columns={[
+              { name: 'university', title: 'University' },
+              { name: 'titleRepository', title: 'Title Repository' },
+              { name: 'typeRepository', title: 'Type Repository' },
+              { name: 'createdAt', title: 'Created At' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(repositorys.data)}
+            />
+
         ) : (
           <NoData msg="Data Belum tersedia !" />
         )}

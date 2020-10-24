@@ -7,6 +7,7 @@ import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import Table from '../../component/Table';
 import ModalDetailEbook from './ModalDetailEBook';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -64,69 +65,22 @@ const Ebooks = props => {
     mappingDataSourceEbookList(filterOptions);
   }, []);
 
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
-  };
 
   React.useEffect(() => {
     mappingDataSourceEbookList(filterOptions);
   }, [filterOptions]);
 
-  if (loading) return null;
-  const { ebooks } = props;
 
-  const columns = [
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.judul;
-        return data;
-      },
-    },
-    {
-      name: 'pengarang',
-      displayName: 'Pengarang',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.pengarang;
-        return data;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.tahunTerbit;
-        return data;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.status;
-        return data;
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.ebook && rowData.ebook.judul,
+        pengarang : rowData.ebook && rowData.ebook.pengarang,
+        tahunTerbit : rowData.ebook && rowData.ebook.tahunTerbit,
+        status : rowData.ebook && rowData.ebook.status,
+        actions : (  <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -135,7 +89,7 @@ const Ebooks = props => {
               >
                 detail
               </button>
-              <Link to={`/admin/edit-ebook?id=${rowData}`}>
+              <Link to={`/admin/edit-ebook?id=${rowData.ebook.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -151,12 +105,17 @@ const Ebooks = props => {
               >
                 Delete
               </button>
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
+  if (loading) return null;
+  const { ebooks } = props;
+
+
+
+
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -174,15 +133,24 @@ const Ebooks = props => {
         </div>
 
         {ebooks.data !== undefined && ebooks.data.length !== 0 ? (
-          <Table
-            columns={columns}
-            source={ebooks}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
-          />
+          <TableDevExtreme
+            columns={[
+              { name: 'judul', title: 'Judul' },
+              { name: 'pengarang', title: 'Pengarang' },
+              { name: 'tahunTerbit', title: 'tahunTerbit' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(ebooks.data)}
+            />
+          // <Table
+          //   columns={columns}
+          //   source={ebooks}
+          //   isLoading={loading}
+          //   limit={filterOptions.limit}
+          //   page={filterOptions.page}
+          //   onPaginationUpdated={onPaginationUpdated}
+          //   searchDefaultValue={filterOptions.judul}
+          // />
         ) : (
           <NoData msg="Data belum tersedia !" />
         )}

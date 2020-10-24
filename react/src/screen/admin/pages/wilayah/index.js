@@ -10,7 +10,7 @@ import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
-import { Link } from 'react-router-dom';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 import CreateEditWilayahModal from './createEditWilayahModal';
 
 const Wilayah = props => {
@@ -91,26 +91,13 @@ const Wilayah = props => {
   if (loading) return null;
   const { wilayah } = props;
 
-  const columns = [
-    {
-      name: 'codeWilayah',
-      displayName: 'Code Wilayah',
-    },
-    {
-      name: 'wilayah',
-      displayName: 'Wilayah',
-    },
-    {
-      name: 'alamat',
-      displayName: 'Alamat',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+    const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        actions : (   <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -126,12 +113,11 @@ const Wilayah = props => {
               >
                 Delete
               </button>{' '}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -150,15 +136,15 @@ const Wilayah = props => {
           </button>
         </div>
         {wilayah.data !== undefined ? (
-          <Table
-            columns={columns}
-            source={wilayah}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
-          />
+           <TableDevExtreme
+            columns={[
+              { name: 'codeWilayah', title: 'Code Wilayah' },
+              { name: 'wilayah', title: 'Wilayah' },
+              { name: 'alamat', title: 'Alamat' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(wilayah.data)}
+            />
         ) : null}
       </main>
       <Modal

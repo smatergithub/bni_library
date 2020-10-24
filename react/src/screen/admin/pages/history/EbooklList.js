@@ -4,6 +4,7 @@ import TableApproval from '../../component/TableApproval';
 import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { getAllEbookHistory } from '../../../../redux/action/history';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -44,51 +45,18 @@ function EbookList(props) {
     getAllHistoryEbook(filterOptions);
   }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.tahunTerbit}</React.Fragment>;
-      },
-    },
 
-    {
-      name: 'nama',
-      displayName: 'Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.ebook.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        tahunTerbit : rowData.ebook.tahunTerbit,
+        quantity : rowData.quantity,
+        actions : ( <React.Fragment>
               {rowData.status !== 'Dikembalikan' ? (
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -102,26 +70,29 @@ function EbookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
 
   if (loading) return null;
 
   return (
     <React.Fragment>
       {historyEbooks !== null && historyEbooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={historyEbooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Judul' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'status', title: 'Status' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(historyEbooks.data)}
+            />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
         )}

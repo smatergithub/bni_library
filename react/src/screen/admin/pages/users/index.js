@@ -10,6 +10,7 @@ import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -109,39 +110,13 @@ const Ebooks = props => {
       });
   };
 
-  if (loading) return null;
-  const { users } = props;
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
 
-  const columns = [
-    {
-      name: 'nama',
-      displayName: 'Nama',
-    },
-    {
-      name: 'alamat',
-      displayName: 'Alamat',
-    },
-    {
-      name: 'email',
-      displayName: 'email',
-    },
-    {
-      name: 'phoneNumber',
-      displayName: 'Nomor Telepon',
-    },
-    {
-      name: 'isAdmin',
-      displayName: 'Admin',
-      customRender: rowData => {
-        return rowData.isAdmin ? 'Aktif' : 'Tidak Aktif';
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
+      return {
+        ...rowData,
+        isAdmin : rowData.isAdmin ? 'Aktif' : 'Tidak Aktif',
+        actions : ( <React.Fragment>
             {!props.me ? null : props.me.superAdmin ? (
               <React.Fragment>
                 <button
@@ -161,11 +136,15 @@ const Ebooks = props => {
                 </button>{' '}
               </React.Fragment>
             ) : null}
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+          </React.Fragment>)
+      }
+    })
+  }
+
+
+  if (loading) return null;
+  const { users } = props;
+
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -173,16 +152,27 @@ const Ebooks = props => {
         <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
 
         {users.data !== undefined ? (
-          <Table
-            columns={columns}
-            source={users}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
-          />
-        ) : null}
+           <TableDevExtreme
+            columns={[
+              { name: 'nama', title: 'Nama' },
+              { name: 'alamat', title: 'Alamat' },
+              { name: 'email', title: 'Email' },
+              { name: 'phoneNumber', title: 'Phone Number' },
+              { name: 'isAdmin', title: 'Is Admin' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(users.data)}
+            />
+          // <Table
+          //   columns={columns}
+          //   source={users}
+          //   isLoading={loading}
+          //   limit={filterOptions.limit}
+          //   page={filterOptions.page}
+          //   onPaginationUpdated={onPaginationUpdated}
+          //   searchDefaultValue={filterOptions.judul}
+          // />
+        ) :  <NoData />}
       </main>
       <Modal
         title="Konfirmasi"

@@ -5,6 +5,8 @@ import { ToastSuccess, ToastError } from '../../../../component';
 import TableApproval from '../../component/TableApproval';
 import ModalDetailBook from "./modalDetailBook";
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
+
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -63,43 +65,17 @@ function BookList(props) {
     mappingDataSourceTransactionBookList(filterOptions);
   }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tanggal Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.book.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        tahunTerbit : rowData.book.tahunTerbit,
+        quantity : rowData.quantity,
+        actions : (  <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -121,27 +97,28 @@ function BookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
 
   if (loading) return null;
   const { transactionBooks } = props;
-  console.log(transactionBooks);
   return (
     <React.Fragment>
       {transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={transactionBooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'tahunTerbit', title: 'Tanggal Peminjam' },
+              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'status', title: 'tahunTerbit' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(transactionBooks.data)}
+            />
       ) : (
           <NoData msg="Belum ada request dari user!" />
         )}

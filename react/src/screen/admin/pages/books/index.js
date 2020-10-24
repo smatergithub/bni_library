@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
@@ -78,53 +79,18 @@ const Books = props => {
     mappingDataSourceBookList(filterOptions);
   }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.judul;
-        return data;
-      },
-    },
-    {
-      name: 'pengarang',
-      displayName: 'Pengarang',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.pengarang;
-        return data;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.tahunTerbit;
-        return data;
-      },
-    },
-    // {
-    //   name: 'stockBuku',
-    //   displayName: 'Stock Buku',
-    //   customRender: rowData => {
-    //     let data = rowData.book && rowData.book.stockBuku;
-    //     return data
-    //   },
-    // },
-    {
-      name: 'status',
-      displayName: 'Status',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.status;
-        return data;
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
+
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.book && rowData.book.judul,
+        pengarang : rowData.book && rowData.book.pengarang,
+        tahunTerbit : rowData.book && rowData.book.tahunTerbit,
+        status : rowData.book && rowData.book.status,
+        stockBuku : rowData.book && rowData.book.stockBuku,
+        actions : ( <React.Fragment>
             <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -151,11 +117,10 @@ const Books = props => {
                 Delete
               </button>
             </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+          </React.Fragment>)
+      }
+    })
+  }
 
   if (loading) return null;
   const { books } = props;
@@ -174,14 +139,21 @@ const Books = props => {
           </Link>
         </div>
         {books.data !== undefined && books.data.length !== 0 ? (
-          <Table
-            columns={columns}
-            source={books}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
+          <TableDevExtreme
+            columns={[
+              { name: 'judul', title: 'Judul' },
+              { name: 'pengarang', title: 'Pengarang' },
+              { name: 'tahunTerbit', title: 'tahunTerbit' },
+              { name: 'stockBuku', title: 'Stock Buku' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(books.data)}
+            // source={books}
+            // isLoading={loading}
+            // limit={filterOptions.limit}
+            // page={filterOptions.page}
+            // onPaginationUpdated={onPaginationUpdated}
+            // searchDefaultValue={filterOptions.judul}
           />
         ) : (
           <NoData />

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import TableApproval from '../../component/TableApproval';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
 
 import { getAllBookHistory } from '../../../../redux/action/history';
 
@@ -57,51 +58,17 @@ function BookList(props) {
     getAllHistoryBook(filterOptions);
   }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
-      },
-    },
 
-    {
-      name: 'nama',
-      displayName: 'Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.user ? rowData.user.nama : ''}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+    const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.book.judul,
+        tahunTerbit : rowData.book.tahunTerbit,
+        nama : rowData.user ? rowData.user.nama : '',
+        quantity : rowData.quantity,
+        actions : ( <React.Fragment>
               {rowData.status !== 'Dikembalikan' ? (
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -115,25 +82,28 @@ function BookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
 
   if (loading) return null;
   return (
     <React.Fragment>
       {historyBooks !== null && historyBooks !== undefined && historyBooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={historyBooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Judul' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'status', title: 'Status' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(historyBooks.data)}
+            />
       ) : (
           <NoData msg="Belum ada request dari user!" />
         )}
