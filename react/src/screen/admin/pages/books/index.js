@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Tooltip, Button } from 'antd';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import Table from '../../component/Table';
-import TableDevExtreme from "../../../../component/TableDevExtreme";
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
@@ -79,18 +80,24 @@ const Books = props => {
     mappingDataSourceBookList(filterOptions);
   }, [filterOptions]);
 
-
-  const adjustIntegrationTable = (dataSource) => {
+  const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
-        judul :rowData.book && rowData.book.judul,
-        pengarang : rowData.book && rowData.book.pengarang,
-        tahunTerbit : rowData.book && rowData.book.tahunTerbit,
-        status : rowData.book && rowData.book.status,
-        stockBuku : rowData.book && rowData.book.stockBuku,
-        actions : ( <React.Fragment>
+        judul: rowData.book && (
+          <Tooltip placement="topLeft" title={rowData.book.judul}>
+            {' '}
+            <div>{rowData.book.judul}</div>
+          </Tooltip>
+        ),
+        pengarang: rowData.book && rowData.book.pengarang,
+        tahunTerbit: rowData.book && rowData.book.tahunTerbit,
+        status: rowData.book && rowData.book.status,
+        stockBuku: rowData.book && rowData.book.stockBuku,
+        namaPeminjam: rowData.user ? rowData.user.nama : '-',
+        npp: rowData.user ? (rowData.user.npp ? rowData.user.npp : '-') : '-',
+        actions: (
+          <React.Fragment>
             <React.Fragment>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -98,7 +105,7 @@ const Books = props => {
                 style={{ marginRight: '5px' }}
                 onClick={() => getDetailDataBook(rowData)}
               >
-                detail
+                Detail
               </button>
               <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
                 <button
@@ -117,10 +124,11 @@ const Books = props => {
                 Delete
               </button>
             </React.Fragment>
-          </React.Fragment>)
-      }
-    })
-  }
+          </React.Fragment>
+        ),
+      };
+    });
+  };
 
   if (loading) return null;
   const { books } = props;
@@ -143,8 +151,10 @@ const Books = props => {
             columns={[
               { name: 'judul', title: 'Judul' },
               { name: 'pengarang', title: 'Pengarang' },
-              { name: 'tahunTerbit', title: 'tahunTerbit' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
               { name: 'stockBuku', title: 'Stock Buku' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'namaPeminjam', title: 'Nama Peminjam' },
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(books.data)}
