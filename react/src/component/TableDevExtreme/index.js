@@ -13,35 +13,25 @@ import {
   Toolbar,
   SearchPanel,
   TableHeaderRow,
-    PagingPanel,
+  PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
 
-
-const TableDevExtreme = (props) => {
-  const [pageSizes] = useState([5, 10, 15]);
-  const {rows,columns} = props;
+const TableDevExtreme = props => {
+  const [pageSizes] = useState([2, 3, 50, 100]);
+  const { rows, columns } = props;
 
   return (
     <div className="min-w-full bg-white">
-      <Grid
-        rows={rows}
-        columns={columns}
-      >
-
-        <SearchState  />
-        <SortingState/>
+      <Grid rows={rows} columns={columns}>
+        <SearchState />
+        <SortingState />
         <IntegratedFiltering />
         <IntegratedSorting />
-        <PagingState
-          defaultCurrentPage={0}
-          defaultPageSize={5}
-        />
+        <PagingState defaultCurrentPage={0} defaultPageSize={1} />
         <IntegratedPaging />
         <Table />
-        <TableHeaderRow  showSortingControls />
-         <PagingPanel
-          pageSizes={pageSizes}
-        />
+        <TableHeaderRow showSortingControls />
+        <PagingPanel pageSizes={pageSizes} />
         <Toolbar />
         <SearchPanel />
       </Grid>
