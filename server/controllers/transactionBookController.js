@@ -3,6 +3,7 @@ const TransactionBook = require('../models').transactionBook;
 const ListBorrowBook = require("../models").listBorrowBook
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const moment = require("moment");
 
 module.exports = {
   list: async (req, res) => {
@@ -183,9 +184,9 @@ module.exports = {
       where: { status: "Dipinjam" },
     })
 
-    // console.log("test",checkTransaction)
+
     if (checkTransaction.length >= 2) {
-      return res.status(404).json({ message: "already borrow book before" });
+      return res.status(404).json({ message: "Anda Sudah Meminjam 2 Buku Sebelumnya" });
     }
 
     books.forEach(async (bookData) => {
@@ -219,7 +220,8 @@ module.exports = {
           return res.status(404).send(err);
         });
 
-      const createTransaction = await TransactionBook.create({
+
+      let requestPayload = {
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
         status: 'Dipinjam',
@@ -230,9 +232,17 @@ module.exports = {
         endDate: req.body.endDate,
         bookId: bookData.bookId,
         isGiveRating: false
-      });
+      }
 
+      let start = moment(requestPayload.startDate).format("YYYY-MM-DD")
+      let end = moment(requestPayload.endDate).format("YYYY-MM-DD")
+      let between = moment.duration(moment(end).diff(start)).asDays();
 
+      if(between >= 14){
+        return res.status(404).json({ message: "Peminjaman maksimal 14 Hari" });
+      }
+
+      const createTransaction = await TransactionBook.create(requestPayload);
 
       if (!createTransaction) {
         return res.status(404).send("Failed Transaction");
