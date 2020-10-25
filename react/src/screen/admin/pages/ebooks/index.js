@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Tooltip } from 'antd';
 import { getEbooks, DeleteEbookAction } from '../../../../redux/action/ebooks';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
+
 import Table from '../../component/Table';
 import ModalDetailEbook from './ModalDetailEBook';
-import TableDevExtreme from "../../../../component/TableDevExtreme";
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -65,59 +67,59 @@ const Ebooks = props => {
     mappingDataSourceEbookList(filterOptions);
   }, []);
 
-
   React.useEffect(() => {
     mappingDataSourceEbookList(filterOptions);
   }, [filterOptions]);
 
-
-  const adjustIntegrationTable = (dataSource) => {
+  const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
-        judul :rowData.ebook && rowData.ebook.judul,
-        pengarang : rowData.ebook && rowData.ebook.pengarang,
-        tahunTerbit : rowData.ebook && rowData.ebook.tahunTerbit,
-         nama : rowData.user && rowData.user.nama,
-        npp : rowData.user && rowData.user.npp,
-        status : rowData.ebook && rowData.ebook.status,
-        actions : (  <React.Fragment>
+        judul: rowData.ebook && (
+          <Tooltip placement="topLeft" title={rowData.ebook.judul}>
+            {' '}
+            <div>{rowData.ebook.judul}</div>
+          </Tooltip>
+        ),
+        pengarang: rowData.ebook && rowData.ebook.pengarang,
+        tahunTerbit: rowData.ebook && rowData.ebook.tahunTerbit,
+        status: rowData.ebook && rowData.ebook.status,
+        namaPeminjam: rowData.user ? rowData.user.nama : '-',
+        npp: rowData.user ? (rowData.user.npp ? rowData.user.npp : '-') : '-',
+        actions: (
+          <React.Fragment>
+            <button
+              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() => getDetailDataEbook(rowData)}
+            >
+              Detail
+            </button>
+            <Link to={`/admin/edit-ebook?id=${rowData.ebook.id}`}>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => getDetailDataEbook(rowData)}
               >
-                detail
+                Edit
               </button>
-              <Link to={`/admin/edit-ebook?id=${rowData.ebook.id}`}>
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                >
-                  Edit
-                </button>
-              </Link>
-              <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
-              >
-                Delete
-              </button>
-            </React.Fragment>)
-      }
-    })
-  }
+            </Link>
+            <button
+              className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
+            >
+              Delete
+            </button>
+          </React.Fragment>
+        ),
+      };
+    });
+  };
 
   if (loading) return null;
   const { ebooks } = props;
-
-
-
-
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -139,9 +141,9 @@ const Ebooks = props => {
             columns={[
               { name: 'judul', title: 'Judul' },
               { name: 'pengarang', title: 'Pengarang' },
-              { name: 'tahunTerbit', title: 'tahunTerbit' },
-              { name: 'nama', title: 'Peminjam' },
-              { name: 'npp', title: 'Npp' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'namaPeminjam', title: 'Nama Peminjam' },
               { name: 'actions', title: 'Action' },
             ]}
             columnExtensions={[
@@ -177,7 +179,8 @@ const Ebooks = props => {
               }
                ]}
             rows={adjustIntegrationTable(ebooks.data)}
-            />
+          />
+        ) : (
           // <Table
           //   columns={columns}
           //   source={ebooks}
@@ -187,7 +190,6 @@ const Ebooks = props => {
           //   onPaginationUpdated={onPaginationUpdated}
           //   searchDefaultValue={filterOptions.judul}
           // />
-        ) : (
           <NoData msg="Data belum tersedia !" />
         )}
       </main>

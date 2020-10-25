@@ -13,7 +13,7 @@ import {
   Toolbar,
   SearchPanel,
   TableHeaderRow,
-    PagingPanel,
+  PagingPanel,
 } from '@devexpress/dx-react-grid-material-ui';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -31,19 +31,12 @@ const TableDevExtreme = (props) => {
   const classes = useStyles();
   return (
     <div className="min-w-full bg-white">
-      <Grid
-        rows={rows}
-        columns={columns}
-      >
-
-        <SearchState  />
-        <SortingState/>
+      <Grid rows={rows} columns={columns}>
+        <SearchState />
+        <SortingState />
         <IntegratedFiltering />
         <IntegratedSorting />
-        <PagingState
-          defaultCurrentPage={0}
-          defaultPageSize={5}
-        />
+        <PagingState defaultCurrentPage={0} defaultPageSize={1} />
         <IntegratedPaging />
         <Table  columnExtensions={columnExtensions} className={classes.root} />
         <TableHeaderRow  showSortingControls className={classes.root} />
