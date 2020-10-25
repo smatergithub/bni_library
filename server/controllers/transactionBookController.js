@@ -178,14 +178,15 @@ module.exports = {
 
     const { books } = req.body;
     var userId = req.userId;
-    // const checkTransaction = await TransactionBook.findAll({
-    //   where: { userId: userId },
-    //   where: { status: "Dipinjam" },
-    // })
+    const checkTransaction = await TransactionBook.findAll({
+      where: { userId: userId },
+      where: { status: "Dipinjam" },
+    })
 
-    // if (checkTransaction) {
-    //   return res.status(404).json({ message: "already borrow book before" });
-    // }
+    // console.log("test",checkTransaction)
+    if (checkTransaction.length >= 2) {
+      return res.status(404).json({ message: "already borrow book before" });
+    }
 
     books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);

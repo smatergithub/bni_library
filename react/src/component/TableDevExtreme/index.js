@@ -36,7 +36,7 @@ const TableDevExtreme = (props) => {
         <SortingState />
         <IntegratedFiltering />
         <IntegratedSorting />
-        <PagingState defaultCurrentPage={0} defaultPageSize={1} />
+        <PagingState defaultCurrentPage={0} defaultPageSize={5} />
         <IntegratedPaging />
         <Table  columnExtensions={columnExtensions} className={classes.root} />
         <TableHeaderRow  showSortingControls className={classes.root} />
