@@ -27,10 +27,12 @@ module.exports = {
         'id',
         'name',
         'title',
-        'category',
+        'methodology',
         'university',
+        'faculty',
+        'strata',
         'releaseYear',
-        'type',
+        'description',
       ];
       paramQuerySQL.where = {
         [Op.and]: {
@@ -96,20 +98,8 @@ module.exports = {
         if (repository.abstrack) {
           repository[abstrack] = LINK();
         }
-        if (repository.bab1) {
-          repository['bab1'] = LINK();
-        }
-        if (repository.bab2) {
-          repository['bab2'] = LINK();
-        }
-        if (repository.bab3) {
-          repository['bab3'] = LINK();
-        }
-        if (repository.bab4) {
-          repository['bab4'] = LINK();
-        }
-        if (repository.bab5) {
-          repository['bab5'] = LINK();
+        if (repository.document) {
+          repository['document'] = LINK();
         }
 
         return res.status(200).send(repository);
@@ -177,33 +167,17 @@ module.exports = {
       return Repositorys.create({
         name: req.body.name,
         title: req.body.title,
-        category: req.body.category,
+        methodology: req.body.methodology,
         university: req.body.university,
-        editor: req.body.editor,
-        translateBy: req.body.translateBy,
+        faculty: req.body.faculty,
+        strata: req.body.strata,
         description: req.body.description,
         releaseYear: req.body.releaseYear,
-        type: req.body.type,
+        category: req.body.category,
         city: req.body.city,
-        bab1:
-          req.files['bab1'] !== undefined
-            ? generateFileLocation(req.files['bab1'][0].filename)
-            : null,
-        bab2:
-          req.files['bab2'] !== undefined
-            ? generateFileLocation(req.files['bab2'][0].filename)
-            : null,
-        bab3:
-          req.files['bab3'] !== undefined
-            ? generateFileLocation(req.files['bab3'][0].filename)
-            : null,
-        bab4:
-          req.files['bab4'] !== undefined
-            ? generateFileLocation(req.files['bab4'][0].filename)
-            : null,
-        bab5:
-          req.files['bab5'] !== undefined
-            ? generateFileLocation(req.files['bab5'][0].filename)
+        document:
+          req.files['document'] !== undefined
+            ? generateFileLocation(req.files['document'][0].filename)
             : null,
         abstrack:
           req.files['abstrack'] !== undefined
@@ -230,35 +204,23 @@ module.exports = {
             .update({
               name: req.body.name,
               title: req.body.title,
-              category: req.body.category,
+              methodology: req.body.methodology,
               university: req.body.university,
-              editor: req.body.editor,
-              translateBy: req.body.translateBy,
+              faculty: req.body.faculty,
+              strata: req.body.strata,
               description: req.body.description,
               releaseYear: req.body.releaseYear,
-              type: req.body.type,
+              category: req.body.category,
               city: req.body.city,
-              bab1:
-                req.files['bab1'] !== undefined
-                  ? generateFileLocation(req.files['bab1'][0].filename)
+              isApproved: req.body.isApproved,
+              document:
+                req.files['document'] !== undefined
+                  ? generateFileLocation(req.files['document'][0].filename)
                   : null,
-              bab2:
-                req.files['bab2'] !== undefined
-                  ? generateFileLocation(req.files['bab2'][0].filename)
+              abstrack:
+                req.files['abstrack'] !== undefined
+                  ? generateFileLocation(req.files['abstrack'][0].filename)
                   : null,
-              bab3:
-                req.files['bab3'] !== undefined
-                  ? generateFileLocation(req.files['bab3'][0].filename)
-                  : null,
-              bab4:
-                req.files['bab4'] !== undefined
-                  ? generateFileLocation(req.files['bab4'][0].filename)
-                  : null,
-              bab5:
-                req.files['bab5'] !== undefined
-                  ? generateFileLocation(req.files['bab5'][0].filename)
-                  : null,
-              abstrack: req.files['abstrack'] !== undefined ? req.files['abstrack'][0] : null,
             })
             .then(response =>
               res.status(201).json({ message: 'Succesfully Create Repository', data: response })

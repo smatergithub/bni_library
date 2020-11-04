@@ -1,34 +1,59 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
+
 import { withRouter } from 'react-router-dom';
 
-import { DatePicker, Space, Checkbox } from 'antd';
+import { DatePicker, Space, Checkbox, Select } from 'antd';
 import { ToastError, ToastSuccess } from '../../../../component';
 import { CreateNewRepositoryUserAction } from '../../../../redux/action/repositorys';
+const { Option } = Select;
 const optionsResearch = [
   { label: 'Pusat', value: 'Pusat' },
   { label: 'Wilayah', value: 'Wilayah' },
+];
+const methodology = [
+  {
+    label: 'Kualitatif',
+    value: 'Kualitatif',
+  },
+  {
+    label: 'Kuantitatif',
+    value: 'Kuantitatif',
+  },
+];
+const strataOpt = [
+  {
+    label: 'S1',
+    value: 'S1',
+  },
+  {
+    label: 'S2',
+    value: 'S2',
+  },
+  {
+    label: 'S3',
+    value: 'S3',
+  },
 ];
 function CreateNewRepo(props) {
   const { handleSubmit, register, errors } = useForm();
   let [typeResearch, setTypeResearch] = React.useState(null);
   let [releaseYear, setReleaseYear] = React.useState(null);
+  let [methodologyResearch, setMethodoloyResearch] = React.useState(null);
+  let [strata, setStrata] = React.useState(null);
   let [pdf, setPdf] = React.useState({
-    bab1: null,
-    bab2: null,
-    bab3: null,
-    bab4: null,
-    bab5: null,
+    document: null,
+    abstrack: null,
   });
   function onSubmit(formData) {
-    formData['bab1'] = pdf.bab1;
-    formData['bab2'] = pdf.bab2;
-    formData['bab3'] = pdf.bab3;
-    formData['bab4'] = pdf.bab4;
-    formData['bab5'] = pdf.bab5;
+    formData['document'] = pdf.document;
+    formData['abstrack'] = pdf.abstrack;
     formData['category'] = typeResearch;
+    formData['methodology'] = methodologyResearch;
+    formData['strata'] = strata;
     formData['releaseYear'] = releaseYear;
+
     props.CreateNewRepositoryUserAction(formData).then(res => {
       if (res.resp) {
         ToastSuccess(res.msg);
@@ -46,20 +71,12 @@ function CreateNewRepo(props) {
 
     reader.onloadend = () => {
       switch (type) {
-        case 'bab2':
-          setPdf({ ...pdf, bab2: file });
+        case 'document':
+          setPdf({ ...pdf, document: file });
           return;
-        case 'bab3':
-          setPdf({ ...pdf, bab3: file });
+        case 'abstrack':
+          setPdf({ ...pdf, abstrack: file });
           return;
-        case 'bab4':
-          setPdf({ ...pdf, bab4: file });
-          return;
-        case 'bab5':
-          setPdf({ ...pdf, bab5: file });
-          return;
-        case 'bab1':
-          setPdf({ ...pdf, bab1: file });
           return;
       }
     };
@@ -86,7 +103,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="name"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
+                    className="w-full px-2 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
                     required=""
                     aria-label="Name"
@@ -95,43 +112,14 @@ function CreateNewRepo(props) {
                     })}
                   />
                 </div>
-                <div className="pt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
-                    Penyunting
-                  </label>
-                  <input
-                    name="editor"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
-                    type="text"
-                    required=""
-                    aria-label="Name"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                  />
-                </div>
-                <div className="pt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
-                    Penerjemah
-                  </label>
-                  <input
-                    name="translateBy"
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
-                    type="text"
-                    required=""
-                    aria-label="Name"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                  />
-                </div>
+
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Judul Penelitian
                   </label>
                   <input
                     name="title"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -160,7 +148,22 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="university"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                    type="text"
+                    required=""
+                    aria-label="Email"
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                  />
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Fakultas
+                  </label>
+                  <input
+                    name="faculty"
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -176,7 +179,7 @@ function CreateNewRepo(props) {
                   </label>
                   <input
                     name="city"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
                     aria-label="Email"
@@ -185,20 +188,38 @@ function CreateNewRepo(props) {
                     })}
                   />
                 </div>
+
                 <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Jenis Riset
+                  <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
+                    Metodologi Riset
                   </label>
-                  <input
-                    name="type"
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
-                    type="text"
-                    required=""
-                    aria-label="Email"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
+                  <Select
+                    style={{ width: '100%' }}
+                    ref={register()}
+                    className="wilayah"
+                    name="wilayah"
+                    onSelect={e => setMethodoloyResearch(e)}
+                  >
+                    {methodology.map(op => {
+                      return <Option value={op.label}>{op.label}</Option>;
                     })}
-                  />
+                  </Select>
+                </div>
+                <div className="mt-2">
+                  <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
+                    Strata
+                  </label>
+                  <Select
+                    style={{ width: '100%' }}
+                    ref={register()}
+                    className="wilayah"
+                    name="wilayah"
+                    onSelect={e => setStrata(e)}
+                  >
+                    {strataOpt.map(op => {
+                      return <Option value={op.label}>{op.label}</Option>;
+                    })}
+                  </Select>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -211,7 +232,7 @@ function CreateNewRepo(props) {
 
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bab1
+                    Abstract
                   </label>
 
                   <input
@@ -225,7 +246,7 @@ function CreateNewRepo(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bab2
+                    File Riset
                   </label>
 
                   <input
@@ -237,48 +258,7 @@ function CreateNewRepo(props) {
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bab3
-                  </label>
 
-                  <input
-                    onChange={e => uploadImage(e, 'bab3')}
-                    type="file"
-                    className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                    accept="application/pdf"
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bab4
-                  </label>
-
-                  <input
-                    onChange={e => uploadImage(e, 'bab4')}
-                    type="file"
-                    className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                    accept="application/pdf"
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bab5
-                  </label>
-
-                  <input
-                    onChange={e => uploadImage(e, 'bab5')}
-                    type="file"
-                    className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                    accept="application/pdf"
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
-                </div>
                 <div className="mt-2">
                   <label className=" block text-sm text-gray-600" htmlFor="message">
                     Deskripsi
