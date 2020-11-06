@@ -1,7 +1,8 @@
-import { REPOSITORYS } from '../../type';
+import { REPOSITORYS, REPOSITORYS_APPROVAL } from '../../type';
 
 const initialState = {
   repositorys: [],
+  approval: [],
 };
 
 const repositorys = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const repositorys = (state = initialState, action) => {
       return {
         ...state,
         repositorys: action.payload,
+      };
+    case REPOSITORYS_APPROVAL:
+      return {
+        ...state,
+        approval: action.payload,
       };
     default:
       return state;

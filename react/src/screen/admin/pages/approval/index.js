@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Modal } from '../../../../component';
-import TableApproval from "../../component/TableApproval";
+import TableApproval from '../../component/TableApproval';
 import { connect } from 'react-redux';
-import BookList from "./BookList";
-import EbookList from "./EbooklList";
-
-
+import BookList from './BookList';
+import EbookList from './EbooklList';
+import ResearchList from './ResearchList';
 
 function Approval(props) {
   const [activeTabs, setActiveTabs] = useState('book');
@@ -26,7 +25,7 @@ function Approval(props) {
                         activeTabs === 'book'
                           ? 'border-gray-800 text-gray-800'
                           : 'border-gray-500 text-gray-500'
-                        } cursor-pointer`}
+                      } cursor-pointer`}
                       onClick={() => setActiveTabs('book')}
                     >
                       BUKU
@@ -36,7 +35,7 @@ function Approval(props) {
                         activeTabs === 'ebook'
                           ? 'border-gray-800 text-gray-800'
                           : 'border-gray-500 text-gray-500'
-                        } cursor-pointer`}
+                      } cursor-pointer`}
                       onClick={() => setActiveTabs('ebook')}
                     >
                       EBOOK
@@ -58,12 +57,23 @@ function Approval(props) {
                         3
                       </span> */}
                     </div>
+                    <div
+                      className={`font-semibold text-base  px-5 py-1 border-b-2 ${
+                        activeTabs === 'repo'
+                          ? 'border-gray-800 text-gray-800'
+                          : 'border-gray-500 text-gray-500'
+                      } cursor-pointer`}
+                      onClick={() => setActiveTabs('repo')}
+                    >
+                      REPOSITORY
+                    </div>
                   </div>
                 </div>
               </div>
               {/* //table */}
-              {activeTabs === "book" && <BookList />}
-              {activeTabs === "ebook" && <EbookList />}
+              {activeTabs === 'book' && <BookList />}
+              {activeTabs === 'ebook' && <EbookList />}
+              {activeTabs === 'repo' && <ResearchList />}
             </div>
           </div>
         </div>
@@ -73,9 +83,7 @@ function Approval(props) {
 }
 
 let mapStateToProps = state => {
-  return {
-
-  };
+  return {};
 };
 
 export default connect(mapStateToProps, null)(Approval);

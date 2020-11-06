@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       city: DataTypes.STRING,
       abstrack: DataTypes.STRING,
       document: DataTypes.STRING,
+      isApproved: DataTypes.BOOLEAN,
     },
     {}
   );

@@ -33,6 +33,7 @@ module.exports = {
         'strata',
         'releaseYear',
         'description',
+        'isApproved',
       ];
       paramQuerySQL.where = {
         [Op.and]: {
@@ -43,6 +44,7 @@ module.exports = {
             [Op.like]: '%' + title + '%',
           },
         },
+        isApproved: true,
       };
     }
     //search (q) , need fix
@@ -80,6 +82,61 @@ module.exports = {
           totalPage: totalPage,
           activePage: Number(page),
           data: repository.rows,
+        });
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  },
+  approval: async (req, res) => {
+    // queryStrings
+
+    let { q, order, sort, limit, page } = req.query;
+    console.log(page);
+    console.log(limit);
+    let paramQuerySQL = {
+      limit: 10,
+      page: 1,
+    };
+
+    paramQuerySQL.where = {
+      isApproved: false,
+    };
+
+    //search (q) , need fix
+    if (q != '' && typeof q !== 'undefined') {
+      paramQuerySQL.where = {
+        q: {
+          [Op.like]: '%' + q + '%',
+        },
+      };
+    }
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    return Repositorys.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let totalPage = Math.ceil(result.count / paramQuerySQL.limit);
+        res.status(200).json({
+          totalPage: totalPage,
+          activePage: Number(page),
+          data: result.rows,
         });
       })
       .catch(err => {
@@ -175,6 +232,7 @@ module.exports = {
         releaseYear: req.body.releaseYear,
         category: req.body.category,
         city: req.body.city,
+        isApproved: false,
         document:
           req.files['document'] !== undefined
             ? generateFileLocation(req.files['document'][0].filename)

@@ -1,5 +1,5 @@
 import RepositoryApi from '../client/RepositoryApi';
-import { REPOSITORYS, DETAIL_REPOSITORY } from '../type';
+import { REPOSITORYS, DETAIL_REPOSITORY, REPOSITORYS_APPROVAL } from '../type';
 /**
  * note: for book creation doesn't need to dispatch //
  * any reducer type,
@@ -74,6 +74,24 @@ export const getRepositorys = param => dispatch => {
       }
     })
     .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getRepositoryApprovalList = param => dispatch => {
+  console.log(param);
+  return RepositoryApi.listAproval(param)
+    .then(res => {
+      if (res) {
+        dispatch({ type: REPOSITORYS_APPROVAL, payload: res });
+        return {
+          resp: true,
+          msg: '',
+        };
+      }
+    })
+    .catch(err => {
+      console.log(err);
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
