@@ -40,6 +40,18 @@ export default class Request {
     return makeAxiosRequest(requestOptions);
   }
 
+  static getFileWithAuth(url) {
+    const requestOptions = {
+      method: 'get',
+      url,
+      headers: {
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+       responseType: "blob",
+    };
+    return makeAxiosRequest(requestOptions);
+  }
+
   static post(url, data, options) {
     const requestOptions = {
       method: 'post',
@@ -57,6 +69,21 @@ export default class Request {
         'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
         'x-access-token': localStorage.getItem('bni_jwtToken'),
       },
+    };
+    return makeAxiosRequest(requestOptions, options);
+  }
+
+
+  static postFileWithAuth(url, data, options, isFormData) {
+    const requestOptions = {
+      method: 'post',
+      url,
+      data,
+      headers: {
+        'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
+        'x-access-token': localStorage.getItem('bni_jwtToken'),
+      },
+      responseType: "blob",
     };
     return makeAxiosRequest(requestOptions, options);
   }

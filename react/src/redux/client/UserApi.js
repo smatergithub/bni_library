@@ -28,6 +28,11 @@ export default class UsersApi {
     return Request.postWithAuth(url);
   }
 
+  static exportDataUser() {
+    const url = `/api/admin/manage-user/export`;
+    return Request.getFileWithAuth(url);
+  }
+
   static deleteUserList(id) {
     const url = `/api/admin/manage-user/delete/${id}`;
     return Request.postWithAuth(url);

@@ -75,10 +75,6 @@ module.exports = {
   },
 
 
-
-
-
-
   deleteUser: async (req, res) => {
     return Users.findByPk(req.params.id).then(user => {
       if (!user) {
@@ -159,13 +155,9 @@ module.exports = {
           });
           rowIndex++;
       });
-      wb.write('ListUser.xlsx');
-      res.status(200).send(user);
+      wb.write('ListUser.xlsx', res)
     })
     .catch(error => res.status(404).send(error));
-
-
-
 
   }
 };

@@ -5,6 +5,7 @@ import {
   toggleUserIntoAdmin,
   deleteUser,
   getMe,
+  exportDataUser
 } from '../../../../redux/action/user';
 import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
@@ -61,13 +62,13 @@ const Ebooks = props => {
     retrieveDataUser(filterOptions);
   }, [filterOptions]);
 
-  function onAdminAction(data, id) {
-    props.toogleIsAdmin(data, id).then(res => {
-      if (res.resp) {
-        retrieveDataUser(filterOptions);
-      }
-    });
-  }
+  // function onAdminAction(data, id) {
+  //   props.toogleIsAdmin(data, id).then(res => {
+  //     if (res.resp) {
+  //       retrieveDataUser(filterOptions);
+  //     }
+  //   });
+  // }
 
   const getDetailUser = (id, MakeAdmin) => {
     const { users } = props;
@@ -88,6 +89,19 @@ const Ebooks = props => {
         retrieveDataUser(filterOptions);
         setLoading(false);
         setShowModalMakeAdmin(false);
+      })
+      .catch(err => {
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
+
+  const exportDataUser = () => {
+    setLoading(true);
+    props
+      .exportDataUser()
+       .then(response => {
+
       })
       .catch(err => {
         console.log('err', err);
@@ -150,7 +164,17 @@ const Ebooks = props => {
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
+        <div className="absolute" style={{ right: '2em', top: '5em',display:'flex',flexDirection:'row',width:'392px' }}>
 
+          <button
+            type="button"
+            onClick={() => exportDataUser()}
+            className="w-full white text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
+          >
+           <span style={{color:'black'}}> <i className="fas fa-plus mr-3" />Export Data User</span>
+          </button>
+
+        </div>
         {users.data !== undefined ? (
            <TableDevExtreme
             columns={[
@@ -213,4 +237,5 @@ export default connect(mapStateToProps, {
   toggleUserIntoAdmin,
   deleteUser,
   getMe,
+  exportDataUser
 })(Ebooks);
