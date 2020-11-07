@@ -79,7 +79,6 @@ export const getRepositorys = param => dispatch => {
     });
 };
 export const getRepositoryApprovalList = param => dispatch => {
-  console.log(param);
   return RepositoryApi.listAproval(param)
     .then(res => {
       if (res) {

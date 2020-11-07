@@ -6,12 +6,17 @@ import ModalDetailBook from './modalDetailBook';
 import { getRepositoryApprovalList } from 'redux/action/repositorys';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import ModalDetailRepository from './ModalDetailRepositories';
+import ModalRepoAction from './ModalRepoAction';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [repoConfirm, setRepoConfirm] = useState({
+    status: false,
+    id: null,
+    type: null,
+  });
   const [filterOptions, setFilterOptions] = React.useState({
     page: 0,
     limit: 5,
@@ -60,11 +65,6 @@ function BookList(props) {
     setShowModalDetail(true);
   };
 
-  const getEditTransactionBook = data => {
-    setDetailData(data);
-    setShowModalEdit(true);
-  };
-
   React.useEffect(() => {
     mappingDataSourceRepoApproval(filterOptions);
   }, [filterOptions]);
@@ -96,23 +96,31 @@ function BookList(props) {
               className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
               type="button"
               style={{ marginRight: '5px' }}
-              onClick={() => getDetailDataBook(rowData)}
+              onClick={() =>
+                setRepoConfirm({
+                  type: 'approve',
+                  id: rowData.id,
+                  status: true,
+                })
+              }
             >
               Approve
             </button>
-            {rowData.status !== 'Dikembalikan' ? (
-              <button
-                className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-                onClick={() => returnBook(rowData.id)}
-                disabled={rowData.status === 'Dikembalikan' ? true : false}
-              >
-                Hapus
-              </button>
-            ) : (
-              '-'
-            )}
+
+            <button
+              className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() =>
+                setRepoConfirm({
+                  type: 'delete',
+                  id: rowData.id,
+                  status: true,
+                })
+              }
+            >
+              Hapus
+            </button>
           </React.Fragment>
         ),
       };
@@ -184,15 +192,26 @@ function BookList(props) {
           setShowModalDetail(false);
         }}
       />
-      {/* <ModalEditApproval
-        showModalDetail={showModalEdit}
-        detailData={detailData}
-        typeApproval="editTransactionBook"
-        onCloseModal={() => {
-          setDetailData({});
-          setShowModalEdit(false);
+      <ModalRepoAction
+        showModalDetail={repoConfirm.status}
+        id={repoConfirm.id}
+        type={repoConfirm.type}
+        callback={() => {
+          setRepoConfirm({
+            type: null,
+            id: null,
+            status: false,
+          });
+          mappingDataSourceRepoApproval(filterOptions);
         }}
-      /> */}
+        onCloseModal={() => {
+          setRepoConfirm({
+            type: null,
+            id: null,
+            status: false,
+          });
+        }}
+      />
     </React.Fragment>
   );
 }
