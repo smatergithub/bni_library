@@ -24,6 +24,7 @@ router.post(
   UserManageController.deleteUser
 );
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList);
+router.post('/manage-user/export', [AuthJWT.isAdmin], UserManageController.exportListUser);
 
 //routing admin panel feature
 
