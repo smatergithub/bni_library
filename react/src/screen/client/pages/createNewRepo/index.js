@@ -77,7 +77,6 @@ function CreateNewRepo(props) {
         case 'abstrack':
           setPdf({ ...pdf, abstrack: file });
           return;
-          return;
       }
     };
 
@@ -236,7 +235,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'bab1')}
+                    onChange={e => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -250,7 +249,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'bab2')}
+                    onChange={e => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
