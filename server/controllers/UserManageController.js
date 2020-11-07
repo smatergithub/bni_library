@@ -1,6 +1,9 @@
 const Users = require('../models').users;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const xl = require('excel4node');
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Worksheet Name');
 
 module.exports = {
   list: async (req, res) => {
@@ -71,6 +74,11 @@ module.exports = {
       });
   },
 
+
+
+
+
+
   deleteUser: async (req, res) => {
     return Users.findByPk(req.params.id).then(user => {
       if (!user) {
@@ -118,5 +126,46 @@ module.exports = {
       res.status(200).send(userDisplay);
     })
       .catch(error => res.status(404).send(error));
+  },
+
+  exportListUser : async (req,res) => {
+    return Users.findAll({
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+      }).then(user => {
+      let userDisplay = []
+      user.forEach(item => {
+        const userData = {
+          ...item.dataValues
+        }
+        userDisplay.push(userData)
+      })
+
+      let headingColumnIndex = 1;
+      userDisplay.forEach((obj) => {
+      Object.keys(obj).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+      });
+    });
+      //Write Data in Excel file
+      let rowIndex = 2;
+      userDisplay.forEach( record => {
+          let columnIndex = 1;
+          Object.keys(record ).forEach(columnName =>{
+              ws.cell(rowIndex,columnIndex++)
+                  .string(record [columnName])
+          });
+          rowIndex++;
+      });
+      wb.write('ListUser.xlsx');
+      res.status(200).send(user);
+    })
+    .catch(error => res.status(404).send(error));
+
+
+
+
   }
 };
