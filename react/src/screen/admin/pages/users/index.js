@@ -101,7 +101,7 @@ const Ebooks = props => {
     props
       .exportDataUser()
        .then(response => {
-
+        ToastSuccess('Sukses Export User');
       })
       .catch(err => {
         console.log('err', err);

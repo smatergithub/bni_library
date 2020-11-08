@@ -172,6 +172,64 @@ module.exports = {
       })
   },
 
+   exportListHistoryEbook : async (req,res) => {
+    return TransactionEbook.findAll({
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+        where: { status: "Dikembalikan" },
+         include: ['ebook', 'user'],
+      }).then(response => {
+      let historyData = []
+      response.forEach(item => {
+        const history = {
+          code: item.dataValues.code,
+          transDate: item.dataValues.transDate,
+          status: item.dataValues.status,
+          isGiveRating: item.dataValues.isGiveRating,
+          note: item.dataValues.note,
+          startDate: item.dataValues.startDate,
+          kategori: item.dataValues.ebook.dataValues.kategori,
+          judul: item.dataValues.ebook.dataValues.kategori,
+          stockBuku: item.dataValues.ebook.dataValues.stockBuku,
+          countRating: item.dataValues.ebook.dataValues.stockBuku,
+          npp: item.dataValues.user.dataValues.npp,
+          nama: item.dataValues.user.dataValues.nama,
+          phoneNumber: item.dataValues.user.dataValues.phoneNumber,
+          tanggalLahir: item.dataValues.user.dataValues.tanggalLahir,
+          wilayah: item.dataValues.user.dataValues.wilayah,
+          singkatan: item.dataValues.user.dataValues.singkatan,
+          jabatan: item.dataValues.user.dataValues.jabatan,
+          alamat: item.dataValues.user.dataValues.alamat,
+          email: item.dataValues.user.dataValues.email,
+        }
+        historyData.push(history)
+      })
+
+
+
+      let headingColumnIndex = 1;
+      historyData.forEach((obj) => {
+      Object.keys(obj).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+      });
+    });
+      //Write Data in Excel file
+      let rowIndex = 2;
+      historyData.forEach( record => {
+          let columnIndex = 1;
+          Object.keys(record ).forEach(columnName =>{
+              ws.cell(rowIndex,columnIndex++)
+                  .string(record [columnName])
+          });
+          rowIndex++;
+      });
+       wb.write('list_history_TransactionEbook.xlsx', res)
+    })
+    .catch(error => res.status(404).send(error));
+  },
+
   // pinjam ebook
   borrowEbook: async (req, res) => {
 

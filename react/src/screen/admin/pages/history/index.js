@@ -3,11 +3,37 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import BookList from './BookList';
 import EbookList from './EbooklList';
+import { ToastError, ToastSuccess } from '../../../../component';
+import { exportBookHistory,exportDataEbookHistory } from '../../../../redux/action/history';
 
 function History(props) {
   const [activeTabs, setActiveTabs] = useState('book');
   const [loading, setLoading] = React.useState(false);
 
+
+  const exportDataHistoryBook = () => {
+    setLoading(true);
+    props
+      .exportBookHistory()
+       .then(response => {
+      ToastSuccess('Sukses Export History Book');
+      })
+      .catch(err => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
+
+  const exportDataHistoryEbook = () => {
+    setLoading(true);
+    props
+      .exportDataEbookHistory()
+       .then(response => {
+        ToastSuccess('Sukses Export History Ebook');
+      })
+      .catch(err => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -44,6 +70,7 @@ function History(props) {
                       <button
                       type="button"
                       style={{width:'300px',color:'white'}}
+                        onClick={() => exportDataHistoryBook()}
                       className="bg-orange-500 text-white font-semibold  rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl"
                         >
                     <span > <i className="fas fa-plus mr-3" />Export History Buku</span>
@@ -53,6 +80,7 @@ function History(props) {
                       <button
                       type="button"
                       style={{width:'300px',color:'white'}}
+                        onClick={() => exportDataHistoryEbook()}
                       className="bg-orange-500 text-white font-semibold  rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl"
                         >
                     <span > <i className="fas fa-plus mr-3" />Export History Ebook</span>
@@ -78,4 +106,4 @@ let mapStateToProps = state => {
   return {};
 };
 
-export default connect(mapStateToProps, null)(History);
+export default connect(mapStateToProps, {exportBookHistory, exportDataEbookHistory})(History);

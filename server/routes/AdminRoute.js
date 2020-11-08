@@ -52,12 +52,14 @@ router.post('/wilayah/upload', [AuthJWT.isAdmin], UploadDocument.single("file"),
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);
+router.get('/transactionBook/history/export', [AuthJWT.isAdmin], TransactionBookController.exportListHistoryBook);
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 router.post('/transactionBook/update/:transactionId', [AuthJWT.isAdmin], TransactionBookController.updateTransactionBook);
 
 
 router.post('/transactionEbook/list', [AuthJWT.isAdmin], TransactionEbookController.list);
 router.post('/transactionEbook/history', [AuthJWT.isAdmin], TransactionEbookController.listHistory);
+router.get('/transactionEbook/history/export', [AuthJWT.isAdmin], TransactionEbookController.exportListHistoryEbook);
 router.post('/transactionEbook/return/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.returnEbook);
 router.post('/transactionEbook/update/:transactionId', [AuthJWT.isAdmin], TransactionEbookController.updateTransactionEbook);
 

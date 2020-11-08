@@ -155,7 +155,7 @@ module.exports = {
           });
           rowIndex++;
       });
-      wb.write('ListUser.xlsx', res)
+      wb.write('list_user.xlsx', res)
     })
     .catch(error => res.status(404).send(error));
 
