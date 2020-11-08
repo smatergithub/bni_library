@@ -47,7 +47,7 @@ function OrderBook(props) {
           });
           props.getBorrowedBookItem(userId, 'rating=true').then(res => {
             if (res.data.length !== 0) {
-              if (res.data.data.length !== 0) {
+              if (res.data.data.length > 1) {
                 setIsUserHaveActiveBook(true);
               }
 
@@ -70,7 +70,7 @@ function OrderBook(props) {
           });
           props.getBorrowedEbookItem(userId, 'rating=true').then(res => {
             if (res.data.length !== 0) {
-              if (res.data.data.length !== 0) {
+              if (res.data.data.length > 1) {
                 setIsUserHaveActiveEbook(true);
               }
               let checkIsBorrowed = res.data.data.some(

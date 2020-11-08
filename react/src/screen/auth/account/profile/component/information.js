@@ -4,8 +4,10 @@ function Information({ user, changePages }) {
   React.useEffect(() => {
     if (user && user.mapUrl) {
       setTimeout(() => {
-        document.getElementsByTagName('iframe')[0].style.width = '100%';
-        document.getElementsByTagName('iframe')[0].style.height = '150';
+        if (document.getElementsByTagName('iframe')[0].style) {
+          document.getElementsByTagName('iframe')[0].style.width = '100%';
+          document.getElementsByTagName('iframe')[0].style.height = '150';
+        }
       }, 3000);
     }
   });

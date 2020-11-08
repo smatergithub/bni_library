@@ -1,0 +1,143 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Modal } from '../../../../component';
+
+function FavoriteBooks(props) {
+  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let { history } = props;
+  function redirectToLogin() {
+    history.push('/auth/login');
+  }
+  let isUserLogged = localStorage.getItem('bni_UserRole') === null;
+
+  return (
+    <React.Fragment>
+      <div className="pt-24">
+        <div class="container mx-auto flex items-center  pt-4 pb-12 mt-5">
+          <section class="bg-gray-200 py-12 w-full">
+            <Link to="/home" className="ml-10">
+              <div
+                className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
+                style={{ width: '10em' }}
+              >
+                {' '}
+                <i className="fas fa-arrow-left"></i> Kembali
+              </div>
+            </Link>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <h2 class="text-2xl font-bold leading-tight text-center lg:text-3xl">
+                Populer di Baca
+              </h2>
+
+              <div class=" text-center mt-8  mx-auto md:flex items-center justify-center">
+                <div class="md:w-2/6  bg-white  rounded-lg shadow-lg ">
+                  <div class="px-4 py-8">
+                    <div class="h-24">
+                      <img
+                        src={require('../../../../assets/building.png')}
+                        alt=""
+                        height="100"
+                        width="120"
+                        class="mx-auto"
+                      />
+                    </div>
+                    <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
+                      KANTOR PUSAT
+                    </h4>
+                    <p class="mt-2 text-sm text-gray-700 px-10">
+                      Kumpulan riset Mahasiswa yang melakukan dengan subjek di kantor pusat atau
+                      divisi yang ada dalam satuan BNI
+                    </p>
+
+                    {!isUserLogged ? (
+                      <Link to="/daftar-riset?kategori=pusat">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
+                        Selengkapnya{' '}
+                        <span>
+                          <i className={`fas fa-arrow-right ml-3`} />
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div class="md:w-2/6  bg-white rounded-lg shadow-lg m-5">
+                  <div class="px-4 py-8">
+                    <div class="h-24">
+                      <img
+                        src={require('../../../../assets/town.png')}
+                        alt=""
+                        height="100"
+                        width="120"
+                        class="mx-auto"
+                      />
+                    </div>
+                    <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
+                      KANTOR WILAYAH
+                    </h4>
+
+                    <p class="mt-2 text-sm text-gray-700 px-10">
+                      Kumpulan riset mahasiswa yang melakukan penelitian dengan subjek dikantor
+                      wilayah atau ke unit yang ada dalam satuan BNI
+                    </p>
+                    {!isUserLogged ? (
+                      <Link to="/daftar-riset?kategori=wilayah">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
+                        Selengkapnya{' '}
+                        <span>
+                          <i className={`fas fa-arrow-right ml-3`} />
+                        </span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+      <Modal
+        title="Authentication required"
+        open={showModalDeletion}
+        onCLose={() => {
+          setShowModalDeletion(false);
+        }}
+        handleSubmit={redirectToLogin}
+      >
+        <div className="my-5">Silahkan Login terlebih dahulu</div>
+      </Modal>
+    </React.Fragment>
+  );
+}
+
+export default FavoriteBooks;

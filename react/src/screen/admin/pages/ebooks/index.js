@@ -148,36 +148,36 @@ const Ebooks = props => {
             ]}
             columnExtensions={[
               {
-                columnName: "judul",
-                width: 150,
-                wordWrapEnabled: true
+                columnName: 'judul',
+                width: 350,
+                wordWrapEnabled: false,
               },
               {
-                columnName: "pengarang",
+                columnName: 'pengarang',
                 width: 250,
-                wordWrapEnabled: true
+                wordWrapEnabled: false,
               },
               {
-                columnName: "tahunTerbit",
+                columnName: 'tahunTerbit',
                 width: 150,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "nama",
+                columnName: 'nama',
                 width: 150,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "npp",
+                columnName: 'npp',
                 width: 100,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "actions",
+                columnName: 'actions',
                 width: 300,
-                wordWrapEnabled: true
-              }
-               ]}
+                wordWrapEnabled: true,
+              },
+            ]}
             rows={adjustIntegrationTable(ebooks.data)}
           />
         ) : (
