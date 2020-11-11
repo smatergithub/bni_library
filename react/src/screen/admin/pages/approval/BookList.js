@@ -6,25 +6,29 @@ import ModalDetailBook from "./modalDetailBook";
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
 import TableDevExtreme from "../../../../component/TableDevExtreme";
 import ModalEditApproval from "./ModalEditApproval";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [showModalEdit,setShowModalEdit] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-  });
 
-  const mappingDataSourceTransactionBookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(2);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceTransactionBookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .ListTransactionBook(filterOptions)
+      .ListTransactionBook(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.transactionBooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -32,21 +36,16 @@ function BookList(props) {
   };
 
   React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
-  }, []);
+    mappingDataSourceTransactionBookList();
+  },[currentPage,totalCount]);
 
-  // const onPaginationUpdated = pagination => {
-  //   setFilterOptions({
-  //     page: pagination.page,
-  //     limit: pagination.limit,
-  //   });
-  // };
+
 
   function returnBook(id) {
     props.MakeReturnBook(id).then(res => {
       if (res.resp) {
         setLoading(false);
-        mappingDataSourceTransactionBookList(filterOptions);
+        mappingDataSourceTransactionBookList();
         ToastSuccess(res.msg);
       } else {
         setLoading(false);
@@ -67,20 +66,16 @@ function BookList(props) {
   }
 
 
-  React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
-  }, [filterOptions]);
-
 
    const adjustIntegrationTable = (dataSource) => {
     return dataSource.map(rowData => {
 
       return {
         ...rowData,
-        judul :rowData.book.judul,
+        judul :rowData.book && rowData.book.judul,
         nama :rowData.user ? rowData.user.nama : '',
         npp :rowData.user ? rowData.user.npp : '',
-        tahunTerbit : rowData.book.tahunTerbit,
+        tahunTerbit :rowData.book && rowData.book.tahunTerbit,
         quantity : rowData.quantity,
         actions : (  <React.Fragment>
            <button
@@ -121,7 +116,7 @@ function BookList(props) {
   const { transactionBooks } = props;
   return (
     <React.Fragment>
-      {transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
+      {!IsEmptyObject(transactionBooks) && transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
          <TableDevExtreme
             columns={[
               { name: 'code', title: 'Code' },
@@ -141,7 +136,7 @@ function BookList(props) {
               },
               {
                 columnName: "judul",
-                width: 250,
+                width: 300,
                 wordWrapEnabled: true
               },
               {
@@ -176,6 +171,10 @@ function BookList(props) {
                ]}
 
             rows={adjustIntegrationTable(transactionBooks.data)}
+             currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
             />
       ) : (
           <NoData msg="Belum ada request dari user!" />

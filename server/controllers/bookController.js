@@ -102,6 +102,7 @@ module.exports = {
     // offset
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+      //paramQuerySQL.offset = parseInt(page);
     }
 
     // order by

@@ -18,20 +18,25 @@ const Wilayah = props => {
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalDetail, setShowModalDetail] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-    judul: '',
-  });
-    let exportFile = React.useRef(null);
 
-  const retrieveDataWilayah = filterOptions => {
+  const [totalCount, setTotalCount] = React.useState(0);
+  const [pageSize] =React.useState(5);
+  const [currentPage, setCurrentPage] = React.useState(0);
+
+  let exportFile = React.useRef(null);
+
+  const retrieveDataWilayah = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getWilayah(filterOptions)
+      .getWilayah(pagination)
       .then(res => {
         if (res) {
-          setLoading(false);
+           setTotalCount(props.wilayah.count);
+        setLoading(false);
         }
       })
       .catch(err => {
@@ -40,24 +45,8 @@ const Wilayah = props => {
   };
 
   React.useEffect(() => {
-    retrieveDataWilayah(filterOptions);
-  }, []);
-
-  // const onPaginationUpdated = pagination => {
-  //   if (pagination.judul) {
-  //     setFilterOptions({
-  //       judul: pagination.judul,
-  //       page: pagination.page,
-  //       limit: pagination.limit,
-  //     });
-  //   } else {
-  //     setFilterOptions({
-  //       page: pagination.page,
-  //       limit: pagination.limit,
-  //       judul: '',
-  //     });
-  //   }
-  // };
+    retrieveDataWilayah();
+  },[currentPage,totalCount]);
 
   const uploadPdf = e => {
     e.preventDefault();
@@ -81,10 +70,6 @@ const Wilayah = props => {
     reader.readAsDataURL(file);
   };
 
-  React.useEffect(() => {
-    retrieveDataWilayah(filterOptions);
-  }, [filterOptions]);
-
   const getDetailWilayah = (id, MakeAdmin) => {
     const { wilayah } = props;
     let detailData = wilayah.data.filter(item => item.id === id);
@@ -101,7 +86,7 @@ const Wilayah = props => {
     props
       .DeleteWilayahAction(detailData.id)
       .then(response => {
-        retrieveDataWilayah(filterOptions);
+        retrieveDataWilayah();
         setLoading(false);
         setShowModalDeletion(false);
       })
@@ -188,6 +173,10 @@ const Wilayah = props => {
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(wilayah.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
             />
         ) : null}
       </main>

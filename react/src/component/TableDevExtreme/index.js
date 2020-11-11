@@ -5,7 +5,7 @@ import {
   SortingState,
   IntegratedSorting,
   PagingState,
-  IntegratedPaging,
+  CustomPaging,
 } from '@devexpress/dx-react-grid';
 import {
   Grid,
@@ -26,7 +26,10 @@ const useStyles = makeStyles({
 
 
 const TableDevExtreme = (props) => {
-  const [pageSizes] = useState([5, 10, 15]);
+  const [currentPage] = useState(props.currentPage);
+  const [pageSize] = useState(props.pageSize);
+
+
   const {rows,columns, columnExtensions = []} = props;
   const classes = useStyles();
   return (
@@ -36,13 +39,18 @@ const TableDevExtreme = (props) => {
         <SortingState />
         <IntegratedFiltering />
         <IntegratedSorting />
-        <PagingState defaultCurrentPage={0} defaultPageSize={5} />
-        <IntegratedPaging />
+         <PagingState
+          currentPage={currentPage}
+          onCurrentPageChange={props.onCurrentPageChange}
+          pageSize={pageSize}
+        />
+         <CustomPaging
+          totalCount={props.totalCount}
+        />
+        {/* <IntegratedPaging /> */}
         <Table  columnExtensions={columnExtensions} className={classes.root} />
         <TableHeaderRow  showSortingControls className={classes.root} />
-         <PagingPanel
-          pageSizes={pageSizes}
-        />
+       <PagingPanel />
         <Toolbar />
         <SearchPanel />
       </Grid>

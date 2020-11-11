@@ -1,7 +1,7 @@
 import { BOOKS } from '../../type';
 
 const initialState = {
-  books: [],
+  books: {},
 };
 
 const books = (state = initialState, action) => {

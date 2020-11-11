@@ -10,17 +10,21 @@ function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [historyEbooks, setHistoryEbooks] = React.useState(null);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const getAllHistoryEbook = filterOptions => {
+  const getAllHistoryEbook = () => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getAllEbookHistory(filterOptions)
+      .getAllEbookHistory(pagination)
       .then(res => {
         if (res) {
+           setTotalCount(res.data.count);
           setHistoryEbooks(res.data);
           setLoading(false);
         }
@@ -31,19 +35,11 @@ function EbookList(props) {
   };
 
   React.useEffect(() => {
-    getAllHistoryEbook(filterOptions);
-  }, []);
+    getAllHistoryEbook();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
 
-  React.useEffect(() => {
-    getAllHistoryEbook(filterOptions);
-  }, [filterOptions]);
+
 
 
 
@@ -52,10 +48,10 @@ function EbookList(props) {
 
       return {
         ...rowData,
-        judul :rowData.ebook.judul,
+        judul :rowData.ebook && rowData.ebook.judul,
         nama :rowData.user ? rowData.user.nama : '',
-         npp :rowData.user ? rowData.user.npp : '',
-        tahunTerbit : rowData.ebook.tahunTerbit,
+        npp :rowData.user ? rowData.user.npp : '',
+        tahunTerbit : rowData.ebook && rowData.ebook.tahunTerbit,
         quantity : rowData.quantity,
         actions : ( <React.Fragment>
               {rowData.status !== 'Dikembalikan' ? (
@@ -135,6 +131,10 @@ function EbookList(props) {
               }
                ]}
             rows={adjustIntegrationTable(historyEbooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
             />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
