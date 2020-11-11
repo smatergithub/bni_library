@@ -52,7 +52,7 @@ router.post('/wilayah/upload', [AuthJWT.isAdmin], UploadDocument.single("file"),
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);
-router.get('/transactionBook/history/export', [AuthJWT.isAdmin], TransactionBookController.exportListHistoryBook);
+router.get('/transactionBook/history/exportData', [AuthJWT.isAdmin], TransactionBookController.exportListHistoryBook);
 router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
 router.post('/transactionBook/update/:transactionId', [AuthJWT.isAdmin], TransactionBookController.updateTransactionBook);
 
