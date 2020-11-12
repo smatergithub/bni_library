@@ -28,6 +28,7 @@ export const DETAIL_EBOOK = 'DETAIL_EBOOK';
 // ===========> type for repositorys action here <===========
 
 export const REPOSITORYS = 'REPOSITORYS';
+export const REPOSITORYS_APPROVAL = 'REPOSITORYS_APPROVAL';
 export const DETAIL_REPOSITORY = 'DETAIL_REPOSITORY';
 
 // ===========> type for transaction action here <===========
@@ -42,3 +43,10 @@ export const DASHBOARD = 'DASHBOARD';
 
 export const WILAYAHS = 'WILAYAHS';
 export const DETAIL_WILAYAH = 'DETAIL_WILAYAH';
+
+
+// ===========> type for history action here <===========
+
+export const HISTORY_TRANSACTION_BOOKS = 'HISTORY_TRANSACTION_BOOKS';
+export const HISTORY_TRANSACTION_EBOOKS = 'HISTORY_TRANSACTION_EBOOKS';
+

@@ -353,38 +353,37 @@ module.exports = {
       }).then(history => {
       let userDisplay = []
       history.forEach(item => {
-        console.log("item",item.dataValues.user.dataValues.name);
-        // const historyData = {
-        //   code: item.dataValues.code,
-        //   transDate: item.dataValues.transDate,
-        //   status: item.dataValues.status,
-        //   note: item.dataValues.note,
-        //   quantity: item.dataValues.quantity,
-        //   startDate: item.dataValues.startDate,
-        //   kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
-        //   judul: item.dataValues.book && item.dataValues.book.dataValues.kategori,
-        //   stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
-        //   countRating: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
-        //   npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
-        //   nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
-        //   phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
-        //   tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
-        //   wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
-        //   singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
-        //   jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
-        //   alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
-        //   email: item.dataValues.user && item.dataValues.user.dataValues.email,
-        // }
-        // historyData.push(userDisplay)
+        const historyData = {
+          code: item.dataValues.code,
+          transDate: item.dataValues.transDate,
+          status: item.dataValues.status,
+          note: item.dataValues.note,
+          quantity: item.dataValues.quantity,
+          startDate: item.dataValues.startDate,
+          // kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
+          // judul: item.dataValues.book && item.dataValues.book.dataValues.kategori,
+          // stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
+          // countRating: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
+          // npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
+          // nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
+          // phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
+          // tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
+          // wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
+          // singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
+          // jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
+          // alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
+          // email: item.dataValues.user && item.dataValues.user.dataValues.email,
+        }
+        historyData.push(userDisplay)
       })
 
-    //  let headingColumnIndex = 1;
-    //   userDisplay.forEach((obj) => {
-    //   Object.keys(obj).forEach((key) => {
-    //        ws.cell(1, headingColumnIndex++)
-    //           .string(key)
-    //   });
-    // });
+     let headingColumnIndex = 1;
+      userDisplay.forEach((obj) => {
+      Object.keys(obj).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+      });
+    });
       // //Write Data in Excel file
       // let rowIndex = 2;
       // userDisplay.forEach( record => {

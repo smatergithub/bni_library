@@ -25,10 +25,13 @@ function ReserachSuccess() {
                       />
                     </div>
                     <h4 class="mt-10 md:px-10 text-lg font-medium tracking-wide uppercase leading-tight">
-                      Berhasil menambahkan repository RISET BNI
+                      Berhasil menambahkan riset ke sistem
                     </h4>
+                    <div class="mt-3 md:px-10  font-medium tracking-wide leading-tight">
+                      Admin akan meninjau riset ini
+                    </div>
                     <Link to="/riset">
-                      <button className="mx-auto lg:mx-0 hover:underline bg-gray-800 text-white mt-10 rounded-lg my-2 py-2 px-5 shadow-lg">
+                      <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white mt-10 rounded-lg my-5 py-2 px-5 shadow-lg">
                         Lihat Halaman Riset{' '}
                         <span>
                           <i className={`fas fa-arrow-right ml-3`} />

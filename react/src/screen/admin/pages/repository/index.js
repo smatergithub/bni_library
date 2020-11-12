@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { getRepositorys, DeleteRepositoryAction } from '../../../../redux/action/repositorys';
 import Table from '../../component/Table';
 import { NoData, Modal, ToastSuccess, ToastError } from '../../../../component';
-import TableDevExtreme from "../../../../component/TableDevExtreme";
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 import moment from 'moment';
 
 const Repository = props => {
@@ -69,38 +69,37 @@ const Repository = props => {
   if (loading) return null;
   const { repositorys } = props;
 
-   const adjustIntegrationTable = (dataSource) => {
+  const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
-        createdAt : moment(rowData.createdAt).format('DD MMM YYYY'),
-        actions : (   <React.Fragment>
-              <Link to={`/admin/edit-repository?id=${rowData.id}`}>
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                >
-                  Edit
-                </button>
-              </Link>
+        createdAt: moment(rowData.createdAt).format('DD MMM YYYY'),
+        actions: (
+          <React.Fragment>
+            <Link to={`/admin/edit-repository?id=${rowData.id}`}>
               <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => {
-                  setSelectedRepo(rowData.id);
-                  setShowModalDeletion(true);
-                }}
+                style={{ marginRight: '5px' }}
               >
-                Delete
+                Edit
               </button>
-            </React.Fragment>)
-      }
-    })
-  }
-
-
+            </Link>
+            <button
+              className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              onClick={() => {
+                setSelectedRepo(rowData.id);
+                setShowModalDeletion(true);
+              }}
+            >
+              Delete
+            </button>
+          </React.Fragment>
+        ),
+      };
+    });
+  };
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -118,17 +117,19 @@ const Repository = props => {
         <h1 className="w-full text-3xl text-black pb-6">Daftar Repository</h1>
 
         {repositorys.data !== undefined && repositorys.data.length !== 0 ? (
-           <TableDevExtreme
+          <TableDevExtreme
             columns={[
-              { name: 'university', title: 'University' },
-              { name: 'titleRepository', title: 'Title Repository' },
-              { name: 'typeRepository', title: 'Type Repository' },
-              { name: 'createdAt', title: 'Created At' },
+              { name: 'name', title: 'Nama' },
+              { name: 'university', title: 'Universitas' },
+              { name: 'title', title: 'Judul' },
+              { name: 'category', title: 'Kategori' },
+              { name: 'methodology', title: 'Methodology' },
+              { name: 'faculty', title: 'Fakultas' },
+              { name: 'strata', title: 'Strata' },
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(repositorys.data)}
-            />
-
+          />
         ) : (
           <NoData msg="Data Belum tersedia !" />
         )}

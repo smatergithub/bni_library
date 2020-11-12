@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
-import ModalDetailBook from "./modalDetailBook";
+import ModalDetailBook from './modalDetailBook';
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
 import TableDevExtreme from "../../../../component/TableDevExtreme";
 import ModalEditApproval from "./ModalEditApproval";
@@ -54,22 +54,19 @@ function BookList(props) {
     });
   }
 
-
   const getDetailDataBook = data => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getEditTransactionBook = (data) => {
+  const getEditTransactionBook = data => {
     setDetailData(data);
     setShowModalEdit(true);
-  }
-
+  };
 
 
    const adjustIntegrationTable = (dataSource) => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
         judul :rowData.book && rowData.book.judul,
@@ -87,30 +84,22 @@ function BookList(props) {
                 Edit
                 </button>
               <button
-                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => getDetailDataBook(rowData)}
+                onClick={() => returnBook(rowData.id)}
+                disabled={rowData.status === 'Dikembalikan' ? true : false}
               >
-                detail
-                </button>
-              {rowData.status !== 'Dikembalikan' ? (
-                <button
-                  className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                  onClick={() => returnBook(rowData.id)}
-                  disabled={rowData.status === 'Dikembalikan' ? true : false}
-                >
-                  Return Book
-                </button>
-              ) : (
-                  '-'
-                )}
-            </React.Fragment>)
-      }
-    })
-  }
+                Return Book
+              </button>
+            ) : (
+              '-'
+            )
+          </React.Fragment>
+        ),
+      };
+    });
+  };
 
   if (loading) return null;
   const { transactionBooks } = props;
@@ -177,8 +166,8 @@ function BookList(props) {
             totalCount={totalCount}
             />
       ) : (
-          <NoData msg="Belum ada request dari user!" />
-        )}
+        <NoData msg="Belum ada request dari user!" />
+      )}
       <ModalDetailBook
         showModalDetail={showModalDetail}
         detailData={detailData}

@@ -5,11 +5,11 @@ import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { getAllEbookHistory } from '../../../../redux/action/history';
 import TableDevExtreme from "../../../../component/TableDevExtreme";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
-  const [historyEbooks, setHistoryEbooks] = React.useState(null);
   const [totalCount, setTotalCount] = useState(0);
   const [pageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
@@ -24,8 +24,8 @@ function EbookList(props) {
       .getAllEbookHistory(pagination)
       .then(res => {
         if (res) {
-           setTotalCount(res.data.count);
-          setHistoryEbooks(res.data);
+           setTotalCount(props.historyEbooks.count);
+
           setLoading(false);
         }
       })
@@ -74,10 +74,10 @@ function EbookList(props) {
 
 
   if (loading) return null;
-
+const { historyEbooks } = props;
   return (
     <React.Fragment>
-      {historyEbooks !== null && historyEbooks.data.length !== 0 ? (
+      {!IsEmptyObject(historyEbooks) && historyEbooks.data !== undefined && historyEbooks.data.length !== 0 ? (
          <TableDevExtreme
              columns={[
               { name: 'code', title: 'Code' },
@@ -143,4 +143,11 @@ function EbookList(props) {
   );
 }
 
-export default connect(null, { getAllEbookHistory })(EbookList);
+let mapStateToProps = state => {
+  return {
+    historyEbooks: state.historys.historyEbooks,
+  };
+};
+
+
+export default connect(mapStateToProps, { getAllEbookHistory })(EbookList);

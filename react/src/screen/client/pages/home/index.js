@@ -92,7 +92,7 @@ function Home() {
                   <p class="mt-2 text-sm text-gray-700">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
-                  <Link to="/riset">
+                  <Link to="/favorite-book">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
@@ -120,7 +120,7 @@ function Home() {
                   <p class="mt-2 text-sm text-gray-700">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                   </p>
-                  <Link to="/riset">
+                  <Link to="/favorite-ebook">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>

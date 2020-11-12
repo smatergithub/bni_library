@@ -19,6 +19,8 @@ import ListResearch from './listResearch';
 import DetailResearch from './detailResearch';
 import AddNewResearch from './createNewRepo';
 import AddNewResearchSuccess from './researchSuccess';
+import FavoriteBooks from './favoriteBook';
+import FavoriteEbooks from './favoriteEbook';
 
 const routes = [
   {
@@ -35,6 +37,16 @@ const routes = [
     path: '/katalog',
     exact: false,
     main: <LandingPages />,
+  },
+  {
+    path: '/favorite-book',
+    exact: false,
+    main: <FavoriteBooks />,
+  },
+  {
+    path: '/favorite-ebook',
+    exact: false,
+    main: <FavoriteEbooks />,
   },
   {
     path: '/riset',

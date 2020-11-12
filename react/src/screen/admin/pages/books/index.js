@@ -148,36 +148,36 @@ const Books = props => {
                 wordWrapEnabled: true
               },
               {
-                columnName: "pengarang",
-                width: 250,
-                wordWrapEnabled: true
+                columnName: 'pengarang',
+                width: 200,
+                wordWrapEnabled: false,
               },
               {
-                columnName: "tahunTerbit",
+                columnName: 'tahunTerbit',
                 width: 150,
-                wordWrapEnabled: true
-              },
-               {
-                columnName: "stockBuku",
-                width: 150,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "nama",
+                columnName: 'stockBuku',
                 width: 150,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "npp",
+                columnName: 'nama',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'npp',
                 width: 100,
-                wordWrapEnabled: true
+                wordWrapEnabled: true,
               },
               {
-                columnName: "actions",
+                columnName: 'actions',
                 width: 300,
-                wordWrapEnabled: true
-              }
-               ]}
+                wordWrapEnabled: true,
+              },
+            ]}
             rows={adjustIntegrationTable(books.data)}
             currentPage={currentPage}
             onCurrentPageChange={setCurrentPage}

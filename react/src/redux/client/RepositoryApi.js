@@ -13,6 +13,10 @@ export default class RepositoryApi {
     const url = `/api/admin/repository?offset=${param.page}&limit=${param.limit}`;
     return Request.getWithAuth(url);
   }
+  static listAproval(param) {
+    const url = `/api/admin/repository_approval?page=${param.page}&limit=${param.limit}`;
+    return Request.getWithAuth(url);
+  }
 
   static detail(id) {
     const url = `/api/admin/repository/${id}`;

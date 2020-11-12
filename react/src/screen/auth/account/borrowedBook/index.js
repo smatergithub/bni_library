@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import { Helmet } from 'react-helmet';
 import ReactStars from 'react-rating-stars-component';
 import Card from '../component/card';
@@ -47,6 +48,8 @@ function Borrowed(props) {
                 <Card
                   type="borrow"
                   data={borrow.book}
+                  enddate={borrow.endDate}
+                  startdate={borrow.startDate}
                   onDetailClick={() => onDetailClick(borrow)}
                 />
                 <div
