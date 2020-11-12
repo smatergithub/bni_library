@@ -79,6 +79,7 @@ function EbookList(props) {
         ...rowData,
         judul :rowData.ebook.judul,
         nama :rowData.user ? rowData.user.nama : '',
+         npp :rowData.user ? rowData.user.npp : '',
         tahunTerbit : rowData.ebook.tahunTerbit,
         actions : ( <React.Fragment>
            <button

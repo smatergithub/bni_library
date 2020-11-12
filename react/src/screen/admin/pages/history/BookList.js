@@ -65,24 +65,10 @@ function BookList(props) {
       return {
         ...rowData,
         judul :rowData.book.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        npp :rowData.user ? rowData.user.npp : '',
         tahunTerbit : rowData.book.tahunTerbit,
-        nama : rowData.user ? rowData.user.nama : '',
         quantity : rowData.quantity,
-        actions : ( <React.Fragment>
-              {rowData.status !== 'Dikembalikan' ? (
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                  onClick={() => returnBook(rowData.id)}
-                  disabled={rowData.status === 'Dikembalikan' ? true : false}
-                >
-                  Return Book
-                </button>
-              ) : (
-                  '-'
-                )}
-            </React.Fragment>)
       }
     })
   }
@@ -91,17 +77,55 @@ function BookList(props) {
   if (loading) return null;
   return (
     <React.Fragment>
+
       {historyBooks !== null && historyBooks !== undefined && historyBooks.data.length !== 0 ? (
          <TableDevExtreme
             columns={[
-              { name: 'code', title: 'Judul' },
+              { name: 'code', title: 'Code' },
               { name: 'judul', title: 'Judul' },
               { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah' },
               { name: 'nama', title: 'Peminjam' },
-              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'npp', title: 'NPP' },
               { name: 'status', title: 'Status' },
-              { name: 'actions', title: 'Action' },
             ]}
+              columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 300,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+               {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              }
+               ]}
             rows={adjustIntegrationTable(historyBooks.data)}
             />
       ) : (

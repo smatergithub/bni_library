@@ -4,6 +4,10 @@ const ListBorrowBook = require("../models").listBorrowBook
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const moment = require("moment");
+const xl = require('excel4node');
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Worksheet Name');
+
 
 module.exports = {
   list: async (req, res) => {
@@ -171,6 +175,65 @@ module.exports = {
       .catch(err => {
         res.status(500).send(err);
       })
+  },
+
+   exportListHistoryBook : async (req,res) => {
+    return TransactionBook.findAll({
+        order: [
+          ['createdAt', 'DESC'],
+        ],
+        where: { status: "Dikembalikan" },
+        include: ['book', 'user']
+      }).then(response => {
+      let historyData = []
+      historyData = response.map(item => {
+        const history = {
+          code: item.dataValues.code,
+          transDate: item.dataValues.transDate,
+          status: item.dataValues.status,
+          note: item.dataValues.note,
+          // quantity: item.dataValues.quantity,
+          // startDate: item.dataValues.startDate,
+          // kategori: item.dataValues.book.dataValues.kategori,
+          // judul: item.dataValues.book.dataValues.kategori,
+          // stockBuku: item.dataValues.book.dataValues.stockBuku,
+          // countRating: item.dataValues.book.dataValues.stockBuku,
+          // npp: item.dataValues.user.dataValues.npp,
+          // nama: item.dataValues.user.dataValues.nama,
+          // phoneNumber: item.dataValues.user.dataValues.phoneNumber,
+          // tanggalLahir: item.dataValues.user.dataValues.tanggalLahir,
+          // wilayah: item.dataValues.user.dataValues.wilayah,
+          // singkatan: item.dataValues.user.dataValues.singkatan,
+          // jabatan: item.dataValues.user.dataValues.jabatan,
+          // alamat: item.dataValues.user.dataValues.alamat,
+          // email: item.dataValues.user.dataValues.email,
+        }
+        return history
+      })
+
+
+      console.log("test",historyData)
+
+      let headingColumnIndex = 1;
+      historyData.forEach((obj) => {
+      Object.keys(obj).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+      });
+    });
+      //Write Data in Excel file
+      let rowIndex = 2;
+      historyData.forEach( record => {
+          let columnIndex = 1;
+          Object.keys(record ).forEach(columnName =>{
+              ws.cell(rowIndex,columnIndex++)
+                  .string(record [columnName])
+          });
+          rowIndex++;
+      });
+       wb.write('list_history_transactionBook.xlsx', res)
+    })
+    .catch(error => res.status(404).send(error));
   },
 
 

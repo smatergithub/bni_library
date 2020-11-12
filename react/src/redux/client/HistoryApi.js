@@ -9,4 +9,14 @@ export default class HistoryApi {
     const url = '/api/admin/transactionEbook/history';
     return Request.postWithAuth(url, body, true);
   }
+
+  static exportDataBook() {
+    const url = `/api/admin/transactionBook/history/export`;
+    return Request.getFileWithAuth(url);
+  }
+
+  static exportDataEbook() {
+    const url = `/api/admin/transactionEbook/history/export`;
+    return Request.getFileWithAuth(url);
+  }
 }

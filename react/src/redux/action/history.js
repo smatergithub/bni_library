@@ -46,3 +46,47 @@ export const getAllEbookHistory = EBook => () => {
       return { resp: false, msg: msg };
     });
 };
+
+export const exportBookHistory = () => () => {
+  return HistoryApi.exportDataBook()
+    .then(response => {
+       const filename = "list_data_book_history";
+        if (navigator.msSaveBlob) {
+          navigator.msSaveBlob(response, filename);
+        } else {
+          let fileURL = window.URL.createObjectURL(response);
+          let a = document.createElement("a");
+
+          a.setAttribute("download", filename);
+          a.href = fileURL;
+          document.body.appendChild(a);
+          a.click();
+        }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const exportDataEbookHistory = () => () => {
+  return HistoryApi.exportDataEbook()
+    .then(response => {
+       const filename = "list_data_ebook_history";
+        if (navigator.msSaveBlob) {
+          navigator.msSaveBlob(response, filename);
+        } else {
+          let fileURL = window.URL.createObjectURL(response);
+          let a = document.createElement("a");
+
+          a.setAttribute("download", filename);
+          a.href = fileURL;
+          document.body.appendChild(a);
+          a.click();
+        }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

@@ -54,6 +54,7 @@ function EbookList(props) {
         ...rowData,
         judul :rowData.ebook.judul,
         nama :rowData.user ? rowData.user.nama : '',
+         npp :rowData.user ? rowData.user.npp : '',
         tahunTerbit : rowData.ebook.tahunTerbit,
         quantity : rowData.quantity,
         actions : ( <React.Fragment>
@@ -82,15 +83,57 @@ function EbookList(props) {
     <React.Fragment>
       {historyEbooks !== null && historyEbooks.data.length !== 0 ? (
          <TableDevExtreme
-            columns={[
-              { name: 'code', title: 'Judul' },
+             columns={[
+              { name: 'code', title: 'Code' },
               { name: 'judul', title: 'Judul' },
               { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah ' },
               { name: 'nama', title: 'Peminjam' },
-              { name: 'quantity', title: 'Jumlah Dipinjam' },
+              { name: 'npp', title: 'NPP' },
               { name: 'status', title: 'Status' },
               { name: 'actions', title: 'Action' },
             ]}
+            columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              },{
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
             rows={adjustIntegrationTable(historyEbooks.data)}
             />
       ) : (

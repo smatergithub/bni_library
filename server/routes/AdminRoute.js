@@ -24,7 +24,7 @@ router.post(
   UserManageController.deleteUser
 );
 router.get('/listUser', [AuthJWT.isAdmin], UserManageController.dataSourceUserList);
-router.post('/manage-user/export', [AuthJWT.isAdmin], UserManageController.exportListUser);
+router.get('/manage-user/export', [AuthJWT.isAdmin], UserManageController.exportListUser);
 
 //routing admin panel feature
 
@@ -75,6 +75,11 @@ router.post(
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);
+router.get(
+  '/transactionBook/history/export',
+  [AuthJWT.isAdmin],
+  TransactionBookController.exportListHistoryBook
+);
 router.post(
   '/transactionBook/return/:transactionId',
   [AuthJWT.isAdmin],
@@ -85,9 +90,13 @@ router.post(
   [AuthJWT.isAdmin],
   TransactionBookController.updateTransactionBook
 );
-
 router.post('/transactionEbook/list', [AuthJWT.isAdmin], TransactionEbookController.list);
 router.post('/transactionEbook/history', [AuthJWT.isAdmin], TransactionEbookController.listHistory);
+router.get(
+  '/transactionEbook/history/export',
+  [AuthJWT.isAdmin],
+  TransactionEbookController.exportListHistoryEbook
+);
 router.post(
   '/transactionEbook/return/:transactionId',
   [AuthJWT.isAdmin],
