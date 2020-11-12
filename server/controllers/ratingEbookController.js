@@ -89,10 +89,10 @@ module.exports = {
   },
   listEbookbyRating: async (req, res) => {
     let paramQuerySQL = {
-      include: ['book'],
+      include: ['ebook'],
       limit: 5,
       order: [['rating', 'DESC']],
-      attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
+      // attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
     };
 
     const RatingList = await RatingEbook.findAndCountAll(paramQuerySQL).then(response => {

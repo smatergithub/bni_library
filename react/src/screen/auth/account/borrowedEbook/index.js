@@ -47,6 +47,8 @@ function BorrowedEbook(props) {
                 <Card
                   type="borrow"
                   data={borrow.ebook}
+                  enddate={borrow.endDate}
+                  startdate={borrow.startDate}
                   onDetailClick={() => onDetailClick(borrow)}
                 />
                 <div

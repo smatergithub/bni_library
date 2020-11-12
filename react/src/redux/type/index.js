@@ -28,6 +28,7 @@ export const DETAIL_EBOOK = 'DETAIL_EBOOK';
 // ===========> type for repositorys action here <===========
 
 export const REPOSITORYS = 'REPOSITORYS';
+export const REPOSITORYS_APPROVAL = 'REPOSITORYS_APPROVAL';
 export const DETAIL_REPOSITORY = 'DETAIL_REPOSITORY';
 
 // ===========> type for transaction action here <===========

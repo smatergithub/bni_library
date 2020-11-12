@@ -1,8 +1,8 @@
 import React from 'react';
-
-const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
+import moment from 'moment';
+const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) => {
   return (
-    <div className="w-full mb-5 py-5 lg:flex">
+    <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">
         <img
           src={data.image}
@@ -16,17 +16,34 @@ const Card = ({ type, data, onDetailClick, onRemoveItem }) => {
       </div>
 
       <div className="w-4/6 h-48  lg:flex  items-center justify-start ">
-        <div>
+        <div className="ml-6">
           <h4 className="text-xl font-bold leading-tight">{data.judul}</h4>
           <div className="mt-2 leading-relaxed">Pengarang : {data.pengarang}</div>
           <div className="mt-1 leading-relaxed"> Penerbit : {data.penerbit} </div>
           <div className="mt-1 leading-relaxed"> Cover ISBN : {data.isbn} </div>
         </div>
       </div>
-      <div className="w-1/6 h-48 flex flex-col items-center justify-between py-10">
+      <div className="w-2/6 h-48 flex flex-col items-start justify-start ">
+        {startdate && enddate && (
+          <React.Fragment>
+            <div className="mt-1 leading-relaxed">
+              {' '}
+              Pinjam Dari : {moment(startdate).format('DD/MM/YYYY')}{' '}
+            </div>
+            <div className="mt-1 leading-relaxed">
+              {' '}
+              Tgl Kembali : {moment(enddate).format('DD/MM/YYYY')}{' '}
+            </div>
+            <div className="mt-1 leading-relaxed">
+              {' '}
+              Durasi : {moment(enddate).diff(moment(startdate), 'days')}
+              {' Hari'}
+            </div>
+          </React.Fragment>
+        )}
         <button
           onClick={() => onDetailClick()}
-          className="lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm h-10 px-5"
+          className="lg:mx-0 hover:underline bg-orange-500 text-white mt-10 rounded-sm h-10 px-5"
           style={{
             right: '2em',
           }}

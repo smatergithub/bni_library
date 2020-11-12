@@ -3,24 +3,29 @@ import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import ModalDetailBook from './modalDetailBook';
-import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
+import { getRepositoryApprovalList } from 'redux/action/repositorys';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
-import ModalEditApproval from './ModalEditApproval';
+import ModalDetailRepository from './ModalDetailRepositories';
+import ModalRepoAction from './ModalRepoAction';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [showModalEdit, setShowModalEdit] = useState(false);
+  const [repoConfirm, setRepoConfirm] = useState({
+    status: false,
+    id: null,
+    type: null,
+  });
   const [filterOptions, setFilterOptions] = React.useState({
     page: 0,
-    limit: 0,
+    limit: 5,
   });
 
-  const mappingDataSourceTransactionBookList = filterOptions => {
+  const mappingDataSourceRepoApproval = filterOptions => {
     setLoading(true);
     props
-      .ListTransactionBook(filterOptions)
+      .getRepositoryApprovalList(filterOptions)
       .then(res => {
         if (res) {
           setLoading(false);
@@ -32,7 +37,7 @@ function BookList(props) {
   };
 
   React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
+    mappingDataSourceRepoApproval(filterOptions);
   }, []);
 
   // const onPaginationUpdated = pagination => {
@@ -46,7 +51,7 @@ function BookList(props) {
     props.MakeReturnBook(id).then(res => {
       if (res.resp) {
         setLoading(false);
-        mappingDataSourceTransactionBookList(filterOptions);
+        mappingDataSourceRepoApproval(filterOptions);
         ToastSuccess(res.msg);
       } else {
         setLoading(false);
@@ -60,55 +65,62 @@ function BookList(props) {
     setShowModalDetail(true);
   };
 
-  const getEditTransactionBook = data => {
-    setDetailData(data);
-    setShowModalEdit(true);
-  };
-
   React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
+    mappingDataSourceRepoApproval(filterOptions);
   }, [filterOptions]);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.book.judul,
-        nama: rowData.user ? rowData.user.nama : '',
-        npp: rowData.user ? rowData.user.npp : '',
-        tahunTerbit: rowData.book.tahunTerbit,
-        quantity: rowData.quantity,
+        title: rowData.title,
+        name: rowData.name,
+        methodology: rowData.methodology,
+        university: rowData.university,
+        university: rowData.university,
+        strata: rowData.strata,
         actions: (
           <React.Fragment>
             <button
               className="bg-orange-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
               type="button"
               style={{ marginRight: '5px' }}
-              onClick={() => getEditTransactionBook(rowData)}
+              onClick={() => {
+                getDetailDataBook(rowData);
+                setShowModalDetail(true);
+              }}
             >
-              Edit
+              Detail
             </button>
             <button
               className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
               type="button"
               style={{ marginRight: '5px' }}
-              onClick={() => getDetailDataBook(rowData)}
+              onClick={() =>
+                setRepoConfirm({
+                  type: 'approve',
+                  id: rowData.id,
+                  status: true,
+                })
+              }
             >
-              Detail
+              Approve
             </button>
-            {rowData.status !== 'Dikembalikan' ? (
-              <button
-                className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-                onClick={() => returnBook(rowData.id)}
-                disabled={rowData.status === 'Dikembalikan' ? true : false}
-              >
-                Return Book
-              </button>
-            ) : (
-              '-'
-            )}
+
+            <button
+              className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() =>
+                setRepoConfirm({
+                  type: 'delete',
+                  id: rowData.id,
+                  status: true,
+                })
+              }
+            >
+              Hapus
+            </button>
           </React.Fragment>
         ),
       };
@@ -116,54 +128,48 @@ function BookList(props) {
   };
 
   if (loading) return null;
-  const { transactionBooks } = props;
+  const { repositories } = props;
   return (
     <React.Fragment>
-      {transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
+      {repositories.data !== undefined && repositories.data.length !== 0 ? (
         <TableDevExtreme
           columns={[
-            { name: 'code', title: 'Code' },
-            { name: 'judul', title: 'Judul' },
-            { name: 'tahunTerbit', title: 'Tahun Terbit' },
-            { name: 'quantity', title: 'Jumlah' },
-            { name: 'nama', title: 'Peminjam' },
-            { name: 'npp', title: 'NPP' },
-            { name: 'status', title: 'Status' },
+            { name: 'title', title: 'Judul' },
+            { name: 'name', title: 'Nama' },
+            { name: 'methodology', title: 'Methodology' },
+            { name: 'university', title: 'University' },
+            { name: 'faculty', title: 'Fakultas' },
+            { name: 'strata', title: 'Strata' },
             { name: 'actions', title: 'Action' },
           ]}
           columnExtensions={[
             {
-              columnName: 'code',
-              width: 150,
-              wordWrapEnabled: true,
-            },
-            {
-              columnName: 'judul',
-              width: 350,
+              columnName: 'title',
+              width: 250,
               wordWrapEnabled: false,
             },
             {
-              columnName: 'nama',
+              columnName: 'name',
               width: 150,
               wordWrapEnabled: true,
             },
             {
-              columnName: 'npp',
+              columnName: 'university',
               width: 150,
               wordWrapEnabled: true,
             },
             {
-              columnName: 'tahunTerbit',
+              columnName: 'faculty',
               width: 150,
               wordWrapEnabled: true,
             },
             {
-              columnName: 'quantity',
+              columnName: 'strata',
               width: 100,
               wordWrapEnabled: true,
             },
             {
-              columnName: 'status',
+              columnName: 'methodology',
               width: 150,
               wordWrapEnabled: true,
             },
@@ -173,12 +179,12 @@ function BookList(props) {
               wordWrapEnabled: true,
             },
           ]}
-          rows={adjustIntegrationTable(transactionBooks.data)}
+          rows={adjustIntegrationTable(repositories.data)}
         />
       ) : (
         <NoData msg="Belum ada request dari user!" />
       )}
-      <ModalDetailBook
+      <ModalDetailRepository
         showModalDetail={showModalDetail}
         detailData={detailData}
         onCloseModal={() => {
@@ -186,13 +192,24 @@ function BookList(props) {
           setShowModalDetail(false);
         }}
       />
-      <ModalEditApproval
-        showModalDetail={showModalEdit}
-        detailData={detailData}
-        typeApproval="editTransactionBook"
+      <ModalRepoAction
+        showModalDetail={repoConfirm.status}
+        id={repoConfirm.id}
+        type={repoConfirm.type}
+        callback={() => {
+          setRepoConfirm({
+            type: null,
+            id: null,
+            status: false,
+          });
+          mappingDataSourceRepoApproval(filterOptions);
+        }}
         onCloseModal={() => {
-          setDetailData({});
-          setShowModalEdit(false);
+          setRepoConfirm({
+            type: null,
+            id: null,
+            status: false,
+          });
         }}
       />
     </React.Fragment>
@@ -201,8 +218,8 @@ function BookList(props) {
 
 let mapStateToProps = state => {
   return {
-    transactionBooks: state.transactions.transactionBooks,
+    repositories: state.repositorys.approval,
   };
 };
 
-export default connect(mapStateToProps, { ListTransactionBook, MakeReturnBook })(BookList);
+export default connect(mapStateToProps, { getRepositoryApprovalList })(BookList);
