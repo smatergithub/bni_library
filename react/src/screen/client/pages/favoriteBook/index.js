@@ -1,13 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import ReactStars from 'react-rating-stars-component';
+import { connect } from 'react-redux';
 import { Modal } from '../../../../component';
+import { getfavorite } from 'redux/action/books';
 
 function FavoriteBooks(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let [books, setBooks] = React.useState([]);
   let { history } = props;
   function redirectToLogin() {
     history.push('/auth/login');
   }
+  React.useEffect(() => {
+    props.getfavorite().then(res => {
+      if (res.resp) {
+        setBooks(res.data);
+      } else {
+        setBooks([]);
+      }
+    });
+  }, []);
+  console.log(books);
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
 
   return (
@@ -30,97 +44,44 @@ function FavoriteBooks(props) {
               </h2>
 
               <div class=" text-center mt-8  mx-auto md:flex items-center justify-center">
-                <div class="md:w-2/6  bg-white  rounded-lg shadow-lg ">
-                  <div class="px-4 py-8">
-                    <div class="h-24">
-                      <img
-                        src={require('../../../../assets/building.png')}
-                        alt=""
-                        height="100"
-                        width="120"
-                        class="mx-auto"
-                      />
-                    </div>
-                    <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
-                      KANTOR PUSAT
-                    </h4>
-                    <p class="mt-2 text-sm text-gray-700 px-10">
-                      Kumpulan riset Mahasiswa yang melakukan dengan subjek di kantor pusat atau
-                      divisi yang ada dalam satuan BNI
-                    </p>
+                {books.length !== 0 &&
+                  books.ratingBook.map((data, key) => {
+                    let book = data.book;
+                    return (
+                      <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+                        <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
+                        <div className="h-16 pt-1 flex items-start justify-between">
+                          <h2 className="text-gray-800 text-lg">{book.judul}</h2>
+                        </div>
 
-                    {!isUserLogged ? (
-                      <Link to="/daftar-riset?kategori=pusat">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
-                          Selengkapnya{' '}
+                        <div className="pt-1 text-gray-900">{book.pengarang}</div>
+                        <div className="flex items-center justify-between">
+                          <ReactStars
+                            count={6}
+                            // isHalf={false}
+                            value={
+                              book.totalRead
+                                ? book.countRating
+                                  ? book.countRating / book.totalRead
+                                  : 0
+                                : 0
+                            }
+                            size={20}
+                            activeColor="#ffd700"
+                          />
                           <span>
-                            <i className={`fas fa-arrow-right ml-3`} />
+                            <i className="fas fa-eye text-yellow-700" />{' '}
+                            {book.totalRead ? book.totalRead : 0}
                           </span>
-                        </button>
-                      </Link>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          if (isUserLogged) {
-                            setShowModalDeletion(true);
-                          }
-                        }}
-                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                      >
-                        Selengkapnya{' '}
-                        <span>
-                          <i className={`fas fa-arrow-right ml-3`} />
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-
-                <div class="md:w-2/6  bg-white rounded-lg shadow-lg m-5">
-                  <div class="px-4 py-8">
-                    <div class="h-24">
-                      <img
-                        src={require('../../../../assets/town.png')}
-                        alt=""
-                        height="100"
-                        width="120"
-                        class="mx-auto"
-                      />
-                    </div>
-                    <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
-                      KANTOR WILAYAH
-                    </h4>
-
-                    <p class="mt-2 text-sm text-gray-700 px-10">
-                      Kumpulan riset mahasiswa yang melakukan penelitian dengan subjek dikantor
-                      wilayah atau ke unit yang ada dalam satuan BNI
-                    </p>
-                    {!isUserLogged ? (
-                      <Link to="/daftar-riset?kategori=wilayah">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
-                          Selengkapnya{' '}
-                          <span>
-                            <i className={`fas fa-arrow-right ml-3`} />
-                          </span>
-                        </button>
-                      </Link>
-                    ) : (
-                      <button
-                        onClick={() => {
-                          if (isUserLogged) {
-                            setShowModalDeletion(true);
-                          }
-                        }}
-                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                      >
-                        Selengkapnya{' '}
-                        <span>
-                          <i className={`fas fa-arrow-right ml-3`} />
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
+                        </div>
+                        <Link to={`/detail-book?id=${book.id}`}>
+                          <button className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                            Detail
+                          </button>
+                        </Link>
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </section>
@@ -140,4 +101,6 @@ function FavoriteBooks(props) {
   );
 }
 
-export default FavoriteBooks;
+export default connect(null, {
+  getfavorite,
+})(FavoriteBooks);
