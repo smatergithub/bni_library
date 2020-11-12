@@ -74,29 +74,37 @@ function BookList(props) {
         npp :rowData.user ? rowData.user.npp : '',
         tahunTerbit :rowData.book && rowData.book.tahunTerbit,
         quantity : rowData.quantity,
-        actions : (  <React.Fragment>
+        actions : ( <React.Fragment>
            <button
                 className="bg-orange-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => getEditTransactionBook(rowData)}
+               onClick={() => getEditTransactionBook(rowData)}
               >
                 Edit
                 </button>
               <button
-                className="bg-red-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => returnBook(rowData.id)}
-                disabled={rowData.status === 'Dikembalikan' ? true : false}
+                onClick={() => getDetailDataBook(rowData)}
               >
-                Return Book
-              </button>
-            ) : (
-              '-'
-            )
-          </React.Fragment>
-        ),
+                detail
+                </button>
+              {rowData.status !== 'Dikembalikan' ? (
+                <button
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                  onClick={() => returnBook(rowData.id)}
+                  disabled={rowData.status === 'Dikembalikan' ? true : false}
+                >
+                  Return Ebook
+                </button>
+              ) : (
+                  '-'
+                )}
+            </React.Fragment>)
       };
     });
   };
