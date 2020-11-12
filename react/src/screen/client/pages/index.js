@@ -20,6 +20,7 @@ import DetailResearch from './detailResearch';
 import AddNewResearch from './createNewRepo';
 import AddNewResearchSuccess from './researchSuccess';
 import FavoriteBooks from './favoriteBook';
+import FavoriteEbooks from './favoriteEbook';
 
 const routes = [
   {
@@ -45,7 +46,7 @@ const routes = [
   {
     path: '/favorite-ebook',
     exact: false,
-    main: <FavoriteBooks />,
+    main: <FavoriteEbooks />,
   },
   {
     path: '/riset',
