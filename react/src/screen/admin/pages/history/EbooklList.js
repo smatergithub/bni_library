@@ -72,7 +72,6 @@ function EbookList(props) {
     })
   }
 
-
   if (loading) return null;
 const { historyEbooks } = props;
   return (
