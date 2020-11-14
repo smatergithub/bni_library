@@ -75,12 +75,7 @@ const Ebooks = props => {
     return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.ebook && (
-          <Tooltip placement="topLeft" title={rowData.ebook.judul}>
-            {' '}
-            <div>{rowData.ebook.judul}</div>
-          </Tooltip>
-        ),
+        judul: rowData.ebook.judul,
         pengarang: rowData.ebook && rowData.ebook.pengarang,
         tahunTerbit: rowData.ebook && rowData.ebook.tahunTerbit,
         status: rowData.ebook && rowData.ebook.status,
@@ -163,7 +158,7 @@ const Ebooks = props => {
                 wordWrapEnabled: true,
               },
               {
-                columnName: 'nama',
+                columnName: 'namaPeminjam',
                 width: 150,
                 wordWrapEnabled: true,
               },
