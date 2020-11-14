@@ -66,12 +66,7 @@ const Books = props => {
     return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.book && (
-          <Tooltip placement="topLeft" title={rowData.book.judul}>
-            {' '}
-            <div>{rowData.book.judul}</div>
-          </Tooltip>
-        ),
+        judul: rowData.book.judul,
         pengarang: rowData.book && rowData.book.pengarang,
         tahunTerbit: rowData.book && rowData.book.tahunTerbit,
         status: rowData.book && rowData.book.status,
@@ -144,7 +139,7 @@ const Books = props => {
             columnExtensions={[
               {
                 columnName: "judul",
-                width: 300,
+                width: 320,
                 wordWrapEnabled: true
               },
               {
@@ -163,8 +158,8 @@ const Books = props => {
                 wordWrapEnabled: true,
               },
               {
-                columnName: 'nama',
-                width: 150,
+                columnName: 'namaPeminjam',
+                width: 200,
                 wordWrapEnabled: true,
               },
               {
