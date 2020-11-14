@@ -8,25 +8,29 @@ import ModalDetailEbook from "./ModalDetailEBook";
 import TableDevExtreme from "../../../../component/TableDevExtreme";
 import ModalEditApproval from "./ModalEditApproval";
 
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-  });
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [showModalEdit,setShowModalEdit] = useState(false);
 
-  const mappingDataSourceTransactionEbookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(2);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceTransactionEbookList = ()  => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .ListTransactionEbook(filterOptions)
+      .ListTransactionEbook(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+         setTotalCount(props.transactionEbooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -34,15 +38,10 @@ function EbookList(props) {
   };
 
   React.useEffect(() => {
-    mappingDataSourceTransactionEbookList(filterOptions);
-  }, []);
+    mappingDataSourceTransactionEbookList();
+  },[currentPage,totalCount]);
 
-  // const onPaginationUpdated = pagination => {
-  //   setFilterOptions({
-  //     page: pagination.page,
-  //     limit: pagination.limit,
-  //   });
-  // };
+
 
   const getEditTransactionEBook = (data) => {
     setDetailData(data);
@@ -56,13 +55,13 @@ function EbookList(props) {
 
 
   React.useEffect(() => {
-    mappingDataSourceTransactionEbookList(filterOptions);
-  }, [filterOptions]);
+    mappingDataSourceTransactionEbookList();
+  }, []);
   function returnEbook(id) {
     props.MakeReturnEbook(id).then(res => {
       if (res.resp) {
         setLoading(false);
-        mappingDataSourceTransactionEbookList(filterOptions);
+        mappingDataSourceTransactionEbookList();
         ToastSuccess(res.msg);
       } else {
         setLoading(false);
@@ -124,7 +123,7 @@ function EbookList(props) {
 
   return (
     <React.Fragment>
-      {transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
+      {!IsEmptyObject(transactionEbooks) && transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
          <TableDevExtreme
             columns={[
               { name: 'code', title: 'Code' },
@@ -178,6 +177,10 @@ function EbookList(props) {
               }
                ]}
             rows={adjustIntegrationTable(transactionEbooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
             />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
@@ -190,7 +193,7 @@ function EbookList(props) {
           setShowModalDetail(false);
         }}
       />
-      <ModalEditApproval
+     {showModalEdit &&  <ModalEditApproval
         showModalDetail={showModalEdit}
         detailData={detailData}
         typeApproval="editTransactionEBook"
@@ -198,7 +201,7 @@ function EbookList(props) {
           setDetailData({});
           setShowModalEdit(false);
         }}
-      />
+      />}
     </React.Fragment>
   );
 }

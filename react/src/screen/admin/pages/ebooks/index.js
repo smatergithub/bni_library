@@ -6,8 +6,7 @@ import { getEbooks, DeleteEbookAction } from '../../../../redux/action/ebooks';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
-
-import Table from '../../component/Table';
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 import ModalDetailEbook from './ModalDetailEBook';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 
@@ -16,20 +15,23 @@ const Ebooks = props => {
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-    judul: '',
-  });
 
-  const mappingDataSourceEbookList = filterOptions => {
+
+   const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceEbookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getEbooks(filterOptions)
+      .getEbooks(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.ebooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -56,7 +58,7 @@ const Ebooks = props => {
         } else {
           ToastError(response.msg);
         }
-        mappingDataSourceEbookList(filterOptions);
+        mappingDataSourceEbookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
@@ -64,12 +66,10 @@ const Ebooks = props => {
   };
 
   React.useEffect(() => {
-    mappingDataSourceEbookList(filterOptions);
-  }, []);
+    mappingDataSourceEbookList();
+  },[currentPage,totalCount]);
 
-  React.useEffect(() => {
-    mappingDataSourceEbookList(filterOptions);
-  }, [filterOptions]);
+
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -136,7 +136,7 @@ const Ebooks = props => {
           </Link>
         </div>
 
-        {ebooks.data !== undefined && ebooks.data.length !== 0 ? (
+        {!IsEmptyObject(ebooks) &&  ebooks.data !== undefined && ebooks.data.length !== 0 ? (
           <TableDevExtreme
             columns={[
               { name: 'judul', title: 'Judul' },
@@ -179,17 +179,12 @@ const Ebooks = props => {
               },
             ]}
             rows={adjustIntegrationTable(ebooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
           />
         ) : (
-          // <Table
-          //   columns={columns}
-          //   source={ebooks}
-          //   isLoading={loading}
-          //   limit={filterOptions.limit}
-          //   page={filterOptions.page}
-          //   onPaginationUpdated={onPaginationUpdated}
-          //   searchDefaultValue={filterOptions.judul}
-          // />
           <NoData msg="Data belum tersedia !" />
         )}
       </main>

@@ -369,12 +369,18 @@ module.exports = {
           return res.status(404).send({ message: 'Ebook not found' });
         }
         ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
-          listBorrow[0].destroy().then(() => {
-            ebook
-              .destroy()
-              .then(() => res.status(200).send({ message: 'succesfully delete' }))
-              .catch(error => res.status(404).send(error));
-          });
+           if(listBorrow[0].dataValues.transactionEbookId !== null && listBorrow[0].dataValues.transactionEbookId !== undefined){
+               listBorrow[0].destroy().then(() => {
+                  ebook
+                    .destroy()
+                    .then(() => res.status(200).send({ message: 'succesfully delete' }))
+                    .catch(error => res.status(404).send(error));
+                });
+          }
+          else{
+            res.status(404).send({ message: 'buku ini sedang dipakai di transaksi lainnya' })
+          }
+
         });
       })
       .catch(error => res.status(500).send(error));

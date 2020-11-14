@@ -43,3 +43,10 @@ export const DASHBOARD = 'DASHBOARD';
 
 export const WILAYAHS = 'WILAYAHS';
 export const DETAIL_WILAYAH = 'DETAIL_WILAYAH';
+
+
+// ===========> type for history action here <===========
+
+export const HISTORY_TRANSACTION_BOOKS = 'HISTORY_TRANSACTION_BOOKS';
+export const HISTORY_TRANSACTION_EBOOKS = 'HISTORY_TRANSACTION_EBOOKS';
+

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Tooltip, Button } from 'antd';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
-import Table from '../../component/Table';
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
@@ -14,20 +14,22 @@ const Books = props => {
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-    judul: '',
-  });
 
-  const mappingDataSourceBookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceBookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getBooks(filterOptions)
+      .getBooks(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.books.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -49,36 +51,16 @@ const Books = props => {
     props
       .DeleteBookAction(detailData.id)
       .then(response => {
-        mappingDataSourceBookList(filterOptions);
+        mappingDataSourceBookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
       .catch(err => console.log('err', err));
   };
 
-  React.useEffect(() => {
-    mappingDataSourceBookList(filterOptions);
-  }, []);
-
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    mappingDataSourceBookList(filterOptions);
-  }, [filterOptions]);
+  useEffect(() => {
+    mappingDataSourceBookList();
+  },[currentPage,totalCount]);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -132,6 +114,7 @@ const Books = props => {
 
   if (loading) return null;
   const { books } = props;
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -146,8 +129,9 @@ const Books = props => {
             </button>
           </Link>
         </div>
-        {books.data !== undefined && books.data.length !== 0 ? (
-          <TableDevExtreme
+        {!IsEmptyObject(books) && books.data !== undefined && books.data.length !== 0 ? (
+          <React.Fragment>
+            <TableDevExtreme
             columns={[
               { name: 'judul', title: 'Judul' },
               { name: 'pengarang', title: 'Pengarang' },
@@ -159,9 +143,9 @@ const Books = props => {
             ]}
             columnExtensions={[
               {
-                columnName: 'judul',
-                width: 250,
-                wordWrapEnabled: false,
+                columnName: "judul",
+                width: 300,
+                wordWrapEnabled: true
               },
               {
                 columnName: 'pengarang',
@@ -195,13 +179,12 @@ const Books = props => {
               },
             ]}
             rows={adjustIntegrationTable(books.data)}
-            // source={books}
-            // isLoading={loading}
-            // limit={filterOptions.limit}
-            // page={filterOptions.page}
-            // onPaginationUpdated={onPaginationUpdated}
-            // searchDefaultValue={filterOptions.judul}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
           />
+          </React.Fragment>
         ) : (
           <NoData />
         )}

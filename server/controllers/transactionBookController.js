@@ -177,65 +177,6 @@ module.exports = {
       })
   },
 
-   exportListHistoryBook : async (req,res) => {
-    return TransactionBook.findAll({
-        order: [
-          ['createdAt', 'DESC'],
-        ],
-        where: { status: "Dikembalikan" },
-        include: ['book', 'user']
-      }).then(response => {
-      let historyData = []
-      historyData = response.map(item => {
-        const history = {
-          code: item.dataValues.code,
-          transDate: item.dataValues.transDate,
-          status: item.dataValues.status,
-          note: item.dataValues.note,
-          // quantity: item.dataValues.quantity,
-          // startDate: item.dataValues.startDate,
-          // kategori: item.dataValues.book.dataValues.kategori,
-          // judul: item.dataValues.book.dataValues.kategori,
-          // stockBuku: item.dataValues.book.dataValues.stockBuku,
-          // countRating: item.dataValues.book.dataValues.stockBuku,
-          // npp: item.dataValues.user.dataValues.npp,
-          // nama: item.dataValues.user.dataValues.nama,
-          // phoneNumber: item.dataValues.user.dataValues.phoneNumber,
-          // tanggalLahir: item.dataValues.user.dataValues.tanggalLahir,
-          // wilayah: item.dataValues.user.dataValues.wilayah,
-          // singkatan: item.dataValues.user.dataValues.singkatan,
-          // jabatan: item.dataValues.user.dataValues.jabatan,
-          // alamat: item.dataValues.user.dataValues.alamat,
-          // email: item.dataValues.user.dataValues.email,
-        }
-        return history
-      })
-
-
-      console.log("test",historyData)
-
-      let headingColumnIndex = 1;
-      historyData.forEach((obj) => {
-      Object.keys(obj).forEach((key) => {
-           ws.cell(1, headingColumnIndex++)
-              .string(key)
-      });
-    });
-      //Write Data in Excel file
-      let rowIndex = 2;
-      historyData.forEach( record => {
-          let columnIndex = 1;
-          Object.keys(record ).forEach(columnName =>{
-              ws.cell(rowIndex,columnIndex++)
-                  .string(record [columnName])
-          });
-          rowIndex++;
-      });
-       wb.write('list_history_transactionBook.xlsx', res)
-    })
-    .catch(error => res.status(404).send(error));
-  },
-
 
   // pinjam buku
   borrowBook: async (req, res) => {
@@ -397,8 +338,83 @@ module.exports = {
         res.status(404).send(err);
       });
 
+    ListBorrowBook.findAll({where : {transactionBookId : transactionId}}).then(listBorrowBook => {
+       listBorrowBook[0].update({
+         userId : null
+       })
+        .catch(err => {
+            res.status(404).send(err);
+          });
+    })
+
     return res.status(200).json({
       message: 'Succesfully Return Book',
     });
   },
+
+
+
+   exportListHistoryBook : async (req,res) => {
+    return TransactionBook.findAll({
+       order: [
+          ['createdAt', 'DESC'],
+        ],
+        where: { status: "Dikembalikan" },
+        include: ['book', 'user']
+      }).then(user => {
+      let userDisplay = []
+      user.forEach(item => {
+        const userData = {
+          ode: item.dataValues.code,
+          transDate: item.dataValues.transDate,
+          status: item.dataValues.status,
+          note: item.dataValues.note,
+          quantity: item.dataValues.quantity,
+          startDate: item.dataValues.startDate,
+          kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
+          judul: item.dataValues.book && item.dataValues.book.dataValues.judul,
+          stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
+          countRating: item.dataValues.book && item.dataValues.book.dataValues.countRating,
+          npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
+          nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
+          phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
+          tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
+          wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
+          singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
+          jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
+          alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
+          email: item.dataValues.user && item.dataValues.user.dataValues.email,
+        }
+        userDisplay.push(userData)
+      })
+
+      // header
+      let headingColumnIndex = 1;
+      Object.keys(userDisplay[0]).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+    });
+
+      //Write Data in Excel file
+      let rowIndex = 2;
+      userDisplay.forEach( record => {
+          let columnIndex = 1;
+          Object.keys(record ).forEach(columnName =>{
+              ws.cell(rowIndex,columnIndex++)
+                .string(record[columnName] == null ? "" : record[columnName].toString())
+          });
+          rowIndex++;
+      });
+
+      wb.write('list_history_book.xlsx',res)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(404).json({message : "masuk sini"})
+    })
+
+  }
 };
+
+
+

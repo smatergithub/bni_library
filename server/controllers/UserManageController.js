@@ -138,26 +138,30 @@ module.exports = {
         userDisplay.push(userData)
       })
 
+      // header
       let headingColumnIndex = 1;
-      userDisplay.forEach((obj) => {
-      Object.keys(obj).forEach((key) => {
+      Object.keys(userDisplay[0]).forEach((key) => {
            ws.cell(1, headingColumnIndex++)
               .string(key)
-      });
     });
+
       //Write Data in Excel file
       let rowIndex = 2;
       userDisplay.forEach( record => {
           let columnIndex = 1;
           Object.keys(record ).forEach(columnName =>{
               ws.cell(rowIndex,columnIndex++)
-                  .string(record [columnName])
+                .string(record[columnName] == null ? "" : record[columnName].toString())
           });
           rowIndex++;
       });
-      wb.write('list_user.xlsx', res)
+
+      wb.write('list_user.xlsx',res)
     })
-    .catch(error => res.status(404).send(error));
+    .catch((err) => {
+      console.log(err)
+      res.status(404).json({message : "masuk sini"})
+    })
 
   }
 };

@@ -4,27 +4,29 @@ import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import TableApproval from '../../component/TableApproval';
 import TableDevExtreme from "../../../../component/TableDevExtreme";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 import { getAllBookHistory } from '../../../../redux/action/history';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
-  const [historyBooks, setHistoryBooks] = React.useState(null);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
 
-  const getAllHistoryBook = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+
+  const getAllHistoryBook = () => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getAllBookHistory(filterOptions)
+      .getAllBookHistory(pagination)
       .then(res => {
-        if (res) {
-          setHistoryBooks(res.data);
-
+         setTotalCount(props.historyBooks.count);
           setLoading(false);
-        }
       })
       .catch(err => {
         console.log('error', err);
@@ -32,31 +34,9 @@ function BookList(props) {
   };
 
   React.useEffect(() => {
-    getAllHistoryBook(filterOptions);
-  }, []);
+    getAllHistoryBook();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
-  function returnBook(id) {
-    props.MakeReturnBook(id).then(res => {
-      if (res.resp) {
-        setLoading(false);
-        getAllHistoryBook(filterOptions);
-        ToastSuccess(res.msg);
-      } else {
-        setLoading(false);
-        ToastError(res.msg);
-      }
-    });
-  }
-
-  React.useEffect(() => {
-    getAllHistoryBook(filterOptions);
-  }, [filterOptions]);
 
 
     const adjustIntegrationTable = (dataSource) => {
@@ -64,10 +44,10 @@ function BookList(props) {
 
       return {
         ...rowData,
-        judul :rowData.book.judul,
+        judul :rowData.book && rowData.book.judul,
         nama :rowData.user ? rowData.user.nama : '',
         npp :rowData.user ? rowData.user.npp : '',
-        tahunTerbit : rowData.book.tahunTerbit,
+        tahunTerbit : rowData.book && rowData.book.tahunTerbit,
         quantity : rowData.quantity,
       }
     })
@@ -75,10 +55,11 @@ function BookList(props) {
 
 
   if (loading) return null;
+   const { historyBooks } = props;
   return (
     <React.Fragment>
 
-      {historyBooks !== null && historyBooks !== undefined && historyBooks.data.length !== 0 ? (
+      {!IsEmptyObject(historyBooks) && historyBooks.data !== undefined && historyBooks.data.length !== 0 ? (
          <TableDevExtreme
             columns={[
               { name: 'code', title: 'Code' },
@@ -127,6 +108,10 @@ function BookList(props) {
               }
                ]}
             rows={adjustIntegrationTable(historyBooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
             />
       ) : (
           <NoData msg="Belum ada request dari user!" />
@@ -135,4 +120,11 @@ function BookList(props) {
   );
 }
 
-export default connect(null, { getAllBookHistory })(BookList);
+let mapStateToProps = state => {
+  return {
+    historyBooks: state.historys.historyBooks,
+  };
+};
+
+
+export default connect(mapStateToProps, { getAllBookHistory })(BookList);
