@@ -126,20 +126,8 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 </div>
               </React.Fragment>
             )}
-            <div className="relative w-full mb-3">
-              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Note</label>
-              <input
-                ref={register()}
-                // defaultValue={user.nama}
-                type="text"
-                name="note"
-                className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
-                placeholder="note"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
-            </div>
+
+            <div className="text-orange-500">Maksimal durasi peminjaman adalah 14 hari</div>
             <div className="mt-2">
               <label className="block text-sm text-gray-600" htmlFor="cus_email">
                 Dari Tanggal
@@ -157,8 +145,31 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 Sampai Tanggal
               </label>
               <Space direction="vertical">
-                <DatePicker onChange={onChangeEndDate} disabledDate={date => date < moment()} />
+                <DatePicker
+                  onChange={onChangeEndDate}
+                  disabledDate={date =>
+                    date < moment(startDate).add(1, 'days') ||
+                    date >
+                      moment(startDate)
+                        .add(14, 'days')
+                        .endOf('days')
+                  }
+                />
               </Space>
+            </div>
+            <div className="relative w-full mb-3 mt-8">
+              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Note</label>
+              <input
+                ref={register()}
+                // defaultValue={user.nama}
+                type="text"
+                name="note"
+                className="px-2 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none   w-full"
+                placeholder="note"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
             </div>
             <div className="mt-6">
               <button

@@ -4,7 +4,7 @@ function Information({ user, changePages }) {
   React.useEffect(() => {
     if (user && user.mapUrl) {
       setTimeout(() => {
-        if (document.getElementsByTagName('iframe')[0].style) {
+        if (document.getElementsByTagName('iframe')[0]) {
           document.getElementsByTagName('iframe')[0].style.width = '100%';
           document.getElementsByTagName('iframe')[0].style.height = '150';
         }
