@@ -311,6 +311,15 @@ module.exports = {
         res.status(404).send(err);
       });
 
+    ListBorrowEbook.findAll({where : {transactionEbookId : transactionId}}).then(listBorrowEbook => {
+       listBorrowEbook[0].update({
+         userId : null
+       })
+        .catch(err => {
+            res.status(404).send(err);
+          });
+    })
+
     return res.status(200).json({
       message: 'Succesfully Return Ebook',
     });
