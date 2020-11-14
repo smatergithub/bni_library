@@ -18,19 +18,17 @@ import {
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-  root : {
-    backgroundColor :'black',
-    color : 'white'
-  }
+  root: {
+    backgroundColor: 'black',
+    color: 'white',
+  },
 });
 
-
-const TableDevExtreme = (props) => {
+const TableDevExtreme = props => {
   const [currentPage] = useState(props.currentPage);
   const [pageSize] = useState(props.pageSize);
 
-
-  const {rows,columns, columnExtensions = []} = props;
+  const { rows, columns, columnExtensions = [] } = props;
   const classes = useStyles();
   return (
     <div className="min-w-full bg-white">
@@ -39,18 +37,16 @@ const TableDevExtreme = (props) => {
         <SortingState />
         <IntegratedFiltering />
         <IntegratedSorting />
-         <PagingState
+        <PagingState
           currentPage={currentPage}
           onCurrentPageChange={props.onCurrentPageChange}
           pageSize={pageSize}
         />
-         <CustomPaging
-          totalCount={props.totalCount}
-        />
+        <CustomPaging totalCount={props.totalCount} />
         {/* <IntegratedPaging /> */}
-        <Table  columnExtensions={columnExtensions} className={classes.root} />
-        <TableHeaderRow  showSortingControls className={classes.root} />
-       <PagingPanel />
+        <Table columnExtensions={columnExtensions} className={classes.root} />
+        <TableHeaderRow showSortingControls className={classes.root} />
+        <PagingPanel />
         <Toolbar />
         <SearchPanel />
       </Grid>

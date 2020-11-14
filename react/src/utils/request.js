@@ -8,19 +8,18 @@ const defaultResponseOptions = {
 // );
 
 const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
-  trackPromise(
-    axios(requestOptions)
-      .then(response => (responseOptions.fullResponse ? response : response.data))
-      .catch(error => {
-        if (error.response.status === 401) {
-          //place your reentry code
-          window.location.replace('/auth/login');
-          localStorage.clear('bni_UserRole');
-        } else {
-          throw responseOptions.fullResponse ? error.response : error.response.data;
-        }
-      })
-  );
+  axios(requestOptions)
+    .then(response => (responseOptions.fullResponse ? response : response.data))
+    .catch(error => {
+      if (error.response.status === 401 || error.response.status === 403) {
+        //place your reentry code
+        window.location.replace('/auth/login');
+        localStorage.clear('bni_UserRole');
+      } else {
+        throw responseOptions.fullResponse ? error.response : error.response.data;
+      }
+    });
+
 export default class Request {
   static get(url, params) {
     const requestOptions = { method: 'get', url };
@@ -47,7 +46,7 @@ export default class Request {
       headers: {
         'x-access-token': localStorage.getItem('bni_jwtToken'),
       },
-       responseType: "blob",
+      responseType: 'blob',
     };
     return makeAxiosRequest(requestOptions);
   }
@@ -73,7 +72,6 @@ export default class Request {
     return makeAxiosRequest(requestOptions, options);
   }
 
-
   static postFileWithAuth(url, data, options, isFormData) {
     const requestOptions = {
       method: 'post',
@@ -83,7 +81,7 @@ export default class Request {
         'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
         'x-access-token': localStorage.getItem('bni_jwtToken'),
       },
-      responseType: "blob",
+      responseType: 'blob',
     };
     return makeAxiosRequest(requestOptions, options);
   }
