@@ -193,7 +193,7 @@ function EbookList(props) {
           setShowModalDetail(false);
         }}
       />
-      <ModalEditApproval
+     {showModalEdit &&  <ModalEditApproval
         showModalDetail={showModalEdit}
         detailData={detailData}
         typeApproval="editTransactionEBook"
@@ -201,7 +201,7 @@ function EbookList(props) {
           setDetailData({});
           setShowModalEdit(false);
         }}
-      />
+      />}
     </React.Fragment>
   );
 }

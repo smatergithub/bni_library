@@ -184,7 +184,7 @@ function BookList(props) {
           setShowModalDetail(false);
         }}
       />
-      <ModalEditApproval
+      {showModalEdit ? <ModalEditApproval
         showModalDetail={showModalEdit}
         detailData={detailData}
         typeApproval="editTransactionBook"
@@ -192,7 +192,7 @@ function BookList(props) {
           setDetailData({});
           setShowModalEdit(false);
         }}
-      />
+      /> : null}
     </React.Fragment>
   );
 }

@@ -6,7 +6,10 @@ import Modal from '../../../../component/Modal';
 import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
 import { EditTransactionBook, EditTransactionEbook } from '../../../../redux/action/transaction';
+
+
 const dateFormat = 'DD-MM-YYYY';
+
 const ModalEditApproval = props => {
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
@@ -18,10 +21,13 @@ const ModalEditApproval = props => {
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal, typeApproval } = props;
 
   function onSubmit(data) {
+    let request = {};
     if (typeApproval === 'editTransactionBook') {
-      data.id = detailData.id;
-      data.startDate = startDate;
-      props.EditTransactionBook(detailData.id, data).then(res => {
+      request.id = detailData.id;
+      request.startDate = startDate;
+      request.endDate = endDate;
+
+      props.EditTransactionBook(detailData.id, request).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
           onCloseModal();
@@ -31,8 +37,10 @@ const ModalEditApproval = props => {
         }
       });
     } else if (typeApproval === 'editTransactionEBook') {
-      data.id = detailData.id;
-      props.EditTransactionEbook(data.id, data).then(res => {
+      request.id = detailData.id;
+      request.startDate = startDate;
+      request.endDate = endDate;
+      props.EditTransactionEbook(data.id, request).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
           onCloseModal();
@@ -46,11 +54,13 @@ const ModalEditApproval = props => {
 
   function onChangeStartDate(date, dateString) {
     setStartDate(dateString);
+    debugger;
   }
 
   function onChangeEndDate(date, dateString) {
     setEndDate(dateString);
   }
+
   return (
     <>
       <Modal
@@ -68,7 +78,7 @@ const ModalEditApproval = props => {
             style={{
               height: 45,
             }}
-            defaultValue={moment('15/01/2010', dateFormat)}
+            defaultValue={moment(detailData.startDate, dateFormat)}
             format={dateFormat}
             onChange={onChangeStartDate}
           />
@@ -83,8 +93,7 @@ const ModalEditApproval = props => {
             style={{
               height: 45,
             }}
-            defaultValue={moment('15/01/2010', dateFormat)}
-            format={dateFormat}
+           defaultValue={moment(detailData.endDate, dateFormat)} format={dateFormat}
             onChange={onChangeEndDate}
           />
           <div className="text-red-700">{errors.endDate && errors.endDate.message}</div>
