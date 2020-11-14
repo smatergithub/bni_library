@@ -74,4 +74,8 @@ export default class UsersApi {
     const url = `/api/updatePassword${query}`;
     return Request.post(url, userData);
   }
+  static contactUs(formData) {
+    const url = `/api/contact-us`;
+    return Request.post(url, formData);
+  }
 }

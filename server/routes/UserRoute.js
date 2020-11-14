@@ -27,6 +27,7 @@ router.get('/ebook/preview/:id', EbookController.getEbookPreviewById);
 
 router.get('/categoryEbook', DataSourceFilterEbookController.getCategory);
 router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);
+router.post('/contact-us', AuthenticationController.contactUs);
 
 router.post(
   '/register',

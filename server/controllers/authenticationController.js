@@ -226,4 +226,14 @@ module.exports = {
     res.cookie('access_token', { maxAge: 0 });
     res.status(200).send({ message: 'success' });
   },
+  contactUs: async (req, res) => {
+    // if (process.env.NODE_ENV !== 'development') {
+    send.sendFeedback({
+      name: req.body.name,
+      email: req.body.email,
+      message: req.body.message,
+    });
+    // }
+    res.status(200).json({ message: 'success' });
+  },
 };

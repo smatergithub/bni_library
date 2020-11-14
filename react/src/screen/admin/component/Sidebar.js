@@ -65,7 +65,7 @@ function Sidebar({ url, createNewBook }) {
   const [selectedMenu, setSelectedMenu] = useState(url);
 
   return (
-    <div className="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
+    <div className="relative bg-sidebar  w-64 hidden sm:block shadow-xl">
       <div className="p-6">
         <a className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
         <button

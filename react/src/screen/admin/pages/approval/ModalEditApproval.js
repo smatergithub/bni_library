@@ -7,7 +7,6 @@ import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
 import { EditTransactionBook, EditTransactionEbook } from '../../../../redux/action/transaction';
 
-
 const dateFormat = 'DD-MM-YYYY';
 
 const ModalEditApproval = props => {
@@ -19,14 +18,13 @@ const ModalEditApproval = props => {
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal, typeApproval } = props;
-
+  console.log(detailData);
   function onSubmit(data) {
     let request = {};
     if (typeApproval === 'editTransactionBook') {
       request.id = detailData.id;
-      request.startDate = startDate;
-      request.endDate = endDate;
-
+      request.startDate = startDate ? startDate : detailData.startDate;
+      request.endDate = endDate ? endDate : detailData.endDate;
       props.EditTransactionBook(detailData.id, request).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -38,8 +36,8 @@ const ModalEditApproval = props => {
       });
     } else if (typeApproval === 'editTransactionEBook') {
       request.id = detailData.id;
-      request.startDate = startDate;
-      request.endDate = endDate;
+      request.startDate = startDate ? startDate : detailData.startDate;
+      request.endDate = endDate ? endDate : detailData.endDate;
       props.EditTransactionEbook(data.id, request).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -54,7 +52,6 @@ const ModalEditApproval = props => {
 
   function onChangeStartDate(date, dateString) {
     setStartDate(dateString);
-    debugger;
   }
 
   function onChangeEndDate(date, dateString) {
@@ -70,6 +67,7 @@ const ModalEditApproval = props => {
         handleSubmit={handleSubmitModal}
         usingAnotherButton={true}
       >
+        <div className="text-yellow-800">Maksimal Peminjaman item ada 14 hari.</div>
         <div className="mt-2">
           <label className="block text-sm text-gray-600" htmlFor="cus_email">
             Start Date
@@ -78,8 +76,8 @@ const ModalEditApproval = props => {
             style={{
               height: 45,
             }}
-            defaultValue={moment(detailData.startDate, dateFormat)}
-            format={dateFormat}
+            defaultValue={detailData.startDate ? moment(detailData.startDate) : moment()}
+            disabledDate={date => date < moment()}
             onChange={onChangeStartDate}
           />
 
@@ -93,7 +91,14 @@ const ModalEditApproval = props => {
             style={{
               height: 45,
             }}
-           defaultValue={moment(detailData.endDate, dateFormat)} format={dateFormat}
+            defaultValue={moment(detailData.endDate)}
+            disabledDate={date =>
+              date < moment(startDate ? startDate : detailData.startDate).add(1, 'days') ||
+              date >
+                moment(startDate ? startDate : detailData.startDate)
+                  .add(14, 'days')
+                  .endOf('days')
+            }
             onChange={onChangeEndDate}
           />
           <div className="text-red-700">{errors.endDate && errors.endDate.message}</div>

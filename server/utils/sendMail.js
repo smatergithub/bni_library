@@ -46,4 +46,22 @@ module.exports = {
         console.log(err);
       });
   },
+  async sendFeedback(payload) {
+    const template = fs.readFileSync('./server/utils/feedback.html', 'utf8');
+    const transporter = await nodemailer.createTransport(config);
+    const mail = {
+      to: 'darvinsinaga12@gmail.com',
+      from: 'e.bni.library@gmail.com',
+      subject: '[BNI LIBRARY] - Feedback',
+      html: mustache.render(unescape(template), { ...payload }),
+    };
+    transporter
+      .sendMail(mail)
+      .then(res => {
+        console.log('======');
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  },
 };

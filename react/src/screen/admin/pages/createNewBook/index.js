@@ -19,13 +19,13 @@ function CreateNewBook(props) {
   let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
-  let [book, setBook] = React.useState(null);
+  let [books, setBooks] = React.useState(null);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Weeding';
+      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Wedding';
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
@@ -72,9 +72,12 @@ function CreateNewBook(props) {
     if (id) {
       props.getDetailBook(id).then(res => {
         if (res.resp) {
-          setBook(res.data);
+          setBooks(res.data);
+          setStatusValue(res.data.book.status);
+          setConditionValue(res.data.book.condition);
+          setPublishDate(res.data.book.tahunTerbit);
         } else {
-          setBook(null);
+          setBooks(null);
         }
       });
     }
@@ -83,10 +86,11 @@ function CreateNewBook(props) {
     setPublishDate(dateString);
   }
   function onChangeCondition(value) {
-    setConditionValue(value[0] ? 'Baik' : 'Weeding');
+    console.log(value);
+    setConditionValue(value[0]);
   }
   function onChangeStatus(value) {
-    setStatusValue(value[0] ? 'Ada' : 'Kosong');
+    setStatusValue(value[0]);
   }
   let uploadPdf = e => {
     e.preventDefault();
@@ -115,8 +119,10 @@ function CreateNewBook(props) {
   ];
   const optionsCondition = [
     { label: 'Baik', value: 'Baik' },
-    { label: 'Weeding', value: 'Weeding' },
+    { label: 'Wedding', value: 'Wedding' },
   ];
+  if (!books && id) return null;
+  let book = id ? books.book : books;
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
@@ -152,7 +158,7 @@ function CreateNewBook(props) {
                     Judul
                   </label>
                   <input
-                    className="w-full px-5 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                    className="w-full px-2 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
                     type="text"
                     name="judul"
                     defaultValue={book ? book.judul : ''}
@@ -170,7 +176,7 @@ function CreateNewBook(props) {
                   <input
                     name="pengarang"
                     defaultValue={book ? book.pengarang : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -187,7 +193,7 @@ function CreateNewBook(props) {
                   <input
                     name="kategori"
                     defaultValue={book ? book.kategori : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -203,7 +209,7 @@ function CreateNewBook(props) {
                   <input
                     name="stockBuku"
                     defaultValue={book ? book.stockBuku : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="number"
                     ref={register({
                       required: 'Field tidak boleh kosong',
@@ -220,7 +226,7 @@ function CreateNewBook(props) {
                   <input
                     name="bahasa"
                     defaultValue={book ? book.bahasa : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
                     ref={register({
@@ -237,7 +243,7 @@ function CreateNewBook(props) {
                   <input
                     name="isbn"
                     defaultValue={book ? book.isbn : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
                     ref={register({
@@ -254,7 +260,7 @@ function CreateNewBook(props) {
                   <input
                     name="penerbit"
                     defaultValue={book ? book.penerbit : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
                     ref={register({
@@ -271,7 +277,7 @@ function CreateNewBook(props) {
                   <input
                     name="lokasiPerpustakaan"
                     defaultValue={book ? book.lokasiPerpustakaan : ''}
-                    className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     type="text"
                     required=""
                     ref={register({
@@ -290,6 +296,7 @@ function CreateNewBook(props) {
                   <Checkbox.Group
                     options={optionsStatus}
                     value={statusValue}
+                    defaultValue={['Weeding']}
                     onChange={onChangeStatus}
                   />
                   <div className="text-red-700"></div>
@@ -310,7 +317,7 @@ function CreateNewBook(props) {
                     Tahun Terbit
                   </label>
                   <Space direction="vertical">
-                    <DatePicker onChange={onChange} />
+                    <DatePicker onChange={onChange} placeholder={publishDate} />
                   </Space>
                 </div>
 
@@ -336,7 +343,7 @@ function CreateNewBook(props) {
                   <textarea
                     name="description"
                     defaultValue={book ? book.description : ''}
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    className="w-full px-2 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                     rows="6"
                     ref={register({
                       required: 'Field tidak boleh kosong',
