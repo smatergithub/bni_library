@@ -30,7 +30,7 @@ const Sidebar = ({ url }) => {
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   return (
     <div className="relative xs:h-20   md:h-screen w-64  sm:block">
-      <nav className="text-white xs:flex md:block   text-base font-semibold">
+      <nav className="text-white xs:flex md:block   text-base font-semibold nav-item-profile-active">
         {isAdmin &&
           routes.map((rt, key) => {
             if (rt.type !== 'user') {
@@ -40,7 +40,7 @@ const Sidebar = ({ url }) => {
                     className={
                       url === rt.params
                         ? 'flex items-center  text-white xs:py-4 xs:pl-6 md:py-4 md:pl-6  nav-item-profile-active nav-item-profile'
-                        : 'flex items-center   text-gray-800 hover:text-white  nav-item-profile xs:py-4 xs:pl-6 md:py-4 md:pl-6'
+                        : 'flex items-center   text-gray-800 hover:text-white  nav-item-profile-active xs:py-4 xs:pl-6 md:py-4 md:pl-6'
                     }
                   >
                     <i className={`${rt.icon} mr-3`} />

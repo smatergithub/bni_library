@@ -10,7 +10,7 @@ import {
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
-import TableDevExtreme from "../../../../component/TableDevExtreme";
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 import CreateEditWilayahModal from './createEditWilayahModal';
 
 const Wilayah = props => {
@@ -20,7 +20,7 @@ const Wilayah = props => {
   const [detailData, setDetailData] = React.useState({});
 
   const [totalCount, setTotalCount] = React.useState(0);
-  const [pageSize] =React.useState(5);
+  const [pageSize] = React.useState(5);
   const [currentPage, setCurrentPage] = React.useState(0);
 
   let exportFile = React.useRef(null);
@@ -28,15 +28,15 @@ const Wilayah = props => {
   const retrieveDataWilayah = () => {
     setLoading(true);
     const pagination = {
-      page : currentPage + 1,
-      limit : pageSize
-    }
+      page: currentPage + 1,
+      limit: pageSize,
+    };
     props
       .getWilayah(pagination)
       .then(res => {
         if (res) {
-           setTotalCount(props.wilayah.count);
-        setLoading(false);
+          setTotalCount(props.wilayah.count);
+          setLoading(false);
         }
       })
       .catch(err => {
@@ -46,7 +46,7 @@ const Wilayah = props => {
 
   React.useEffect(() => {
     retrieveDataWilayah();
-  },[currentPage,totalCount]);
+  }, [currentPage, totalCount]);
 
   const uploadPdf = e => {
     e.preventDefault();
@@ -98,42 +98,49 @@ const Wilayah = props => {
   if (loading) return null;
   const { wilayah } = props;
 
-
-    const adjustIntegrationTable = (dataSource) => {
+  const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
-        actions : (   <React.Fragment>
-              <button
-                className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                style={{ marginRight: '5px' }}
-                onClick={() => getDetailWilayah(rowData.id, 'edit')}
-              >
-                edit
-              </button>
-              <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                onClick={() => getDetailWilayah(rowData.id, 'delete')}
-              >
-                Delete
-              </button>{' '}
-            </React.Fragment>)
-      }
-    })
-  }
-
+        actions: (
+          <React.Fragment>
+            <button
+              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() => getDetailWilayah(rowData.id, 'edit')}
+            >
+              Edit
+            </button>
+            <button
+              className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              onClick={() => getDetailWilayah(rowData.id, 'delete')}
+            >
+              Delete
+            </button>{' '}
+          </React.Fragment>
+        ),
+      };
+    });
+  };
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1>
-        <div className="absolute" style={{ right: '2em', top: '5em',display:'flex',flexDirection:'row',width:'392px' }}>
-
-            <button
-            style={{marginRight:'42px'}}
+        <div
+          className="absolute"
+          style={{
+            right: '2em',
+            top: '5em',
+            display: 'flex',
+            flexDirection: 'row',
+            width: '392px',
+          }}
+        >
+          <button
+            style={{ marginRight: '42px' }}
             type="button"
             className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => {
@@ -144,27 +151,29 @@ const Wilayah = props => {
             <i className="fas fa-plus mr-3" /> Tambah Wilayah
           </button>
           <input
-                  onChange={e => uploadPdf(e)}
-                  type="file"
-                  style={{
-                    display: 'none',
-                  }}
-                  ref={exportFile}
-                  className=""
-                  accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  aria-label="Email"
-                />
+            onChange={e => uploadPdf(e)}
+            type="file"
+            style={{
+              display: 'none',
+            }}
+            ref={exportFile}
+            className=""
+            accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+            aria-label="Email"
+          />
           <button
-
             type="button"
             className="w-full white text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
             onClick={() => exportFile.current.click()}
           >
-           <span style={{color:'black'}}> <i className="fas fa-plus mr-3" /> Import Wilayah</span>
+            <span style={{ color: 'black' }}>
+              {' '}
+              <i className="fas fa-plus mr-3" /> Import Wilayah
+            </span>
           </button>
         </div>
         {wilayah.data !== undefined ? (
-           <TableDevExtreme
+          <TableDevExtreme
             columns={[
               { name: 'codeWilayah', title: 'Code Wilayah' },
               { name: 'wilayah', title: 'Wilayah' },
@@ -176,7 +185,7 @@ const Wilayah = props => {
             onCurrentPageChange={setCurrentPage}
             pageSize={pageSize}
             totalCount={totalCount}
-            />
+          />
         ) : null}
       </main>
       <Modal
@@ -213,5 +222,5 @@ export default connect(mapStateToProps, {
   DeleteWilayahAction,
   EditWilayahAction,
   CreateNewWilayahAction,
-  UploadWilayahFile
+  UploadWilayahFile,
 })(Wilayah);

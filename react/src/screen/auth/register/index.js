@@ -108,7 +108,7 @@ function Register(props) {
                         <input
                           type="text"
                           onChange={e => setFormData({ ...formData, nama: e.target.value })}
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                          className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                           placeholder="Nama"
                           style={{
                             transition: 'all 0.15s ease 0s',
@@ -122,7 +122,7 @@ function Register(props) {
                         <input
                           onChange={e => setFormData({ ...formData, email: e.target.value })}
                           type="text"
-                          className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
+                          className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                           placeholder="Email"
                           style={{
                             transition: 'all 0.15s ease 0s',

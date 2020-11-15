@@ -37,7 +37,9 @@ isAdmin = (req, res, next) => {
     }
     req.userId = decoded.id;
     req.isAdmin = decoded.isAdmin;
-    if (req.isAdmin !== true)
+    req.superAdmin = decoded.superAdmin;
+
+    if (!req.isAdmin && !req.superAdmin)
       return res.status(500).json({ message: 'your are not allowed for this feature' });
     next();
   });

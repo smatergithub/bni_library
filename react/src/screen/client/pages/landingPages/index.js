@@ -7,9 +7,8 @@ function LandingPages(props) {
     <React.Fragment>
       <div className="pt-24">
         <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-          <div className="flex flex-col w-full md:pr-10 md:w-3/5 justify-center items-start text-center md:text-left">
-            <h1 className="my-4 text-3xl font-bold leading-tight">Digital Library</h1>
-            <h1 className="text-3xl font-bold leading-tight">
+          <div className="flex flex-col w-full md:pr-10 md:w-3/5 justify-center items-start text-center md:text-left md:pt-20">
+            <h1 className="text-3xl font-bold ">
               BNI Corporate University & Divisi Perencanaan Strategis
             </h1>
             <p className="leading-normal text-2xl mb-8 ">
