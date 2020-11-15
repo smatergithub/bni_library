@@ -31,16 +31,15 @@ module.exports = {
           expiredDateToken: expireDate,
         })
           .then(verification => {
-            if (process.env.NODE_ENV !== 'development') {
-              send.sendMailRegister({
-                link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
-                name: req.body.nama,
-                email: req.body.email,
-                btn_title: 'Verif email address',
-                text:
-                  'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
-              });
-            }
+            send.sendMailRegister({
+              link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
+              name: req.body.nama,
+              email: req.body.email,
+              btn_title: 'Verif email address',
+              text:
+                'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
+            });
+
             res.status(201).send({
               message: 'account was registered successfully!',
             });
@@ -157,16 +156,16 @@ module.exports = {
                 expiredDateResetToken: expireDate,
               })
               .then(response => {
-                if (process.env.NODE_ENV !== 'development') {
-                  send.sendResetPasswordLink({
-                    link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
-                    name: '',
-                    email: req.body.email,
-                    btn_title: 'Password Reset',
-                    text:
-                      'You requested a password reset. Please use the button below to continue the process.',
-                  });
-                }
+                // if (process.env.NODE_ENV !== 'development') {
+                send.sendResetPasswordLink({
+                  link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
+                  name: '',
+                  email: req.body.email,
+                  btn_title: 'Password Reset',
+                  text:
+                    'You requested a password reset. Please use the button below to continue the process.',
+                });
+                // }
                 res.status(200).json({ message: 'success' });
               })
               .catch(err => {
