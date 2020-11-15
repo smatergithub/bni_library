@@ -123,8 +123,6 @@ module.exports = {
 
 
 
-      console.log("rows",req.file);
-
       readXlsxFile(path).then(rows => {
         // skip header
         rows.shift();
@@ -144,7 +142,6 @@ module.exports = {
           dataWilayah.push(rowWilayah);
         });
 
-        console.log("data boosk",dataWilayah)
         Wilayah.bulkCreate(dataWilayah)
           .then(response => {
              return res.status(200).json({
@@ -159,7 +156,6 @@ module.exports = {
           });
       });
     } catch (error) {
-      console.log("err",error);
       res.status(500).json({
         message: 'Could not upload the file: ' + req.file.originalname,
       });
