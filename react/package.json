@@ -41,8 +41,8 @@
   },
   "scripts": {
     "start": "npm run watch:css && react-app-rewired start",
-    "build": "npm run build:css && react-scripts build && npm run reduce-css",
-    "reduce-css": "purgecss --css build/static/css/*.css --content build/index.html build/static/js/*.js --output build/static/css",
+    "build": "npm run build:css && react-scripts build  ",
+    "reduce-css": "purgecss --css build/static/css/*.*.css --content build/index.html build/static/js/*.js --output build/static/css",
     "eject": "react-scripts eject",
     "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
     "watch:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
