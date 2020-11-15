@@ -201,7 +201,7 @@ function Books(props) {
                       activeColor="#ffd700"
                     />
                     <span>
-                      <i className="fas fa-eye text-yellow-700" />{' '}
+                      <i className="fas fa-heart text-yellow-700" />{' '}
                       {book.totalRead ? book.totalRead : 0}
                     </span>
                   </div>

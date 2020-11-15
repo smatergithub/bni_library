@@ -4,10 +4,10 @@ import { Route, Redirect } from 'react-router-dom';
 
 function WithAdminAuth({ user, component: Component, ...rest }) {
   function validateRoute() {
-    let checkAccessToken = localStorage.getItem('bni_jwtToken');
     let role = localStorage.getItem('bni_UserRole');
-    // console.log(role);
-    if ((checkAccessToken !== null && role === '3') || role === '2') {
+    console.log(role);
+    if (role === '3' || role === '2') {
+      console.log('masuk sini');
       return true;
     } else {
       return false;
