@@ -109,6 +109,52 @@ module.exports = {
       .catch(error => res.status(500).send(error));
   },
 
+
+  uploadWilayah: async (req, res) => {
+    try {
+      if (req.file == undefined) {
+        return res.status(400).send('Please upload an excel file!');
+      }
+
+      let path = __basedir + '/server/public/document/' + req.file.filename;
+
+      readXlsxFile(path).then(rows => {
+        // skip header
+        rows.shift();
+
+        let dataWilayahs = [];
+
+        rows.forEach(row => {
+          let rowWilayah = {
+            codeWilayah: row[0],
+            wilayah: row[1],
+            alamat: row[2],
+            linkGoogleMap: row[3],
+          };
+
+          dataWilayahs.push(rowWilayah);
+        });
+
+        Wilayah.bulkCreate(dataWilayahs)
+          .then(response => {
+             return res.status(200).json({
+              message: 'Uploaded the file successfully: ' + req.file.originalname,
+            });
+          })
+          .catch(error => {
+            res.status(500).json({
+              message: 'Fail to import data into database!',
+              error: error.message,
+            });
+          });
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: 'Could not upload the file: ' + req.file.originalname,
+      });
+    }
+  },
+
   delete: async (req, res) => {
     return Wilayah.findByPk(req.params.id)
       .then(wilayah => {

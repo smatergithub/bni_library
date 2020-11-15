@@ -88,3 +88,24 @@ export const getDetailWilayah = id => dispatch => {
       return { resp: false, msg: msg };
     });
 };
+
+export const UploadWilayahFile = wilayah => () => {
+  var formdata = new FormData();
+  for (var key in wilayah) {
+    formdata.append(key, wilayah[key]);
+  }
+
+  return WilayahApi.uploadWilayahFile(formdata)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Wilayah Berhasil di tambahkan',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

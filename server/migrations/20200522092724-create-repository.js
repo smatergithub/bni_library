@@ -14,22 +14,22 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
       },
-      category: {
+      methodology: {
         type: Sequelize.STRING,
       },
       university: {
         type: Sequelize.STRING,
       },
-      editor: {
+      faculty: {
         type: Sequelize.STRING,
       },
-      translateBy: {
+      strata: {
+        type: Sequelize.STRING,
+      },
+      category: {
         type: Sequelize.STRING,
       },
       city: {
-        type: Sequelize.STRING,
-      },
-      type: {
         type: Sequelize.STRING,
       },
       description: {
@@ -38,23 +38,14 @@ module.exports = {
       releaseYear: {
         type: Sequelize.STRING,
       },
-      bab1: {
-        type: Sequelize.STRING,
-      },
-      bab2: {
-        type: Sequelize.STRING,
-      },
-      bab3: {
-        type: Sequelize.STRING,
-      },
-      bab4: {
-        type: Sequelize.STRING,
-      },
-      bab5: {
+      document: {
         type: Sequelize.STRING,
       },
       abstrack: {
         type: Sequelize.STRING,
+      },
+      isApproved: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

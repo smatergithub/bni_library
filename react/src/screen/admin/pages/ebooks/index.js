@@ -1,32 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { Tooltip } from 'antd';
 import { getEbooks, DeleteEbookAction } from '../../../../redux/action/ebooks';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
-import Table from '../../component/Table';
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 import ModalDetailEbook from './ModalDetailEBook';
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-    judul: '',
-  });
 
-  const mappingDataSourceEbookList = filterOptions => {
+
+   const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceEbookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getEbooks(filterOptions)
+      .getEbooks(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.ebooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -53,7 +58,7 @@ const Ebooks = props => {
         } else {
           ToastError(response.msg);
         }
-        mappingDataSourceEbookList(filterOptions);
+        mappingDataSourceEbookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
@@ -61,102 +66,55 @@ const Ebooks = props => {
   };
 
   React.useEffect(() => {
-    mappingDataSourceEbookList(filterOptions);
-  }, []);
+    mappingDataSourceEbookList();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
-  };
 
-  React.useEffect(() => {
-    mappingDataSourceEbookList(filterOptions);
-  }, [filterOptions]);
 
-  if (loading) return null;
-  const { ebooks } = props;
-
-  const columns = [
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.judul;
-        return data;
-      },
-    },
-    {
-      name: 'pengarang',
-      displayName: 'Pengarang',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.pengarang;
-        return data;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.tahunTerbit;
-        return data;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-      customRender: rowData => {
-        let data = rowData.ebook && rowData.ebook.status;
-        return data;
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
+      return {
+        ...rowData,
+        judul: rowData.ebook.judul,
+        pengarang: rowData.ebook && rowData.ebook.pengarang,
+        tahunTerbit: rowData.ebook && rowData.ebook.tahunTerbit,
+        status: rowData.ebook && rowData.ebook.status,
+        namaPeminjam: rowData.user ? rowData.user.nama : '-',
+        npp: rowData.user ? (rowData.user.npp ? rowData.user.npp : '-') : '-',
+        actions: (
           <React.Fragment>
-            <React.Fragment>
+            <button
+              className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              style={{ marginRight: '5px' }}
+              onClick={() => getDetailDataEbook(rowData)}
+            >
+              Detail
+            </button>
+            <Link to={`/admin/edit-ebook?id=${rowData.ebook.id}`}>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => getDetailDataEbook(rowData)}
               >
-                detail
+                Edit
               </button>
-              <Link to={`/admin/edit-ebook?id=${rowData}`}>
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                >
-                  Edit
-                </button>
-              </Link>
-              <button
-                className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                type="button"
-                onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
-              >
-                Delete
-              </button>
-            </React.Fragment>
+            </Link>
+            <button
+              className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+              type="button"
+              onClick={() => getDetailDataDeleteEbook(rowData.ebook)}
+            >
+              Delete
+            </button>
           </React.Fragment>
-        );
-      },
-    },
-  ];
+        ),
+      };
+    });
+  };
+
+  if (loading) return null;
+  const { ebooks } = props;
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -173,15 +131,53 @@ const Ebooks = props => {
           </Link>
         </div>
 
-        {ebooks.data !== undefined && ebooks.data.length !== 0 ? (
-          <Table
-            columns={columns}
-            source={ebooks}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
+        {!IsEmptyObject(ebooks) &&  ebooks.data !== undefined && ebooks.data.length !== 0 ? (
+          <TableDevExtreme
+            columns={[
+              { name: 'judul', title: 'Judul' },
+              { name: 'pengarang', title: 'Pengarang' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'namaPeminjam', title: 'Nama Peminjam' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            columnExtensions={[
+              {
+                columnName: 'judul',
+                width: 350,
+                wordWrapEnabled: false,
+              },
+              {
+                columnName: 'pengarang',
+                width: 250,
+                wordWrapEnabled: false,
+              },
+              {
+                columnName: 'tahunTerbit',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'namaPeminjam',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'npp',
+                width: 100,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'actions',
+                width: 300,
+                wordWrapEnabled: true,
+              },
+            ]}
+            rows={adjustIntegrationTable(ebooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
           />
         ) : (
           <NoData msg="Data belum tersedia !" />

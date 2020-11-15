@@ -56,7 +56,7 @@ function DetailEbooks(props) {
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
         {ebooks !== null && (
-          <div class="flex  w-full">
+          <div class="lg:flex  w-full">
             <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">

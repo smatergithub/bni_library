@@ -32,4 +32,8 @@ export default class EbookApi {
     const url = `/api/admin/ebook/${id}`;
     return Request.deleteWithAuth(url);
   }
+  static favorite() {
+    const url = `/api/ratingEbook/list`;
+    return Request.get(url);
+  }
 }

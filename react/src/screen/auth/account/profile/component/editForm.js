@@ -100,7 +100,7 @@ function EditUser(props) {
   let { user } = props;
   if (!user) return null;
   return (
-    <div class="bg-gray-100 rounded-lg shadow-lg pl-10 relative">
+    <div class="bg-gray-100 rounded-lg shadow-lg xs:pl-0 md:pl-10 relative">
       <div class="px-4 py-8 flex">
         <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
           <form onSubmit={handleSubmit(onSubmit)}>

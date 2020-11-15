@@ -89,10 +89,10 @@ function Home() {
                   <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
                     HOT BOOKS
                   </h4>
-                  <p class="mt-2 text-sm text-gray-700">
+                  <div class="mt-2 text-sm text-gray-700">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </p>
-                  <Link to="/riset">
+                  </div>
+                  <Link to="/favorite-book">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
@@ -117,10 +117,10 @@ function Home() {
                   <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
                     EBOOKS
                   </h4>
-                  <p class="mt-2 text-sm text-gray-700">
+                  <div class="mt-2 text-sm text-gray-700">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </p>
-                  <Link to="/riset">
+                  </div>
+                  <Link to="/favorite-ebook">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
@@ -143,11 +143,11 @@ function Home() {
                     />
                   </div>
                   <h4 class="mt-10 text-lg font-medium tracking-wide uppercase leading-tight">
-                    NEWS
+                    Riset
                   </h4>
-                  <p class="mt-2 text-sm text-gray-700">
+                  <div class="mt-2 text-sm text-gray-700">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </p>
+                  </div>
                   <Link to="/riset">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}

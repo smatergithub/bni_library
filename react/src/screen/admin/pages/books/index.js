@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { Tooltip, Button } from 'antd';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
-import Table from '../../component/Table';
+import {IsEmptyObject} from '../../component/IsEmptyObject';
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
@@ -12,20 +14,22 @@ const Books = props => {
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-    judul: '',
-  });
 
-  const mappingDataSourceBookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceBookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getBooks(filterOptions)
+      .getBooks(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.books.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -47,83 +51,29 @@ const Books = props => {
     props
       .DeleteBookAction(detailData.id)
       .then(response => {
-        mappingDataSourceBookList(filterOptions);
+        mappingDataSourceBookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
       .catch(err => console.log('err', err));
   };
 
-  React.useEffect(() => {
-    mappingDataSourceBookList(filterOptions);
-  }, []);
+  useEffect(() => {
+    mappingDataSourceBookList();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    mappingDataSourceBookList(filterOptions);
-  }, [filterOptions]);
-
-  const columns = [
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.judul;
-        return data;
-      },
-    },
-    {
-      name: 'pengarang',
-      displayName: 'Pengarang',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.pengarang;
-        return data;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.tahunTerbit;
-        return data;
-      },
-    },
-    // {
-    //   name: 'stockBuku',
-    //   displayName: 'Stock Buku',
-    //   customRender: rowData => {
-    //     let data = rowData.book && rowData.book.stockBuku;
-    //     return data
-    //   },
-    // },
-    {
-      name: 'status',
-      displayName: 'Status',
-      customRender: rowData => {
-        let data = rowData.book && rowData.book.status;
-        return data;
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
+      return {
+        ...rowData,
+        judul: rowData.book.judul,
+        pengarang: rowData.book && rowData.book.pengarang,
+        tahunTerbit: rowData.book && rowData.book.tahunTerbit,
+        status: rowData.book && rowData.book.status,
+        stockBuku: rowData.book && rowData.book.stockBuku,
+        namaPeminjam: rowData.user ? rowData.user.nama : '-',
+        npp: rowData.user ? (rowData.user.npp ? rowData.user.npp : '-') : '-',
+        actions: (
           <React.Fragment>
             <React.Fragment>
               <button
@@ -132,7 +82,7 @@ const Books = props => {
                 style={{ marginRight: '5px' }}
                 onClick={() => getDetailDataBook(rowData)}
               >
-                detail
+                Detail
               </button>
               <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
                 <button
@@ -152,13 +102,14 @@ const Books = props => {
               </button>
             </React.Fragment>
           </React.Fragment>
-        );
-      },
-    },
-  ];
+        ),
+      };
+    });
+  };
 
   if (loading) return null;
   const { books } = props;
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -173,16 +124,62 @@ const Books = props => {
             </button>
           </Link>
         </div>
-        {books.data !== undefined && books.data.length !== 0 ? (
-          <Table
-            columns={columns}
-            source={books}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
+        {!IsEmptyObject(books) && books.data !== undefined && books.data.length !== 0 ? (
+          <React.Fragment>
+            <TableDevExtreme
+            columns={[
+              { name: 'judul', title: 'Judul' },
+              { name: 'pengarang', title: 'Pengarang' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'stockBuku', title: 'Stock Buku' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'namaPeminjam', title: 'Nama Peminjam' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            columnExtensions={[
+              {
+                columnName: "judul",
+                width: 320,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: 'pengarang',
+                width: 200,
+                wordWrapEnabled: false,
+              },
+              {
+                columnName: 'tahunTerbit',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'stockBuku',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'namaPeminjam',
+                width: 200,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'npp',
+                width: 100,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'actions',
+                width: 300,
+                wordWrapEnabled: true,
+              },
+            ]}
+            rows={adjustIntegrationTable(books.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
           />
+          </React.Fragment>
         ) : (
           <NoData />
         )}

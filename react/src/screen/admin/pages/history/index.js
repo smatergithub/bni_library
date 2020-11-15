@@ -3,15 +3,41 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import BookList from './BookList';
 import EbookList from './EbooklList';
+import { ToastError, ToastSuccess } from '../../../../component';
+import { exportBookHistory, exportDataEbookHistory } from '../../../../redux/action/history';
 
 function History(props) {
   const [activeTabs, setActiveTabs] = useState('book');
   const [loading, setLoading] = React.useState(false);
 
+  const exportDataHistoryBook = () => {
+    setLoading(true);
+    props
+      .exportBookHistory()
+      .then(response => {
+        ToastSuccess('Sukses Export History Book');
+      })
+      .catch(err => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
+
+  const exportDataHistoryEbook = () => {
+    setLoading(true);
+    props
+      .exportDataEbookHistory()
+      .then(response => {
+        ToastSuccess('Sukses Export History Ebook');
+      })
+      .catch(err => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Semua Transaksi</h1>
+
         <div className="flex flex-wrap mt-5 px-1">
           <div className="w-full xl:w-12/12 mb-12 xl:mb-0">
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -37,27 +63,41 @@ function History(props) {
                       onClick={() => setActiveTabs('ebook')}
                     >
                       EBOOK
-                      {/* <span
-                        style={{
-                          width: 25,
-                          height: 25,
-                          backgroundColor: 'red',
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          position: 'absolute',
-                          right: '0',
-                          top: '-1em',
-                          color: 'white',
-                          borderRadius: '50%',
-                        }}
-                      >
-                        3
-                      </span> */}
                     </div>
+                    {activeTabs === 'book' && (
+                      <div className="w-full py-2 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => exportDataHistoryBook()}
+                          className="bg-orange-500 text-white px-10 py-2 font-semibold  rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl"
+                        >
+                          <span>
+                            {' '}
+                            <i className="fas fa-plus mr-3" />
+                            Export History Buku
+                          </span>
+                        </button>
+                      </div>
+                    )}
+                    {activeTabs === 'ebook' && (
+                      <div className="w-full py-2 flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => exportDataHistoryEbook()}
+                          className="bg-orange-500 text-white  px-10 py-2 font-semibold  rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl"
+                        >
+                          <span>
+                            {' '}
+                            <i className="fas fa-plus mr-3" />
+                            Export History Ebook
+                          </span>
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
+
               {/* //table */}
               {activeTabs === 'book' && <BookList />}
               {activeTabs === 'ebook' && <EbookList />}
@@ -73,4 +113,4 @@ let mapStateToProps = state => {
   return {};
 };
 
-export default connect(mapStateToProps, null)(History);
+export default connect(mapStateToProps, { exportBookHistory, exportDataEbookHistory })(History);

@@ -5,24 +5,32 @@ import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/transaction';
 import ModalDetailEbook from "./ModalDetailEBook";
+import TableDevExtreme from "../../../../component/TableDevExtreme";
+import ModalEditApproval from "./ModalEditApproval";
+
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
+  const [showModalEdit,setShowModalEdit] = useState(false);
 
-  const mappingDataSourceTransactionEbookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(2);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceTransactionEbookList = ()  => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .ListTransactionEbook(filterOptions)
+      .ListTransactionEbook(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+         setTotalCount(props.transactionEbooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -30,31 +38,30 @@ function EbookList(props) {
   };
 
   React.useEffect(() => {
-    mappingDataSourceTransactionEbookList(filterOptions);
-  }, []);
+    mappingDataSourceTransactionEbookList();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
+
+
+  const getEditTransactionEBook = (data) => {
+    setDetailData(data);
+    setShowModalEdit(true);
+  }
 
   const getDetailDataEbook = data => {
     setDetailData(data);
-    console.log("data", data)
     setShowModalDetail(true);
   };
 
 
   React.useEffect(() => {
-    mappingDataSourceTransactionEbookList(filterOptions);
-  }, [filterOptions]);
+    mappingDataSourceTransactionEbookList();
+  }, []);
   function returnEbook(id) {
     props.MakeReturnEbook(id).then(res => {
       if (res.resp) {
         setLoading(false);
-        mappingDataSourceTransactionEbookList(filterOptions);
+        mappingDataSourceTransactionEbookList();
         ToastSuccess(res.msg);
       } else {
         setLoading(false);
@@ -63,36 +70,25 @@ function EbookList(props) {
     });
   }
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.tahunTerbit}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+    const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.ebook.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+         npp :rowData.user ? rowData.user.npp : '',
+        tahunTerbit : rowData.ebook.tahunTerbit,
+        actions : ( <React.Fragment>
+           <button
+                className="bg-orange-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+                onClick={() => getEditTransactionEBook(rowData)}
+              >
+                Edit
+                </button>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -114,27 +110,78 @@ function EbookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
+
+
+
 
   if (loading) return null;
   const { transactionEbooks } = props;
 
   return (
     <React.Fragment>
-      {transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={transactionEbooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+      {!IsEmptyObject(transactionEbooks) && transactionEbooks.data !== undefined && transactionEbooks.data.length !== 0 ? (
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah ' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'status', title: 'Status' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              },{
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
+            rows={adjustIntegrationTable(transactionEbooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
         )}
@@ -146,6 +193,15 @@ function EbookList(props) {
           setShowModalDetail(false);
         }}
       />
+     {showModalEdit &&  <ModalEditApproval
+        showModalDetail={showModalEdit}
+        detailData={detailData}
+        typeApproval="editTransactionEBook"
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalEdit(false);
+        }}
+      />}
     </React.Fragment>
   );
 }

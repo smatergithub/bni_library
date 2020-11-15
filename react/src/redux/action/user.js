@@ -225,6 +225,29 @@ export const toogleIsAdmin = (userData, id) => () => {
     });
 };
 
+export const exportDataUser = () => () => {
+  return UserApi.exportDataUser()
+    .then(response => {
+      console.log('response', response);
+      const filename = 'list_data_user';
+      if (navigator.msSaveBlob) {
+        navigator.msSaveBlob(response, filename);
+      } else {
+        let fileURL = window.URL.createObjectURL(response);
+        let a = document.createElement('a');
+
+        a.setAttribute('download', filename);
+        a.href = fileURL;
+        document.body.appendChild(a);
+        a.click();
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const getWilayah = () => () => {
   return WilayahApi.list()
     .then(res => {
@@ -256,6 +279,18 @@ export const forgotPassword = data => () => {
 };
 export const resetPassword = (data, query) => () => {
   return UserApi.resetPassword(data, query)
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: '' };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const contactUs = data => () => {
+  return UserApi.contactUs(data)
     .then(res => {
       if (res) {
         return { resp: true, msg: '' };

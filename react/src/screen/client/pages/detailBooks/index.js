@@ -57,10 +57,10 @@ function DetailBooks(props) {
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
         {books !== null && (
-          <div class="flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
-              <div className="w-2/5 ">
-                <div className="bg-red-400 rounded-lg  border-gray-300">
+          <div class="lg:flex  w-full">
+            <div class="lg:flex lg:w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
+              <div className="lg:w-2/5 ">
+                <div className=" rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     src={books.book.image}
@@ -72,7 +72,7 @@ function DetailBooks(props) {
                   />
                 </div>
               </div>
-              <div className="w-3/5 px-5">
+              <div className="lg:w-3/5 px-5">
                 <div className="text-lg font-bold">{books.book.judul}</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
@@ -122,7 +122,7 @@ function DetailBooks(props) {
                 )}
               </div>
             </div>
-            <div class="w-2/6  bg-white px-10 py-10 m-2 relative">
+            <div class="lg:w-2/6  bg-white px-10 py-10 m-2 relative">
               <div className="text-lg font-bold">Book Details</div>
               <div
                 className={`font-bold absolute  ${

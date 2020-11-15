@@ -55,7 +55,7 @@ function About() {
             y="0"
           >
             <polygon
-              className="text-gray-300 fill-current"
+              className="text-orange-500 fill-current"
               points="2560 0 2560 100 0 100"
             ></polygon>
           </svg>
@@ -87,7 +87,7 @@ function About() {
               </a>
             </div>
             <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-pink-600">
+              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-orange-500">
                 <img
                   alt="..."
                   src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1051&amp;q=80"
@@ -106,7 +106,7 @@ function About() {
                   >
                     <polygon
                       points="-30,95 583,95 583,65"
-                      className="text-pink-600 fill-current"
+                      className="text-orange-500 fill-current"
                     ></polygon>
                   </svg>
                   <h4 className="text-xl font-bold text-white">Services</h4>
@@ -204,7 +204,7 @@ function About() {
           </div>
         </div>
       </section>
-      <section className="pb-20 bg-gray-300 mt-24">
+      <section className="pb-20 bg-orange-400 mt-24 pt-5">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap">
             <div className="lg:pt-12 pt-6 w-full md:w-4/12 px-4 text-center">

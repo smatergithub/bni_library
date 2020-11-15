@@ -14,6 +14,17 @@ export default class TransactionApi {
     const url = `/api/admin/transactionEbook/return/${id}`;
     return Request.postWithAuth(url, {}, true);
   }
+
+   static editTransactionBook(id,body) {
+    const url = `/api/admin/transactionbook/update/${id}`;
+     return Request.postWithAuth(url, body, false, false);
+  }
+
+   static editTransactionEbook(id,body) {
+    const url = `/api/admin/transactionEbook/update/${id}`;
+     return Request.postWithAuth(url, body, false, false);
+  }
+
   static getListTransactionEbook(body) {
     const url = `/api/admin/transactionEbook/list`;
     return Request.postWithAuth(url, body, true);

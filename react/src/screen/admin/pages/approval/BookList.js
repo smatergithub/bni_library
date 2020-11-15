@@ -2,27 +2,33 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
-import TableApproval from '../../component/TableApproval';
-import ModalDetailBook from "./modalDetailBook";
+import ModalDetailBook from './modalDetailBook';
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
+import ModalEditApproval from "./ModalEditApproval";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
+  const [showModalEdit,setShowModalEdit] = useState(false);
 
-  const mappingDataSourceTransactionBookList = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(2);
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const mappingDataSourceTransactionBookList = () => {
     setLoading(true);
+    const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .ListTransactionBook(filterOptions)
+      .ListTransactionBook(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.transactionBooks.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -30,20 +36,16 @@ function BookList(props) {
   };
 
   React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
-  }, []);
+    mappingDataSourceTransactionBookList();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
+
+
   function returnBook(id) {
     props.MakeReturnBook(id).then(res => {
       if (res.resp) {
         setLoading(false);
-        mappingDataSourceTransactionBookList(filterOptions);
+        mappingDataSourceTransactionBookList();
         ToastSuccess(res.msg);
       } else {
         setLoading(false);
@@ -52,54 +54,35 @@ function BookList(props) {
     });
   }
 
-
   const getDetailDataBook = data => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
+  const getEditTransactionBook = data => {
+    setDetailData(data);
+    setShowModalEdit(true);
+  };
 
-  React.useEffect(() => {
-    mappingDataSourceTransactionBookList(filterOptions);
-  }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tanggal Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+      return {
+        ...rowData,
+        judul :rowData.book && rowData.book.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        npp :rowData.user ? rowData.user.npp : '',
+        tahunTerbit :rowData.book && rowData.book.tahunTerbit,
+        quantity : rowData.quantity,
+        actions : ( <React.Fragment>
+           <button
+                className="bg-orange-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                type="button"
+                style={{ marginRight: '5px' }}
+               onClick={() => getEditTransactionBook(rowData)}
+              >
+                Edit
+                </button>
               <button
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
@@ -116,35 +99,83 @@ function BookList(props) {
                   onClick={() => returnBook(rowData.id)}
                   disabled={rowData.status === 'Dikembalikan' ? true : false}
                 >
-                  Return Book
+                  Return Ebook
                 </button>
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      };
+    });
+  };
 
   if (loading) return null;
   const { transactionBooks } = props;
-  console.log(transactionBooks);
   return (
     <React.Fragment>
-      {transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={transactionBooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+      {!IsEmptyObject(transactionBooks) && transactionBooks.data !== undefined && transactionBooks.data.length !== 0 ? (
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'status', title: 'Status' },
+              { name: 'actions', title: 'Action' },
+            ]}
+             columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 300,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+               {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              },{
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
+
+            rows={adjustIntegrationTable(transactionBooks.data)}
+             currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            />
       ) : (
-          <NoData msg="Belum ada request dari user!" />
-        )}
+        <NoData msg="Belum ada request dari user!" />
+      )}
       <ModalDetailBook
         showModalDetail={showModalDetail}
         detailData={detailData}
@@ -153,6 +184,15 @@ function BookList(props) {
           setShowModalDetail(false);
         }}
       />
+      {showModalEdit ? <ModalEditApproval
+        showModalDetail={showModalEdit}
+        detailData={detailData}
+        typeApproval="editTransactionBook"
+        onCloseModal={() => {
+          setDetailData({});
+          setShowModalEdit(false);
+        }}
+      /> : null}
     </React.Fragment>
   );
 }

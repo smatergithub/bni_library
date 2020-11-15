@@ -4,23 +4,28 @@ import TableApproval from '../../component/TableApproval';
 import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { getAllEbookHistory } from '../../../../redux/action/history';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
-  const [historyEbooks, setHistoryEbooks] = React.useState(null);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const getAllHistoryEbook = filterOptions => {
+  const getAllHistoryEbook = () => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getAllEbookHistory(filterOptions)
+      .getAllEbookHistory(pagination)
       .then(res => {
         if (res) {
-          setHistoryEbooks(res.data);
+           setTotalCount(props.historyEbooks.count);
+
           setLoading(false);
         }
       })
@@ -30,65 +35,25 @@ function EbookList(props) {
   };
 
   React.useEffect(() => {
-    getAllHistoryEbook(filterOptions);
-  }, []);
+    getAllHistoryEbook();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
 
-  React.useEffect(() => {
-    getAllHistoryEbook(filterOptions);
-  }, [filterOptions]);
 
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.ebook.tahunTerbit}</React.Fragment>;
-      },
-    },
 
-    {
-      name: 'nama',
-      displayName: 'Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.user ? rowData.user.nama : ""}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
+
+
+   const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.ebook && rowData.ebook.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        npp :rowData.user ? rowData.user.npp : '',
+        tahunTerbit : rowData.ebook && rowData.ebook.tahunTerbit,
+        quantity : rowData.quantity,
+        actions : ( <React.Fragment>
               {rowData.status !== 'Dikembalikan' ? (
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
@@ -102,26 +67,74 @@ function EbookList(props) {
               ) : (
                   '-'
                 )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
+            </React.Fragment>)
+      }
+    })
+  }
 
   if (loading) return null;
-
+const { historyEbooks } = props;
   return (
     <React.Fragment>
-      {historyEbooks !== null && historyEbooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={historyEbooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+      {!IsEmptyObject(historyEbooks) && historyEbooks.data !== undefined && historyEbooks.data.length !== 0 ? (
+         <TableDevExtreme
+             columns={[
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah ' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'status', title: 'Status' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 250,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              },{
+                columnName: "actions",
+                width: 300,
+                wordWrapEnabled: true
+              }
+               ]}
+            rows={adjustIntegrationTable(historyEbooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            />
       ) : (
           <NoData msg="Belum ada request Dari user!" />
         )}
@@ -129,4 +142,11 @@ function EbookList(props) {
   );
 }
 
-export default connect(null, { getAllEbookHistory })(EbookList);
+let mapStateToProps = state => {
+  return {
+    historyEbooks: state.historys.historyEbooks,
+  };
+};
+
+
+export default connect(mapStateToProps, { getAllEbookHistory })(EbookList);

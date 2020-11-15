@@ -3,27 +3,30 @@ import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import TableApproval from '../../component/TableApproval';
+import TableDevExtreme from "../../../../component/TableDevExtreme";
+import {IsEmptyObject} from '../../component/IsEmptyObject';
 
 import { getAllBookHistory } from '../../../../redux/action/history';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
-  const [historyBooks, setHistoryBooks] = React.useState(null);
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
-  });
 
-  const getAllHistoryBook = filterOptions => {
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
+
+
+  const getAllHistoryBook = () => {
     setLoading(true);
+     const pagination = {
+      page : currentPage + 1,
+      limit : pageSize
+    }
     props
-      .getAllBookHistory(filterOptions)
+      .getAllBookHistory(pagination)
       .then(res => {
-        if (res) {
-          setHistoryBooks(res.data);
-
+         setTotalCount(props.historyBooks.count);
           setLoading(false);
-        }
       })
       .catch(err => {
         console.log('error', err);
@@ -31,109 +34,85 @@ function BookList(props) {
   };
 
   React.useEffect(() => {
-    getAllHistoryBook(filterOptions);
-  }, []);
+    getAllHistoryBook();
+  },[currentPage,totalCount]);
 
-  const onPaginationUpdated = pagination => {
-    setFilterOptions({
-      page: pagination.page,
-      limit: pagination.limit,
-    });
-  };
-  function returnBook(id) {
-    props.MakeReturnBook(id).then(res => {
-      if (res.resp) {
-        setLoading(false);
-        getAllHistoryBook(filterOptions);
-        ToastSuccess(res.msg);
-      } else {
-        setLoading(false);
-        ToastError(res.msg);
+
+
+    const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map(rowData => {
+
+      return {
+        ...rowData,
+        judul :rowData.book && rowData.book.judul,
+        nama :rowData.user ? rowData.user.nama : '',
+        npp :rowData.user ? rowData.user.npp : '',
+        tahunTerbit : rowData.book && rowData.book.tahunTerbit,
+        quantity : rowData.quantity,
       }
-    });
+    })
   }
 
-  React.useEffect(() => {
-    getAllHistoryBook(filterOptions);
-  }, [filterOptions]);
-
-  const columns = [
-    {
-      name: 'code',
-      displayName: 'Code',
-    },
-    {
-      name: 'judul',
-      displayName: 'Judul',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.judul}</React.Fragment>;
-      },
-    },
-    {
-      name: 'tahunTerbit',
-      displayName: 'Tahun Terbit',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.book.tahunTerbit}</React.Fragment>;
-      },
-    },
-
-    {
-      name: 'nama',
-      displayName: 'Peminjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.user ? rowData.user.nama : ''}</React.Fragment>;
-      },
-    },
-    {
-      name: 'quantity',
-      displayName: 'Jumlah Dipinjam',
-      customRender: rowData => {
-        return <React.Fragment>{rowData.quantity}</React.Fragment>;
-      },
-    },
-    {
-      name: 'status',
-      displayName: 'Status',
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
-          <React.Fragment>
-            <React.Fragment>
-              {rowData.status !== 'Dikembalikan' ? (
-                <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
-                  type="button"
-                  style={{ marginRight: '5px' }}
-                  onClick={() => returnBook(rowData.id)}
-                  disabled={rowData.status === 'Dikembalikan' ? true : false}
-                >
-                  Return Book
-                </button>
-              ) : (
-                  '-'
-                )}
-            </React.Fragment>
-          </React.Fragment>
-        );
-      },
-    },
-  ];
 
   if (loading) return null;
+   const { historyBooks } = props;
   return (
     <React.Fragment>
-      {historyBooks !== null && historyBooks !== undefined && historyBooks.data.length !== 0 ? (
-        <TableApproval
-          columns={columns}
-          source={historyBooks}
-          isLoading={loading}
-          limit={filterOptions.limit}
-          page={filterOptions.page}
-          onPaginationUpdated={onPaginationUpdated}
-        />
+
+      {!IsEmptyObject(historyBooks) && historyBooks.data !== undefined && historyBooks.data.length !== 0 ? (
+         <TableDevExtreme
+            columns={[
+              { name: 'code', title: 'Code' },
+              { name: 'judul', title: 'Judul' },
+              { name: 'tahunTerbit', title: 'Tahun Terbit' },
+              { name: 'quantity', title: 'Jumlah' },
+              { name: 'nama', title: 'Peminjam' },
+              { name: 'npp', title: 'NPP' },
+              { name: 'status', title: 'Status' },
+            ]}
+              columnExtensions={[
+              {
+                columnName: "code",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "judul",
+                width: 300,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "nama",
+                width: 150,
+                wordWrapEnabled: true
+              },
+               {
+                columnName: "npp",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "tahunTerbit",
+                width: 150,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "quantity",
+                width: 100,
+                wordWrapEnabled: true
+              },
+              {
+                columnName: "status",
+                width: 150,
+                wordWrapEnabled: true
+              }
+               ]}
+            rows={adjustIntegrationTable(historyBooks.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            totalCount={totalCount}
+            />
       ) : (
           <NoData msg="Belum ada request dari user!" />
         )}
@@ -141,4 +120,11 @@ function BookList(props) {
   );
 }
 
-export default connect(null, { getAllBookHistory })(BookList);
+let mapStateToProps = state => {
+  return {
+    historyBooks: state.historys.historyBooks,
+  };
+};
+
+
+export default connect(mapStateToProps, { getAllBookHistory })(BookList);

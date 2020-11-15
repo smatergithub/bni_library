@@ -5,11 +5,13 @@ import {
   toggleUserIntoAdmin,
   deleteUser,
   getMe,
+  exportDataUser,
 } from '../../../../redux/action/user';
 import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
+import TableDevExtreme from '../../../../component/TableDevExtreme';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -17,8 +19,8 @@ const Ebooks = props => {
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [filterOptions, setFilterOptions] = React.useState({
-    page: 1,
-    limit: 5,
+    page: 0,
+    limit: 0,
     judul: '',
   });
 
@@ -60,13 +62,13 @@ const Ebooks = props => {
     retrieveDataUser(filterOptions);
   }, [filterOptions]);
 
-  function onAdminAction(data, id) {
-    props.toogleIsAdmin(data, id).then(res => {
-      if (res.resp) {
-        retrieveDataUser(filterOptions);
-      }
-    });
-  }
+  // function onAdminAction(data, id) {
+  //   props.toogleIsAdmin(data, id).then(res => {
+  //     if (res.resp) {
+  //       retrieveDataUser(filterOptions);
+  //     }
+  //   });
+  // }
 
   const getDetailUser = (id, MakeAdmin) => {
     const { users } = props;
@@ -94,6 +96,20 @@ const Ebooks = props => {
       });
   };
 
+  const exportDataUser = () => {
+    setLoading(true);
+    props
+      .exportDataUser()
+      .then(response => {
+        ToastSuccess('Sukses Export User');
+        window.location.reload();
+      })
+      .catch(err => {
+        console.log('err', err);
+        ToastError('Tidak Bisa Akses Fitur Ini');
+      });
+  };
+
   const handleDeleteUser = () => {
     setLoading(true);
     props
@@ -109,43 +125,17 @@ const Ebooks = props => {
       });
   };
 
-  if (loading) return null;
-  const { users } = props;
-
-  const columns = [
-    {
-      name: 'nama',
-      displayName: 'Nama',
-    },
-    {
-      name: 'alamat',
-      displayName: 'Alamat',
-    },
-    {
-      name: 'email',
-      displayName: 'email',
-    },
-    {
-      name: 'phoneNumber',
-      displayName: 'Nomor Telepon',
-    },
-    {
-      name: 'isAdmin',
-      displayName: 'Admin',
-      customRender: rowData => {
-        return rowData.isAdmin ? 'Aktif' : 'Tidak Aktif';
-      },
-    },
-    {
-      name: 'actions',
-      displayName: 'Actions',
-      customRender: rowData => {
-        return (
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
+      return {
+        ...rowData,
+        isAdmin: rowData.isAdmin ? 'Aktif' : 'Tidak Aktif',
+        actions: (
           <React.Fragment>
             {!props.me ? null : props.me.superAdmin ? (
               <React.Fragment>
                 <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   w-20 py-1 rounded outline-none focus:outline-none "
                   type="button"
                   style={{ marginRight: '5px' }}
                   onClick={() => getDetailUser(rowData.id, 'isAdmin')}
@@ -153,7 +143,7 @@ const Ebooks = props => {
                   {rowData.isAdmin !== true ? ' Make Admin' : ' Make User'}
                 </button>
                 <button
-                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
+                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   w-16 py-1 rounded outline-none focus:outline-none "
                   type="button"
                   onClick={() => getDetailUser(rowData.id, 'delete')}
                 >
@@ -162,27 +152,64 @@ const Ebooks = props => {
               </React.Fragment>
             ) : null}
           </React.Fragment>
-        );
-      },
-    },
-  ];
+        ),
+      };
+    });
+  };
+
+  if (loading) return null;
+  const { users } = props;
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
-
+        <div
+          className="absolute"
+          style={{
+            right: '2em',
+            top: '4em',
+            display: 'flex',
+            flexDirection: 'row',
+            width: '392px',
+          }}
+        >
+          <button
+            type="button"
+            onClick={() => exportDataUser()}
+            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
+          >
+            <span>
+              {' '}
+              <i className="fas fa-plus mr-3" />
+              Export Data User
+            </span>
+          </button>
+        </div>
         {users.data !== undefined ? (
-          <Table
-            columns={columns}
-            source={users}
-            isLoading={loading}
-            limit={filterOptions.limit}
-            page={filterOptions.page}
-            onPaginationUpdated={onPaginationUpdated}
-            searchDefaultValue={filterOptions.judul}
+          <TableDevExtreme
+            columns={[
+              { name: 'nama', title: 'Nama' },
+              { name: 'alamat', title: 'Alamat' },
+              { name: 'email', title: 'Email' },
+              { name: 'phoneNumber', title: 'Phone Number' },
+              { name: 'isAdmin', title: 'Is Admin' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(users.data)}
           />
-        ) : null}
+        ) : (
+          // <Table
+          //   columns={columns}
+          //   source={users}
+          //   isLoading={loading}
+          //   limit={filterOptions.limit}
+          //   page={filterOptions.page}
+          //   onPaginationUpdated={onPaginationUpdated}
+          //   searchDefaultValue={filterOptions.judul}
+          // />
+          <NoData />
+        )}
       </main>
       <Modal
         title="Konfirmasi"
@@ -223,4 +250,5 @@ export default connect(mapStateToProps, {
   toggleUserIntoAdmin,
   deleteUser,
   getMe,
+  exportDataUser,
 })(Ebooks);

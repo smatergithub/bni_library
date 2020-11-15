@@ -27,4 +27,8 @@ export default class BookApi {
     const url = `/api/admin/book/${id}`;
     return Request.deleteWithAuth(url);
   }
+  static favorite() {
+    const url = `/api/ratingBook/list`;
+    return Request.get(url);
+  }
 }

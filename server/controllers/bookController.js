@@ -1,6 +1,5 @@
 const Books = require('../models').books;
 const ListBorrowBook = require('../models').listBorrowBook;
-// const Upload = require('../middelwares/uploadImage');
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 require('dotenv').config();
@@ -103,6 +102,7 @@ module.exports = {
     // offset
     if (page != '' && typeof page !== 'undefined' && page > 0) {
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+      //paramQuerySQL.offset = parseInt(page);
     }
 
     // order by
@@ -310,12 +310,18 @@ module.exports = {
           return res.status(404).send({ message: 'Book not found' });
         }
         ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
-          listBorrow[0].destroy().then(() => {
-            book
-              .destroy()
-              .then(() => res.status(200).send({ message: 'succesfully delete' }))
-              .catch(error => res.status(404).send(error));
-          })
+          if(listBorrow[0].dataValues.transactionBookId !== null && listBorrow[0].dataValues.transactionBookId !== undefined){
+               listBorrow[0].destroy().then(() => {
+                  book
+                    .destroy()
+                    .then(() => res.status(200).send({ message: 'succesfully delete' }))
+                    .catch(error => res.status(404).send(error));
+                })
+          }
+          else{
+            res.status(404).send({ message: 'buku ini sedang dipakai di transaksi lainnya' })
+          }
+
         })
 
       })

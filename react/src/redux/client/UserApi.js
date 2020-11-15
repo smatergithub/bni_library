@@ -28,6 +28,11 @@ export default class UsersApi {
     return Request.postWithAuth(url);
   }
 
+  static exportDataUser() {
+    const url = `/api/admin/manage-user/export`;
+    return Request.getFileWithAuth(url);
+  }
+
   static deleteUserList(id) {
     const url = `/api/admin/manage-user/delete/${id}`;
     return Request.postWithAuth(url);
@@ -68,5 +73,9 @@ export default class UsersApi {
   static resetPassword(userData, query) {
     const url = `/api/updatePassword${query}`;
     return Request.post(url, userData);
+  }
+  static contactUs(formData) {
+    const url = `/api/contact-us`;
+    return Request.post(url, formData);
   }
 }

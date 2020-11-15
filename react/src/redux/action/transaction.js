@@ -5,6 +5,39 @@ import { TRANSACTION_BOOKS, TRANSACTION_EBOOKS } from '../type';
  * any reducer type,
  * just return the response (true/false) to the UI
  */
+
+ export const EditTransactionBook = (id, data) => () => {
+  return TransactionApi.editTransactionBook(id, data)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Transaksi Buku Berhasil di diubah',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
+export const EditTransactionEbook = (id, data) => () => {
+  return TransactionApi.editTransactionEBook(id, data)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Transaksi Ebook Berhasil di diubah',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 export const MakeReturnBook = id => () => {
   return TransactionApi.returnBook(id)
     .then(res => {

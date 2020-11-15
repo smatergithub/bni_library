@@ -3,6 +3,11 @@ const TransactionBook = require('../models').transactionBook;
 const ListBorrowBook = require("../models").listBorrowBook
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const moment = require("moment");
+const xl = require('excel4node');
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Worksheet Name');
+
 
 module.exports = {
   list: async (req, res) => {
@@ -178,14 +183,15 @@ module.exports = {
 
     const { books } = req.body;
     var userId = req.userId;
-    // const checkTransaction = await TransactionBook.findAll({
-    //   where: { userId: userId },
-    //   where: { status: "Dipinjam" },
-    // })
+    const checkTransaction = await TransactionBook.findAll({
+      where: { userId: userId },
+      where: { status: "Dipinjam" },
+    })
 
-    // if (checkTransaction) {
-    //   return res.status(404).json({ message: "already borrow book before" });
-    // }
+
+    if (checkTransaction.length >= 2) {
+      return res.status(404).json({ message: "Anda Sudah Meminjam 2 Buku Sebelumnya" });
+    }
 
     books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);
@@ -218,7 +224,8 @@ module.exports = {
           return res.status(404).send(err);
         });
 
-      const createTransaction = await TransactionBook.create({
+
+      let requestPayload = {
         code: `INV-${Math.round(Math.random() * 1000000)}`,
         transDate: Date(),
         status: 'Dipinjam',
@@ -229,9 +236,17 @@ module.exports = {
         endDate: req.body.endDate,
         bookId: bookData.bookId,
         isGiveRating: false
-      });
+      }
 
+      let start = moment(requestPayload.startDate).format("YYYY-MM-DD")
+      let end = moment(requestPayload.endDate).format("YYYY-MM-DD")
+      let between = moment.duration(moment(end).diff(start)).asDays();
 
+      if(between >= 14){
+        return res.status(404).json({ message: "Peminjaman maksimal 14 Hari" });
+      }
+
+      const createTransaction = await TransactionBook.create(requestPayload);
 
       if (!createTransaction) {
         return res.status(404).send("Failed Transaction");
@@ -258,6 +273,29 @@ module.exports = {
       });
     })
 
+  },
+
+
+  updateTransactionBook: async (req, res) => {
+    const { transactionId } = req.params;
+
+    TransactionBook.findByPk(transactionId)
+      .then(transaction => {
+        transaction
+          .update({
+            startDate: req.body.startDate,
+            endDate: req.body.endDate
+          })
+          .catch(err => {
+            res.status(404).send(err);
+          });
+      })
+      .catch(err => {
+        res.status(404).send(err);
+      });
+    return res.status(200).json({
+      message: 'Succesfully Update Book',
+    });
   },
 
   returnABook: async (req, res) => {
@@ -300,8 +338,83 @@ module.exports = {
         res.status(404).send(err);
       });
 
+    ListBorrowBook.findAll({where : {transactionBookId : transactionId}}).then(listBorrowBook => {
+       listBorrowBook[0].update({
+         userId : null
+       })
+        .catch(err => {
+            res.status(404).send(err);
+          });
+    })
+
     return res.status(200).json({
       message: 'Succesfully Return Book',
     });
   },
+
+
+
+   exportListHistoryBook : async (req,res) => {
+    return TransactionBook.findAll({
+       order: [
+          ['createdAt', 'DESC'],
+        ],
+        where: { status: "Dikembalikan" },
+        include: ['book', 'user']
+      }).then(user => {
+      let userDisplay = []
+      user.forEach(item => {
+        const userData = {
+          ode: item.dataValues.code,
+          transDate: item.dataValues.transDate,
+          status: item.dataValues.status,
+          note: item.dataValues.note,
+          quantity: item.dataValues.quantity,
+          startDate: item.dataValues.startDate,
+          kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
+          judul: item.dataValues.book && item.dataValues.book.dataValues.judul,
+          stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
+          countRating: item.dataValues.book && item.dataValues.book.dataValues.countRating,
+          npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
+          nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
+          phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
+          tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
+          wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
+          singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
+          jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
+          alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
+          email: item.dataValues.user && item.dataValues.user.dataValues.email,
+        }
+        userDisplay.push(userData)
+      })
+
+      // header
+      let headingColumnIndex = 1;
+      Object.keys(userDisplay[0]).forEach((key) => {
+           ws.cell(1, headingColumnIndex++)
+              .string(key)
+    });
+
+      //Write Data in Excel file
+      let rowIndex = 2;
+      userDisplay.forEach( record => {
+          let columnIndex = 1;
+          Object.keys(record ).forEach(columnName =>{
+              ws.cell(rowIndex,columnIndex++)
+                .string(record[columnName] == null ? "" : record[columnName].toString())
+          });
+          rowIndex++;
+      });
+
+      wb.write('list_history_book.xlsx',res)
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(404).json({message : "masuk sini"})
+    })
+
+  }
 };
+
+
+
