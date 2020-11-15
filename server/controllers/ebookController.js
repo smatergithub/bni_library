@@ -1,6 +1,5 @@
 const Ebooks = require('../models/').ebooks;
 const ListBorrowEbook = require('../models').listBorrowEbook;
-const UploadFile = require('../models').uploadFile;
 const Sequelize = require('sequelize');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const fetch = require('node-fetch');
@@ -273,6 +272,8 @@ module.exports = {
         // skip header
         rows.shift();
 
+        console.log("rows",rows);
+
         let Databooks = [];
 
         rows.forEach(row => {
@@ -298,6 +299,7 @@ module.exports = {
           Databooks.push(rowBook);
         });
 
+        console.log("data boosk",Databooks)
         Ebooks.bulkCreate(Databooks)
           .then(response => {
             response.map(item => {

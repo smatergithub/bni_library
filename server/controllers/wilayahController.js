@@ -2,6 +2,9 @@ const Wilayah = require('../models/').wilayah;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
+
+const readXlsxFile = require('read-excel-file/node');
+
 module.exports = {
 
   list: async (req, res) => {
@@ -118,24 +121,28 @@ module.exports = {
 
       let path = __basedir + '/server/public/document/' + req.file.filename;
 
+
+
       readXlsxFile(path).then(rows => {
         // skip header
         rows.shift();
 
-        let dataWilayahs = [];
+
+
+        let dataWilayah = [];
 
         rows.forEach(row => {
           let rowWilayah = {
-            codeWilayah: row[0],
+           codeWilayah: row[0],
             wilayah: row[1],
             alamat: row[2],
             linkGoogleMap: row[3],
           };
 
-          dataWilayahs.push(rowWilayah);
+          dataWilayah.push(rowWilayah);
         });
 
-        Wilayah.bulkCreate(dataWilayahs)
+        Wilayah.bulkCreate(dataWilayah)
           .then(response => {
              return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
@@ -154,6 +161,7 @@ module.exports = {
       });
     }
   },
+
 
   delete: async (req, res) => {
     return Wilayah.findByPk(req.params.id)
