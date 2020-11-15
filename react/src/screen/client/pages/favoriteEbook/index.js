@@ -15,15 +15,17 @@ function FavoriteEBooks(props) {
   React.useEffect(() => {
     props.getfavorite().then(res => {
       if (res.resp) {
+        console.log("res",res);
         setBooks(res.data);
       } else {
         setBooks([]);
       }
     });
   }, []);
-  console.log(books);
+
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
 
+  console.log("books",books.RatingEbook);
   return (
     <React.Fragment>
       <div className="pt-24">
@@ -44,9 +46,8 @@ function FavoriteEBooks(props) {
               </h2>
 
               <div class=" text-center mt-8  mx-auto md:flex items-center justify-center">
-                {books.length !== 0 &&
-                  books.ratingBook.map((data, key) => {
-                    let book = data.book;
+                {books.RatingEbook !== undefined ? books.RatingEbook.map((data, key) => {
+                    let book = data;
                     return (
                       <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                         <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
@@ -81,7 +82,7 @@ function FavoriteEBooks(props) {
                         </Link>
                       </div>
                     );
-                  })}
+                  }) : null}
               </div>
             </div>
           </section>
