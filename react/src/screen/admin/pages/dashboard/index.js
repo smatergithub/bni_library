@@ -61,13 +61,13 @@ const Dashboard = props => {
                   <TopBar
                     title={'Buku'}
                     value={dashboardSummary.bookCount}
-                    icon={'fas fa-chart-pie'}
+                    icon={'fas fa-book'}
                     description={'Total Buku'}
                   />
                   <TopBar
                     title={'Ebook'}
                     value={dashboardSummary.ebookCount}
-                    icon={'fas fa-percent'}
+                    icon={'fas fa-book-open'}
                     description={'Total Ebook'}
                   />
                   <TopBar
