@@ -53,13 +53,12 @@ const Wilayah = props => {
 
     let reader = new FileReader();
     let file = e.target.files[0];
-
     reader.onloadend = () => {
       props.UploadWilayahFile({ file }).then(res => {
         if (res) {
           console.log('res', res);
           ToastSuccess(res.msg);
-          props.history.push('/admin/wilayah');
+         retrieveDataWilayah();
         } else {
           ToastError(res.msg);
         }
