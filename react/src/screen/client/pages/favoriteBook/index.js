@@ -21,7 +21,6 @@ function FavoriteBooks(props) {
       }
     });
   }, []);
-  console.log(books);
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
 
   return (
@@ -46,7 +45,7 @@ function FavoriteBooks(props) {
               <div class=" text-center mt-8  mx-auto md:flex items-center justify-center">
                 {books.length !== 0 &&
                   books.ratingBook.map((data, key) => {
-                    let book = data.book;
+                    let book = data;
                     return (
                       <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                         <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
