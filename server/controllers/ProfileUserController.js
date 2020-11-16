@@ -18,6 +18,7 @@ module.exports = {
         }
         let dataUser = {
           id: user.id,
+          npp : user.npp,
           nama: user.nama,
           phoneNumber: user.phoneNumber,
           tanggalLahir: user.tanggalLahir,
@@ -53,6 +54,7 @@ module.exports = {
         }
         let dataUser = {
           id: userId ? userId : req.body.id,
+          npp : req.body.npp,
           nama: req.body.nama,
           phoneNumber: req.body.phoneNumber,
           tanggalLahir: req.body.tanggalLahir,
