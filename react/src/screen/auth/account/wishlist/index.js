@@ -33,9 +33,7 @@ function Wishlist(props) {
         <meta charSet="utf-8" />
         <title>Wishlist | Ebni</title>
       </Helmet>
-      <div className="bg-orange-300 uppercase text-gray-900 text-base font-semibold py-4 pl-6">
-        Wishlist
-      </div>
+      <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">Wishlist</div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {wishlist.length === 0 && <NoData msg="Belum ada item wishlist !" />}
         {wishlist.length !== 0 &&

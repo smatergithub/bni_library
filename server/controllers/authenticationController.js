@@ -1,226 +1,134 @@
 const Users = require('../models').users;
-const VerificationToken = require('../models').verificationToken;
-const cryptoRandomString = require('crypto-random-string');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+const fetch = require('node-fetch');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const send = require('../utils/sendMail');
 const { setJWTCookieOption } = require('../utils/setCookies');
-
 require('dotenv').config();
 
 module.exports = {
-  register: async (req, res) => {
-    Users.scope('withPassword')
-      .create({
-        nama: req.body.nama,
-        email: req.body.email,
-        tanggalLahir: req.body.tanggalLahir,
-        password: bcrypt.hashSync(req.body.password, 8),
-        isVerified: false,
-        isAdmin: false,
-        superAdmin: false,
-      })
-      .then(user => {
-        var expireDate = new Date();
-        expireDate.setDate(expireDate.getDate() + 1 / 24);
-        VerificationToken.create({
-          userId: user.id,
-          token: cryptoRandomString({ length: 20 }),
-          expiredDateToken: expireDate,
-        })
-          .then(verification => {
-            send.sendMailRegister({
-              link: `${process.env.PUBLIC_URL}/auth/activation?email=${req.body.email}&token=${verification.token} `,
-              name: req.body.nama,
-              email: req.body.email,
-              btn_title: 'Verif email address',
-              text:
-                'Youre almost ready to start enjoying E-BNI LIBRARY. Simply click the yellow button below to verify your email address.',
-            });
-
-            res.status(201).send({
-              message: 'account was registered successfully!',
-            });
-          })
-          .catch(err => {
-            res.status(404).send({ message: 'failed registered account' });
-          });
-      })
-      .catch(err => {
-        res.status(500).send({ message: err.message });
-      });
-  },
-
-  verificationAccount: async (req, res) => {
-    Users.scope('withPassword')
-      .findOne({
-        where: { email: req.query.email },
-      })
-      .then(user => {
-        if (user.isVerified) {
-          return res.status(404).json({ message: 'Email Already verified' });
-        }
-
-        VerificationToken.destroy({
-          where: {
-            expiredDateToken: { [Op.lt]: Sequelize.fn('CURDATE') },
-          },
-        });
-        var recordToken = VerificationToken.findOne({
-          where: { token: req.query.token, userId: user.id },
-        });
-
-        if (recordToken) {
-          user
-            .update({ isVerified: true })
-            .then(updateUser => {
-              return res.status(200).json({ message: `User with ${user.email} has been verified` });
-            })
-            .catch(err => {
-              return res.status(404).json({ message: 'Verification failed' });
-            });
-        } else {
-          return res.status(404).json({ message: 'Token expired ' });
-        }
-      })
-      .catch(err => {
-        return res.status(500).json({ message: err });
-      });
-  },
-
   login: async (req, res) => {
-    Users.scope('withPassword')
-      .findOne({
-        where: {
-          email: req.body.email,
-        },
-      })
-      .then(user => {
-        if (!user) {
-          return res.status(404).send({ message: 'User Not found.' });
+    let url = `https://digihc.bnicorpu.co.id/login_user/${req.body.npp}/${req.body.password}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(response => {
+        if (response.status === 200) {
+          checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
-
-        var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-        if (!passwordIsValid) {
-          return res.status(404).send({
-            message: 'Invalid Password!',
-          });
+        if (response.status === 401) {
+          res.status(402).send({ message: response.message });
         }
-
-        if (!user.isVerified) {
-          return res.status(404).send({ message: 'User Not Verification.' });
-        }
-
-        var token = jwt.sign(
-          { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
-          process.env.SECRET_TOKEN,
-          {
-            expiresIn: 86400, // 24 hours
-          }
-        );
-        res.cookie('access_token', token, setJWTCookieOption());
-        res.status(200).send({
-          email: user.email,
-
-          role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
-          isAdmin: user.isAdmin,
-          superAdmin: user.superAdmin,
-        });
       })
       .catch(err => {
-        res.status(500).send({ message: err.message });
+        res.status(500).send({ message: 'Terjadi kesalahan' });
       });
-  },
 
-  resetPassword: async (req, res) => {
-    await Users.scope('withPassword')
-      .findOne({
-        where: {
-          email: req.body.email,
-        },
-      })
-      .then(user => {
-        VerificationToken.findOne({
+    async function checkIfUserAlreadyCreateOnDb(userObj, password) {
+      return await Users.scope('withPassword')
+        .findOne({
           where: {
-            userId: user.id,
+            npp: userObj.npp,
           },
         })
-          .then(verificationToken => {
-            var expireDate = new Date();
-            expireDate.setDate(expireDate.getDate() + 1 / 24);
-            verificationToken
-              .update({
-                resetToken: cryptoRandomString({ length: 20 }),
-                expiredDateResetToken: expireDate,
-              })
-              .then(response => {
-                // if (process.env.NODE_ENV !== 'development') {
-                send.sendResetPasswordLink({
-                  link: `${process.env.PUBLIC_URL}/auth/reset-password?email=${req.body.email}&token=${response.resetToken} `,
-                  name: '',
-                  email: req.body.email,
-                  btn_title: 'Password Reset',
-                  text:
-                    'You requested a password reset. Please use the button below to continue the process.',
-                });
-                // }
-                res.status(200).json({ message: 'success' });
+        .then(async user => {
+          if (!user) {
+            // res.status(200).send({ message: 'sukses' });
+            return await Users.create({
+              nama: userObj.nama,
+              email: userObj.email,
+              npp: userObj.npp,
+              tgl_lahir: userObj.tgl_lahir,
+              wilayah: userObj.wilayah,
+              singkatan: userObj.singkatan,
+              kdunit: userObj.kdunit,
+              unit_besaran: userObj.unit_besaran,
+              jenjang: userObj.jenjang,
+              password: bcrypt.hashSync(password, 8),
+              jabatan: userObj.jabatan,
+              email: userObj.email,
+              url_img: userObj.url_img,
+              isAdmin: false,
+              superAdmin: false,
+            })
+              .then(res_user => {
+                return res.status(200).send({ message: 'firstLogin' });
               })
               .catch(err => {
-                res.status(200).send({ message: 'success' });
+                res.status(500).send({ message: err.message });
               });
-          })
-          .catch(err => {
-            res.status(200).send({ message: 'success' });
-          });
-      })
-      .catch(err => {
-        res.status(200).send({ message: 'success' });
-      });
-  },
-
-  updatePassword: async (req, res) => {
-    Users.scope('withPassword')
-      .findOne({
-        where: { email: req.query.email },
-      })
-      .then(user => {
-        VerificationToken.destroy({
-          where: {
-            expiredDateResetToken: { [Op.lt]: Sequelize.fn('CURDATE') },
-          },
-        });
-
-        var recordResetToken = VerificationToken.findOne({
-          where: {
-            resetToken: req.query.resetToken,
-            userId: user.id,
-          },
-        });
-
-        if (recordResetToken) {
-          if (req.body.confirmPassword !== req.body.password) {
-            return res.status(404).json({ message: 'Passwords do not match. Please try again.' });
           }
-          user.update(
+
+          var passwordIsValid = bcrypt.compareSync(password, user.password);
+          if (!passwordIsValid) {
+            return res.status(404).send({
+              message: 'Invalid Password!',
+            });
+          }
+          var token = jwt.sign(
+            { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+            process.env.SECRET_TOKEN,
             {
-              password: bcrypt.hashSync(req.body.password, 8),
-            },
-            {
-              where: {
-                email: req.query.email,
-              },
+              expiresIn: 86400, // 24 hours
             }
           );
-          return res.status(200).json({ message: 'Succesfully Update Password' });
-        }
-      })
-      .catch(err => {
-        return res.status(500).json({ message: err });
-      });
+          res.cookie('access_token', token, setJWTCookieOption());
+          res.status(200).send({
+            email: user.email,
+            role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
+            isAdmin: user.isAdmin,
+            superAdmin: user.superAdmin,
+          });
+        })
+        .catch(err => {
+          res.status(500).send({ message: err.message });
+        });
+    }
+
+    async function createNewUser(userData, password) {
+      let response = await Users.scope('withPassword')
+        .create({
+          nama: userData.nama,
+          email: userData.email,
+          npp: userData.npp,
+          tgl_lahir: userData.tgl_lahir,
+          wilayah: userData.wilayah,
+          singkatan: userData.singkatan,
+          kdunit: userData.kdunit,
+          unit_besaran: userData.unit_besaran,
+          jenjang: userData.jenjang,
+          password: bcrypt.hashSync(password, 8),
+          jabatan: userData.jabatan,
+          email: userData.email,
+          url_img: userData.url_img,
+          isAdmin: false,
+          superAdmin: false,
+        })
+        .then(res_user => {
+          res.status(200).send({ message: 'sukses' });
+          // var expireDate = new Date();
+          // expireDate.setDate(expireDate.getDate() + 1 / 24);
+          // VerificationToken.create({
+          //   userId: res_user.id,
+          //   token: cryptoRandomString({ length: 20 }),
+          //   expiredDateToken: expireDate,
+          // })
+          //   .then(res => {
+          //     res.status(200).send({
+          //       message: 1,
+          //     });
+          //   })
+          //   .catch(err => {
+          //     res.status(500).send({ message: err.message });
+          //   });
+        })
+        .catch(err => {
+          console.log('inikan?');
+          res.status(500).send({ message: err.message });
+        });
+      res.status(200).send({ message: response });
+    }
   },
+
   logout: async (req, res) => {
     res.cookie('access_token', { maxAge: 0 });
     res.status(200).send({ message: 'success' });

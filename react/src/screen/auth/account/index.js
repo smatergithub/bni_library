@@ -45,17 +45,20 @@ function Accounts(props) {
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
-      <div className="pl-4 flex items-center bg-orange-400 justify-between  w-full">
+      <div className="pl-4 flex items-center bg-orange-600 justify-between  w-full">
         <Link to={isAdmin ? '/admin/dashboard' : '/'}>
-          <div className="toggleColour text-gray-900 no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
+          <div className="toggleColour text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl">
             BNI
           </div>
         </Link>
         <button
-          className="lg:mx-0 hover:underline text-red-900 font-extrabold text-lg  rounded-sm h-10 px-5"
+          className="lg:mx-0 hover:underline text-white  text-lg  rounded-sm  px-5"
           onClick={() => logoutUser()}
         >
-          LOGOUT
+          <span className="mr-1 pt-2">
+            <i class="fas fa-sign-out-alt"></i>
+          </span>
+          Log Out
         </button>
       </div>
       <div
