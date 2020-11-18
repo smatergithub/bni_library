@@ -137,7 +137,7 @@ function Login(props) {
                     </div>
                     <div className="text-center mt-6">
                       <button
-                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
                         type="submit"
                         style={{
                           transition: 'all 0.15s ease 0s',
@@ -147,12 +147,12 @@ function Login(props) {
                       </button>
                     </div>
 
-                    <div
+                    {/* <div
                       className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer "
                       onClick={() => history.push('/auth/register')}
                     >
                       Daftar
-                    </div>
+                    </div> */}
                     <div
                       className="mt-5 text-center text-orange-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
                       onClick={() => history.push('/')}
