@@ -6,20 +6,16 @@ import { ToastError } from '../../../component';
 
 function Login(props) {
   let { history } = props;
-  let [user, setUser] = useState({ email: '', password: '' });
+  let [user, setUser] = useState({ npp: '', password: '' });
 
   function onLogin(e) {
     e.preventDefault();
-    let email = user.email.split('@');
-    if (user.email.trim().length === 0 && user.password.trim().length === 0) {
-      ToastError('Email atau password tidak boleh kosong');
-    } else if (email.length === 2 && email[1] === 'bni.co.id_test') {
-      // user can input another email domain for testing, later the email must accept @bni.co.id only
-      ToastError('Anda belum menginput alamat email BNI Anda');
+
+    if (user.npp.trim().length === 0 || user.password.trim().length === 0) {
+      ToastError('NPP atau password tidak boleh kosong');
     } else {
       let data = {
-        email: user.email,
-        // email.length === 2 && email[1] === 'bni.co.id' ? user.email : user.email + '@bni.co.id',
+        npp: user.npp,
         password: user.password,
       };
 
@@ -27,20 +23,41 @@ function Login(props) {
         .signIn(data)
         .then(res => {
           if (res.resp) {
-            props.getMe().then(res => {
-              if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
-                history.push('/profile/home?edit=true');
-              } else {
-                history.push('/admin/dashboard');
-              }
-            });
+            if (res.data.message === 'firstLogin') {
+              props
+                .signIn(data)
+                .then(res => {
+                  if (res.resp) {
+                    props.getMe().then(res => {
+                      if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
+                        history.push('/profile/home?edit=true');
+                      } else {
+                        history.push('/admin/dashboard');
+                      }
+                    });
+                  } else {
+                    ToastError(res.msg);
+                  }
+                })
+                .catch(err => {
+                  let msg = err.message || 'Something wrong';
+                  ToastError(msg);
+                });
+            } else {
+              props.getMe().then(res => {
+                if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
+                  history.push('/profile/home?edit=true');
+                } else {
+                  history.push('/admin/dashboard');
+                }
+              });
+            }
           } else {
             ToastError(res.msg);
           }
         })
         .catch(err => {
           console.log(err);
-          debugger;
           let msg = err.message || 'Something wrong';
           ToastError(msg);
         });
@@ -73,13 +90,13 @@ function Login(props) {
                   <form onSubmit={e => onLogin(e)}>
                     <div className="relative w-full mb-3">
                       <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
-                        Email
+                        NPP
                       </label>
                       <input
-                        onChange={e => setUser({ ...user, email: e.target.value })}
+                        onChange={e => setUser({ ...user, npp: e.target.value })}
                         type="text"
                         className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
-                        placeholder="Email"
+                        placeholder="NPP"
                         style={{
                           transition: 'all 0.15s ease 0s',
                         }}

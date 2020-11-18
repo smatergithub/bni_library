@@ -29,16 +29,8 @@ router.get('/categoryEbook', DataSourceFilterEbookController.getCategory);
 router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);
 router.post('/contact-us', AuthenticationController.contactUs);
 
-router.post(
-  '/register',
-  [verifySignUp.checkDuplicateUsernameOrEmail],
-  AuthenticationController.register
-);
 router.post('/login', AuthenticationController.login);
 router.get('/logout', AuthenticationController.logout);
-router.post('/verification', AuthenticationController.verificationAccount);
-router.post('/resetPassword', AuthenticationController.resetPassword);
-router.post('/updatePassword', AuthenticationController.updatePassword);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get(
