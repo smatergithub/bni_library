@@ -47,7 +47,6 @@ module.exports = {
               jabatan: userObj.jabatan,
               email: userObj.email,
               url_img: userObj.url_img,
-              isVerified: false,
               isAdmin: false,
               superAdmin: false,
             })
@@ -101,7 +100,6 @@ module.exports = {
           jabatan: userData.jabatan,
           email: userData.email,
           url_img: userData.url_img,
-          isVerified: false,
           isAdmin: false,
           superAdmin: false,
         })
