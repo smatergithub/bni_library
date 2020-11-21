@@ -239,7 +239,7 @@ module.exports = {
       image: location,
 
       sourceLink: req.body.sourceLink,
-      condition: req.body.condition,
+      kondisi: req.body.kondisi,
       isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response => {
@@ -290,7 +290,7 @@ module.exports = {
             penerbit: row[9],
             lokasiPerpustakaan: row[10],
             status: row[11],
-            condition: row[12],
+            kondisi: row[12],
             image: row[13],
             sourceLink: row[14],
             isPromotion: false,
@@ -299,7 +299,6 @@ module.exports = {
           Databooks.push(rowBook);
         });
 
-        console.log("data boosk",Databooks)
         Ebooks.bulkCreate(Databooks)
           .then(response => {
             response.map(item => {
@@ -353,7 +352,7 @@ module.exports = {
             image: req.file ? location : req.file,
 
             sourceLink: req.body.sourceLink,
-            condition: req.body.condition,
+            kondisi: req.body.kondisi,
             isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
           })
           .then(response =>

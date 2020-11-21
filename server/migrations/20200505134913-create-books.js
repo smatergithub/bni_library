@@ -20,6 +20,9 @@ module.exports = {
       tahunTerbit: {
         type: Sequelize.STRING,
       },
+      jumlahPeminjam: {
+        type: Sequelize.INTEGER,
+      },
       description: {
         type: Sequelize.TEXT,
       },
@@ -30,7 +33,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       isbn: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       bahasa: {
         type: Sequelize.STRING,
@@ -44,10 +47,19 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
       },
-      image: {
+       nomorLemari: {
         type: Sequelize.STRING,
       },
-      condition: {
+       rakLemari: {
+        type: Sequelize.STRING,
+      },
+      keterangan: {
+        type: Sequelize.TEXT,
+      },
+      urlFile: {
+        type: Sequelize.STRING,
+      },
+      image: {
         type: Sequelize.STRING,
       },
       countRating: {
@@ -55,9 +67,6 @@ module.exports = {
       },
       totalRead: {
         type: Sequelize.INTEGER,
-      },
-      isPromotion: {
-        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
