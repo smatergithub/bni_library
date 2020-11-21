@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       judul: DataTypes.STRING,
       pengarang: DataTypes.STRING,
       tahunTerbit: DataTypes.STRING,
+      jumlahPeminjam : DataTypes.STRING,
       description: DataTypes.TEXT,
       stockBuku: DataTypes.INTEGER,
       tanggalTerbit: DataTypes.STRING,
@@ -21,11 +22,13 @@ module.exports = (sequelize, DataTypes) => {
       penerbit: DataTypes.STRING,
       lokasiPerpustakaan: DataTypes.STRING,
       status: DataTypes.STRING,
+      nomorLemari :  DataTypes.STRING,
+      rakLemari :  DataTypes.STRING,
+      keterangan :  DataTypes.TEXT,
+      urlFile :  DataTypes.STRING,
       image: DataTypes.STRING,
       countRating: DataTypes.INTEGER,
       totalRead: DataTypes.INTEGER,
-      condition: DataTypes.STRING,
-      isPromotion: DataTypes.BOOLEAN,
     },
     {}
   );

@@ -214,6 +214,7 @@ module.exports = {
             .update({
               stockBuku: book.stockBuku - bookData.quantity,
               status: book.stockBuku < 0 ? "Ada" : "Kosong",
+              jumlahDipinjam : book.quantity +  bookData.quantity
 
             })
             .catch(err => {
@@ -329,6 +330,7 @@ module.exports = {
         book
           .update({
             stockBuku: book.stockBuku + transactionBook.quantity,
+            jumlahDipinjam : book.quantity - transactionBook.quantity
           })
           .catch(err => {
             res.status(404).send(err);

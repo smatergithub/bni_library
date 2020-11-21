@@ -16,7 +16,6 @@ function CreateNewBook(props) {
   let { id } = parsed;
   const { handleSubmit, register, errors } = useForm();
   let [image, setImage] = React.useState(null);
-  let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [books, setBooks] = React.useState(null);
@@ -25,7 +24,7 @@ function CreateNewBook(props) {
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Wedding';
+
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
@@ -39,8 +38,6 @@ function CreateNewBook(props) {
       });
     } else {
       formData['image'] = image ? image : book.image;
-      formData['condition'] =
-        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : book.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : book.tahunTerbit;
       formData['status'] =
@@ -74,7 +71,6 @@ function CreateNewBook(props) {
         if (res.resp) {
           setBooks(res.data);
           setStatusValue(res.data.book.status);
-          setConditionValue(res.data.book.condition);
           setPublishDate(res.data.book.tahunTerbit);
         } else {
           setBooks(null);
@@ -85,10 +81,7 @@ function CreateNewBook(props) {
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
-  function onChangeCondition(value) {
-    console.log(value);
-    setConditionValue(value[0]);
-  }
+
   function onChangeStatus(value) {
     setStatusValue(value[0]);
   }
@@ -116,10 +109,6 @@ function CreateNewBook(props) {
   const optionsStatus = [
     { label: 'Ada', value: 'Ada' },
     { label: 'Kosong', value: 'Kosong' },
-  ];
-  const optionsCondition = [
-    { label: 'Baik', value: 'Baik' },
-    { label: 'Wedding', value: 'Wedding' },
   ];
   if (!books && id) return null;
   let book = id ? books.book : books;
@@ -272,6 +261,44 @@ function CreateNewBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                   Nomor Lemari
+                  </label>
+                  <input
+                    name="nomorLemari"
+                    defaultValue={book ? book.nomorLemari : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.nomorLemari && errors.nomorLemari.message}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                   Rak
+                  </label>
+                  <input
+                    name="rakLemari"
+                    defaultValue={book ? book.rakLemari : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.rakLemari && errors.rakLemari.message}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Lokasi Perpustakaan
                   </label>
                   <input
@@ -301,17 +328,7 @@ function CreateNewBook(props) {
                   />
                   <div className="text-red-700"></div>
                 </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Kondisi
-                  </label>
-                  <Checkbox.Group
-                    options={optionsCondition}
-                    value={conditionValue}
-                    onChange={onChangeCondition}
-                  />
-                  <div className="text-red-700"></div>
-                </div>
+
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Tahun Terbit
@@ -336,6 +353,44 @@ function CreateNewBook(props) {
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
 
+                 <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    URL File
+                  </label>
+                  <input
+                    name="urlFile"
+                    defaultValue={book ? book.urlFile : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.urlFile && errors.urlFile.message}
+                  </div>
+                </div>
+                 <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Keterangan
+                  </label>
+                  <input
+                    name="keterangan"
+                    defaultValue={book ? book.keterangan : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.keterangan && errors.keterangan.message}
+                  </div>
+                </div>
                 <div className="mt-2">
                   <label className=" block text-sm text-gray-600" htmlFor="message">
                     Deskripsi
