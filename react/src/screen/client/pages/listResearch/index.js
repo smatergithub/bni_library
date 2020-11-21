@@ -168,9 +168,9 @@ function ListReserach(props) {
                                 marginTop: 4,
                               }}
                             ></i>
-                            <div className="pt-2 ml-2 text-sm">Jenis Riset : {item.type}</div>
+                            <div className="pt-2 ml-2 text-sm">Jenis Riset : {item.category}</div>
                           </div>
-                          <div className="flex items-center  text-gray-700">
+                          {/* <div className="flex items-center  text-gray-700">
                             <i
                               className="fas fa-file"
                               style={{
@@ -180,7 +180,7 @@ function ListReserach(props) {
                             <div className="ml-2 text-sm mt-2 px-2 py-1 border-radi bg-green-400  rounded text-white">
                               {`Tersedia ${countFile} File`}
                             </div>
-                          </div>
+                          </div> */}
 
                           <div
                             className="flex items-center justify-end  absolute w-full "
