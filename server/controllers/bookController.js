@@ -194,7 +194,7 @@ module.exports = {
           : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
         return book
           .update({
-             kategori: req.body.kategori,
+            kategori: req.body.kategori,
             judul: req.body.judul,
             pengarang: req.body.pengarang,
             tahunTerbit: req.body.tahunTerbit,

@@ -17,7 +17,6 @@ function CreateNewEBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
   let [image, setImage] = React.useState(null);
-  let [conditionValue, setConditionValue] = React.useState(null);
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [ebooks, setEbooks] = React.useState(null);
@@ -27,7 +26,7 @@ function CreateNewEBook(props) {
   function onSubmit(formData) {
     if (!id) {
       formData['image'] = image;
-      formData['condition'] = conditionValue == 'Baik' ? 'Baik' : 'Wedding';
+
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
@@ -45,8 +44,6 @@ function CreateNewEBook(props) {
       }
     } else {
       formData['image'] = image ? image : ebook.image;
-      formData['condition'] =
-        conditionValue !== null ? (conditionValue == 'Baik' ? 'Baik' : 'Weeding') : ebook.condition;
       formData['tahunTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['tanggalTerbit'] = publishDate ? publishDate : ebook.tahunTerbit;
       formData['status'] =
@@ -137,7 +134,7 @@ function CreateNewEBook(props) {
         if (res.resp) {
           setEbooks(res.data);
           setStatusValue(res.data.ebook.status);
-          setConditionValue(res.data.ebook.condition);
+
           setPublishDate(res.data.ebook.tahunTerbit);
         } else {
           setEbooks(null);
@@ -148,19 +145,13 @@ function CreateNewEBook(props) {
   function onChange(date, dateString) {
     setPublishDate(dateString);
   }
-  function onChangeCondition(value) {
-    setConditionValue(value[0]);
-  }
+
   function onChangeStatus(value) {
     setStatusValue(value[0]);
   }
   const optionsStatus = [
     { label: 'Ada', value: 'Ada' },
     { label: 'Kosong', value: 'Kosong' },
-  ];
-  const optionsCondition = [
-    { label: 'Baik', value: 'Baik' },
-    { label: 'Wedding', value: 'Wedding' },
   ];
   if (id && !ebooks) return null;
   let ebook = id ? ebooks.ebook : ebooks;
@@ -319,7 +310,44 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                 </div>
-
+                 <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                   Nomor Lemari
+                  </label>
+                  <input
+                    name="nomorLemari"
+                    defaultValue={ebook ? ebook.nomorLemari : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.nomorLemari && errors.nomorLemari.message}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                   Rak
+                  </label>
+                  <input
+                    name="rakLemari"
+                    defaultValue={ebook ? ebook.rakLemari : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.rakLemari && errors.rakLemari.message}
+                  </div>
+                </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Lokasi Perpustakaan
@@ -352,17 +380,6 @@ function CreateNewEBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Kondisi
-                  </label>
-                  <Checkbox.Group
-                    options={optionsCondition}
-                    value={conditionValue}
-                    onChange={optionsCondition}
-                  />
-                  <div className="text-red-700"></div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Tahun Terbit
                   </label>
                   <Space direction="vertical">
@@ -384,7 +401,25 @@ function CreateNewEBook(props) {
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
-
+                  <div className="mt-2">
+                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                    Keterangan
+                  </label>
+                  <input
+                    name="keterangan"
+                    defaultValue={ebook ? ebook.keterangan : ''}
+                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                    type="text"
+                    required=""
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
+                    aria-label="Email"
+                  />
+                  <div className="text-red-700">
+                    {errors.keterangan && errors.keterangan.message}
+                  </div>
+                </div>
                 <div className="mt-2">
                   <label className=" block text-sm text-gray-600" htmlFor="message">
                     Deskripsi
