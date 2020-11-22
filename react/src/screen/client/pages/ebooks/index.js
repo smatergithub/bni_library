@@ -178,7 +178,10 @@ function Ebooks(props) {
               let isAdd = wishlist.some(ws => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img className="hover:grow hover:shadow-lg h-64" src={ebook.image} />
+                  <img
+                    className="hover:grow hover:shadow-lg h-64"
+                    src={ebook.image ? ebook.image : require('../../../../assets/default-book.svg')}
+                  />
                   <div className="h-16 pt-2 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{ebook.judul}</h2>
 
