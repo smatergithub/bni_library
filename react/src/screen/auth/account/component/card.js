@@ -43,7 +43,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
         )}
         <button
           onClick={() => onDetailClick()}
-          className="lg:mx-0 hover:underline bg-orange-500 text-white mt-10 rounded-sm h-10 px-5"
+          className="lg:mx-0 hover:underline bg-orange-500 text-white mt-8 rounded-sm h-10  px-5"
           style={{
             right: '2em',
           }}
@@ -53,13 +53,13 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
         {type === 'borrow' && data.sourceLink && (
           <a
             href={data.sourceLink}
-            className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm h-10 px-5 py-3"
+            className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
             style={{
               right: '2em',
             }}
             download
           >
-            UNDUH
+            BACA
           </a>
         )}
         {type === 'wishlist' && (

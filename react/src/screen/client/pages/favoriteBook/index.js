@@ -42,7 +42,7 @@ function FavoriteBooks(props) {
               </h2>
 
               <div class=" mt-8  mx-auto md:flex items-start justify-center">
-                {books.ratingBook !== 0 ? (
+                {books.ratingBook && books.ratingBook.length !== 0 ? (
                   books.ratingBook.map((data, key) => {
                     let book = data;
                     return (
