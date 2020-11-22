@@ -94,9 +94,10 @@ module.exports = {
     };
 
     const RatingList = await Ebooks.findAndCountAll(paramQuerySQL).then(response => {
+      let list = response.rows.filter(x => x.countRating !== null)
       return {
         count: response.count,
-        data: response.rows,
+        data: list,
       };
     });
 
