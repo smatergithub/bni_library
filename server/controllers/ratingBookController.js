@@ -93,11 +93,14 @@ module.exports = {
       order: [['countRating', 'DESC']],
     };
     const RatingList = await Books.findAndCountAll(paramQuerySQL).then(response => {
+      let list = response.rows.filter(x => x.countRating !== null)
+      console.log("rating List",list)
       return {
         count: response.count,
-        data: response.rows,
+        data: list,
       };
     });
+
     try {
       res.status(200).json({
         ratingBook: RatingList.data,

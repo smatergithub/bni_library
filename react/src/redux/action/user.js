@@ -8,7 +8,7 @@ export const signIn = user => dispatch => {
       if (res) {
         localStorage.setItem('bni_UserRole', res.role);
         dispatch({ type: SIGN_IN, payload: res });
-        return { resp: true, msg: '' };
+        return { resp: true, msg: '', data: res };
       }
     })
     .catch(err => {

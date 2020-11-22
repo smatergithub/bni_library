@@ -21,6 +21,7 @@ import AddNewResearch from './createNewRepo';
 import AddNewResearchSuccess from './researchSuccess';
 import FavoriteBooks from './favoriteBook';
 import FavoriteEbooks from './favoriteEbook';
+import NotFound from './notFound';
 
 const routes = [
   {
@@ -32,6 +33,11 @@ const routes = [
     path: '/home',
     exact: false,
     main: <Home />,
+  },
+  {
+    path: '/not-found',
+    exact: false,
+    main: <NotFound />,
   },
   {
     path: '/katalog',

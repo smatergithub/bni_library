@@ -14,10 +14,7 @@ module.exports = {
       nama: {
         type: Sequelize.STRING,
       },
-      phoneNumber: {
-        type: Sequelize.STRING,
-      },
-      tanggalLahir: {
+      tgl_lahir: {
         type: Sequelize.STRING,
       },
       wilayah: {
@@ -29,7 +26,7 @@ module.exports = {
       kdunit: {
         type: Sequelize.STRING,
       },
-      unitBesaran: {
+      unit_besaran: {
         type: Sequelize.STRING,
       },
       unit: {
@@ -47,24 +44,20 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
-      imageUrl: {
+      url_img: {
         type: Sequelize.STRING,
       },
       mapUrl: {
         type: Sequelize.TEXT,
-      },
-
-      password: {
-        type: Sequelize.STRING,
-      },
-      isVerified: {
-        type: Sequelize.BOOLEAN,
       },
       isAdmin: {
         type: Sequelize.BOOLEAN,
       },
       superAdmin: {
         type: Sequelize.BOOLEAN,
+      },
+      password: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

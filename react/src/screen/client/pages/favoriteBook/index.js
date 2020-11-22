@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 import { connect } from 'react-redux';
-import { Modal } from '../../../../component';
+import { Modal, NoData } from '../../../../component';
 import { getfavorite } from 'redux/action/books';
 
 function FavoriteBooks(props) {
@@ -21,7 +21,6 @@ function FavoriteBooks(props) {
       }
     });
   }, []);
-  let isUserLogged = localStorage.getItem('bni_UserRole') === null;
 
   return (
     <React.Fragment>
@@ -43,12 +42,17 @@ function FavoriteBooks(props) {
               </h2>
 
               <div class=" mt-8  mx-auto md:flex items-start justify-center">
-                {books.length !== 0 &&
+                {books.ratingBook && books.ratingBook.length !== 0 ? (
                   books.ratingBook.map((data, key) => {
                     let book = data;
                     return (
                       <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                        <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
+                        <img
+                          className="hover:grow hover:shadow-lg h-64"
+                          src={
+                            book.image ? book.image : require('../../../../assets/default-book.svg')
+                          }
+                        />
                         <div className="h-16 pt-1 flex items-start justify-between">
                           <h2 className="text-gray-800 text-lg">{book.judul}</h2>
                         </div>
@@ -80,7 +84,10 @@ function FavoriteBooks(props) {
                         </Link>
                       </div>
                     );
-                  })}
+                  })
+                ) : (
+                  <NoData />
+                )}
               </div>
             </div>
           </section>

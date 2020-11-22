@@ -7,7 +7,7 @@ function LandingPages(props) {
     <React.Fragment>
       <div className="pt-24">
         <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-          <div className="flex flex-col w-full md:pr-10 md:w-3/5 justify-center items-start text-center md:text-left md:pt-20">
+          <div className="flex flex-col w-full md:pr-10 md:w-3/5 justify-center items-start text-start md:text-left md:pt-20">
             <h1 className="text-3xl font-bold ">
               BNI Corporate University & Divisi Perencanaan Strategis
             </h1>

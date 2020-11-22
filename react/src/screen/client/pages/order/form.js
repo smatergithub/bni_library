@@ -19,6 +19,8 @@ function FormOrder({ data, type, onOrderItem, user }) {
   function onSubmit(formData) {
     if (moment(startDate).valueOf() > moment(endDate).valueOf()) {
       ToastError('Tanggal Pengembalian harus lebih besar daripada tanggal pinjam');
+    } else if (!endDate || !startDate) {
+      ToastError('Tanggal Peminjaman harus di lengkapi!');
     } else {
       let { id, type } = parsed;
       formData['startDate'] = startDate;
@@ -113,7 +115,9 @@ function FormOrder({ data, type, onOrderItem, user }) {
                     Jumlah Buku
                   </label>
                   <input
-                    ref={register()}
+                    ref={register({
+                      required: 'Field tidak boleh kosong',
+                    })}
                     // defaultValue={user.nama}
                     type="number"
                     name="quantity"
@@ -123,6 +127,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                       transition: 'all 0.15s ease 0s',
                     }}
                   />
+                  <div className="text-red-700">{errors.quantity && errors.quantity.message}</div>
                 </div>
               </React.Fragment>
             )}
@@ -133,11 +138,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 Dari Tanggal
               </label>
               <Space direction="vertical">
-                <DatePicker
-                  onChange={onChangeStartDate}
-                  defaultValue={moment()}
-                  disabledDate={date => date < moment()}
-                />
+                <DatePicker onChange={onChangeStartDate} disabledDate={date => date < moment()} />
               </Space>
             </div>
             <div className="mt-2">
@@ -160,7 +161,9 @@ function FormOrder({ data, type, onOrderItem, user }) {
             <div className="relative w-full mb-3 mt-8">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Note</label>
               <input
-                ref={register()}
+                ref={register({
+                  required: 'Field tidak boleh kosong',
+                })}
                 // defaultValue={user.nama}
                 type="text"
                 name="note"
@@ -170,6 +173,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                   transition: 'all 0.15s ease 0s',
                 }}
               />
+              <div className="text-red-700">{errors.note && errors.note.message}</div>
             </div>
             <div className="mt-6">
               <button

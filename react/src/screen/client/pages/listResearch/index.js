@@ -130,8 +130,8 @@ function ListReserach(props) {
                     <div key={key} className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                       <div className="md:flex shadow-lg  mx-6  my-5 max-w-lg md:max-w-4xl h-64">
                         <img
-                          className="h-full w-full md:w-1/3  object-cover rounded-lg rounded-r-none pb-5/6"
-                          src="https://ik.imagekit.io/q5edmtudmz/FB_IMG_15658659197157667_wOd8n5yFyXI.jpg"
+                          className="h-40 w-full md:w-1/3  object-contain rounded-lg rounded-r-none pt-10"
+                          src={require('../../../../assets/riset.svg')}
                           alt="bag"
                         />
                         <div className="w-full md:w-2/3 px-4 py-4 bg-white rounded-lg relative">
@@ -168,9 +168,9 @@ function ListReserach(props) {
                                 marginTop: 4,
                               }}
                             ></i>
-                            <div className="pt-2 ml-2 text-sm">Jenis Riset : {item.type}</div>
+                            <div className="pt-2 ml-2 text-sm">Jenis Riset : {item.category}</div>
                           </div>
-                          <div className="flex items-center  text-gray-700">
+                          {/* <div className="flex items-center  text-gray-700">
                             <i
                               className="fas fa-file"
                               style={{
@@ -180,7 +180,7 @@ function ListReserach(props) {
                             <div className="ml-2 text-sm mt-2 px-2 py-1 border-radi bg-green-400  rounded text-white">
                               {`Tersedia ${countFile} File`}
                             </div>
-                          </div>
+                          </div> */}
 
                           <div
                             className="flex items-center justify-end  absolute w-full "
@@ -190,7 +190,7 @@ function ListReserach(props) {
                             }}
                           >
                             <Link to={`/detail-riset?id=${item.id}`}>
-                              <button className=" bg-gray-800 text-white px-5 py-2 rounded-md ">
+                              <button className=" bg-orange-600 text-white px-5 py-2 rounded-md ">
                                 Detail
                               </button>
                             </Link>

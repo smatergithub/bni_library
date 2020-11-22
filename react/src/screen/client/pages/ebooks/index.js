@@ -178,7 +178,10 @@ function Ebooks(props) {
               let isAdd = wishlist.some(ws => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img className="hover:grow hover:shadow-lg h-64" src={ebook.image} />
+                  <img
+                    className="hover:grow hover:shadow-lg h-64"
+                    src={ebook.image ? ebook.image : require('../../../../assets/default-book.svg')}
+                  />
                   <div className="h-16 pt-2 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{ebook.judul}</h2>
 
@@ -221,7 +224,7 @@ function Ebooks(props) {
                       {ebook.totalRead ? ebook.totalRead : 0}
                     </span>
                   </div>
-                  <button
+                  {/* <button
                     onClick={() => {
                       setShowPreview({
                         open: true,
@@ -234,7 +237,7 @@ function Ebooks(props) {
                 `}
                   >
                     Lihat Preview
-                  </button>
+                  </button> */}
                   <button
                     className="w-full bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}

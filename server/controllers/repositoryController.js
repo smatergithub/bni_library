@@ -34,6 +34,7 @@ module.exports = {
         'releaseYear',
         'description',
         'isApproved',
+        'category',
       ];
       paramQuerySQL.where = {
         [Op.and]: {
@@ -92,8 +93,6 @@ module.exports = {
     // queryStrings
 
     let { q, order, sort, limit, page } = req.query;
-    console.log(page);
-    console.log(limit);
     let paramQuerySQL = {
       limit: 10,
       page: 1,
@@ -217,8 +216,6 @@ module.exports = {
       .catch(error => res.status(500).send(error));
   },
   add: async (req, res) => {
-    // console.log('')
-
     UploadMultipleDocument(req, res, err => {
       if (err) throw err;
       return Repositorys.create({

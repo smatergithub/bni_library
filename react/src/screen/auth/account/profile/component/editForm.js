@@ -99,11 +99,28 @@ function EditUser(props) {
 
   let { user } = props;
   if (!user) return null;
+
+
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg xs:pl-0 md:pl-10 relative">
       <div class="px-4 py-8 flex">
         <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
           <form onSubmit={handleSubmit(onSubmit)}>
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Npp</label>
+              <input
+                ref={register()}
+                defaultValue={user.npp}
+                type="text"
+                name="npp"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                placeholder="Npp"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
+            </div>
+
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Nama</label>
               <input
@@ -113,6 +130,20 @@ function EditUser(props) {
                 name="nama"
                 className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                 placeholder="Nama"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
+            </div>
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Phone Number</label>
+              <input
+                ref={register()}
+                defaultValue={user.phoneNumber}
+                type="text"
+                name="phoneNumber"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                placeholder="Phone Number"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}
@@ -202,6 +233,20 @@ function EditUser(props) {
                 name="kdunit"
                 type="text"
                 className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
+            </div>
+            <div className="relative w-full mb-3">
+              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Jenjang</label>
+              <input
+                ref={register()}
+                defaultValue={user.jenjang}
+                type="text"
+                name="jenjang"
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                placeholder="Jenjang"
                 style={{
                   transition: 'all 0.15s ease 0s',
                 }}

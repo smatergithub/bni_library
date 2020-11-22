@@ -1,5 +1,6 @@
 import React from 'react';
-
+let imgDefault =
+  'https://images.unsplash.com/photo-1521310192545-4ac7951413f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80';
 function Information({ user, changePages }) {
   React.useEffect(() => {
     if (user && user.mapUrl) {
@@ -22,7 +23,7 @@ function Information({ user, changePages }) {
       <div class="px-4 py-8 flex">
         <div class="h-24 w-24 rounded-full ">
           <img
-            src="https://images.unsplash.com/photo-1521310192545-4ac7951413f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80"
+            src={user.url_img ? user.url_img : imgDefault}
             alt=""
             className="h-24 w-24 rounded-full"
           />

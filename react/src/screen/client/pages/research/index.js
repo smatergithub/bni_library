@@ -6,7 +6,7 @@ function Reserach(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let { history } = props;
   function redirectToLogin() {
-    history.push('/auth/login');
+    window.location.replace('/auth/login');
   }
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
 
@@ -14,7 +14,7 @@ function Reserach(props) {
     <React.Fragment>
       <div className="pt-24">
         <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-          <div className="flex flex-col w-full md:w-3/5 justify-center items-start text-center md:text-left">
+          <div className="flex flex-col w-full md:w-3/5 justify-center items-start text-start md:text-left">
             <h1 className="my-4 text-3xl font-bold leading-tight">Riset BNI </h1>
 
             <p className="leading-normal text-2xl mb-8">

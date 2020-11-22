@@ -16,6 +16,7 @@ import {
   createEbookFeeback,
   getMe,
 } from '../../../../redux/action/user';
+import { removeBookWishlist, removeEbookWishlist } from 'redux/action/wishlist';
 import { orderBook, orderEbook } from '../../../../redux/action/transaction';
 import Form from './form';
 function OrderBook(props) {
@@ -96,11 +97,19 @@ function OrderBook(props) {
       props.history.push('/profile/ebooks');
     }
   }
+  function removeWishlist(data) {
+    let { type } = parsed;
+    if (type === 'book') {
+      props.removeBookWishlist(data);
+    } else {
+      props.removeEbookWishlist(data);
+    }
+  }
   function onOrderItem(formData) {
     if (moment(formData.startDate).valueOf() > moment(formData.endDate).valueOf()) {
       ToastError('Tanggal Pengembalian harus lebih besar daripada tanggal pinjam');
     } else {
-      let { id, type } = parsed;
+      let { type } = parsed;
 
       if (type === 'book') {
         if (isUserhaveActiveBook) {
@@ -110,12 +119,12 @@ function OrderBook(props) {
         } else {
           props.orderBook(formData).then(res => {
             if (res.resp) {
+              removeWishlist(books.book);
               setShowModalDeletion(true);
             }
           });
         }
       } else if (type === 'ebook') {
-        console.log(isUserhaveActiveEbook);
         if (isUserhaveActiveEbook) {
           ToastError(
             'Maksimal peminjaman hanya 1 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
@@ -123,6 +132,7 @@ function OrderBook(props) {
         } else {
           props.orderEbook(formData).then(res => {
             if (res.resp) {
+              removeWishlist(ebooks.ebook);
               setShowModalDeletion(true);
             }
           });
@@ -204,5 +214,7 @@ export default withRouter(
     createBookFeeback,
     createEbookFeeback,
     getMe,
+    removeEbookWishlist,
+    removeBookWishlist,
   })(OrderBook)
 );

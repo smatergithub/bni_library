@@ -161,7 +161,10 @@ function Books(props) {
               let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
+                  <img
+                    className="hover:grow hover:shadow-lg h-64"
+                    src={book.image ? book.image : require('../../../../assets/default-book.svg')}
+                  />
                   <div className="h-16 pt-1 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{book.judul}</h2>
 

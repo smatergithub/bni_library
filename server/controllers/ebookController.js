@@ -159,32 +159,6 @@ module.exports = {
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
-    // order by
-    // if (
-    //   order != '' &&
-    //   typeof order !== 'undefined' &&
-    //   ['createdAt'].includes(order.toLowerCase())
-    // ) {
-    //   paramQuerySQL.order = [[order, sort]];
-    // }
-    // if (typeof sort !== 'undefined' && !['asc', 'desc'].includes(sort.toLowerCase())) {
-    //   sort = 'DESC';
-    // }
-
-    // return await Books.findAndCountAll(paramQuerySQL)
-    //   .then(book => {
-    //     let totalPage = Math.ceil(book.count / req.body.limit);
-    //     let page = Math.ceil(req.body.page);
-    //     res.status(200).json({
-    //       count: book.count,
-    //       totalPage: totalPage,
-    //       activePage: page,
-    //       data: book.rows,
-    //     });
-    //   })
-    //   .catch(err => {
-    //     res.status(500).send(err);
-    //   });
     return await ListBorrowEbook.findAndCountAll(paramQuerySQL)
       .then(ebook => {
         let totalPage = Math.ceil(ebook.count / req.body.limit);
@@ -229,18 +203,17 @@ module.exports = {
       pengarang: req.body.pengarang,
       tahunTerbit: req.body.tahunTerbit,
       description: req.body.description,
-      stockBuku: req.body.stockBuku,
       tanggalTerbit: req.body.tanggalTerbit,
       isbn: req.body.isbn,
       bahasa: req.body.bahasa,
       penerbit: req.body.penerbit,
       lokasiPerpustakaan: req.body.lokasiPerpustakaan,
+      nomorLemari: req.body.nomorLemari,
+      rakLemari: req.body.rakLemari,
+      keterangan: req.body.keterangan,
+      sourceLink: req.body.sourceLink,
       status: req.body.status,
       image: location,
-
-      sourceLink: req.body.sourceLink,
-      condition: req.body.condition,
-      isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
     })
       .then(response => {
         const createListBorrowEbook = ListBorrowEbook.create({
@@ -278,28 +251,27 @@ module.exports = {
 
         rows.forEach(row => {
           let rowBook = {
-            kategori: row[0],
-            judul: row[1],
-            pengarang: row[2],
-            tahunTerbit: row[3],
-            description: row[4],
-            stockBuku: row[5],
-            tanggalTerbit: row[6],
-            isbn: row[7],
-            bahasa: row[8],
-            penerbit: row[9],
-            lokasiPerpustakaan: row[10],
-            status: row[11],
-            condition: row[12],
-            image: row[13],
-            sourceLink: row[14],
-            isPromotion: false,
+            kategori: row[1],
+            judul: row[2],
+            pengarang: row[3],
+            tahunTerbit: row[4],
+            jumlahPeminjam : row[5],
+            description: row[6],
+            tanggalTerbit: row[8],
+            isbn: row[9],
+            bahasa: row[10],
+            penerbit: row[11],
+            lokasiPerpustakaan: row[12],
+            status: row[13],
+            nomorLemari : row[20],
+            rakLemari : row[21],
+            keterangan : row[22],
+            sourceLink : row[23]
           };
 
           Databooks.push(rowBook);
         });
 
-        console.log("data boosk",Databooks)
         Ebooks.bulkCreate(Databooks)
           .then(response => {
             response.map(item => {
@@ -343,18 +315,17 @@ module.exports = {
             pengarang: req.body.pengarang,
             tahunTerbit: req.body.tahunTerbit,
             description: req.body.description,
-            stockBuku: req.body.stockBuku,
             tanggalTerbit: req.body.tanggalTerbit,
             isbn: req.body.isbn,
             bahasa: req.body.bahasa,
             penerbit: req.body.penerbit,
             lokasiPerpustakaan: req.body.lokasiPerpustakaan,
-            status: req.body.status,
-            image: req.file ? location : req.file,
-
+            nomorLemari: req.body.nomorLemari,
+            rakLemari: req.body.rakLemari,
+            keterangan: req.body.keterangan,
             sourceLink: req.body.sourceLink,
-            condition: req.body.condition,
-            isPromotion: req.body.isPromotion ? req.body.isPromotion : false,
+            status: req.body.status,
+             image: req.file ? location : req.file,
           })
           .then(response =>
             res.status(200).json({ message: 'successfully update Ebook', data: response })
@@ -371,7 +342,7 @@ module.exports = {
           return res.status(404).send({ message: 'Ebook not found' });
         }
         ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
-           if(listBorrow[0].dataValues.transactionEbookId !== null && listBorrow[0].dataValues.transactionEbookId !== undefined){
+           if(listBorrow[0].dataValues.transactionEbookId == null && listBorrow[0].dataValues.transactionEbookId == undefined){
                listBorrow[0].destroy().then(() => {
                   ebook
                     .destroy()
