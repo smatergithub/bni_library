@@ -94,7 +94,6 @@ function CreateNewBook(props) {
     reader.onloadend = () => {
       props.UploadBookFIle({ file }).then(res => {
         if (res) {
-          console.log('res', res);
           ToastSuccess(res.msg);
           props.history.push('/admin/books');
         } else {
@@ -261,7 +260,7 @@ function CreateNewBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                   Nomor Lemari
+                    Nomor Lemari
                   </label>
                   <input
                     name="nomorLemari"
@@ -280,7 +279,7 @@ function CreateNewBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                   Rak
+                    Rak
                   </label>
                   <input
                     name="rakLemari"
@@ -293,9 +292,7 @@ function CreateNewBook(props) {
                     })}
                     aria-label="Email"
                   />
-                  <div className="text-red-700">
-                    {errors.rakLemari && errors.rakLemari.message}
-                  </div>
+                  <div className="text-red-700">{errors.rakLemari && errors.rakLemari.message}</div>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -353,7 +350,7 @@ function CreateNewBook(props) {
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
 
-                 <div className="mt-2">
+                <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     URL File
                   </label>
@@ -368,11 +365,9 @@ function CreateNewBook(props) {
                     })}
                     aria-label="Email"
                   />
-                  <div className="text-red-700">
-                    {errors.urlFile && errors.urlFile.message}
-                  </div>
+                  <div className="text-red-700">{errors.urlFile && errors.urlFile.message}</div>
                 </div>
-                 <div className="mt-2">
+                <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Keterangan
                   </label>

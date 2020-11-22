@@ -6,7 +6,6 @@ function WithAdminAuth({ user, component: Component, ...rest }) {
   function validateRoute() {
     let role = localStorage.getItem('bni_UserRole');
     if (role === '3' || role === '2') {
-      console.log('masuk sini');
       return true;
     } else {
       return false;

@@ -76,7 +76,6 @@ function Ebooks(props) {
   }
   function onDocumentLoadSuccess({ numPages }) {
     // setNumPages(numPages);
-    console.log(numPages);
   }
 
   React.useEffect(() => {

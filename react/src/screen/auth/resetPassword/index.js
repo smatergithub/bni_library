@@ -11,7 +11,7 @@ import { ToastError } from 'component';
 function ResetPassword(props) {
   const parsed = queryString.parse(props.location.search);
   let { email, token } = parsed;
-  console.log(parsed);
+
   const [password, setPassword] = React.useState('');
   const [cpassword, setCpassword] = React.useState('');
   const [sendSuccess, setSendSuccess] = React.useState(false);

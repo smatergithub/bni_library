@@ -90,7 +90,6 @@ export const getRepositoryApprovalList = param => dispatch => {
       }
     })
     .catch(err => {
-      console.log(err);
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

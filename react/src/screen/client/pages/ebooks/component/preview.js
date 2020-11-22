@@ -24,7 +24,6 @@ function EbookPreview(props) {
         setLoading(false);
         setEbook(res.data);
       }
-      console.log(res);
     });
   }, []);
   return (
