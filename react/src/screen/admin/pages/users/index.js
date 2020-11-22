@@ -91,7 +91,6 @@ const Ebooks = props => {
         setShowModalMakeAdmin(false);
       })
       .catch(err => {
-        console.log('err', err);
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };

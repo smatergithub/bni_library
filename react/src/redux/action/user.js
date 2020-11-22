@@ -228,7 +228,6 @@ export const toogleIsAdmin = (userData, id) => () => {
 export const exportDataUser = () => () => {
   return UserApi.exportDataUser()
     .then(response => {
-      console.log('response', response);
       const filename = 'list_data_user';
       if (navigator.msSaveBlob) {
         navigator.msSaveBlob(response, filename);

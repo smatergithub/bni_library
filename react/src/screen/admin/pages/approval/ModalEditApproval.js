@@ -18,7 +18,7 @@ const ModalEditApproval = props => {
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal, typeApproval } = props;
-  console.log(detailData);
+
   function onSubmit(data) {
     let request = {};
     if (typeApproval === 'editTransactionBook') {

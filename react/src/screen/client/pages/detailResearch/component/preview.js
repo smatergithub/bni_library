@@ -20,7 +20,6 @@ function EbookPreview(props) {
       if (res.resp) {
         setEbook(res.data);
       }
-      console.log(res);
     });
   }, []);
   return (
