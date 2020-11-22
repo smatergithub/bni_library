@@ -224,7 +224,7 @@ function Ebooks(props) {
                       {ebook.totalRead ? ebook.totalRead : 0}
                     </span>
                   </div>
-                  <button
+                  {/* <button
                     onClick={() => {
                       setShowPreview({
                         open: true,
@@ -237,7 +237,7 @@ function Ebooks(props) {
                 `}
                   >
                     Lihat Preview
-                  </button>
+                  </button> */}
                   <button
                     className="w-full bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
                     onClick={() => history.push(`/detail-ebook?id=${ebook.id}`)}

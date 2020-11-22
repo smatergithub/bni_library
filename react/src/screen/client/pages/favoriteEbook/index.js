@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 import { connect } from 'react-redux';
-import { Modal } from '../../../../component';
+import { Modal, NoData } from '../../../../component';
 import { getfavorite } from 'redux/action/ebooks';
 
 function FavoriteEBooks(props) {
@@ -15,7 +15,6 @@ function FavoriteEBooks(props) {
   React.useEffect(() => {
     props.getfavorite().then(res => {
       if (res.resp) {
-        console.log('res', res);
         setBooks(res.data);
       } else {
         setBooks([]);
@@ -23,9 +22,7 @@ function FavoriteEBooks(props) {
     });
   }, []);
 
-  let isUserLogged = localStorage.getItem('bni_UserRole') === null;
-
-  console.log('books', books.RatingEbook);
+  console.log('books', books);
   return (
     <React.Fragment>
       <div className="pt-24">
@@ -46,45 +43,47 @@ function FavoriteEBooks(props) {
               </h2>
 
               <div class=" mt-8  mx-auto md:flex items-start justify-start">
-                {books.RatingEbook !== undefined
-                  ? books.RatingEbook.map((data, key) => {
-                      let book = data;
-                      return (
-                        <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                          <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
-                          <div className="h-16 pt-1 flex items-start justify-between">
-                            <h2 className="text-gray-800 text-lg">{book.judul}</h2>
-                          </div>
-
-                          <div className="pt-1 text-gray-900">{book.pengarang}</div>
-                          <div className="flex items-center justify-between">
-                            <ReactStars
-                              count={6}
-                              // isHalf={false}
-                              value={
-                                book.totalRead
-                                  ? book.countRating
-                                    ? book.countRating / book.totalRead
-                                    : 0
-                                  : 0
-                              }
-                              size={20}
-                              activeColor="#ffd700"
-                            />
-                            <span>
-                              <i className="fas fa-heart text-yellow-700" />{' '}
-                              {book.totalRead ? book.totalRead : 0}
-                            </span>
-                          </div>
-                          <Link to={`/detail-book?id=${book.id}`}>
-                            <button className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
-                              Detail
-                            </button>
-                          </Link>
+                {books.RatingEbook.length ? (
+                  books.RatingEbook.map((data, key) => {
+                    let book = data;
+                    return (
+                      <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
+                        <img className="hover:grow hover:shadow-lg h-64" src={book.image} />
+                        <div className="h-16 pt-1 flex items-start justify-between">
+                          <h2 className="text-gray-800 text-lg">{book.judul}</h2>
                         </div>
-                      );
-                    })
-                  : null}
+
+                        <div className="pt-1 text-gray-900">{book.pengarang}</div>
+                        <div className="flex items-center justify-between">
+                          <ReactStars
+                            count={6}
+                            // isHalf={false}
+                            value={
+                              book.totalRead
+                                ? book.countRating
+                                  ? book.countRating / book.totalRead
+                                  : 0
+                                : 0
+                            }
+                            size={20}
+                            activeColor="#ffd700"
+                          />
+                          <span>
+                            <i className="fas fa-heart text-yellow-700" />{' '}
+                            {book.totalRead ? book.totalRead : 0}
+                          </span>
+                        </div>
+                        <Link to={`/detail-book?id=${book.id}`}>
+                          <button className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                            Detail
+                          </button>
+                        </Link>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <NoData />
+                )}
               </div>
             </div>
           </section>
