@@ -63,7 +63,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
           </a>
         )}
         {type === 'wishlist' && (
-          <div className="text-red-500 cursor-pointer" onClick={() => onRemoveItem()}>
+          <div className="text-red-500 mt-10 cursor-pointer" onClick={() => onRemoveItem()}>
             HAPUS
             <i
               className="fas fa-times-circle text-xl text-red-500 "

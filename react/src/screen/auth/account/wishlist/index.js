@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import { NoData } from '../../../../component';
 import { removeBookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import Card from '../component/card';
-import books from 'redux/reducer/modules/books';
 
 function Wishlist(props) {
   let wishlist = props.books.concat(props.ebooks);
