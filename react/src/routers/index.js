@@ -18,6 +18,7 @@ function Routes(props) {
         <WithAdmin path="/admin/:id" component={Dashboard} />
         <Route exact path="/auth/:id" component={Auth} />
         <Route exact path="/profile/:id" component={Account} />
+        <Route exact path="/404" component={Account} />
       </Router>
       {/* <Loader /> */}
     </>

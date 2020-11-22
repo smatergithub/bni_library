@@ -7,6 +7,7 @@ import Profile from './profile';
 import BorrowedBook from './borrowedBook';
 import BorrowedEbook from './borrowedEbook';
 import Wishlist from './wishlist';
+import ReadEbook from './readEbook';
 
 const routes = [
   {
@@ -28,6 +29,11 @@ const routes = [
     path: '/profile/ebooks',
     exact: false,
     main: () => <BorrowedEbook />,
+  },
+  {
+    path: '/profile/read-ebooks',
+    exact: false,
+    main: () => <ReadEbook />,
   },
 ];
 

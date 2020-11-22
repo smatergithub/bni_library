@@ -5,7 +5,6 @@ import { Route, Redirect } from 'react-router-dom';
 function WithAdminAuth({ user, component: Component, ...rest }) {
   function validateRoute() {
     let role = localStorage.getItem('bni_UserRole');
-    console.log(role);
     if (role === '3' || role === '2') {
       console.log('masuk sini');
       return true;

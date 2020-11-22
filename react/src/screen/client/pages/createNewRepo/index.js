@@ -264,7 +264,7 @@ function CreateNewRepo(props) {
                   </label>
                   <textarea
                     name="description"
-                    className="w-full px-5 py-2 text-gray-700 bg-gray-100 rounded outline-none border"
+                    className="w-full px-2 py-2 text-gray-700 bg-gray-100 rounded outline-none border"
                     rows="6"
                     ref={register({
                       required: 'Field tidak boleh kosong',

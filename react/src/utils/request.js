@@ -15,6 +15,8 @@ const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptio
         //place your reentry code
         window.location.replace('/auth/login');
         localStorage.clear('bni_UserRole');
+      } else if (error.response.status === 404) {
+        window.location.replace('/not-found');
       } else {
         throw responseOptions.fullResponse ? error.response : error.response.data;
       }
