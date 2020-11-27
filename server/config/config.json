@@ -9,11 +9,11 @@
     "logging": false
   },
   "production": {
-    "username": "root",
-    "password": "root",
-    "database": "db_library",
+    "username": "elibrary",
+    "password": "L1Br4r1BCV2020",
+    "database": "db_library_beta",
     "host": "127.0.0.1",
-    "dialect": "mysql",
+    "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
   }
