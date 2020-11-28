@@ -3,7 +3,7 @@ var router = express.Router();
 var { verifySignUp, AuthJWT } = require('../middelwares');
 
 //controller
-const AuthenticationController = require('../controllers/AuthenticationController');
+const AuthenticationController = require('../controllers/authenticationController');
 const ProfileUserController = require('../controllers/ProfileUserController');
 const BookController = require('../controllers/BookController');
 const EbookController = require('../controllers/EbookController');
