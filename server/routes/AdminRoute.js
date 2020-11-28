@@ -3,12 +3,12 @@ const router = express.Router();
 const { AuthJWT } = require('../middelwares');
 const UploadDocument = require('../middelwares/uploadDocument');
 const UploadImage = require('../middelwares/uploadImage');
-const BookController = require('../controllers/BookController');
-const EbookController = require('../controllers/EbookController');
+const BookController = require('../controllers/eookController');
+const EbookController = require('../controllers/ebookController');
 const UserManageController = require('../controllers/UserManageController');
-const RepositoryController = require('../controllers/RepositoryController');
-const TransactionBookController = require('../controllers/TransactionBookController');
-const TransactionEbookController = require('../controllers/TransactionEbookController');
+const RepositoryController = require('../controllers/repositoryController');
+const TransactionBookController = require('../controllers/transactionBookController');
+const TransactionEbookController = require('../controllers/transactionEbookController');
 const WilayahController = require('../controllers/wilayahController');
 const DashboardController = require('../controllers/dashboardController');
 
@@ -75,10 +75,21 @@ router.post(
 
 router.post('/transactionBook/list', [AuthJWT.isAdmin], TransactionBookController.list);
 router.post('/transactionBook/history', [AuthJWT.isAdmin], TransactionBookController.listHistory);
-router.get('/transactionBook/history/export', [AuthJWT.isAdmin], TransactionBookController.exportListHistoryBook);
-router.post('/transactionBook/return/:transactionId', [AuthJWT.isAdmin], TransactionBookController.returnABook);
-router.post('/transactionBook/update/:transactionId', [AuthJWT.isAdmin], TransactionBookController.updateTransactionBook);
-
+router.get(
+  '/transactionBook/history/export',
+  [AuthJWT.isAdmin],
+  TransactionBookController.exportListHistoryBook
+);
+router.post(
+  '/transactionBook/return/:transactionId',
+  [AuthJWT.isAdmin],
+  TransactionBookController.returnABook
+);
+router.post(
+  '/transactionBook/update/:transactionId',
+  [AuthJWT.isAdmin],
+  TransactionBookController.updateTransactionBook
+);
 
 router.post('/transactionEbook/list', [AuthJWT.isAdmin], TransactionEbookController.list);
 router.post('/transactionEbook/history', [AuthJWT.isAdmin], TransactionEbookController.listHistory);

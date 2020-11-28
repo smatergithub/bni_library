@@ -5,12 +5,12 @@ var { verifySignUp, AuthJWT } = require('../middelwares');
 //controller
 const AuthenticationController = require('../controllers/authenticationController');
 const ProfileUserController = require('../controllers/ProfileUserController');
-const BookController = require('../controllers/BookController');
-const EbookController = require('../controllers/EbookController');
+const BookController = require('../controllers/bookController');
+const EbookController = require('../controllers/ebookController');
 const DataSourceFilterBookController = require('../controllers/dataSourceFilterBookController');
 const DataSourceFilterEbookController = require('../controllers/dataSourceFilterEbookController');
-const TransactionBookController = require('../controllers/TransactionBookController');
-const TransactionEbookController = require('../controllers/TransactionEbookController');
+const TransactionBookController = require('../controllers/transactionBookController');
+const TransactionEbookController = require('../controllers/transactionEbookController');
 const RatingBookController = require('../controllers/ratingBookController');
 const RatingEbookController = require('../controllers/ratingEbookController');
 const Repository = require('../controllers/repositoryController');
