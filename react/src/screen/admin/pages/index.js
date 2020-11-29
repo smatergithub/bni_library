@@ -107,6 +107,7 @@ function HomeAdmin(props) {
     props.logout().then(res => {
       if (res.resp) {
         localStorage.removeItem('bni_UserRole');
+        window.location.replace('/auth/login');
       }
     });
   }

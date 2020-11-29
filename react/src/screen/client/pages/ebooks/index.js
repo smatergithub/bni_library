@@ -178,7 +178,7 @@ function Ebooks(props) {
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img
-                    className="hover:grow hover:shadow-lg h-64"
+                    className="hover:grow hover:shadow-lg h-64 w-full"
                     src={ebook.image ? ebook.image : require('../../../../assets/default-book.svg')}
                   />
                   <div className="h-16 pt-2 flex items-start justify-between">

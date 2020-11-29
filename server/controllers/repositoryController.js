@@ -152,7 +152,7 @@ module.exports = {
           });
         }
         if (repository.abstrack) {
-          repository[abstrack] = LINK();
+          repository['abstrack'] = LINK();
         }
         if (repository.document) {
           repository['document'] = LINK();
@@ -171,46 +171,41 @@ module.exports = {
             message: 'repository Not Found',
           });
         } else {
-          async function copyPages() {
-            // Fetch first existing PDF document
+          if (repository[type]) {
+            async function copyPages() {
+              // Fetch first existing PDF document
 
-            const firstDonorPdfBytes = await fetch(repository[type]).then(res => res.arrayBuffer());
-            const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
+              const firstDonorPdfBytes = await fetch(repository[type]).then(res =>
+                res.arrayBuffer()
+              );
+              const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
 
-            // Create a new PDFDocument
+              // Create a new PDFDocument
 
-            const pdfDoc = await PDFDocument.create();
-            if (firstDonorPdfDoc.getPageCount() > 10) {
+              const pdfDoc = await PDFDocument.create();
+
               // Copy the 1st page from the first donor document, and
-              for (let i = 0; i < 10; i++) {
+              for (let i = 0; i < firstDonorPdfDoc.getPageCount(); i++) {
                 const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
                 // Add the first copied page
                 pdfDoc.addPage(firstDonorPage);
               }
-            } else if (firstDonorPdfDoc.getPageCount() > 5) {
-              for (let i = 0; i < 2; i++) {
-                const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [i]);
-                // Add the first copied page
-                pdfDoc.addPage(firstDonorPage);
-              }
-            } else {
-              const [firstDonorPage] = await pdfDoc.copyPages(firstDonorPdfDoc, [0]);
-              // Add the first copied page
-              pdfDoc.addPage(firstDonorPage);
+
+              // Insert the second copied page to index 0, so it will be the
+              // first page in `pdfDoc`
+              // pdfDoc.insertPage(0, secondDonorPage);
+
+              // Serialize the PDFDocument to bytes (a Uint8Array)
+              const pdfBytes = await pdfDoc.save();
+              res.type('pdf');
+              var array = Array.from(pdfBytes);
+
+              res.status(200).send(array);
             }
-
-            // Insert the second copied page to index 0, so it will be the
-            // first page in `pdfDoc`
-            // pdfDoc.insertPage(0, secondDonorPage);
-
-            // Serialize the PDFDocument to bytes (a Uint8Array)
-            const pdfBytes = await pdfDoc.save();
-            res.type('pdf');
-            var array = Array.from(pdfBytes);
-
-            res.status(200).send(array);
+            copyPages();
+          } else {
+            res.status(500).send({ message: 'Dokumen tidak di temukan' });
           }
-          copyPages();
         }
       })
       .catch(error => res.status(500).send(error));
@@ -218,6 +213,7 @@ module.exports = {
   add: async (req, res) => {
     UploadMultipleDocument(req, res, err => {
       if (err) throw err;
+
       return Repositorys.create({
         name: req.body.name,
         title: req.body.title,
@@ -271,11 +267,11 @@ module.exports = {
               document:
                 req.files['document'] !== undefined
                   ? generateFileLocation(req.files['document'][0].filename)
-                  : null,
+                  : repo.document,
               abstrack:
                 req.files['abstrack'] !== undefined
                   ? generateFileLocation(req.files['abstrack'][0].filename)
-                  : null,
+                  : repo.abstrack,
             })
             .then(response =>
               res.status(201).json({ message: 'Succesfully Create Repository', data: response })

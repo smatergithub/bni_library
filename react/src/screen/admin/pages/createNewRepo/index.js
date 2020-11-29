@@ -76,6 +76,7 @@ function CreateNewRepo(props) {
       formData['methodology'] = methodologyResearch ? methodologyResearch : repo.methodology;
       formData['strata'] = strata ? strata : repo.strata;
       formData['releaseYear'] = releaseYear ? releaseYear : repo.releaseYear;
+
       props.EditRepositoryAction(id, formData).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);

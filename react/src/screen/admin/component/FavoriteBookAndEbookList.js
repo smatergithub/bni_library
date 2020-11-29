@@ -11,7 +11,7 @@ function FavoriteBookAndEbookList({
 }) {
   return (
     <div className="flex flex-wrap mt-5 px-1">
-      <div className="w-full xl:w-8/12 mb-12 xl:mb-0 ">
+      <div className="w-full xl:w-6/12 mb-12 xl:mb-0 ">
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
           <div className="rounded-t mb-0 px-4 py-3 border-0">
             <div className="flex flex-wrap items-center">
@@ -87,12 +87,12 @@ function FavoriteBookAndEbookList({
           </div>
         </div>
       </div>
-      <div className="w-full xl:w-4/12 pl-4">
+      <div className="w-full xl:w-6/12 pl-4">
         <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
           <div className="rounded-t mb-0 px-1 py-3 border-0">
             <div className="flex flex-wrap items-center">
               <div className="relative w-full px-4 max-w-full flex-grow flex-1">
-                <h3 className="font-semibold text-base text-gray-800">DAFTAR EBOOK</h3>
+                <h3 className="font-semibold text-base text-gray-800">Ebook Favorit</h3>
               </div>
               <div className="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                 <button
@@ -130,16 +130,16 @@ function FavoriteBookAndEbookList({
                 <tbody>
                   {isLoading
                     ? null
-                    : mockEbook !== null && mockEbook !== undefined
+                    : mockEbook && mockEbook !== undefined
                     ? mockEbook.map(ebook => {
                         return (
                           <tr className="p-4">
-                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2 ">
+                            <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 whitespace-no-wrap p-2 ">
                               {ebook.judul.length > 15
                                 ? ebook.judul.substring(0, 15) + '...'
                                 : ebook.judul}
                             </th>
-                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-2">
+                            <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 whitespace-no-wrap p-2">
                               {ebook.pengarang}
                             </td>
                             {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">

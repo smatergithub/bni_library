@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { moment } from 'moment';
+import moment from 'moment';
 import { DatePicker } from 'antd';
 
 import { Input, Select } from 'antd';
 import { updateMe, getWilayah } from '../../../../../redux/action/user';
 import { ToastSuccess, ToastError } from '../../../../../component';
 const { Option } = Select;
-const dateFormat = 'DD-MM-YYYY';
 
 function EditUser(props) {
   const [dataWilayah, setDataWilayah] = React.useState([]);
@@ -21,7 +20,7 @@ function EditUser(props) {
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
   function onSubmit(formData) {
-    formData.tanggalLahir = dateBorn;
+    formData.tanggalLahir = dateBorn ? dateBorn : moment(props.user.tgl_lahir).format();
     formData.alamat = selectedAlamat.label;
     formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
     props.updateMe(formData).then(res => {
@@ -99,8 +98,7 @@ function EditUser(props) {
 
   let { user } = props;
   if (!user) return null;
-
-
+  console.log(user);
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg xs:pl-0 md:pl-10 relative">
       <div class="px-4 py-8 flex">
@@ -135,20 +133,7 @@ function EditUser(props) {
                 }}
               />
             </div>
-            <div className="relative w-full mb-3">
-              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Phone Number</label>
-              <input
-                ref={register()}
-                defaultValue={user.phoneNumber}
-                type="text"
-                name="phoneNumber"
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                placeholder="Phone Number"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
-            </div>
+
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Email</label>
               <input
@@ -172,8 +157,8 @@ function EditUser(props) {
                 }}
                 // defaultValue={moment('15/01/2010', dateFormat)}
                 // value={moment().format(dateFormat)}
-                placeholder={user.tanggalLahir}
-                format={dateFormat}
+                placeholder={moment(user.tgl_lahir)}
+                // format={dateFormat}
                 onChange={handleDate}
               />
             </div>
@@ -181,34 +166,32 @@ function EditUser(props) {
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Wilayah
               </label>
-              <Select
+              <input
                 defaultValue={user.wilayah}
-                style={{ width: '100%' }}
                 ref={register()}
-                className="wilayah"
                 name="wilayah"
-              >
-                {dataWilayah.map(op => {
-                  return <Option value={op.label}>{op.label}</Option>;
-                })}
-              </Select>
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
+                placeholder="Wilayah"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                 Singkatan
               </label>
 
-              <Select
+              <input
                 defaultValue={user.singkatan}
-                style={{ width: '100%' }}
                 ref={register()}
-                className="singkatan"
                 name="singkatan"
-              >
-                {codeWilayah.map(op => {
-                  return <Option value={op.label}>{op.label}</Option>;
-                })}
-              </Select>
+                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
+                placeholder="Wilayah"
+                style={{
+                  transition: 'all 0.15s ease 0s',
+                }}
+              />
             </div>
             <div className="relative w-full mb-3">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Unit</label>
@@ -239,7 +222,9 @@ function EditUser(props) {
               />
             </div>
             <div className="relative w-full mb-3">
-              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Jenjang</label>
+              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
+                Jenjang
+              </label>
               <input
                 ref={register()}
                 defaultValue={user.jenjang}
@@ -267,20 +252,7 @@ function EditUser(props) {
                 }}
               />
             </div>
-            <div className="relative w-full mb-3">
-              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Alamat</label>
-              <Select
-                defaultValue={user.alamat}
-                style={{ width: '100%' }}
-                onChange={handleChange}
-                className="alamat"
-                name="alamat"
-              >
-                {alamat.map(op => {
-                  return <Option value={op.value}>{op.label}</Option>;
-                })}
-              </Select>
-            </div>
+
             {selectedLinkMap ? (
               <div className="relative w-full mb-3">
                 <div

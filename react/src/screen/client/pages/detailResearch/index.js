@@ -121,14 +121,13 @@ function DetailResearch(props) {
                   }}
                 ></div>
                 <div> Nama : {research.name}</div>
-                <div> Jenis : {research.type} </div>
-                <div> Penyunting : {research.editor} </div>
-                <div> Penerjemah : {research.translateBy} </div>
+                <div> Methodology : {research.methodology} </div>
+                <div> Strata : {research.strata} </div>
               </div>
             </div>
 
             <div class="w-3/6  bg-white px-10 py-10 m-2">
-              <div className="text-lg font-bold">Penerbit</div>
+              <div className="text-lg font-bold">Terbit</div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"
                 style={{
@@ -136,39 +135,50 @@ function DetailResearch(props) {
                 }}
               ></div>
               <div> Nama : {research.university}</div>
+              <div> Fakultas : {research.faculty} </div>
               <div> Kota : {research.city} </div>
               <div> Tahun : {research.releaseYear}</div>
             </div>
             <div class="w-3/6  bg-white px-10 py-10 m-2">
-              <div className="text-lg font-bold">Preview</div>
+              <div className="text-lg font-bold">BACA</div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"
                 style={{
                   height: 1,
                 }}
               ></div>
-              {pdfList.map((pdf, key) => {
-                return (
-                  <div
-                    key={key}
-                    className="flex mt-3"
-                    onClick={() => {
-                      setShowPreview({
-                        open: true,
-                        file: pdf.type,
-                      });
-                    }}
-                  >
-                    <div className="flex items-center">
-                      <i className="fas fa-link text-yellow-700" />
-                    </div>
-                    <div className="text-blue-600 ml-3 underline cursor-pointer capitalize">
-                      {' '}
-                      {pdf.type}
-                    </div>
-                  </div>
-                );
-              })}
+              <div
+                className="flex mt-3"
+                onClick={() => {
+                  setShowPreview({
+                    open: true,
+                    file: 'document',
+                  });
+                }}
+              >
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700" />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer capitalize">
+                  Document
+                </div>
+              </div>
+              <div
+                className="flex mt-3"
+                onClick={() => {
+                  setShowPreview({
+                    open: true,
+                    file: 'abstrack',
+                  });
+                }}
+              >
+                <div className="flex items-center">
+                  <i className="fas fa-link text-yellow-700" />
+                </div>
+                <div className="text-blue-600 ml-3 underline cursor-pointer capitalize">
+                  Abstrack
+                </div>
+              </div>
             </div>
           </div>
         )}

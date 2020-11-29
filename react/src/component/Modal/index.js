@@ -41,7 +41,7 @@ export default function Modal({
                 </div>
                 {children}
                 {usingAnotherButton ? null : (
-                  <div className="flex justify-end pt-2">
+                  <div className={`flex justify-end pt-2  `}>
                     {hideCloseBtn ? null : (
                       <button
                         onClick={() => onCLose()}

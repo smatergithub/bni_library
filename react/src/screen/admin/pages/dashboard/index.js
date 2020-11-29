@@ -48,6 +48,17 @@ const Dashboard = props => {
             rating: item.totalRating,
           };
         });
+  const dataSourceEbook =
+    dashboardSummary.ratingEbook === undefined
+      ? null
+      : dashboardSummary.ratingEbook.map(item => {
+          return {
+            judul: item.ebook.judul,
+            tahunTerbit: item.ebook.tahunTerbit,
+            pengarang: item.ebook.pengarang,
+            rating: item.totalRating,
+          };
+        });
 
   return (
     <div className="bg-gray-100 font-family-karla flex">
@@ -85,7 +96,7 @@ const Dashboard = props => {
               goToBookDetail={goToBookDetail}
               goToEBookDetail={goToEBookDetail}
               mockBookFavorite={dataSourceBook}
-              mockEbook={dashboardSummary.ebook}
+              mockEbook={dataSourceEbook}
             />
           </main>
         </div>
