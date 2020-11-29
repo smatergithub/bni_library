@@ -352,23 +352,6 @@ function CreateNewBook(props) {
 
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    URL File
-                  </label>
-                  <input
-                    name="urlFile"
-                    defaultValue={book ? book.urlFile : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.urlFile && errors.urlFile.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Keterangan
                   </label>
                   <input

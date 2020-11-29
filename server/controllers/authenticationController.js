@@ -41,6 +41,7 @@ module.exports = {
               wilayah: userObj.wilayah,
               singkatan: userObj.singkatan,
               kdunit: userObj.kdunit,
+              unit: userObj.unit,
               unit_besaran: userObj.unit_besaran,
               jenjang: userObj.jenjang,
               password: bcrypt.hashSync(password, 8),

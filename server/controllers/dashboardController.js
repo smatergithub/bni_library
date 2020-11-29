@@ -1,12 +1,19 @@
 const Ebooks = require('../models/').ebooks;
 const Books = require('../models').books;
 const RatingBook = require('../models').ratingBook;
+const RatingEbook = require('../models').ratingEbook;
 const Users = require('../models').users;
 const sequelize = require('sequelize');
 
 module.exports = {
   dashboardSummary: async (req, res) => {
-    const EbookList = await Ebooks.findAndCountAll().then(response => {
+    let paramQuerySQLEbook = {
+      include: ['ebook'],
+      limit: 5,
+      order: [['rating', 'DESC']],
+      attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
+    };
+    const EbookList = await RatingEbook.findAndCountAll(paramQuerySQLEbook).then(response => {
       return {
         count: response.count,
         data: response.rows,
@@ -49,7 +56,7 @@ module.exports = {
         ebookCount: EbookList.count,
         bookCount: BookList.count,
         userCount: UserList.count,
-        ebook: EbookList.data,
+        ratingEbook: EbookList.data,
         ratingBook: RatingList.data,
       });
     } catch (err) {
