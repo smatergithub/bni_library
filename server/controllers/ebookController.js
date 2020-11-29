@@ -266,7 +266,8 @@ module.exports = {
             nomorLemari: row[20],
             rakLemari: row[21],
             keterangan: row[22],
-            sourceLink: row[23],
+            sourceLink: row[24],
+            image: row[23],
           };
 
           Databooks.push(rowBook);
