@@ -16,7 +16,7 @@ function LandingPages(props) {
               Strategis yang menyediakan informasi buku-buku, jurnal, hasil riset baik secara
               hardcopy dan softcopy dalam meningkatkan kompetensi dan knowledge para BNI Hi-Movers{' '}
             </p>
-            <Link to="/auth/register">
+            <Link to="/auth/login">
               <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                 Start Now
               </button>

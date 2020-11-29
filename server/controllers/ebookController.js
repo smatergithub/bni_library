@@ -245,7 +245,7 @@ module.exports = {
         // skip header
         rows.shift();
 
-        console.log("rows",rows);
+        console.log('rows', rows);
 
         let Databooks = [];
 
@@ -255,7 +255,7 @@ module.exports = {
             judul: row[2],
             pengarang: row[3],
             tahunTerbit: row[4],
-            jumlahPeminjam : row[5],
+            jumlahPeminjam: row[5],
             description: row[6],
             tanggalTerbit: row[8],
             isbn: row[9],
@@ -263,10 +263,10 @@ module.exports = {
             penerbit: row[11],
             lokasiPerpustakaan: row[12],
             status: row[13],
-            nomorLemari : row[20],
-            rakLemari : row[21],
-            keterangan : row[22],
-            sourceLink : row[23]
+            nomorLemari: row[20],
+            rakLemari: row[21],
+            keterangan: row[22],
+            sourceLink: row[23],
           };
 
           Databooks.push(rowBook);
@@ -325,7 +325,7 @@ module.exports = {
             keterangan: req.body.keterangan,
             sourceLink: req.body.sourceLink,
             status: req.body.status,
-             image: req.file ? location : req.file,
+            image: req.file ? location : req.file,
           })
           .then(response =>
             res.status(200).json({ message: 'successfully update Ebook', data: response })
@@ -342,18 +342,19 @@ module.exports = {
           return res.status(404).send({ message: 'Ebook not found' });
         }
         ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
-           if(listBorrow[0].dataValues.transactionEbookId == null && listBorrow[0].dataValues.transactionEbookId == undefined){
-               listBorrow[0].destroy().then(() => {
-                  ebook
-                    .destroy()
-                    .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                    .catch(error => res.status(404).send(error));
-                });
+          if (
+            listBorrow[0].dataValues.transactionEbookId == null &&
+            listBorrow[0].dataValues.transactionEbookId == undefined
+          ) {
+            listBorrow[0].destroy().then(() => {
+              ebook
+                .destroy()
+                .then(() => res.status(200).send({ message: 'succesfully delete' }))
+                .catch(error => res.status(404).send(error));
+            });
+          } else {
+            res.status(404).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
           }
-          else{
-            res.status(404).send({ message: 'buku ini sedang dipakai di transaksi lainnya' })
-          }
-
         });
       })
       .catch(error => res.status(500).send(error));
