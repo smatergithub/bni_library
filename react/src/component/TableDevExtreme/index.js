@@ -31,7 +31,12 @@ const TableDevExtreme = props => {
   const { rows, columns, columnExtensions = [] } = props;
   const classes = useStyles();
   return (
-    <div className="min-w-full bg-white">
+    <div
+      className="min-w-full bg-white"
+      style={{
+        height: '50em',
+      }}
+    >
       <Grid rows={rows} columns={columns}>
         <SearchState />
         <SortingState />
