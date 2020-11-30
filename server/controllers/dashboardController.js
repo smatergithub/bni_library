@@ -13,7 +13,16 @@ module.exports = {
       order: [['rating', 'DESC']],
       attributes: ['rating', [sequelize.fn('sum', sequelize.col('rating')), 'totalRating']],
     };
-    const EbookList = await RatingEbook.findAndCountAll(paramQuerySQLEbook).then(response => {
+    const EbookRatingList = await RatingEbook.findAndCountAll(paramQuerySQLEbook).then(response => {
+      return {
+        count: response.count,
+        data: response.rows,
+      };
+    });
+    const EbookList = await Ebooks.findAndCountAll({
+      offset: 1,
+      limit: 5,
+    }).then(response => {
       return {
         count: response.count,
         data: response.rows,
@@ -56,7 +65,7 @@ module.exports = {
         ebookCount: EbookList.count,
         bookCount: BookList.count,
         userCount: UserList.count,
-        ratingEbook: EbookList.data,
+        ratingEbook: EbookRatingList.data,
         ratingBook: RatingList.data,
       });
     } catch (err) {
