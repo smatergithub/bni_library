@@ -6,7 +6,7 @@ const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const Op = Sequelize.Op;
 
 function generateFileLocation(file) {
-  return `${process.env.SERVER_BACKEND}/img/documentRepository/${file}`;
+  return `${process.env.PUBLIC_URL}/img/documentRepository/${file}`;
 }
 var LINK = function() {
   return (
