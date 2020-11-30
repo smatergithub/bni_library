@@ -166,7 +166,7 @@ function Books(props) {
                     src={book.image ? book.image : require('../../../../assets/default-book.svg')}
                   />
                   <div className="h-16 pt-1 flex items-start justify-between">
-                    <h2 className="text-gray-800 text-lg">{book.judul.slice(0, 70)}</h2>
+                    <h2 className="text-gray-800 text-lg">{book.judul.slice(0, 68)}</h2>
 
                     {!isAdd && (
                       <div

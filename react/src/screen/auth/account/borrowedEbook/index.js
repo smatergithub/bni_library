@@ -115,11 +115,11 @@ function BorrowedEbook(props) {
                 <div>{`By (author) ${ebooks.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
                 <div>
-                  {ebooks.description.length > 505
+                  {ebooks.description !== null && ebooks.description.length > 505
                     ? ebooks.description.slice(0, showMore ? ebooks.description.length : 500)
                     : null}
                 </div>
-                {ebooks.description.length > 505 && (
+                {ebooks.description !== null && ebooks.description.length > 505 && (
                   <div
                     onClick={() => setShowMore(!showMore)}
                     className="text-blue-400 underline cursor-pointer"

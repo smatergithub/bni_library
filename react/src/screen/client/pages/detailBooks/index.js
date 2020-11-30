@@ -104,7 +104,7 @@ function DetailBooks(props) {
                 <div>{`By (author) ${books.book.pengarang}`}</div>
                 <div className="py-1 font-bold">Description:</div>
                 <div>
-                  {books.book.description.length > 505
+                  {books.book.description !== null && books.book.description.length > 505
                     ? books.book.description.slice(
                         0,
                         showMore ? books.book.description.length : 500
@@ -112,7 +112,7 @@ function DetailBooks(props) {
                     : null}
                 </div>
 
-                {books.book.description.length > 505 && (
+                {books.book.description !== null && books.book.description.length > 505 && (
                   <div
                     onClick={() => setShowMore(!showMore)}
                     className="text-blue-400 underline cursor-pointer"

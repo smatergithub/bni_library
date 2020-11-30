@@ -104,14 +104,14 @@ function DetailEbooks(props) {
                 <div className="py-1 font-bold">Description:</div>
 
                 <div>
-                  {ebooks.ebook.description.length > 505
+                  {ebooks.ebook.description !== null && ebooks.ebook.description.length > 505
                     ? ebooks.ebook.description.slice(
                         0,
                         showMore ? ebooks.ebook.description.length : 500
                       )
                     : null}
                 </div>
-                {ebooks.ebook.description.length > 505 && (
+                {ebooks.ebook.description !== null && ebooks.ebook.description.length > 505 && (
                   <div
                     onClick={() => setShowMore(!showMore)}
                     className="text-blue-400 underline cursor-pointer"
