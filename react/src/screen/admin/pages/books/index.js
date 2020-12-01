@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Tooltip, Button } from 'antd';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
-import {IsEmptyObject} from '../../component/IsEmptyObject';
+import { IsEmptyObject } from '../../component/IsEmptyObject';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
@@ -16,15 +16,15 @@ const Books = props => {
   const [showModalDetail, setShowModalDetail] = useState(false);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceBookList = () => {
     setLoading(true);
     const pagination = {
-      page : currentPage + 1,
-      limit : pageSize
-    }
+      page: currentPage + 1,
+      limit: pageSize,
+    };
     props
       .getBooks(pagination)
       .then(res => {
@@ -60,7 +60,7 @@ const Books = props => {
 
   useEffect(() => {
     mappingDataSourceBookList();
-  },[currentPage,totalCount]);
+  }, [currentPage, totalCount, pageSize]);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -127,58 +127,59 @@ const Books = props => {
         {!IsEmptyObject(books) && books.data !== undefined && books.data.length !== 0 ? (
           <React.Fragment>
             <TableDevExtreme
-            columns={[
-              { name: 'judul', title: 'Judul' },
-              { name: 'pengarang', title: 'Pengarang' },
-              { name: 'tahunTerbit', title: 'Tahun Terbit' },
-              { name: 'stockBuku', title: 'Stock Buku' },
-              { name: 'npp', title: 'NPP' },
-              { name: 'namaPeminjam', title: 'Nama Peminjam' },
-              { name: 'actions', title: 'Action' },
-            ]}
-            columnExtensions={[
-              {
-                columnName: "judul",
-                width: 320,
-                wordWrapEnabled: true
-              },
-              {
-                columnName: 'pengarang',
-                width: 200,
-                wordWrapEnabled: false,
-              },
-              {
-                columnName: 'tahunTerbit',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'stockBuku',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'namaPeminjam',
-                width: 200,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'npp',
-                width: 100,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'actions',
-                width: 300,
-                wordWrapEnabled: true,
-              },
-            ]}
-            rows={adjustIntegrationTable(books.data)}
-            currentPage={currentPage}
-            onCurrentPageChange={setCurrentPage}
-            pageSize={pageSize}
-            totalCount={totalCount}
-          />
+              columns={[
+                { name: 'judul', title: 'Judul' },
+                { name: 'pengarang', title: 'Pengarang' },
+                { name: 'tahunTerbit', title: 'Tahun Terbit' },
+                { name: 'stockBuku', title: 'Stock Buku' },
+                { name: 'npp', title: 'NPP' },
+                { name: 'namaPeminjam', title: 'Nama Peminjam' },
+                { name: 'actions', title: 'Action' },
+              ]}
+              columnExtensions={[
+                {
+                  columnName: 'judul',
+                  width: 320,
+                  wordWrapEnabled: true,
+                },
+                {
+                  columnName: 'pengarang',
+                  width: 200,
+                  wordWrapEnabled: false,
+                },
+                {
+                  columnName: 'tahunTerbit',
+                  width: 150,
+                  wordWrapEnabled: true,
+                },
+                {
+                  columnName: 'stockBuku',
+                  width: 150,
+                  wordWrapEnabled: true,
+                },
+                {
+                  columnName: 'namaPeminjam',
+                  width: 200,
+                  wordWrapEnabled: true,
+                },
+                {
+                  columnName: 'npp',
+                  width: 100,
+                  wordWrapEnabled: true,
+                },
+                {
+                  columnName: 'actions',
+                  width: 300,
+                  wordWrapEnabled: true,
+                },
+              ]}
+              rows={adjustIntegrationTable(books.data)}
+              currentPage={currentPage}
+              onCurrentPageChange={setCurrentPage}
+              pageSize={pageSize}
+              onPageSizeChange={setPageSize}
+              totalCount={totalCount}
+            />
           </React.Fragment>
         ) : (
           <NoData />

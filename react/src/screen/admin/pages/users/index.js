@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
   getUsersListToAdmin,
@@ -18,20 +18,21 @@ const Ebooks = props => {
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
-  const [filterOptions, setFilterOptions] = React.useState({
-    page: 0,
-    limit: 0,
-    judul: '',
-  });
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const retrieveDataUser = filterOptions => {
+  const retrieveDataUser = () => {
     setLoading(true);
+    const pagination = {
+      page: currentPage + 1,
+      limit: pageSize,
+    };
     props
-      .getUsersListToAdmin(filterOptions)
+      .getUsersListToAdmin(pagination)
       .then(res => {
-        if (res) {
-          setLoading(false);
-        }
+        setTotalCount(props.users.count);
+        setLoading(false);
       })
       .catch(err => {
         console.log('error', err);
@@ -39,28 +40,8 @@ const Ebooks = props => {
   };
 
   React.useEffect(() => {
-    retrieveDataUser(filterOptions);
-  }, []);
-
-  const onPaginationUpdated = pagination => {
-    if (pagination.judul) {
-      setFilterOptions({
-        judul: pagination.judul,
-        page: pagination.page,
-        limit: pagination.limit,
-      });
-    } else {
-      setFilterOptions({
-        page: pagination.page,
-        limit: pagination.limit,
-        judul: '',
-      });
-    }
-  };
-
-  React.useEffect(() => {
-    retrieveDataUser(filterOptions);
-  }, [filterOptions]);
+    retrieveDataUser();
+  }, [currentPage, totalCount, pageSize]);
 
   // function onAdminAction(data, id) {
   //   props.toogleIsAdmin(data, id).then(res => {
@@ -86,7 +67,7 @@ const Ebooks = props => {
     props
       .toggleUserIntoAdmin(detailData.id)
       .then(response => {
-        retrieveDataUser(filterOptions);
+        retrieveDataUser();
         setLoading(false);
         setShowModalMakeAdmin(false);
       })
@@ -114,7 +95,7 @@ const Ebooks = props => {
     props
       .deleteUser(detailData.id)
       .then(response => {
-        retrieveDataUser(filterOptions);
+        retrieveDataUser();
         setLoading(false);
         setShowModalDeletion(false);
       })
@@ -196,6 +177,11 @@ const Ebooks = props => {
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(users.data)}
+            currentPage={currentPage}
+            onCurrentPageChange={setCurrentPage}
+            pageSize={pageSize}
+            onPageSizeChange={setPageSize}
+            totalCount={totalCount}
           />
         ) : (
           // <Table
