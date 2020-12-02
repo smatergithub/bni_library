@@ -20,7 +20,7 @@ module.exports = {
         }
       })
       .catch(err => {
-        res.status(500).send({ message: 'Terjadi kesalahan' });
+        res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {
@@ -83,50 +83,6 @@ module.exports = {
         .catch(err => {
           res.status(500).send({ message: err.message });
         });
-    }
-
-    async function createNewUser(userData, password) {
-      let response = await Users.scope('withPassword')
-        .create({
-          nama: userData.nama,
-          email: userData.email,
-          npp: userData.npp,
-          tgl_lahir: userData.tgl_lahir,
-          wilayah: userData.wilayah,
-          singkatan: userData.singkatan,
-          kdunit: userData.kdunit,
-          unit_besaran: userData.unit_besaran,
-          jenjang: userData.jenjang,
-          password: bcrypt.hashSync(password, 8),
-          jabatan: userData.jabatan,
-          email: userData.email,
-          url_img: userData.url_img,
-          isAdmin: false,
-          superAdmin: false,
-        })
-        .then(res_user => {
-          res.status(200).send({ message: 'sukses' });
-          // var expireDate = new Date();
-          // expireDate.setDate(expireDate.getDate() + 1 / 24);
-          // VerificationToken.create({
-          //   userId: res_user.id,
-          //   token: cryptoRandomString({ length: 20 }),
-          //   expiredDateToken: expireDate,
-          // })
-          //   .then(res => {
-          //     res.status(200).send({
-          //       message: 1,
-          //     });
-          //   })
-          //   .catch(err => {
-          //     res.status(500).send({ message: err.message });
-          //   });
-        })
-        .catch(err => {
-          console.log('inikan?');
-          res.status(500).send({ message: err.message });
-        });
-      res.status(200).send({ message: response });
     }
   },
 
