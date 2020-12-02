@@ -27,9 +27,11 @@ const useStyles = makeStyles({
 const TableDevExtreme = props => {
   const [currentPage] = useState(props.currentPage);
   const [pageSize] = useState(props.pageSize);
+  const [pageSizes] = useState([5, 10, 15]);
 
   const { rows, columns, columnExtensions = [] } = props;
   const classes = useStyles();
+
   return (
     <div
       className="min-w-full bg-white"
@@ -46,12 +48,13 @@ const TableDevExtreme = props => {
           currentPage={currentPage}
           onCurrentPageChange={props.onCurrentPageChange}
           pageSize={pageSize}
+          onPageSizeChange={props.onPageSizeChange}
         />
         <CustomPaging totalCount={props.totalCount} />
         {/* <IntegratedPaging /> */}
         <Table columnExtensions={columnExtensions} className={classes.root} />
         <TableHeaderRow showSortingControls className={classes.root} />
-        <PagingPanel />
+        <PagingPanel pageSizes={pageSizes} />
         <Toolbar />
         <SearchPanel />
       </Grid>

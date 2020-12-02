@@ -20,7 +20,7 @@ const Wilayah = props => {
   const [detailData, setDetailData] = React.useState({});
 
   const [totalCount, setTotalCount] = React.useState(0);
-  const [pageSize] = React.useState(5);
+  const [pageSize, setPageSize] = React.useState(5);
   const [currentPage, setCurrentPage] = React.useState(0);
 
   let exportFile = React.useRef(null);
@@ -46,7 +46,7 @@ const Wilayah = props => {
 
   React.useEffect(() => {
     retrieveDataWilayah();
-  }, [currentPage, totalCount]);
+  }, [currentPage, totalCount, pageSize]);
 
   const uploadPdf = e => {
     e.preventDefault();
@@ -58,7 +58,7 @@ const Wilayah = props => {
         if (res) {
           console.log('res', res);
           ToastSuccess(res.msg);
-         retrieveDataWilayah();
+          retrieveDataWilayah();
         } else {
           ToastError(res.msg);
         }
@@ -184,6 +184,7 @@ const Wilayah = props => {
             currentPage={currentPage}
             onCurrentPageChange={setCurrentPage}
             pageSize={pageSize}
+            onPageSizeChange={setPageSize}
             totalCount={totalCount}
           />
         ) : null}

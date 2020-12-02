@@ -130,7 +130,7 @@ function HomeAdmin(props) {
       >
         <Sidebar url={match.params.id} createNewBook={createNewBook} />
       </div>
-      <div className="w-full flex flex-col h-screen overflow-y-hidden">
+      <div className="w-full flex flex-col  overflow-y-hidden">
         <Switch>
           <div>
             <Header logout={logoutUser} updateProfile={updateProfile} />

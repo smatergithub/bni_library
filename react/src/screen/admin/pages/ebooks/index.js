@@ -6,7 +6,7 @@ import { getEbooks, DeleteEbookAction } from '../../../../redux/action/ebooks';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
-import {IsEmptyObject} from '../../component/IsEmptyObject';
+import { IsEmptyObject } from '../../component/IsEmptyObject';
 import ModalDetailEbook from './ModalDetailEBook';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 
@@ -16,17 +16,16 @@ const Ebooks = props => {
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
 
-
-   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize] = useState(5);
+  const [totalCount, setTotalCount] = useState(0);
+  const [pageSize, setPageSize] = useState(5);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceEbookList = () => {
     setLoading(true);
     const pagination = {
-      page : currentPage + 1,
-      limit : pageSize
-    }
+      page: currentPage + 1,
+      limit: pageSize,
+    };
     props
       .getEbooks(pagination)
       .then(res => {
@@ -67,9 +66,7 @@ const Ebooks = props => {
 
   React.useEffect(() => {
     mappingDataSourceEbookList();
-  },[currentPage,totalCount]);
-
-
+  }, [currentPage, totalCount, pageSize]);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -131,7 +128,7 @@ const Ebooks = props => {
           </Link>
         </div>
 
-        {!IsEmptyObject(ebooks) &&  ebooks.data !== undefined && ebooks.data.length !== 0 ? (
+        {!IsEmptyObject(ebooks) && ebooks.data !== undefined && ebooks.data.length !== 0 ? (
           <TableDevExtreme
             columns={[
               { name: 'judul', title: 'Judul' },
@@ -177,6 +174,7 @@ const Ebooks = props => {
             currentPage={currentPage}
             onCurrentPageChange={setCurrentPage}
             pageSize={pageSize}
+            onPageSizeChange={setPageSize}
             totalCount={totalCount}
           />
         ) : (
