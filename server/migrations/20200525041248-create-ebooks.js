@@ -50,10 +50,10 @@ module.exports = {
       rakLemari: {
         type: Sequelize.STRING,
       },
-       keterangan: {
+      keterangan: {
         type: Sequelize.TEXT,
       },
-       urlFile: {
+      urlFile: {
         type: Sequelize.STRING,
       },
       image: {
@@ -74,6 +74,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
         type: Sequelize.DATE,
       },
     });

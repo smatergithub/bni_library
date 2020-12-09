@@ -47,10 +47,10 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
       },
-       nomorLemari: {
+      nomorLemari: {
         type: Sequelize.STRING,
       },
-       rakLemari: {
+      rakLemari: {
         type: Sequelize.STRING,
       },
       keterangan: {
@@ -74,6 +74,9 @@ module.exports = {
       },
       updatedAt: {
         allowNull: false,
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
         type: Sequelize.DATE,
       },
     });

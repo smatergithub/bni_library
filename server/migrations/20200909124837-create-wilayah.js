@@ -9,10 +9,10 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       codeWilayah: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       wilayah: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       alamat: {
         type: Sequelize.TEXT,
@@ -22,15 +22,18 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('wilayahs');
-  }
+  },
 };
