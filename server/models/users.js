@@ -27,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
       isAdmin: DataTypes.BOOLEAN,
       superAdmin: DataTypes.BOOLEAN,
     },
+
     {
       defaultScope: {
         attributes: { exclude: ['password'] },
@@ -36,6 +37,8 @@ module.exports = (sequelize, DataTypes) => {
           attributes: {},
         },
       },
+      timestamps: true,
+      paranoid: true,
     }
   );
   users.associate = function(models) {
@@ -45,5 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       as: 'users',
     });
   };
+
   return users;
 };

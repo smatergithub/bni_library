@@ -20,9 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       userId: DataTypes.STRING,
       ebookId: DataTypes.STRING,
     },
-    {}
+    {
+      timestamps: true,
+      paranoid: true,
+    }
   );
-  transactionEbook.associate = function (models) {
+  transactionEbook.associate = function(models) {
     // associations can be defined here
 
     transactionEbook.belongsTo(models.ebooks, {
