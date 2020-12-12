@@ -18,9 +18,9 @@ function Reserach(props) {
             <h1 className="my-4 text-3xl font-bold leading-tight">Riset BNI </h1>
 
             <p className="leading-normal text-2xl mb-8">
-              Hai Mover's kalian tertarik untuk menlihat hsil karya mahasiswa atau mahasiswi yang
-              ini melakukan penelitian di BNI, tentunya mereka adalah Mahasiswa jenjang S1 dan S2.
-              Jika ingin melakukan penelitian melengkapi kentuntuan di bawah.
+              BNI Hi Mover's, pasti kalian tertarik untuk melihat hasil karya mahasiswa yang
+              melakukan penelitian di BNI, tentunya mereka adalah mahasiswa jenjang S1 dan S2. Jika
+              kamu juga ingin melakukan penelitian, silakan lengkapi ketentuan di bawah.
             </p>
 
             {!isUserLogged ? (
@@ -120,7 +120,7 @@ function Reserach(props) {
                     </h4>
 
                     <p class="mt-2 text-sm text-gray-700 px-10">
-                      Kumpulan riset mahasiswa yang melakukan penelitian dengan subjek dikantor
+                      Kumpulan riset mahasiswa yang melakukan penelitian dengan subjek di kantor
                       wilayah atau ke unit yang ada dalam satuan BNI
                     </p>
                     {!isUserLogged ? (

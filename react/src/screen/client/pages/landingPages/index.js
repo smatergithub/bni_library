@@ -12,9 +12,9 @@ function LandingPages(props) {
               BNI Corporate University & Divisi Perencanaan Strategis
             </h1>
             <p className="leading-normal text-2xl mb-8 ">
-              Media Hybrid Perpustakaan yang ada di BNI Corporate University dan Divisi Perencanaan
-              Strategis yang menyediakan informasi buku-buku, jurnal, hasil riset baik secara
-              hardcopy dan softcopy dalam meningkatkan kompetensi dan knowledge para BNI Hi-Movers{' '}
+              Media Hybrid Perpustakaan BNI Corporate University dan Divisi Perencanaan Strategis
+              menyediakan informasi-informasi dari buku, jurnal, dan hasil riset, baik secara
+              hardcopy, maupun softcopy untuk meningkatkan kompetensi dan pengetahuan BNI Hi-Movers.{' '}
             </p>
             <Link to="/auth/login">
               <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">

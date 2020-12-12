@@ -18,7 +18,7 @@ function Home() {
                 <div className="md:ml-8 mt-4 md:mt-0  ">
                   <h4 className="text-xl font-bold leading-tight">Katalog</h4>
                   <p className="mt-2 leading-relaxed">
-                    Ada beberapa pilihan buku yang bisa kamu pinjam dan di antar gratis!
+                    Katalog Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
                   </p>
                   <Link to="/books">
                     <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
@@ -47,7 +47,7 @@ function Home() {
                 <div className="md:ml-8 mt-10 md:mt-0">
                   <h4 className="text-xl font-bold leading-tight">Riset</h4>
                   <p className="mt-2 leading-relaxed">
-                    Buat kamu yang mau riset di BNI, Detailnya ada di FaQ ya..
+                    Buat kamu yang ingin melakukan riset di BNI, temui detailnya di bagian FAQ, ya!
                   </p>
                   <Link to="/riset">
                     <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">

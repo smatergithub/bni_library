@@ -28,11 +28,12 @@ function About() {
           <div className="items-center flex flex-wrap">
             <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
               <div className="pr-12">
-                <h1 className="text-white font-semibold text-5xl mt-10">E Library</h1>
+                <h1 className="text-white font-semibold text-5xl mt-10">Digital Library</h1>
                 <p className="mt-4 text-lg text-gray-300">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu accumsan elit.
-                  Nam hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat
-                  ut felis in, feugiat ornare quam.
+                  Digital Library "Media Hybrid Perpustakaan BNI Corporate University dan Divisi
+                  Perencanaan Strategis menyediakan informasi-informasi dari buku, jurnal, dan hasil
+                  riset, baik secara hardcopy, maupun softcopy untuk meningkatkan kompetensi dan
+                  pengetahuan BNI Hi-Movers."
                 </p>
               </div>
             </div>
@@ -70,15 +71,14 @@ function About() {
               </div>
               <h3 className="text-3xl mb-2 font-semibold leading-normal">FASILITAS</h3>
               <p className="text-lg font-light leading-relaxed mt-4 mb-4 text-gray-700">
+                Di Perpustakaan BNI Corporate University dan Divisi REN memilik Fasilitas Berupa PC,
+                Internet dan intranet, Wifi serta Meja & Kursi untuk Keperluan Meeting dan lainnya
+              </p>
+              {/* <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-gray-700">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu accumsan elit. Nam
                 hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat ut
                 felis in, feugiat ornare quam
-              </p>
-              <p className="text-lg font-light leading-relaxed mt-0 mb-4 text-gray-700">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu accumsan elit. Nam
-                hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat ut
-                felis in, feugiat ornare quam
-              </p>
+              </p> */}
               <a
                 href="https://www.creative-tim.com/learning-lab/tailwind-starter-kit#/presentation"
                 className="font-bold text-gray-800 mt-8 underline"
@@ -157,11 +157,11 @@ function About() {
                 </div>
                 <h3 className="text-3xl font-semibold">Layanan Kami</h3>
                 <p className="mt-4 text-lg leading-relaxed text-gray-600">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu accumsan elit.
-                  Nam hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat
-                  ut felis in, feugiat ornare quam
+                  Di Perpustakaan BNI Corporate University dan Divisi REN kami Melayani Peminjaman
+                  buku, akses internet & intranet, Print serta melayani kebutuhan riset untuk
+                  mahasiswa S1 sampai S3
                 </p>
-                <ul className="list-none mt-6">
+                {/* <ul className="list-none mt-6">
                   <li className="py-2">
                     <div className="flex items-center">
                       <div>
@@ -198,7 +198,7 @@ function About() {
                       </div>
                     </div>
                   </li>
-                </ul>
+                </ul> */}
               </div>
             </div>
           </div>
@@ -243,8 +243,8 @@ function About() {
                   </div>
                   <h6 className="text-xl font-semibold">Lokasi</h6>
                   <p className="mt-2 mb-4 text-gray-600">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis eu accumsan elit.
-                    Nam hendrerit massa leo
+                    Gedoeng BNI Alamat: Kota Tua, Jl. Lada No.1, RT.4/RW.6, Pinangsia, Kec. Taman
+                    Sari, Kota Jakarta Barat, Daerah Khusus Ibukota Jakarta 11110
                   </p>
                 </div>
               </div>
