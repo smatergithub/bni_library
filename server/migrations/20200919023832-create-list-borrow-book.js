@@ -9,25 +9,28 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       bookId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       transactionBookId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       userId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('listBorrowBooks');
-  }
+  },
 };
