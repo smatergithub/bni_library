@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
+//update  08:12
+
 global.__basedir = __dirname + '/..';
 
 global.__locationdir = __dirname;
