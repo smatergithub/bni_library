@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       document: DataTypes.STRING,
       isApproved: DataTypes.BOOLEAN,
     },
-    {}
+    {
+      timestamps: true,
+      paranoid: true,
+    }
   );
   repository.associate = function(models) {
     // associations can be defined here

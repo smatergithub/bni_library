@@ -9,31 +9,34 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       transactionBookId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       bookId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       userId: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       rating: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       note: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
+      deletedAt: {
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
     return queryInterface.dropTable('ratingBooks');
-  }
+  },
 };
