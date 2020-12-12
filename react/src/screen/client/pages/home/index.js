@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Footer } from 'component';
 
 function Home() {
   return (
@@ -162,6 +163,7 @@ function Home() {
           </div>
         </section>
       </div>
+      <Footer />
     </React.Fragment>
   );
 }

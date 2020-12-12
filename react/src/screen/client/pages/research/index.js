@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Footer } from 'component';
 import { Modal } from '../../../../component';
 
 function Reserach(props) {
@@ -164,6 +165,7 @@ function Reserach(props) {
       >
         <div className="my-5">Silahkan Login terlebih dahulu</div>
       </Modal>
+      <Footer />
     </React.Fragment>
   );
 }
