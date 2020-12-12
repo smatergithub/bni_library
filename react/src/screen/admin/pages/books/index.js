@@ -113,16 +113,21 @@ const Books = props => {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
-        <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
-          <Link to="/admin/add-new-book">
-            <button
-              type="button"
-              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-            >
-              <i className="fas fa-plus mr-3" /> Buku Baru
-            </button>
-          </Link>
+        <div
+          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          className="mb-10"
+        >
+          <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
+          <div className="w-2/12  ">
+            <Link to="/admin/add-new-book">
+              <button
+                type="button"
+                className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              >
+                <i className="fas fa-plus mr-3" /> Buku Baru
+              </button>
+            </Link>
+          </div>
         </div>
         {!IsEmptyObject(books) && books.data !== undefined && books.data.length !== 0 ? (
           <React.Fragment>
