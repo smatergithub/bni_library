@@ -44,13 +44,14 @@ var https_options = {
     fs.readFileSync('./security/ssl/AAA_Certificate_Services.crt', 'utf8'),
   ],
 };
+const port = process.env.PORT_BACKEND;
 var db = require('./models');
 db.sequelize.sync().then(function() {
   // console.log('database connection success');
 });
 
 https.createServer(https_options, app).listen(port);
-const port = process.env.PORT_BACKEND;
+
 // app.listen(port, function() {
 //   console.log(`Server running in PORT: ${port}`);
 // });
