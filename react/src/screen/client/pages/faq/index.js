@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { contactUs } from 'redux/action/user';
-import { ToastSuccess } from 'component';
+import { ToastSuccess, Footer } from 'component';
 
 function Faq(props) {
   let [msgObj, setMsgObj] = React.useState({
@@ -44,8 +44,11 @@ function Faq(props) {
               <div className="md:pr-12">
                 <h3 className="text-3xl font-semibold">Q n A</h3>
                 <p className="mt-4 text-lg leading-relaxed text-gray-600">
-                  The extension comes with three pre-built pages to help you get started faster. You
-                  can change the text and images and you're good to go.
+                  Apa itu Digital Library "Media Hybrids" ? Merupakan Sebuah platform perpustakaan
+                  digital yang dapat mempermudah pegawai BNI untuk mengakses buku-buku yang tersedia
+                  di perpustakaan BNI Corporate University dan REN. Selain Itu mempermudah
+                  teman-teman mahasiswa atau mahasiswi untuk melakukan riset dengan BNI sebagai
+                  Objeknya.
                 </p>
               </div>
             </div>
@@ -80,9 +83,9 @@ function Faq(props) {
             <div className="w-full lg:w-6/12 px-4">
               <h2 className="text-4xl font-semibold text-white">Got Idea?</h2>
               <p className="text-lg leading-relaxed mt-4 mb-4 text-white">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas elementum nunc vel
-                tincidunt posuere. Cras nunc urna, imperdiet molestie malesuada eget, faucibus ut
-                ligula
+                Bagaimana dengan situs Digital library ini? Berikan kritik dan saran anda yang
+                membangun agar kami dapat memperbaiki kekurangan kami dan dapat memberikan kenyaman
+                kepada anda terimakasih.
               </p>
             </div>
           </div>
@@ -94,10 +97,10 @@ function Faq(props) {
             <div className="w-full lg:w-6/12 px-4">
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300">
                 <form className="flex-auto p-5 lg:p-10" onSubmit={e => handleSubmit(e)}>
-                  <h4 className="text-2xl font-semibold">imperdiet molestie malesuada eget,?</h4>
-                  <p className="leading-relaxed mt-1 mb-4 text-gray-600">
+                  <h4 className="text-2xl font-semibold">Kontak Kami</h4>
+                  {/* <p className="leading-relaxed mt-1 mb-4 text-gray-600">
                     Complete this form and we will get back to you in 24 hours.
-                  </p>
+                  </p> */}
                   <div className="relative w-full mb-3 mt-8">
                     <label
                       className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -172,6 +175,7 @@ function Faq(props) {
           </div>
         </div>
       </section>
+      <Footer />
     </React.Fragment>
   );
 }

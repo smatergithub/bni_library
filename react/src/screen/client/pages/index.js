@@ -2,6 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+
 import { logout } from '../../../redux/action/user';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';

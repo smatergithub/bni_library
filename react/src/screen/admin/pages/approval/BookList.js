@@ -176,7 +176,7 @@ function BookList(props) {
           totalCount={totalCount}
         />
       ) : (
-        <NoData msg="Belum ada request dari user!" />
+        <NoData msg="Belum ada request dari user!" isEmpty />
       )}
       <ModalDetailBook
         showModalDetail={showModalDetail}

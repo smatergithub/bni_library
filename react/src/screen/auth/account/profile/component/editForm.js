@@ -98,7 +98,7 @@ function EditUser(props) {
 
   let { user } = props;
   if (!user) return null;
-  console.log(user);
+
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg xs:pl-0 md:pl-10 relative">
       <div class="px-4 py-8 flex">

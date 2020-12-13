@@ -36,7 +36,7 @@ const TableDevExtreme = props => {
     <div
       className="min-w-full bg-white"
       style={{
-        height: '50em',
+        height: '100%',
       }}
     >
       <Grid rows={rows} columns={columns}>
