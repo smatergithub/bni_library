@@ -86,7 +86,7 @@ function FavoriteEBooks(props) {
                     );
                   })
                 ) : (
-                  <NoData />
+                  <NoData msg="Data tidak ditemukan" />
                 )}
               </div>
             </div>

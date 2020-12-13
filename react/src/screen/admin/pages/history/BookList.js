@@ -111,7 +111,7 @@ function BookList(props) {
           totalCount={totalCount}
         />
       ) : (
-        <NoData msg="Belum ada request dari user!" />
+        <NoData msg="Belum transaksi buku!" isEmpty />
       )}
     </React.Fragment>
   );

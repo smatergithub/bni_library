@@ -61,20 +61,21 @@ const routes = [
   },
 ];
 
-function Sidebar({ url, createNewBook }) {
+function Sidebar({ url, createNewBook, user }) {
   const [selectedMenu, setSelectedMenu] = useState(url);
 
   return (
     <div className="relative bg-sidebar  w-64 hidden sm:block shadow-xl">
       <div className="p-6">
         <a className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
-        <button
+
+        {/* <button
           type="button"
           onClick={() => createNewBook()}
           className="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center"
         >
           <i className="fas fa-plus mr-3" /> Buku baru
-        </button>
+        </button> */}
       </div>
       <nav className="text-white text-base font-semibold pt-3">
         {routes.map(rt => {
