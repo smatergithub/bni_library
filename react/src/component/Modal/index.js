@@ -8,6 +8,7 @@ export default function Modal({
   children,
   large,
   usingForDetail,
+  usingForSubmit,
   usingAnotherButton,
   hideCloseBtn,
 }) {
@@ -47,15 +48,15 @@ export default function Modal({
                         onClick={() => onCLose()}
                         className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
                       >
-                        Close
+                        Tutup
                       </button>
                     )}
-                    {usingForDetail ? null : (
+                    {usingForDetail || usingForSubmit ? null : (
                       <button
                         onClick={() => handleSubmit()}
                         className="modal-close px-6 p-3 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
                       >
-                        Submit
+                        Hapus
                       </button>
                     )}
                   </div>

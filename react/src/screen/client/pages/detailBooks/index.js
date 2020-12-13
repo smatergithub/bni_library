@@ -102,7 +102,7 @@ function DetailBooks(props) {
                 </div>
                 <div> Paperback | {books.book.bahasa}</div>
                 <div>{`By (author) ${books.book.pengarang}`}</div>
-                <div className="py-1 font-bold">Description:</div>
+                <div className="py-1 font-bold">Deskripsi:</div>
                 <div>
                   {books.book.description !== null && books.book.description.length > 505
                     ? books.book.description.slice(
@@ -123,7 +123,7 @@ function DetailBooks(props) {
               </div>
             </div>
             <div class="lg:w-2/6  bg-white px-10 py-10 m-2 relative">
-              <div className="text-lg font-bold">Book Details</div>
+              <div className="text-lg font-bold">Detail Buku</div>
               <div
                 className={`font-bold absolute  ${
                   books.book.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
@@ -133,7 +133,7 @@ function DetailBooks(props) {
                   top: '2em',
                 }}
               >
-                {books.book.stockBuku == 0 ? 'Tidak Tersedia' : 'Tesedia'}
+                {books.book.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
               </div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"
@@ -189,7 +189,7 @@ function DetailBooks(props) {
                       isWishlistClick ? 'border-red-600' : 'border-gray-600'
                     }`}
                   >
-                    {isWishlistClick ? 'Hapus Wishlist' : 'Tambah Wishlist'}
+                    {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
                   </button>
                 </>
               )}

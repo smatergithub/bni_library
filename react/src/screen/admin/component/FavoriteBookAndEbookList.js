@@ -81,7 +81,7 @@ function FavoriteBookAndEbookList({
               </table>
             ) : (
               <div>
-                <NoData msg="Belum ada data buku favorit" />
+                <NoData msg="Belum ada data buku favorit" isEmpty />
               </div>
             )}
           </div>
@@ -164,7 +164,7 @@ function FavoriteBookAndEbookList({
                 </tbody>
               </table>
             ) : (
-              <NoData msg="Belum ada data ebook " />
+              <NoData msg="Belum ada data ebook " isEmpty />
             )}
           </div>
         </div>

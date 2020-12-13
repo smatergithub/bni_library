@@ -128,7 +128,7 @@ function HomeAdmin(props) {
           zIndex: '10000',
         }}
       >
-        <Sidebar url={match.params.id} createNewBook={createNewBook} />
+        <Sidebar url={match.params.id} createNewBook={createNewBook} user={props.user} />
       </div>
       <div className="w-full flex flex-col  overflow-y-hidden">
         <Switch>

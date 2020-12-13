@@ -56,7 +56,6 @@ const Wilayah = props => {
     reader.onloadend = () => {
       props.UploadWilayahFile({ file }).then(res => {
         if (res) {
-          console.log('res', res);
           ToastSuccess(res.msg);
           retrieveDataWilayah();
         } else {
