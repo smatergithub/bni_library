@@ -36,22 +36,25 @@ app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 app.get('*', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
 );
-var https_options = {
-  key: fs.readFileSync('./security/ssl/bnicorpu.key', 'utf8'),
-  cert: fs.readFileSync('./security/ssl/bnicorpu.crt', 'utf8'),
-  ca: [
-    fs.readFileSync('./security/ssl/bnicorpu.ca', 'utf8'),
-    fs.readFileSync('./security/ssl/AAA_Certificate_Services.crt', 'utf8'),
-  ],
-};
+
 const port = process.env.PORT_BACKEND;
 var db = require('./models');
 db.sequelize.sync().then(function() {
   // console.log('database connection success');
 });
-
-https.createServer(https_options, app).listen(port);
-
-// app.listen(port, function() {
-//   console.log(`Server running in PORT: ${port}`);
-// });
+if (process.env.NODE_ENV === 'production') {
+  var https_options = {
+    key: fs.readFileSync('./security/ssl/bnicorpu.key', 'utf8'),
+    cert: fs.readFileSync('./security/ssl/bnicorpu.crt', 'utf8'),
+    ca: [
+      fs.readFileSync('./security/ssl/bnicorpu.ca', 'utf8'),
+      fs.readFileSync('./security/ssl/AAA_Certificate_Services.crt', 'utf8'),
+    ],
+  };
+  https.createServer(https_options, app).listen(port);
+} else
+  app.listen(port, function() {
+    console.log(`Server running in PORT: ${port}`);
+  });
+{
+}

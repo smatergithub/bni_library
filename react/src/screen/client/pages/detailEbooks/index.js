@@ -101,7 +101,7 @@ function DetailEbooks(props) {
                 </div>
                 <div> Paperback | {ebooks.ebook.bahasa}</div>
                 <div>{`By (author) ${ebooks.ebook.pengarang}`}</div>
-                <div className="py-1 font-bold">Description:</div>
+                <div className="py-1 font-bold">Deskripsi:</div>
 
                 <div>
                   {ebooks.ebook.description !== null && ebooks.ebook.description.length > 505
@@ -122,7 +122,7 @@ function DetailEbooks(props) {
               </div>
             </div>
             <div class="w-2/6  bg-white px-10 py-10 m-2">
-              <div className="text-lg font-bold">Book Details</div>
+              <div className="text-lg font-bold">Detail E-Book</div>
               <div
                 className="bg-gray-400 w-full mt-2 mb-2"
                 style={{
@@ -173,7 +173,7 @@ function DetailEbooks(props) {
                   }
                 }}
               >
-                {isWishlistClick ? 'Hapus Wishlist' : 'Tambah Wishlist'}
+                {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
               </button>
             </div>
           </div>

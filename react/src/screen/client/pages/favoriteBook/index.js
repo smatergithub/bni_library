@@ -38,7 +38,7 @@ function FavoriteBooks(props) {
             </Link>
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <h2 class="text-2xl font-bold leading-tight text-center lg:text-3xl">
-                Populer di Baca
+                Populer Dibaca
               </h2>
 
               <div class=" mt-8  mx-auto md:flex items-start justify-center">
@@ -86,7 +86,7 @@ function FavoriteBooks(props) {
                     );
                   })
                 ) : (
-                  <NoData />
+                  <NoData msg="Data tidak ditemukan" />
                 )}
               </div>
             </div>

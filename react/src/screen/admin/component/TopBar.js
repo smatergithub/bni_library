@@ -1,10 +1,7 @@
 import React from 'react';
 
-
-
 function Bar(props) {
   return (
-
     <div className="w-full lg:w-6/12 xl:w-4/12 px-1">
       <div className="relative flex flex-col min-w-0 break-words bg-white rounded mb-6 xl:mb-0 shadow-lg">
         <div className="flex-auto p-4">
@@ -14,7 +11,7 @@ function Bar(props) {
               <span className="font-semibold text-xl text-gray-800">{props.value}</span>
             </div>
             <div className="relative w-auto pl-4 flex-initial">
-              <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-red-500">
+              <div className="text-white p-3 text-center inline-flex items-center justify-center w-12 h-12 shadow-lg rounded-full bg-orange-600">
                 <i className={props.icon} />
               </div>
             </div>

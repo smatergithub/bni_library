@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { Input } from 'antd';
+import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { signIn, getMe } from '../../../redux/action/user';
 import { ToastError } from '../../../component';
 
@@ -29,10 +31,10 @@ function Login(props) {
                 .then(res => {
                   if (res.resp) {
                     props.getMe().then(res => {
-                      if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
-                        history.push('/profile/home?edit=true');
-                      } else {
+                      if (res.data.isAdmin || res.data.superAdmin) {
                         history.push('/admin/dashboard');
+                      } else {
+                        history.push('/profile/home?edit=true');
                       }
                     });
                   } else {
@@ -41,14 +43,18 @@ function Login(props) {
                 })
                 .catch(err => {
                   let msg = err.message || 'Something wrong';
-                  ToastError(msg);
+                  if (msg === 'Terjadi Kesalahan Koneksi Ke Database Servers') {
+                    ToastError('Username atau password salah.');
+                  } else {
+                    ToastError(msg);
+                  }
                 });
             } else {
               props.getMe().then(res => {
-                if (!res.data.alamat || !res.data.wilayah || !res.data.jabatan) {
-                  history.push('/profile/home?edit=true');
-                } else {
+                if (res.data.isAdmin || res.data.superAdmin) {
                   history.push('/admin/dashboard');
+                } else {
+                  history.push('/profile/home?edit=true');
                 }
               });
             }
@@ -57,7 +63,6 @@ function Login(props) {
           }
         })
         .catch(err => {
-          console.log(err);
           let msg = err.message || 'Something wrong';
           ToastError(msg);
         });
@@ -81,7 +86,7 @@ function Login(props) {
               <div className="relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-white border-0">
                 <div className="rounded-t mb-0 px-6 py-6">
                   <div className="text-center mb-3">
-                    <h4 className="text-gray-600 text-sm font-bold">Login</h4>
+                    <h4 className="text-gray-600 text-sm font-bold">Masuk</h4>
                   </div>
 
                   <hr className="mt-6 border-b-1 border-gray-400" />
@@ -115,14 +120,15 @@ function Login(props) {
                       <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         Password
                       </label>
-                      <input
-                        type="password"
-                        onChange={e => setUser({ ...user, password: e.target.value })}
-                        className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
-                        placeholder="Password"
+                      <Input.Password
                         style={{
-                          transition: 'all 0.15s ease 0s',
+                          height: 45,
                         }}
+                        onChange={e => setUser({ ...user, password: e.target.value })}
+                        placeholder="Password"
+                        iconRender={visible =>
+                          visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                        }
                       />
                     </div>
                     <div>

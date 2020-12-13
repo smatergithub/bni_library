@@ -182,7 +182,7 @@ function BookList(props) {
           rows={adjustIntegrationTable(repositories.data)}
         />
       ) : (
-        <NoData msg="Belum ada request dari user!" />
+        <NoData msg="Belum ada request dari user!" isEmpty />
       )}
       <ModalDetailRepository
         showModalDetail={showModalDetail}

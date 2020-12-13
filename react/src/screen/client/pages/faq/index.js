@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { contactUs } from 'redux/action/user';
-import { ToastSuccess } from 'component';
+import { ToastSuccess, Footer } from 'component';
 
 function Faq(props) {
   let [msgObj, setMsgObj] = React.useState({
@@ -175,6 +175,7 @@ function Faq(props) {
           </div>
         </div>
       </section>
+      <Footer />
     </React.Fragment>
   );
 }
