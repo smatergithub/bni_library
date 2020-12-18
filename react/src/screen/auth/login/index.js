@@ -30,13 +30,15 @@ function Login(props) {
                 .signIn(data)
                 .then(res => {
                   if (res.resp) {
-                    props.getMe().then(res => {
-                      if (res.data.isAdmin || res.data.superAdmin) {
-                        history.push('/admin/dashboard');
-                      } else {
-                        history.push('/profile/home?edit=true');
-                      }
-                    });
+                    history.push('/admin/dashboard');
+                    // props.getMe().then(res => {
+
+                    // if (res.data.isAdmin || res.data.superAdmin) {
+                    //   history.push('/admin/dashboard');
+                    // } else {
+                    //   history.push('/profile/home?edit=true');
+                    // }
+                    // });
                   } else {
                     ToastError(res.msg);
                   }
