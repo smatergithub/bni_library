@@ -87,7 +87,7 @@ module.exports = {
   },
 
   logout: async (req, res) => {
-    res.cookie('access_token', { maxAge: 0 });
+    res.cookie('access_token', 'delete', { maxAge: 0, httpOnly: 'true' });
     res.status(200).send({ message: 'success' });
   },
   contactUs: async (req, res) => {
