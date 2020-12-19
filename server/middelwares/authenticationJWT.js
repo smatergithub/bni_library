@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 verifyToken = (req, res, next) => {
-  let token = req.cookies.access_token || '';
+  let token = req.headers['x-access-token'];
 
   if (!token) {
     return res.status(403).send({
@@ -22,7 +22,7 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  let token = req.cookies.access_token || '';
+  let token = req.headers['x-access-token'];
 
   if (!token) {
     return res.status(403).send({
@@ -46,7 +46,7 @@ isAdmin = (req, res, next) => {
 };
 
 isSuperAdmin = (req, res, next) => {
-  let token = req.cookies.access_token || '';
+  let token = req.headers['x-access-token'];
 
   if (!token) {
     return res.status(403).send({
@@ -62,7 +62,7 @@ isSuperAdmin = (req, res, next) => {
     req.userId = decoded.id;
     req.isAdmin = decoded.isAdmin;
     req.superAdmin = decoded.superAdmin;
-    console.log('decoded admin', req.superAdmin);
+
     if (req.superAdmin !== true) {
       return res.status(500).json({ message: 'your are not allowed for this feature' });
     } else if (req.isAdmin !== true && req.superAdmin !== true) {
