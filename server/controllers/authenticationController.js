@@ -3,7 +3,7 @@ const fetch = require('node-fetch');
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 const send = require('../utils/sendMail');
-const { setJWTCookieOption } = require('../utils/setCookies');
+// const { setJWTCookieOption } = require('../utils/setCookies');
 require('dotenv').config();
 
 module.exports = {
@@ -57,28 +57,29 @@ module.exports = {
               .catch(err => {
                 res.status(500).send({ message: err.message });
               });
-          }
-
-          var passwordIsValid = bcrypt.compareSync(password, user.password);
-          if (!passwordIsValid) {
-            return res.status(404).send({
-              message: 'Invalid Password!',
+          } else {
+            var passwordIsValid = bcrypt.compareSync(password, user.password);
+            if (!passwordIsValid) {
+              return res.status(404).send({
+                message: 'Invalid Password!',
+              });
+            }
+            var token = jwt.sign(
+              { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+              process.env.SECRET_TOKEN,
+              {
+                expiresIn: 86400, // 24 hours
+              }
+            );
+            // res.cookie('access_token', token, setJWTCookieOption());
+            res.status(200).send({
+              accessToken: token,
+              email: user.email,
+              role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
+              isAdmin: user.isAdmin,
+              superAdmin: user.superAdmin,
             });
           }
-          var token = jwt.sign(
-            { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
-            process.env.SECRET_TOKEN,
-            {
-              expiresIn: 86400, // 24 hours
-            }
-          );
-          res.cookie('access_token', token, setJWTCookieOption());
-          res.status(200).send({
-            email: user.email,
-            role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
-            isAdmin: user.isAdmin,
-            superAdmin: user.superAdmin,
-          });
         })
         .catch(err => {
           res.status(500).send({ message: err.message });
@@ -87,7 +88,7 @@ module.exports = {
   },
 
   logout: async (req, res) => {
-    res.cookie('access_token', 'delete', { maxAge: 0, httpOnly: 'true' });
+    // res.cookie('access_token', 'delete', { maxAge: 0, httpOnly: 'true' });
     res.status(200).send({ message: 'success' });
   },
   contactUs: async (req, res) => {
