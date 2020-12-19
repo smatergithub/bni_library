@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
-const cookieParser = require('cookie-parser');
+// const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -22,7 +22,7 @@ var corsOptions = {
 
 const app = express();
 
-app.use(cookieParser());
+// app.use(cookieParser());
 app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());

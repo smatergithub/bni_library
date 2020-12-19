@@ -35,7 +35,7 @@ export default class Request {
       method: 'get',
       url,
       headers: {
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
     return makeAxiosRequest(requestOptions);
@@ -46,7 +46,7 @@ export default class Request {
       method: 'get',
       url,
       headers: {
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
       responseType: 'blob',
     };
@@ -68,7 +68,7 @@ export default class Request {
       data,
       headers: {
         'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
     return makeAxiosRequest(requestOptions, options);
@@ -81,7 +81,7 @@ export default class Request {
       data,
       headers: {
         'Content-Type': isFormData ? 'application/x-www-form-urlencoded' : 'application/json',
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
       responseType: 'blob',
     };
@@ -100,7 +100,7 @@ export default class Request {
       data,
       headers: {
         'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
     return makeAxiosRequest(requestOptions, options);
@@ -118,7 +118,7 @@ export default class Request {
       data,
       headers: {
         'Content-Type': isFormData ? 'multipart/form-data' : 'application/json',
-        'x-access-token': localStorage.getItem('bni_jwtToken'),
+        'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
     return makeAxiosRequest(requestOptions, options);
