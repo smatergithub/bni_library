@@ -10,6 +10,7 @@ export default function Modal({
   usingForDetail,
   usingForSubmit,
   usingAnotherButton,
+  labelSubmitButton,
   hideCloseBtn,
 }) {
   return (
@@ -56,7 +57,7 @@ export default function Modal({
                         onClick={() => handleSubmit()}
                         className="modal-close px-6 p-3 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
                       >
-                        Hapus
+                        {labelSubmitButton ? labelSubmitButton : 'Hapus'}
                       </button>
                     )}
                   </div>

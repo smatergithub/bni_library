@@ -151,7 +151,7 @@ function Login(props) {
                           transition: 'all 0.15s ease 0s',
                         }}
                       >
-                        Sign In
+                        Masuk
                       </button>
                     </div>
 

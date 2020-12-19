@@ -197,6 +197,7 @@ function OrderBook(props) {
         title="Action required"
         open={isBorrowReview}
         handleSubmit={formData => onFeedbackSubmit(formData)}
+        labelSubmitButton="Masuk"
       >
         <div className="my-5">Silahkan Login terlebih dahulu</div>
       </FeedbackModal>

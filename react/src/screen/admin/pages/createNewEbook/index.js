@@ -310,9 +310,9 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                 </div>
-                 <div className="mt-2">
+                <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                   Nomor Lemari
+                    Nomor Lemari
                   </label>
                   <input
                     name="nomorLemari"
@@ -331,7 +331,7 @@ function CreateNewEBook(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                   Rak
+                    Rak
                   </label>
                   <input
                     name="rakLemari"
@@ -344,9 +344,7 @@ function CreateNewEBook(props) {
                     })}
                     aria-label="Email"
                   />
-                  <div className="text-red-700">
-                    {errors.rakLemari && errors.rakLemari.message}
-                  </div>
+                  <div className="text-red-700">{errors.rakLemari && errors.rakLemari.message}</div>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -401,7 +399,7 @@ function CreateNewEBook(props) {
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
-                  <div className="mt-2">
+                <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
                     Keterangan
                   </label>

@@ -131,7 +131,7 @@ const Repository = props => {
             rows={adjustIntegrationTable(repositorys.data)}
           />
         ) : (
-          <NoData msg="Data Belum tersedia !" />
+          <NoData msg="Data Belum Tersedia !" />
         )}
       </main>
       <Modal

@@ -287,12 +287,13 @@ function Ebooks(props) {
           </div>
         )}
         <Modal
-          title="Authentication required"
+          title="Otentikasi diperlukan"
           open={showModalDeletion}
           onCLose={() => {
             setShowModalDeletion(false);
           }}
           handleSubmit={redirectToLogin}
+          labelSubmitButton="Masuk"
         >
           <div className="my-5">Silahkan Login terlebih dahulu</div>
         </Modal>
