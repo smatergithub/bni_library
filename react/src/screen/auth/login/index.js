@@ -32,15 +32,14 @@ function Login(props) {
                   localStorage.setItem('access_token_ebni', res.data.accessToken);
 
                   if (res.resp) {
-                    history.push('/admin/dashboard');
-                    // props.getMe().then(res => {
-
-                    // if (res.data.isAdmin || res.data.superAdmin) {
-                    //   history.push('/admin/dashboard');
-                    // } else {
-                    //   history.push('/profile/home?edit=true');
-                    // }
-                    // });
+                    // history.push('/admin/dashboard');
+                    props.getMe().then(res => {
+                      if (res.data.isAdmin || res.data.superAdmin) {
+                        history.push('/admin/dashboard');
+                      } else {
+                        history.push('/profile/home?edit=true');
+                      }
+                    });
                   } else {
                     ToastError(res.msg);
                   }
@@ -56,13 +55,13 @@ function Login(props) {
             } else {
               localStorage.setItem('access_token_ebni', res.data.accessToken);
 
-              // props.getMe().then(res => {
-              //   if (res.data.isAdmin || res.data.superAdmin) {
-              history.push('/admin/dashboard');
-              // } else {
-              //   history.push('/profile/home?edit=true');
-              // }
-              // });
+              props.getMe().then(res => {
+                if (res.data.isAdmin || res.data.superAdmin) {
+                  history.push('/admin/dashboard');
+                } else {
+                  history.push('/profile/home?edit=true');
+                }
+              });
             }
           } else {
             ToastError(res.msg);
