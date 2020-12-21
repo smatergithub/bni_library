@@ -183,7 +183,7 @@ const Ebooks = props => {
             totalCount={totalCount}
           />
         ) : (
-          <NoData msg="Data belum tersedia !" />
+          <NoData msg="Data belum Tersedia !" />
         )}
       </main>
       <Modal

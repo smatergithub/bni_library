@@ -126,7 +126,7 @@ function DetailBooks(props) {
               <div className="text-lg font-bold">Detail Buku</div>
               <div
                 className={`font-bold absolute  ${
-                  books.book.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
+                  books.book.stockBuku == 0 ? 'bg-red-600' : 'bg-orange-500'
                 } text-white py-1 px-3 rounded`}
                 style={{
                   right: '2em',
@@ -198,12 +198,13 @@ function DetailBooks(props) {
         )}
       </section>
       <Modal
-        title="Authentication required"
+        title="Otentikasi diperlukan"
         open={showModalDeletion}
         onCLose={() => {
           setShowModalDeletion(false);
         }}
         handleSubmit={redirectToLogin}
+        labelSubmitButton="Masuk"
       >
         <div className="my-5">Silahkan Login terlebih dahulu</div>
       </Modal>
