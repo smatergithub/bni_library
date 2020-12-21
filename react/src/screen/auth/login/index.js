@@ -29,6 +29,8 @@ function Login(props) {
               props
                 .signIn(data)
                 .then(res => {
+                  localStorage.setItem('access_token_ebni', res.data.accessToken);
+
                   if (res.resp) {
                     history.push('/admin/dashboard');
                     // props.getMe().then(res => {
@@ -52,13 +54,15 @@ function Login(props) {
                   }
                 });
             } else {
-              props.getMe().then(res => {
-                if (res.data.isAdmin || res.data.superAdmin) {
-                  history.push('/admin/dashboard');
-                } else {
-                  history.push('/profile/home?edit=true');
-                }
-              });
+              localStorage.setItem('access_token_ebni', res.data.accessToken);
+
+              // props.getMe().then(res => {
+              //   if (res.data.isAdmin || res.data.superAdmin) {
+              history.push('/admin/dashboard');
+              // } else {
+              //   history.push('/profile/home?edit=true');
+              // }
+              // });
             }
           } else {
             ToastError(res.msg);
