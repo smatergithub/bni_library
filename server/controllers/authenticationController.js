@@ -24,6 +24,8 @@ module.exports = {
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {
+      console.log(userObj);
+      console.log('======== user');
       return await Users.scope('withPassword')
         .findOne({
           where: {
