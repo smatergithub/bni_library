@@ -29,7 +29,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
         if (Number(formData.quantity) > data.stockBuku) {
           ToastError('Stock buku tidak cukup!');
         } else if (data.stockBuku == 0) {
-          ToastError('Buku tidak tersedia!');
+          ToastError('Buku tidak Tersedia!');
         } else {
           formData['books'] = [
             {

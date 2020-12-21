@@ -45,7 +45,7 @@ function Faq(props) {
                 <h3 className="text-3xl font-semibold">Q n A</h3>
                 <p className="mt-4 text-lg leading-relaxed text-gray-600">
                   Apa itu Digital Library "Media Hybrids" ? Merupakan Sebuah platform perpustakaan
-                  digital yang dapat mempermudah pegawai BNI untuk mengakses buku-buku yang tersedia
+                  digital yang dapat mempermudah pegawai BNI untuk mengakses buku-buku yang Tersedia
                   di perpustakaan BNI Corporate University dan REN. Selain Itu mempermudah
                   teman-teman mahasiswa atau mahasiswi untuk melakukan riset dengan BNI sebagai
                   Objeknya.

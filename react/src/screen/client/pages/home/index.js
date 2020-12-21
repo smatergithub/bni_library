@@ -19,7 +19,7 @@ function Home() {
                 <div className="md:ml-8 mt-4 md:mt-0  ">
                   <h4 className="text-xl font-bold leading-tight">Katalog</h4>
                   <p className="mt-2 leading-relaxed">
-                    Katalog Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
+                    Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
                   </p>
                   <Link to="/books">
                     <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
@@ -91,7 +91,8 @@ function Home() {
                     HOT BOOKS
                   </h4>
                   <div class="mt-2 text-sm text-gray-700">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Buku-buku populer yang wajib dibaca oleh segenap BNI Hi-Movers untuk
+                    meningkatkan kompetensi dan kemampuan.
                   </div>
                   <Link to="/favorite-book">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
@@ -119,7 +120,8 @@ function Home() {
                     EBOOKS
                   </h4>
                   <div class="mt-2 text-sm text-gray-700">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Buku elektronik yang dapat dibaca kapan saja, di mana saja. Hanya dengan sekali
+                    klik melalui smartphone Anda.
                   </div>
                   <Link to="/favorite-ebook">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
@@ -147,7 +149,8 @@ function Home() {
                     Riset
                   </h4>
                   <div class="mt-2 text-sm text-gray-700">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Berbagai hasil penelitian yang telah dilakukan oleh mahasiswa dari jenjang S1
+                    sampai dengan S3 seputar BNI.
                   </div>
                   <Link to="/riset">
                     <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
