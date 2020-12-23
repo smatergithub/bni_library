@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 verifyToken = (req, res, next) => {
-  let token = req.headers['x-access-token'];
+  let token = req.query.token;
 
   if (!token) {
     return res.status(403).send({
@@ -22,7 +22,7 @@ verifyToken = (req, res, next) => {
 };
 
 isAdmin = (req, res, next) => {
-  let token = req.headers['x-access-token'];
+  let token = req.query.token;
 
   if (!token) {
     return res.status(403).send({
@@ -46,7 +46,7 @@ isAdmin = (req, res, next) => {
 };
 
 isSuperAdmin = (req, res, next) => {
-  let token = req.headers['x-access-token'];
+  let token = req.query.token;
 
   if (!token) {
     return res.status(403).send({
