@@ -4,7 +4,7 @@ import { NoData } from '../../../../component';
 import { ToastSuccess, ToastError } from '../../../../component';
 import ModalDetailBook from './modalDetailBook';
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
 import { IsEmptyObject } from '../../component/IsEmptyObject';
 
@@ -15,13 +15,13 @@ function BookList(props) {
   const [showModalEdit, setShowModalEdit] = useState(false);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = React.useState(5);
+  const [pageSize, setPageSize] = React.useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceTransactionBookList = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage + 1,
+      page: currentPage,
       limit: pageSize,
     };
     props
@@ -37,7 +37,7 @@ function BookList(props) {
 
   React.useEffect(() => {
     mappingDataSourceTransactionBookList();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
 
   function returnBook(id) {
     props.MakeReturnBook(id).then(res => {
@@ -169,11 +169,11 @@ function BookList(props) {
             },
           ]}
           rows={adjustIntegrationTable(transactionBooks.data)}
-          currentPage={currentPage}
-          onCurrentPageChange={setCurrentPage}
-          pageSize={pageSize}
-          onPageSizeChange={setPageSize}
-          totalCount={totalCount}
+          // currentPage={currentPage}
+          // onCurrentPageChange={setCurrentPage}
+          // pageSize={pageSize}
+          // onPageSizeChange={setPageSize}
+          // totalCount={totalCount}
         />
       ) : (
         <NoData msg="Belum ada request dari user!" isEmpty />

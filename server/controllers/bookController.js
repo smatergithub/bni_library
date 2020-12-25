@@ -95,15 +95,15 @@ module.exports = {
       include: ['book', 'transactionBook', 'user'],
     };
 
-    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
-      paramQuerySQL.limit = parseInt(limit);
-    }
+    // if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+    //   paramQuerySQL.limit = parseInt(limit);
+    // }
 
-    // offset
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
-      //paramQuerySQL.offset = parseInt(page);
-    }
+    // // offset
+    // if (page != '' && typeof page !== 'undefined' && page > 0) {
+    //   paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+    //   //paramQuerySQL.offset = parseInt(page);
+    // }
 
     return await ListBorrowBook.findAndCountAll(paramQuerySQL)
       .then(book => {
