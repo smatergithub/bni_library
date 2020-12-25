@@ -79,12 +79,6 @@ function About() {
                 hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat ut
                 felis in, feugiat ornare quam
               </p> */}
-              <a
-                href="https://www.creative-tim.com/learning-lab/tailwind-starter-kit#/presentation"
-                className="font-bold text-gray-800 mt-8 underline"
-              >
-                Selengkapnya
-              </a>
             </div>
             <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
               <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-orange-500">

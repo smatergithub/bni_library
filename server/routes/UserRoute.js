@@ -30,7 +30,8 @@ router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);
 router.post('/contact-us', AuthenticationController.contactUs);
 
 router.post('/login', AuthenticationController.login);
-router.get('/logout', AuthenticationController.logout);
+router.post('/login', AuthenticationController.login);
+router.get('/isValidToken', AuthenticationController.isTokenValid);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get(

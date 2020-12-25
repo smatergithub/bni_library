@@ -78,4 +78,8 @@ export default class UsersApi {
     const url = `/api/contact-us`;
     return Request.post(url, formData);
   }
+  static isValidToken() {
+    const url = `/api/isValidToken`;
+    return Request.getWithAuth(url);
+  }
 }
