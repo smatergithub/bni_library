@@ -114,7 +114,7 @@ function NavBar(props) {
   return (
     <nav
       id="header"
-      className={`fixed w-full z-30 top-0 text-white bg-white `}
+      className={`fixed w-full z-30 top-0 text-white bg-orange-500 `}
       style={{
         zIndex: 1000,
       }}
@@ -202,7 +202,7 @@ function NavBar(props) {
           </div>
         )}
         <div
-          className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-white lg:bg-transparent text-black p-4 lg:p-0 z-20"
+          className="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden lg:block mt-2 lg:mt-0 bg-orange-500 lg:bg-transparent text-black  lg:p-0 z-20"
           id="nav-content"
         >
           <ul className="list-reset lg:flex justify-end flex-1 items-center">
@@ -215,9 +215,9 @@ function NavBar(props) {
                   >
                     <div
                       className={`relative inline-block text-sm ${
-                        selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
-                      } no-underline hover:text-gray-500  py-2 px-4 ${
-                        selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
+                        selectedMenu === rt.params ? 'text-white' : 'text-gray-900'
+                      } no-underline hover:text-white  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-white' : ''
                       } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
                       <div className="relative">
@@ -279,7 +279,7 @@ function NavBar(props) {
               )}
               {!props.isAuth && (
                 <Link to="/auth/login">
-                  <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm my-2 py-2 px-5 shadow-lg">
+                  <button className="mx-auto lg:mx-0 hover:underline bg-white text-orange-500  rounded-sm my-2 py-2 px-5 shadow-lg">
                     Masuk
                   </button>
                 </Link>
