@@ -5,8 +5,10 @@ import { Helmet } from 'react-helmet';
 import ReactStars from 'react-rating-stars-component';
 import { Input, Select } from 'antd';
 import { NoData, Modal } from '../../../../component';
+import { checkIsImageExist } from '../../component/helper';
 import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
+import NoImage from 'assets/NoImage.png';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -87,6 +89,7 @@ function Books(props) {
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
+  console.log(checkIsImageExist('sfssf'));
   if (processing && props.books === null) return null;
 
   const { wishlist } = props;
@@ -99,9 +102,9 @@ function Books(props) {
         <title>Buku | E-BNI</title>
       </Helmet>
       <section className="bg-white py-8 ">
-        <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
-          <nav id="buku" className="w-full z-30  px-6 py-1">
-            <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0  py-3 mt-16">
+        <div className="container mx-auto  flex items-center flex-wrap pt-4 pb-12 ">
+          <nav id="buku" className="w-full z-30  px-6 py-1 md:mt-16">
+            <div className="w-full container mx-auto flex flex-wrap items-center justify-between mt-0">
               <a
                 className="uppercase tracking-wide no-underline hover:no-underline font-bold text-gray-800 text-xl "
                 href="#"
@@ -158,12 +161,19 @@ function Books(props) {
           {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
+              console.log(checkIsImageExist(book.image));
               let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img
                     className="hover:grow hover:shadow-lg h-64"
-                    src={book.image ? book.image : require('../../../../assets/default-book.svg')}
+                    src={
+                      book.image
+                        ? checkIsImageExist(book.image)
+                          ? book.image
+                          : require('../../../../assets/NoImage.png')
+                        : require('../../../../assets/NoImage.png')
+                    }
                   />
                   <div className="h-16 pt-1 flex items-start justify-between">
                     <h2 className="text-gray-800 text-lg">{book.judul.slice(0, 68)}</h2>
