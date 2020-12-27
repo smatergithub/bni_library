@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import ReactStars from 'react-rating-stars-component';
-import { Input, Select } from 'antd';
+import { Input, Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
 import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
@@ -176,7 +176,16 @@ function Books(props) {
                     }
                   />
                   <div className="h-16 pt-1 flex items-start justify-between">
-                    <h2 className="text-gray-800 text-lg">{book.judul.slice(0, 68)}</h2>
+                    <Tooltip placement="bottom" title={book.judul}>
+                      <h2
+                        className="text-gray-800 text-lg"
+                        style={{ fontSize: '16px', paddingRight: '4px' }}
+                      >
+                        {book.judul.length > 50
+                          ? book.judul.slice(0, 50) + '...'
+                          : book.judul.slice(0, 50)}
+                      </h2>
+                    </Tooltip>
 
                     {!isAdd && (
                       <div

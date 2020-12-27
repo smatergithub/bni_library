@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { ToastSuccess, ToastError } from '../../../../component';
 import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/transaction';
 import ModalDetailEbook from './ModalDetailEBook';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
 
 import { IsEmptyObject } from '../../component/IsEmptyObject';
@@ -17,7 +17,7 @@ function EbookList(props) {
   const [showModalEdit, setShowModalEdit] = useState(false);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = React.useState(5);
+  const [pageSize, setPageSize] = React.useState(999999999);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceTransactionEbookList = () => {
@@ -39,7 +39,7 @@ function EbookList(props) {
 
   React.useEffect(() => {
     mappingDataSourceTransactionEbookList();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
 
   const getEditTransactionEBook = data => {
     setDetailData(data);
@@ -174,11 +174,11 @@ function EbookList(props) {
             },
           ]}
           rows={adjustIntegrationTable(transactionEbooks.data)}
-          currentPage={currentPage}
-          onCurrentPageChange={setCurrentPage}
-          pageSize={pageSize}
-          onPageSizeChange={setPageSize}
-          totalCount={totalCount}
+          // currentPage={currentPage}
+          // onCurrentPageChange={setCurrentPage}
+          // pageSize={pageSize}
+          // onPageSizeChange={setPageSize}
+          // totalCount={totalCount}
         />
       ) : (
         <NoData msg="Belum ada request Dari user!" isEmpty />

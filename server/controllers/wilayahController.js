@@ -2,29 +2,34 @@ const Wilayah = require('../models/').wilayah;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-
 const readXlsxFile = require('read-excel-file/node');
 
 module.exports = {
-
   list: async (req, res) => {
-    let { codeWilayah, wilayah, limit, page, order, sort } = req.body;
+    let { q, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
 
-    if (codeWilayah != '' && typeof codeWilayah !== 'undefined') {
+    if (q != '' && typeof q !== 'undefined') {
       paramQuerySQL.where = {
         codeWilayah: {
-          [Op.like]: '%' + codeWilayah + '%',
+          [Op.like]: '%' + q + '%',
         },
-      };
-    }
-    if (wilayah != '' && typeof wilayah !== 'undefined') {
-      paramQuerySQL.where = {
         wilayah: {
-          [Op.like]: '%' + wilayah + '%',
+          [Op.like]: '%' + q + '%',
+        },
+        alamat: {
+          [Op.like]: '%' + q + '%',
         },
       };
     }
+
+    // if (wilayah != '' && typeof wilayah !== 'undefined') {
+    //   paramQuerySQL.where = {
+    //     wilayah: {
+    //       [Op.like]: '%' + wilayah + '%',
+    //     },
+    //   };
+    // }
 
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
       paramQuerySQL.limit = parseInt(limit);
@@ -48,6 +53,7 @@ module.exports = {
       sort = 'DESC';
     }
 
+    console.log('param', paramQuerySQL);
     return await Wilayah.findAndCountAll(paramQuerySQL)
       .then(response => {
         let totalPage = Math.ceil(response.count / req.body.limit);
@@ -78,12 +84,11 @@ module.exports = {
   },
 
   add: async (req, res) => {
-
     return Wilayah.create({
       codeWilayah: req.body.codeWilayah,
       wilayah: req.body.wilayah,
       alamat: req.body.alamat,
-      linkGoogleMap: req.body.linkGoogleMap
+      linkGoogleMap: req.body.linkGoogleMap,
     })
       .then(response =>
         res.status(201).json({ message: 'successfully create wilayah', data: response })
@@ -112,7 +117,6 @@ module.exports = {
       .catch(error => res.status(500).send(error));
   },
 
-
   uploadWilayah: async (req, res) => {
     try {
       if (req.file == undefined) {
@@ -121,19 +125,15 @@ module.exports = {
 
       let path = __basedir + '/server/public/document/' + req.file.filename;
 
-
-
       readXlsxFile(path).then(rows => {
         // skip header
         rows.shift();
-
-
 
         let dataWilayah = [];
 
         rows.forEach(row => {
           let rowWilayah = {
-           codeWilayah: row[0],
+            codeWilayah: row[0],
             wilayah: row[1],
             alamat: row[2],
             linkGoogleMap: row[3],
@@ -144,7 +144,7 @@ module.exports = {
 
         Wilayah.bulkCreate(dataWilayah)
           .then(response => {
-             return res.status(200).json({
+            return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
           })
@@ -161,7 +161,6 @@ module.exports = {
       });
     }
   },
-
 
   delete: async (req, res) => {
     return Wilayah.findByPk(req.params.id)

@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
 import { pdfjs } from 'react-pdf';
 import ReactStars from 'react-rating-stars-component';
-import { Input, Select } from 'antd';
+import { Input, Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
@@ -198,7 +198,6 @@ function Ebooks(props) {
                     />
                     <div className="h-16 pt-2 flex items-start justify-between">
                       <h2 className="text-gray-800 text-lg">{ebook.judul.slice(0, 70)}</h2>
-
                       {!isAdd && (
                         <div
                           onClick={() => {
