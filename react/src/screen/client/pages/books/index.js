@@ -2,13 +2,13 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { Dropdown, Input } from 'semantic-ui-react';
 import ReactStars from 'react-rating-stars-component';
-import { Input, Select, Tooltip } from 'antd';
+import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
 import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
-import NoImage from 'assets/NoImage.png';
 const { Search } = Input;
 const { Option } = Select;
 
@@ -34,11 +34,12 @@ function Books(props) {
     props.getCategory().then(res => {
       if (res.resp) {
         if (res.data.length > 0) {
-          let categories = res.data
+          let filterCategories = res.data
             .map(e => e['label'])
             .map((e, i, final) => final.indexOf(e) === i && i)
             .filter(e => res.data[e])
             .map(e => res.data[e]);
+          let categories = filterCategories.map(e => ({ text: e.label, value: e.label }));
           setCategory(categories);
         }
       }
@@ -78,6 +79,7 @@ function Books(props) {
     setPagination({
       ...pagination,
       kategori: value,
+      judul: '',
     });
   }
   function handleSearch(value) {
@@ -89,7 +91,6 @@ function Books(props) {
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
-  console.log(checkIsImageExist('sfssf'));
   if (processing && props.books === null) return null;
 
   const { wishlist } = props;
@@ -114,20 +115,38 @@ function Books(props) {
 
               <div className="flex items-center" id="buku-nav-content">
                 <div className="pl-3 text-gray-800 inline-block no-underline hover:text-black">
-                  <Select
-                    defaultValue="Kategori"
-                    style={{ width: 120 }}
-                    onChange={handleChange}
-                    className="category"
-                  >
-                    {category.map(op => {
-                      return <Option value={op.label}>{op.label}</Option>;
-                    })}
-                  </Select>
+                  <Dropdown
+                    placeholder="Kategori"
+                    onChange={(e, { value }) => handleChange(value)}
+                    selection
+                    options={category}
+                  />
                 </div>
 
                 <div className="text-gray-800 px-1 bg-purple-white ">
-                  <Search
+                  <div class="ui icon input search">
+                    <input
+                      type="text"
+                      placeholder="Search..."
+                      value={pagination.judul}
+                      onChange={value => handleSearch(value.target.value)}
+                    />
+                    <i
+                      onClick={() => {
+                        setPagination({
+                          ...pagination,
+                          limit: 8,
+                          page: 1,
+                          judul: '',
+                          kategori: '',
+                        });
+                      }}
+                      aria-hidden="true"
+                      class="close icon tutup"
+                      style={{ cursor: 'pointer' }}
+                    ></i>
+                  </div>
+                  {/* <Search
                     style={{
                       borderRadius: '10px',
                     }}
@@ -136,12 +155,11 @@ function Books(props) {
                     enterButton="Cari"
                     size="large"
                     onSearch={value => handleSearch(value)}
-                  />
+                  /> */}
                 </div>
                 <div
                   className="ml-10 cursor-pointer"
                   onClick={() => {
-                    document.getElementById('searchBook').value = '';
                     setCategory([]);
                     getCategory();
                     setPagination({
