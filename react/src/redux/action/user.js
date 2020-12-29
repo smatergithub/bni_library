@@ -300,3 +300,15 @@ export const contactUs = data => () => {
       return { resp: false, msg: msg };
     });
 };
+export const isValidToken = () => () => {
+  return UserApi.isValidToken()
+    .then(res => {
+      if (res) {
+        return { resp: true, msg: res.message };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};

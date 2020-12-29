@@ -79,19 +79,13 @@ function About() {
                 hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl, volutpat ut
                 felis in, feugiat ornare quam
               </p> */}
-              <a
-                href="https://www.creative-tim.com/learning-lab/tailwind-starter-kit#/presentation"
-                className="font-bold text-gray-800 mt-8 underline"
-              >
-                Selengkapnya
-              </a>
             </div>
             <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
               <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-orange-500">
                 <img
                   alt="..."
-                  src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=crop&amp;w=1051&amp;q=80"
-                  className="w-full align-middle rounded-t-lg"
+                  src={require('../../../../assets/fasilitas.png')}
+                  className="w-full align-middle rounded-t-lg h-64"
                 />
                 <blockquote className="relative p-8 mb-4">
                   <svg

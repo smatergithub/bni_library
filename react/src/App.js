@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
+import 'semantic-ui-css/semantic.min.css';
 import Router from './routers';
 import './styles/custom/index.scss';
 import 'react-toastify/dist/ReactToastify.css';
