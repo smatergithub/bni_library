@@ -21,13 +21,13 @@ function Information({ user, changePages }) {
   return (
     <div class="bg-white rounded-lg shadow-lg pl-10 relative">
       <div class="px-4 py-8 flex">
-        <div class="h-24 w-24 rounded-full ">
+        {/* <div class="h-24 w-24 rounded-full ">
           <img
             src={user.url_img ? user.url_img : imgDefault}
             alt=""
             className="h-24 w-24 rounded-full"
           />
-        </div>
+        </div> */}
         <div className="h-32 flex-start px-8">
           <h4 class=" text-lg tracking-wide uppercase leading-tight">{user.nama}</h4>
           <div class="text-sm text-gray-600">{user.jabatan}</div>

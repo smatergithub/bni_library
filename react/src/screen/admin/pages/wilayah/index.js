@@ -155,27 +155,26 @@ const Wilayah = props => {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1>
+        {/* <h1 className="w-full text-3xl text-black pb-6">Daftar Wilayah</h1> */}
         <div
-          className="absolute"
           style={{
-            right: '2em',
-            top: '5em',
             display: 'flex',
             flexDirection: 'row',
-            width: '392px',
+            justifyContent: 'space-between',
+            marginBottom: '14px',
           }}
         >
+          <h1 className="w-full text-3xl text-black ">Daftar Wilayah</h1>
           <button
-            style={{ marginRight: '42px' }}
+            style={{ marginRight: '42px', width: '380px', height: '34px' }}
             type="button"
-            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            className=" bg-orange-500 text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => {
               setDetailData({});
               setShowModalDetail(true);
             }}
           >
-            <i className="fas fa-plus mr-3" /> Tambah Wilayah
+            <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Tambah Wilayah
           </button>
           <input
             onChange={e => uploadPdf(e)}
@@ -190,13 +189,12 @@ const Wilayah = props => {
           />
           <button
             type="button"
-            className="w-full white text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
+            style={{ width: '380px', height: '34px' }}
+            className="w-full white text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
             onClick={() => exportFile.current.click()}
           >
-            <span style={{ color: 'black' }}>
-              {' '}
-              <i className="fas fa-plus mr-3" /> Import Wilayah
-            </span>
+            <i className="fas fa-plus mr-3" style={{ fontSize: '18px', color: 'black' }} />{' '}
+            <span style={{ color: 'black' }}>Import Wilayah</span>
           </button>
         </div>
         {wilayah.data !== undefined ? (

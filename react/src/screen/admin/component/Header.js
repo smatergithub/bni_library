@@ -11,7 +11,8 @@ function Header({ logout, updateProfile }) {
           onClick={() => setShowHeaderMenu(!showHeaderMenu)}
           className=" z-10 w-12 h-12 rounded-full overflow-hidden border-4 border-gray-400 hover:border-gray-300 focus:border-gray-300 focus:outline-none"
         >
-          <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400" alt="" />
+          {/* <img src="https://source.unsplash.com/uJ8LNVCBjFQ/400x400" alt="" /> */}
+          <i className="fas fa-user text-lg text-black"></i>
         </button>
         {/* <button type="button" className="h-full w-full fixed inset-0 cursor-default" /> */}
         {showHeaderMenu ? (

@@ -53,7 +53,6 @@ module.exports = {
       sort = 'DESC';
     }
 
-    console.log('param', paramQuerySQL);
     return await Wilayah.findAndCountAll(paramQuerySQL)
       .then(response => {
         let totalPage = Math.ceil(response.count / req.body.limit);
