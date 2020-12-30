@@ -79,6 +79,22 @@ export const toggleUserIntoAdmin = id => () => {
       return { resp: false, msg: msg };
     });
 };
+export const toggleUserIntoRepoAdmin = (id, body) => () => {
+  return UserApi.toggleUserIntoRepoAdmin(id, body)
+    .then(res => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Account User Berhasil di perbarui.',
+        };
+      }
+    })
+    .catch(err => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+
 
 export const deleteUser = id => () => {
   return UserApi.deleteUserList(id)

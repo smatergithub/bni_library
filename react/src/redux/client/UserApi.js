@@ -7,7 +7,7 @@ export default class UsersApi {
   }
   static logout() {
     const url = '/api/logout';
-    return Request.get(url);
+    return Request.getWithAuth(url);
   }
   static register(userData) {
     const url = '/api/register';
@@ -27,7 +27,10 @@ export default class UsersApi {
     const url = `/api/admin/manage-user/userIntoAdmin/${id}`;
     return Request.postWithAuth(url);
   }
-
+  static toggleUserIntoRepoAdmin(id, useData) {
+    const url = `/api/admin/manage-user/userIntoRepoAdmin/${id}`;
+    return Request.postWithAuth(url, useData, false);
+  }
   static exportDataUser() {
     const url = `/api/admin/manage-user/export`;
     return Request.getFileWithAuth(url);

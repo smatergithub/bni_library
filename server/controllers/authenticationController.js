@@ -51,6 +51,7 @@ module.exports = {
               url_img: userObj.url_img,
               isAdmin: false,
               superAdmin: false,
+              isRepoAdmin: false,
             })
               .then(res_user => {
                 return res.status(200).send({ message: 'firstLogin' });
