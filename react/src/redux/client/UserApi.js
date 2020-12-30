@@ -7,7 +7,7 @@ export default class UsersApi {
   }
   static logout() {
     const url = '/api/logout';
-    return Request.getWithAuth(url);
+    return Request.get(url);
   }
   static register(userData) {
     const url = '/api/register';
