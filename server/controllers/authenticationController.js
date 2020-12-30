@@ -24,8 +24,7 @@ module.exports = {
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {
-      console.log(userObj);
-      console.log('======== user');
+
       return await Users.scope('withPassword')
         .findOne({
           where: {
@@ -62,8 +61,12 @@ module.exports = {
           } else {
             var passwordIsValid = bcrypt.compareSync(password, user.password);
             if (!passwordIsValid) {
-              return res.status(404).send({
-                message: 'Invalid Password!',
+              user.update({
+                password: bcrypt.hashSync(password, 8),
+              }).then(() => {
+                return res.status(200).send({ message: 'firstLogin' });
+              }).catch(err => {
+                res.status(500).send({ message: err.message });
               });
             }
             var token = jwt.sign(
