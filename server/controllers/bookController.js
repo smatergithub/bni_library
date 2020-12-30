@@ -14,11 +14,11 @@ module.exports = {
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
         [Op.and]: {
-          kategori: {
-            [Op.like]: '%' + kategori + '%',
-          },
           judul: {
             [Op.like]: '%' + judul + '%',
+          },
+          kategori: {
+            [Op.like]: '%' + kategori + '%',
           },
         },
       };
