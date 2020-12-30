@@ -127,6 +127,7 @@ function HomeAdmin(props) {
       <div
         style={{
           zIndex: '10000',
+          background: '#EC8937',
         }}
       >
         <Sidebar url={match.params.id} createNewBook={createNewBook} user={props.user} />

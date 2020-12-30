@@ -103,19 +103,26 @@ const Repository = props => {
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
-      <div className="w-2/12 absolute " style={{ right: '2em', top: '5em' }}>
-        <Link to="/admin/new-repository">
-          <button
-            type="button"
-            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-          >
-            <i className="fas fa-plus mr-3" /> Repository Baru
-          </button>
-        </Link>
-      </div>
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Repository</h1>
-
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: '14px',
+          }}
+        >
+          <h1 className="w-full text-3xl text-black ">Daftar Repository</h1>
+          <Link to="/admin/new-repository">
+            <button
+              style={{ width: '380px', height: '34px' }}
+              type="button"
+              className=" bg-orange-500 text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+            >
+              <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Repository Baru
+            </button>
+          </Link>
+        </div>
         {repositorys.data !== undefined && repositorys.data.length !== 0 ? (
           <TableDevExtreme
             columns={[
