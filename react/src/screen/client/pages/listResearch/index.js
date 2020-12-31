@@ -20,6 +20,7 @@ function ListReserach(props) {
     kategori: kategori === 'pusat' ? 'Pusat' : kategori === 'wilayah' ? 'Wilayah' : '',
   });
   let { history } = props;
+  let checkIsUserRepoAdmin = localStorage.getItem('bni_repoAdmin') === '1'
   function getAllResearch(params) {
     props.getRepositorysByUser(params).then(res => {
       setResearch(res.data);
@@ -79,11 +80,13 @@ function ListReserach(props) {
         <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 ">
           <nav id="buku" className="w-full z-30 top-0 px-6 py-1">
             <div className="w-full container mx-auto flex flex-wrap items-center justify-between   py-3 mt-16">
-              <Link to="/tambah-riset">
+              {checkIsUserRepoAdmin ? <Link to="/tambah-riset">
                 <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                   Upload Riset
                 </button>
               </Link>
+                : <div></div>
+              }
 
               <div className="flex items-center" id="buku-nav-content">
                 <div className="pl-3 text-gray-800 inline-block no-underline hover:text-black"></div>

@@ -45,6 +45,30 @@ isAdmin = (req, res, next) => {
   });
 };
 
+isRepoAdmin = (req, res, next) => {
+  let token = req.query.token;
+
+  if (!token) {
+    return res.status(403).send({
+      message: 'No token provided!',
+    });
+  }
+  jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
+    if (err) {
+      return res.status(401).send({
+        message: 'Unauthorized!',
+      });
+    }
+    req.userId = decoded.id;
+    req.isRepoAdmin = decoded.isRepoAdmin;
+    req.isAdmin = decoded.isAdmin;
+
+    if (!req.isRepoAdmin)
+      return res.status(500).json({ message: 'your are not allowed for this feature' });
+    next();
+  });
+};
+
 isSuperAdmin = (req, res, next) => {
   let token = req.query.token;
 
@@ -77,5 +101,6 @@ const authenticationJWT = {
   verifyToken: verifyToken,
   isAdmin: isAdmin,
   isSuperAdmin: isSuperAdmin,
+  isRepoAdmin: isRepoAdmin
 };
 module.exports = authenticationJWT;

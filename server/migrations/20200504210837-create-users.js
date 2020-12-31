@@ -59,6 +59,9 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
+      isRepoAdmin: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -130,6 +130,7 @@ function HomeUser(props) {
     props.logout().then(res => {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
+        localStorage.removeItem('bni_repoAdmin')
         localStorage.removeItem('bni_UserRole');
         window.location.replace('/auth/login');
       }

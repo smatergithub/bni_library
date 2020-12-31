@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       isAdmin: DataTypes.BOOLEAN,
       superAdmin: DataTypes.BOOLEAN,
+      isRepoAdmin: DataTypes.BOOLEAN,
     },
 
     {
@@ -41,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true,
     }
   );
-  users.associate = function(models) {
+  users.associate = function (models) {
     // associations can be defined here
     users.hasMany(models.transactionBook, {
       foreignKey: 'userId',

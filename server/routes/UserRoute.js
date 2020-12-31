@@ -30,7 +30,7 @@ router.get('/tahunTerbitEbook', DataSourceFilterEbookController.getTahunTerbit);
 router.post('/contact-us', AuthenticationController.contactUs);
 
 router.post('/login', AuthenticationController.login);
-router.post('/login', AuthenticationController.login);
+router.get('/logout', AuthenticationController.logout);
 router.get('/isValidToken', AuthenticationController.isTokenValid);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
@@ -69,7 +69,7 @@ router.post(
 router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
 router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRatingEbook);
 
-router.post('/repository', [AuthJWT.verifyToken], Repository.add);
+router.post('/repository', [AuthJWT.isRepoAdmin], Repository.add);
 router.get('/repository', [AuthJWT.verifyToken], Repository.list);
 router.get('/repository/:id', [AuthJWT.verifyToken], Repository.getById);
 router.get('/repository/preview/:id', [AuthJWT.verifyToken], Repository.getPreviewById);
