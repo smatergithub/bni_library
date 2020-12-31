@@ -7,6 +7,7 @@ export const signIn = user => dispatch => {
     .then(res => {
       if (res) {
         localStorage.setItem('bni_UserRole', res.role);
+        localStorage.setItem('bni_repoAdmin', res.isRepoAdmin);
         dispatch({ type: SIGN_IN, payload: res });
         return { resp: true, msg: '', data: res };
       }

@@ -10,6 +10,8 @@ function Reserach(props) {
     window.location.replace('/auth/login');
   }
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
+  let checkIsUserRepoAdmin = localStorage.getItem('bni_repoAdmin') === '1'
+
 
   return (
     <React.Fragment>
@@ -26,23 +28,12 @@ function Reserach(props) {
               kamu juga ingin melakukan penelitian, silakan lengkapi ketentuan di bawah.
             </p>
 
-            {!isUserLogged ? (
+            {checkIsUserRepoAdmin && (
               <Link to="/tambah-riset">
                 <button className="mx-auto md:mx-0 xl:mx-0 lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                   Upload Riset
                 </button>
               </Link>
-            ) : (
-              <button
-                onClick={() => {
-                  if (isUserLogged) {
-                    setShowModalDeletion(true);
-                  }
-                }}
-                className="mobile:mx-auto md:mx-0 xl:mx-0 lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-              >
-                Upload Riset
-              </button>
             )}
           </div>
 
@@ -90,20 +81,20 @@ function Reserach(props) {
                         </button>
                       </Link>
                     ) : (
-                      <button
-                        onClick={() => {
-                          if (isUserLogged) {
-                            setShowModalDeletion(true);
-                          }
-                        }}
-                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                      >
-                        Selengkapnya{' '}
-                        <span>
-                          <i className={`fas fa-arrow-right ml-3`} />
-                        </span>
-                      </button>
-                    )}
+                        <button
+                          onClick={() => {
+                            if (isUserLogged) {
+                              setShowModalDeletion(true);
+                            }
+                          }}
+                          className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                        >
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      )}
                   </div>
                 </div>
 
@@ -136,20 +127,20 @@ function Reserach(props) {
                         </button>
                       </Link>
                     ) : (
-                      <button
-                        onClick={() => {
-                          if (isUserLogged) {
-                            setShowModalDeletion(true);
-                          }
-                        }}
-                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                      >
-                        Selengkapnya{' '}
-                        <span>
-                          <i className={`fas fa-arrow-right ml-3`} />
-                        </span>
-                      </button>
-                    )}
+                        <button
+                          onClick={() => {
+                            if (isUserLogged) {
+                              setShowModalDeletion(true);
+                            }
+                          }}
+                          className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                        >
+                          Selengkapnya{' '}
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      )}
                   </div>
                 </div>
               </div>

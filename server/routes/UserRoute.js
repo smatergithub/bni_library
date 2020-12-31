@@ -69,7 +69,7 @@ router.post(
 router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
 router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRatingEbook);
 
-router.post('/repository', [AuthJWT.verifyToken], Repository.add);
+router.post('/repository', [AuthJWT.isRepoAdmin], Repository.add);
 router.get('/repository', [AuthJWT.verifyToken], Repository.list);
 router.get('/repository/:id', [AuthJWT.verifyToken], Repository.getById);
 router.get('/repository/preview/:id', [AuthJWT.verifyToken], Repository.getPreviewById);

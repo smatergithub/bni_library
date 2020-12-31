@@ -71,7 +71,7 @@ module.exports = {
               });
             }
             var token = jwt.sign(
-              { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+              { id: user.id, isAdmin: user.isAdmin, isRepoAdmin: user.isRepoAdmin, superAdmin: user.superAdmin },
               process.env.SECRET_TOKEN,
               {
                 expiresIn: 86400, // 24 hours
@@ -82,8 +82,7 @@ module.exports = {
               accessToken: token,
               email: user.email,
               role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
-              isAdmin: user.isAdmin,
-              superAdmin: user.superAdmin,
+              isRepoAdmin: user.isRepoAdmin ? 1 : 0
             });
           }
         })
