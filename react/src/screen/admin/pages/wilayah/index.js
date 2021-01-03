@@ -10,32 +10,36 @@ import {
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import CreateEditWilayahModal from './createEditWilayahModal';
 
 const Wilayah = props => {
   const [loading, setLoading] = React.useState(false);
+
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalDetail, setShowModalDetail] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
 
-  const [totalCount, setTotalCount] = React.useState(0);
-  const [pageSize, setPageSize] = React.useState(5);
+  // const [isFetching, setIsFetching] = React.useState(false);
+  // const [totalCount, setTotalCount] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(99999999);
   const [currentPage, setCurrentPage] = React.useState(0);
+  const [searchValue, setSearchState] = React.useState('');
 
   let exportFile = React.useRef(null);
 
   const retrieveDataWilayah = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage + 1,
+      page: currentPage,
       limit: pageSize,
+      // q: searchValue,
     };
     props
       .getWilayah(pagination)
       .then(res => {
         if (res) {
-          setTotalCount(props.wilayah.count);
+          // setTotalCount(props.wilayah.count);
           setLoading(false);
         }
       })
@@ -44,9 +48,33 @@ const Wilayah = props => {
       });
   };
 
+  // const retrieveSearchDataWilayah = () => {
+  //   setIsFetching(true);
+  //   const pagination = {
+  //     page: currentPage + 1,
+  //     limit: pageSize,
+  //     q: searchValue,
+  //   };
+  //   props
+  //     .getWilayah(pagination)
+  //     .then(res => {
+  //       if (res) {
+  //         setTotalCount(props.wilayah.count);
+  //         setIsFetching(false);
+  //       }
+  //     })
+  //     .catch(err => {
+  //       console.log('error', err);
+  //     });
+  // };
+
   React.useEffect(() => {
     retrieveDataWilayah();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
+
+  // React.useEffect(() => {
+  //   retrieveSearchDataWilayah();
+  // }, [searchValue]);
 
   const uploadPdf = e => {
     e.preventDefault();
@@ -180,11 +208,13 @@ const Wilayah = props => {
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(wilayah.data)}
-            currentPage={currentPage}
-            onCurrentPageChange={setCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={setPageSize}
-            totalCount={totalCount}
+            // currentPage={currentPage}
+            // onCurrentPageChange={setCurrentPage}
+            // pageSize={pageSize}
+            // onPageSizeChange={setPageSize}
+            // onValueChange={setSearchState}
+            // setLoading={isFetching}
+            // totalCount={totalCount}
           />
         ) : null}
       </main>

@@ -8,15 +8,17 @@ function Home() {
       <section className="py-16 lg:py-16 lg:mt-5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 ">
           <div className="grid grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-8">
-            <div className="h-24">
+            <div className="h-64">
               <div className="w-1/1 p-5 ">
-                <img src="https://images.unsplash.com/photo-1507738978512-35798112892c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&amp;w=1267&amp;h=600&amp;q=80" />
+                <img src="https://images.unsplash.com/photo-1507738978512-35798112892c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&amp;w=1267&amp;h=800&amp;q=80" />
               </div>
             </div>
 
             <div className="pr-20 md:mt-0 sm:mt-64">
-              <div className="md:flex h-48 mb-16 ">
+              <div className="md:flex h-48  ">
                 <div className="md:ml-8 mt-4 md:mt-0  ">
+                  <img src={require('../../../../assets/katalog.png')} className="w-32  h-32" />
+
                   <h4 className="text-xl font-bold leading-tight">Katalog</h4>
                   <p className="mt-2 leading-relaxed">
                     Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
@@ -38,14 +40,11 @@ function Home() {
                     </button>
                   </Link>
                 </div>
-                <div>
-                  <div className="w-48 h-24 bg-orange-500 rounded-full">
-                    <img src={require('../../../../assets/home.svg')} />
-                  </div>
-                </div>
               </div>
-              <div className="md:flex  h-34 ">
+              <div className="pt-32">
                 <div className="md:ml-8 mt-10 md:mt-0">
+                  <img src={require('../../../../assets/riset.png')} className="w-32  h-32" />
+
                   <h4 className="text-xl font-bold leading-tight">Riset</h4>
                   <p className="mt-2 leading-relaxed">
                     Buat kamu yang ingin melakukan riset di BNI, temui detailnya di bagian FAQ, ya!
@@ -58,11 +57,6 @@ function Home() {
                       </span>
                     </button>
                   </Link>
-                </div>
-                <div>
-                  <div className="w-48 h-24 bg-orange-500 ml-2 rounded-full">
-                    <img src={require('../../../../assets/home2.svg')} />
-                  </div>
                 </div>
               </div>
             </div>
@@ -120,17 +114,21 @@ function Home() {
                     EBOOKS
                   </h4>
                   <div class="mt-2 text-sm text-gray-700">
-                    Buku elektronik yang dapat dibaca kapan saja, di mana saja. Hanya dengan sekali
-                    klik melalui smartphone Anda.
+                    {/* Buku elektronik yang dapat dibaca kapan saja, di mana saja. Hanya dengan sekali
+                    klik melalui smartphone Anda. */}
+                    Mohon maaf, saat ini sistem masih dalam pengembangan.
                   </div>
-                  <Link to="/favorite-ebook">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
-                      Selengkapnya{' '}
-                      <span>
-                        <i className={`fas fa-arrow-right ml-3`} />
-                      </span>
-                    </button>
-                  </Link>
+                  {/* <Link to="/favorite-ebook"> */}
+                  <button
+                    disabled
+                    className="mx-auto lg:mx-0 hover:underline bg-gray-400 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                  >
+                    Selengkapnya{' '}
+                    <span>
+                      <i className={`fas fa-arrow-right ml-3`} />
+                    </span>
+                  </button>
+                  {/* </Link> */}
                 </div>
               </div>
 

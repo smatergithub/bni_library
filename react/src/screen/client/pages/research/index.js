@@ -14,9 +14,11 @@ function Reserach(props) {
   return (
     <React.Fragment>
       <div className="pt-24">
-        <div className="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
+        <div className="container px-3 mx-auto xl:mx-0 lg:mx-0 flex flex-wrap flex-col md:flex-row items-center">
           <div className="flex flex-col w-full md:w-3/5 justify-center items-start text-start md:text-left">
-            <h1 className="my-4 text-3xl font-bold leading-tight">Riset BNI </h1>
+            <h1 className="my-4 mobile:pt-0 md:pt-10 lg:pt-10  text-3xl font-bold leading-tight">
+              Riset BNI{' '}
+            </h1>
 
             <p className="leading-normal text-2xl mb-8">
               BNI Hi Mover's, pasti kalian tertarik untuk melihat hasil karya mahasiswa yang
@@ -26,7 +28,7 @@ function Reserach(props) {
 
             {!isUserLogged ? (
               <Link to="/tambah-riset">
-                <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
+                <button className="mx-auto md:mx-0 xl:mx-0 lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                   Upload Riset
                 </button>
               </Link>
@@ -37,7 +39,7 @@ function Reserach(props) {
                     setShowModalDeletion(true);
                   }
                 }}
-                className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                className="mobile:mx-auto md:mx-0 xl:mx-0 lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
               >
                 Upload Riset
               </button>

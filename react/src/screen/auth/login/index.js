@@ -166,7 +166,7 @@ function Login(props) {
                     </div> */}
                     <div
                       className="mt-5 text-center text-orange-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
-                      onClick={() => history.push('/')}
+                      onClick={() => history.push('/home')}
                     >
                       Beranda
                     </div>

@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 
 function LandingPages(props) {
   let { history } = props;
+  const isUserLogged =
+    localStorage.getItem('bni_UserRole') && localStorage.getItem('access_token_ebni');
   return (
     <React.Fragment>
       <div className="pt-24">
@@ -16,7 +18,7 @@ function LandingPages(props) {
               menyediakan informasi-informasi dari buku, jurnal, dan hasil riset, baik secara
               hardcopy, maupun softcopy untuk meningkatkan kompetensi dan pengetahuan BNI Hi-Movers.{' '}
             </p>
-            <Link to="/auth/login">
+            <Link to={isUserLogged ? '/home' : '/auth/login'}>
               <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                 Start Now
               </button>

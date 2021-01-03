@@ -93,6 +93,29 @@ module.exports = {
     // res.cookie('access_token', 'delete', { maxAge: 0, httpOnly: 'true' });
     res.status(200).send({ message: 'success' });
   },
+  isTokenValid: async (req, res) => {
+    let token = req.query.token;
+
+    if (!token) {
+      // do not remove the message, because it will be effected on client side
+      // 0 = no token provide or the token no longer active, we need to remove token from localstorage
+      // 1 = the token still alive so don't need to remove localStorage
+      res.status(200).send({ message: '0' });
+    }
+
+    const isTokenActive = jwt.verify(token, process.env.SECRET_TOKEN, (err, decoded) => {
+      if (err) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    if (isTokenActive) {
+      res.status(200).send({ message: '1' });
+    } else {
+      res.status(200).send({ message: '0' });
+    }
+  },
   contactUs: async (req, res) => {
     // if (process.env.NODE_ENV !== 'development') {
     send.sendFeedback({

@@ -3,7 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-import { logout } from '../../../redux/action/user';
+import { logout, isValidToken } from '../../../redux/action/user';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
@@ -136,6 +136,14 @@ function HomeUser(props) {
     });
   }
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+  React.useEffect(() => {
+    props.isValidToken().then(res => {
+      if (res.msg === '0') {
+        localStorage.removeItem('access_token_ebni');
+        localStorage.removeItem('bni_UserRole');
+      }
+    });
+  }, []);
   return (
     <div>
       <NavBar url={match.params.id} props={props} isAuth={isUserLogged} logout={logoutUser} />
@@ -153,4 +161,4 @@ HomeUser.propTypes = {
 let mapState = state => {
   return { user: state.user };
 };
-export default connect(mapState, { logout })(HomeUser);
+export default connect(mapState, { logout, isValidToken })(HomeUser);

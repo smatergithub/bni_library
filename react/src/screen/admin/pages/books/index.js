@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Tooltip, Button } from 'antd';
+// import { Tooltip, Button } from 'antd';
 import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
 import { IsEmptyObject } from '../../component/IsEmptyObject';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
@@ -16,19 +16,19 @@ const Books = props => {
   const [showModalDetail, setShowModalDetail] = useState(false);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceBookList = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage + 1,
+      page: currentPage,
       limit: pageSize,
     };
     props
       .getBooks(pagination)
       .then(res => {
-        setTotalCount(props.books.count);
+        // setTotalCount(props.books.count);
         setLoading(false);
       })
       .catch(err => {
@@ -58,9 +58,12 @@ const Books = props => {
       .catch(err => console.log('err', err));
   };
 
+  // useEffect(() => {
+  //   mappingDataSourceBookList();
+  // }, [currentPage, totalCount, pageSize]);
   useEffect(() => {
     mappingDataSourceBookList();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -179,11 +182,11 @@ const Books = props => {
                 },
               ]}
               rows={adjustIntegrationTable(books.data)}
-              currentPage={currentPage}
-              onCurrentPageChange={setCurrentPage}
-              pageSize={pageSize}
-              onPageSizeChange={setPageSize}
-              totalCount={totalCount}
+              // currentPage={currentPage}
+              // onCurrentPageChange={setCurrentPage}
+              // pageSize={pageSize}
+              // onPageSizeChange={setPageSize}
+              // totalCount={totalCount}
             />
           </React.Fragment>
         ) : (

@@ -11,7 +11,7 @@ import Table from '../../component/Table';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/index';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -19,13 +19,13 @@ const Ebooks = props => {
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(9999999999);
   const [currentPage, setCurrentPage] = useState(0);
 
   const retrieveDataUser = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage + 1,
+      page: currentPage,
       limit: pageSize,
     };
     props
@@ -41,7 +41,7 @@ const Ebooks = props => {
 
   React.useEffect(() => {
     retrieveDataUser();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
 
   // function onAdminAction(data, id) {
   //   props.toogleIsAdmin(data, id).then(res => {
@@ -177,22 +177,13 @@ const Ebooks = props => {
               { name: 'actions', title: 'Action' },
             ]}
             rows={adjustIntegrationTable(users.data)}
-            currentPage={currentPage}
-            onCurrentPageChange={setCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={setPageSize}
-            totalCount={totalCount}
+            // currentPage={currentPage}
+            // onCurrentPageChange={setCurrentPage}
+            // pageSize={pageSize}
+            // onPageSizeChange={setPageSize}
+            // totalCount={totalCount}
           />
         ) : (
-          // <Table
-          //   columns={columns}
-          //   source={users}
-          //   isLoading={loading}
-          //   limit={filterOptions.limit}
-          //   page={filterOptions.page}
-          //   onPaginationUpdated={onPaginationUpdated}
-          //   searchDefaultValue={filterOptions.judul}
-          // />
           <NoData />
         )}
       </main>

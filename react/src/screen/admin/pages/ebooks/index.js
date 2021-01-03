@@ -8,7 +8,7 @@ import { ToastError, ToastSuccess } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import { IsEmptyObject } from '../../component/IsEmptyObject';
 import ModalDetailEbook from './ModalDetailEBook';
-import TableDevExtreme from '../../../../component/TableDevExtreme';
+import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 
 const Ebooks = props => {
   const [loading, setLoading] = React.useState(false);
@@ -17,19 +17,19 @@ const Ebooks = props => {
   const [showModalDetail, setShowModalDetail] = useState(false);
 
   const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
 
   const mappingDataSourceEbookList = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage + 1,
+      page: currentPage,
       limit: pageSize,
     };
     props
       .getEbooks(pagination)
       .then(res => {
-        setTotalCount(props.ebooks.count);
+        // setTotalCount(props.ebooks.count);
         setLoading(false);
       })
       .catch(err => {
@@ -66,7 +66,7 @@ const Ebooks = props => {
 
   React.useEffect(() => {
     mappingDataSourceEbookList();
-  }, [currentPage, totalCount, pageSize]);
+  }, []);
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
@@ -176,11 +176,11 @@ const Ebooks = props => {
               },
             ]}
             rows={adjustIntegrationTable(ebooks.data)}
-            currentPage={currentPage}
-            onCurrentPageChange={setCurrentPage}
-            pageSize={pageSize}
-            onPageSizeChange={setPageSize}
-            totalCount={totalCount}
+            // currentPage={currentPage}
+            // onCurrentPageChange={setCurrentPage}
+            // pageSize={pageSize}
+            // onPageSizeChange={setPageSize}
+            // totalCount={totalCount}
           />
         ) : (
           <NoData msg="Data belum Tersedia !" />
