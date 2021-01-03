@@ -119,6 +119,7 @@ function Books(props) {
                     placeholder="Kategori"
                     onChange={(e, { value }) => handleChange(value)}
                     selection
+                    value={pagination.kategori}
                     options={category}
                   />
                 </div>
@@ -179,7 +180,7 @@ function Books(props) {
           {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
-              console.log(checkIsImageExist(book.image));
+              // console.log(checkIsImageExist(book.image));
               let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
@@ -225,7 +226,9 @@ function Books(props) {
                     )}
                   </div>
 
-                  <div className="pt-1 text-gray-900">{book.pengarang}</div>
+                  <div className="pt-1 text-gray-900" style={{ fontSize: '10px' }}>
+                    {book.pengarang}
+                  </div>
                   <div className="flex items-center justify-between">
                     <ReactStars
                       count={6}

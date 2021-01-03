@@ -19,6 +19,11 @@ router.post(
   UserManageController.toggleUserIsAdmin
 );
 router.post(
+  '/manage-user/userIntoRepoAdmin/:id',
+  [AuthJWT.isAdmin],
+  UserManageController.toggleUserIsRepoAdmin
+);
+router.post(
   '/manage-user/delete/:id',
   [AuthJWT.isAdmin, AuthJWT.isSuperAdmin],
   UserManageController.deleteUser

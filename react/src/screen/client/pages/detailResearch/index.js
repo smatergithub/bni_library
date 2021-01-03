@@ -73,8 +73,7 @@ function DetailResearch(props) {
               <div className="w-4/12 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${research.image.split('/').pop()}`}
-                    src={img}
+                    src={require('../../../../assets/riset.svg')}
                     alt=""
                     style={{
                       height: 310,
@@ -187,6 +186,7 @@ function DetailResearch(props) {
         title="Preview"
         large={true}
         open={showPreview.open}
+        usingForDetail={true}
         onCLose={() => {
           setShowPreview({
             open: false,

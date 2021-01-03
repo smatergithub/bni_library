@@ -45,6 +45,7 @@ function Accounts(props) {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
+        localStorage.removeItem('bni_repoAdmin')
         window.location.replace('/');
       }
     });

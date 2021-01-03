@@ -71,6 +71,6 @@
     "customize-cra": "^1.0.0",
     "customize-cra-react-refresh": "^1.1.0",
     "kcd-scripts": "^5.9.0",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.1.8"
   }
 }

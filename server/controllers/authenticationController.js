@@ -24,8 +24,7 @@ module.exports = {
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {
-      console.log(userObj);
-      console.log('======== user');
+
       return await Users.scope('withPassword')
         .findOne({
           where: {
@@ -52,6 +51,7 @@ module.exports = {
               url_img: userObj.url_img,
               isAdmin: false,
               superAdmin: false,
+              isRepoAdmin: false,
             })
               .then(res_user => {
                 return res.status(200).send({ message: 'firstLogin' });
@@ -62,12 +62,16 @@ module.exports = {
           } else {
             var passwordIsValid = bcrypt.compareSync(password, user.password);
             if (!passwordIsValid) {
-              return res.status(404).send({
-                message: 'Invalid Password!',
+              user.update({
+                password: bcrypt.hashSync(password, 8),
+              }).then(() => {
+                return res.status(200).send({ message: 'firstLogin' });
+              }).catch(err => {
+                res.status(500).send({ message: err.message });
               });
             }
             var token = jwt.sign(
-              { id: user.id, isAdmin: user.isAdmin, superAdmin: user.superAdmin },
+              { id: user.id, isAdmin: user.isAdmin, isRepoAdmin: user.isRepoAdmin, superAdmin: user.superAdmin },
               process.env.SECRET_TOKEN,
               {
                 expiresIn: 86400, // 24 hours
@@ -78,8 +82,7 @@ module.exports = {
               accessToken: token,
               email: user.email,
               role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
-              isAdmin: user.isAdmin,
-              superAdmin: user.superAdmin,
+              isRepoAdmin: user.isRepoAdmin ? 1 : 0
             });
           }
         })

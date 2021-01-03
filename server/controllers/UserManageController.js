@@ -57,6 +57,7 @@ module.exports = {
             email: item.email,
             isAdmin: item.isAdmin,
             superAdmin: item.superAdmin,
+            isRepoAdmin: item.isRepoAdmin,
           };
           data.push(dataUser);
         });
@@ -108,6 +109,24 @@ module.exports = {
       })
       .catch(error => res.status(404).send(error));
   },
+  toggleUserIsRepoAdmin: async (req, res) => {
+    return Users.findByPk(req.params.id)
+      .then(user => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'user Not Found',
+          });
+        }
+        let requestAdmin = user.isAdmin === true ? false : true
+        return user
+          .update({
+            isRepoAdmin: req.body.isRepoAdmin,
+          })
+          .then(() => res.status(200).send(user))
+          .catch(error => res.status(404).send(error));
+      })
+      .catch(error => res.status(404).send(error));
+  },
 
   dataSourceUserList: async (req, res) => {
     return Users.findAll().then(user => {
@@ -124,12 +143,12 @@ module.exports = {
       .catch(error => res.status(404).send(error));
   },
 
-  exportListUser : async (req,res) => {
+  exportListUser: async (req, res) => {
     return Users.findAll({
-        order: [
-          ['createdAt', 'DESC'],
-        ],
-      }).then(user => {
+      order: [
+        ['createdAt', 'DESC'],
+      ],
+    }).then(user => {
       let userDisplay = []
       user.forEach(item => {
         const userData = {
@@ -141,27 +160,27 @@ module.exports = {
       // header
       let headingColumnIndex = 1;
       Object.keys(userDisplay[0]).forEach((key) => {
-           ws.cell(1, headingColumnIndex++)
-              .string(key)
-    });
+        ws.cell(1, headingColumnIndex++)
+          .string(key)
+      });
 
       //Write Data in Excel file
       let rowIndex = 2;
-      userDisplay.forEach( record => {
-          let columnIndex = 1;
-          Object.keys(record ).forEach(columnName =>{
-              ws.cell(rowIndex,columnIndex++)
-                .string(record[columnName] == null ? "" : record[columnName].toString())
-          });
-          rowIndex++;
+      userDisplay.forEach(record => {
+        let columnIndex = 1;
+        Object.keys(record).forEach(columnName => {
+          ws.cell(rowIndex, columnIndex++)
+            .string(record[columnName] == null ? "" : record[columnName].toString())
+        });
+        rowIndex++;
       });
 
-      wb.write('list_user.xlsx',res)
+      wb.write('list_user.xlsx', res)
     })
-    .catch((err) => {
-      console.log(err)
-      res.status(404).json({message : "masuk sini"})
-    })
+      .catch((err) => {
+        console.log(err)
+        res.status(404).json({ message: "masuk sini" })
+      })
 
   }
 };

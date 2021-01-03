@@ -80,14 +80,14 @@ function About() {
                 felis in, feugiat ornare quam
               </p> */}
             </div>
-            <div className="w-full md:w-4/12 px-4 mr-auto ml-auto">
+            <div className="w-full md:w-4/12 px-4 mr-auto ml-auto" style={{ marginTop: '24px' }}>
               <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-lg bg-orange-500">
                 <img
                   alt="..."
                   src={require('../../../../assets/fasilitas.png')}
                   className="w-full align-middle rounded-t-lg h-64"
                 />
-                <blockquote className="relative p-8 mb-4">
+                {/* <blockquote className="relative p-8 mb-4">
                   <svg
                     preserveAspectRatio="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +109,7 @@ function About() {
                     Nam hendrerit massa leo, quis congue orci vestibulum vel. Nunc sem nisl,
                     volutpat ut felis in, feugiat ornare quam
                   </p>
-                </blockquote>
+                </blockquote> */}
               </div>
             </div>
           </div>

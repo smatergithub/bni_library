@@ -108,6 +108,7 @@ function HomeAdmin(props) {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
+        localStorage.removeItem('bni_repoAdmin')
         window.location.replace('/auth/login');
       }
     });
@@ -127,6 +128,7 @@ function HomeAdmin(props) {
       <div
         style={{
           zIndex: '10000',
+          background: '#EC8937',
         }}
       >
         <Sidebar url={match.params.id} createNewBook={createNewBook} user={props.user} />

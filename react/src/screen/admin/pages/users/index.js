@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {
   getUsersListToAdmin,
   toggleUserIntoAdmin,
+  toggleUserIntoRepoAdmin,
   deleteUser,
   getMe,
   exportDataUser,
@@ -54,10 +55,27 @@ const Ebooks = props => {
   const getDetailUser = (id, MakeAdmin) => {
     const { users } = props;
     let detailData = users.data.filter(item => item.id === id);
-    setDetailData(detailData[0]);
-    if (MakeAdmin === 'isAdmin') {
+    if (MakeAdmin === 'makeRisetAdmin') {
+      let updateDetailData = {
+        makeRisetAdmin: 1,
+        ...detailData[0]
+      }
+      setDetailData(updateDetailData);
+      setShowModalMakeAdmin(true);
+    } else if (MakeAdmin === 'makeAsUser') {
+      let updateDetailData = {
+        makeRisetAdmin: 2,
+        ...detailData[0]
+      }
+      setDetailData(updateDetailData);
+      setShowModalMakeAdmin(true);
+    }
+
+    else if (MakeAdmin === 'isAdmin') {
+      setDetailData(detailData[0]);
       setShowModalMakeAdmin(true);
     } else {
+      setDetailData(detailData[0]);
       setShowModalDeletion(true);
     }
   };
@@ -67,6 +85,7 @@ const Ebooks = props => {
     props
       .toggleUserIntoAdmin(detailData.id)
       .then(response => {
+        ToastSuccess('Update Berhasil.')
         retrieveDataUser();
         setLoading(false);
         setShowModalMakeAdmin(false);
@@ -75,6 +94,35 @@ const Ebooks = props => {
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
+  const makeRepoAdmin = () => {
+    setLoading(true);
+    if (detailData && detailData.makeRisetAdmin === 1) {
+      props
+        .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: true })
+        .then(response => {
+          retrieveDataUser();
+          ToastSuccess('Update Berhasil.')
+          setLoading(false);
+          setShowModalMakeAdmin(false);
+        })
+        .catch(err => {
+          ToastError('Tidak Bisa Akses Fitur Ini');
+        });
+    } else {
+      props
+        .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: false })
+        .then(response => {
+          ToastSuccess('Update Berhasil.')
+          retrieveDataUser();
+          setLoading(false);
+          setShowModalMakeAdmin(false);
+        })
+        .catch(err => {
+          ToastError('Tidak Bisa Akses Fitur Ini');
+        });
+    }
+
+  }
 
   const exportDataUser = () => {
     setLoading(true);
@@ -107,15 +155,17 @@ const Ebooks = props => {
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
+
       return {
         ...rowData,
-        isAdmin: rowData.isAdmin ? 'Aktif' : 'Tidak Aktif',
+        isAdmin: <div style={{ color: rowData.isAdmin ? 'green' : 'red' }}>{rowData.isAdmin ? 'Yes' : 'No'}</div>,
+        isRepoAdmin: <div style={{ color: rowData.isRepoAdmin ? 'green' : 'red' }}>{rowData.isRepoAdmin ? 'Yes' : 'No'}</div>,
         actions: (
           <React.Fragment>
-            {!props.me ? null : props.me.superAdmin ? (
+            {props.me && props.me.id !== rowData.id && props.me.superAdmin ? (
               <React.Fragment>
                 <button
-                  className="bg-green-400 text-white active:bg-indigo-600 text-xs   w-20 py-1 rounded outline-none focus:outline-none "
+                  className="bg-green-400 text-white active:bg-indigo-600 text-xs  px-2 py-1 rounded outline-none focus:outline-none "
                   type="button"
                   style={{ marginRight: '5px' }}
                   onClick={() => getDetailUser(rowData.id, 'isAdmin')}
@@ -123,12 +173,25 @@ const Ebooks = props => {
                   {rowData.isAdmin !== true ? ' Make Admin' : ' Make User'}
                 </button>
                 <button
-                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   w-16 py-1 rounded outline-none focus:outline-none "
+                  className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-2 py-1 rounded outline-none focus:outline-none "
                   type="button"
                   onClick={() => getDetailUser(rowData.id, 'delete')}
                 >
                   Delete
                 </button>{' '}
+              </React.Fragment>
+            ) : null}
+            {props.me && props.me.id !== rowData.id && !rowData.isAdmin ? (
+              <React.Fragment>
+                <button
+                  className={`${rowData.isRepoAdmin ? 'bg-gray-800' : 'bg-orange-600'} text-white active:bg-indigo-600 text-xs  py-1 px-2 rounded outline-none focus:outline-none `}
+                  type="button"
+                  style={{ marginRight: '5px' }}
+                  onClick={() => getDetailUser(rowData.id, !rowData.isRepoAdmin ? 'makeRisetAdmin' : 'makeAsUser')}
+                >
+                  {rowData.isRepoAdmin ? ' Make as User' : 'Make Riset Admin'}
+                </button>
+
               </React.Fragment>
             ) : null}
           </React.Fragment>
@@ -139,31 +202,26 @@ const Ebooks = props => {
 
   if (loading) return null;
   const { users } = props;
-
+  let checkActionIsUserRepoAdmin = detailData && detailData.makeRisetAdmin !== undefined
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Daftar Pengguna</h1>
         <div
-          className="absolute"
           style={{
-            right: '2em',
-            top: '4em',
             display: 'flex',
             flexDirection: 'row',
-            width: '392px',
+            justifyContent: 'space-between',
+            marginBottom: '14px',
           }}
         >
+          <h1 className="w-full text-3xl text-black ">Daftar Pengguna</h1>
           <button
+            style={{ width: '380px', height: '34px' }}
             type="button"
+            className=" bg-orange-500 text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => exportDataUser()}
-            className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl  flex items-center justify-center"
           >
-            <span>
-              {' '}
-              <i className="fas fa-plus mr-3" />
-              Export Data User
-            </span>
+            <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Export Data User
           </button>
         </div>
         {users.data !== undefined ? (
@@ -173,23 +231,33 @@ const Ebooks = props => {
               { name: 'alamat', title: 'Alamat' },
               { name: 'email', title: 'Email' },
               { name: 'phoneNumber', title: 'Phone Number' },
-              { name: 'isAdmin', title: 'Is Admin' },
+              { name: 'isRepoAdmin', title: 'Riset Admin' },
+              { name: 'isAdmin', title: 'Admin' },
               { name: 'actions', title: 'Action' },
             ]}
+            columnExtensions={[
+
+              {
+                columnName: 'actions',
+                width: 300,
+                wordWrapEnabled: true,
+              },
+            ]}
             rows={adjustIntegrationTable(users.data)}
-            // currentPage={currentPage}
-            // onCurrentPageChange={setCurrentPage}
-            // pageSize={pageSize}
-            // onPageSizeChange={setPageSize}
-            // totalCount={totalCount}
+          // currentPage={currentPage}
+          // onCurrentPageChange={setCurrentPage}
+          // pageSize={pageSize}
+          // onPageSizeChange={setPageSize}
+          // totalCount={totalCount}
           />
         ) : (
-          <NoData />
-        )}
+            <NoData />
+          )}
       </main>
       <Modal
         title="Konfirmasi"
         open={showModalDeletion}
+        hideCloseBtn
         onCLose={() => {
           setDetailData({});
           setShowModalDeletion(false);
@@ -201,13 +269,16 @@ const Ebooks = props => {
       <Modal
         title="Konfirmasi"
         open={showModalMakeAdmin}
+
+        hideCloseBtn
+        labelSubmitButton="Submit"
         onCLose={() => {
           setDetailData({});
           setShowModalMakeAdmin(false);
         }}
-        handleSubmit={makeUserIntoAdmin}
+        handleSubmit={checkActionIsUserRepoAdmin ? makeRepoAdmin : makeUserIntoAdmin}
       >
-        <div className="my-5">Anda yakin untuk Menjadikan User ini Admin ?</div>
+        <div className="my-5">Anda yakin untuk mengupdate user ini ?</div>
       </Modal>
     </div>
   );
@@ -224,6 +295,7 @@ let mapStateToProps = state => {
 export default connect(mapStateToProps, {
   getUsersListToAdmin,
   toggleUserIntoAdmin,
+  toggleUserIntoRepoAdmin,
   deleteUser,
   getMe,
   exportDataUser,
