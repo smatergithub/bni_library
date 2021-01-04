@@ -64,6 +64,7 @@ function BorrowedEbook(props) {
         <Modal
           title={ebookBorrowSelected.code}
           open={showModal}
+          usingForDetail={true}
           onCLose={() => {
             setShowModal(false);
           }}

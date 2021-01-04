@@ -185,11 +185,13 @@ function OrderBook(props) {
       </section>
       <Modal
         title="Order Berhasil"
+        usingForDetail={true}
         open={showModalDeletion}
         onCLose={() => {
           setShowModalDeletion(false);
+          redirectProfile();
         }}
-        handleSubmit={redirectProfile}
+        // handleSubmit={redirectProfile}
       >
         <div className="my-5">Silahkan tunjukan invoice kepada admin perpustakaan </div>
       </Modal>

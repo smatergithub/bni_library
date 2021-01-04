@@ -75,19 +75,19 @@ module.exports = {
       });
   },
 
-
   deleteUser: async (req, res) => {
-    return Users.findByPk(req.params.id).then(user => {
-      if (!user) {
-        return res.status(404).send({
-          message: 'user Not Found',
-        });
-      }
-      return user
-        .destroy()
-        .then(() => res.status(200).send({ message: 'succesfully delete' }))
-        .catch(error => res.status(404).send(error));
-    })
+    return Users.findByPk(req.params.id)
+      .then(user => {
+        if (!user) {
+          return res.status(404).send({
+            message: 'user Not Found',
+          });
+        }
+        return user
+          .destroy()
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
+          .catch(error => res.status(404).send(error));
+      })
       .catch(error => res.status(500).send(error));
   },
 
@@ -99,7 +99,7 @@ module.exports = {
             message: 'user Not Found',
           });
         }
-        let requestAdmin = user.isAdmin === true ? false : true
+        let requestAdmin = user.isAdmin === true ? false : true;
         return user
           .update({
             isAdmin: requestAdmin,
@@ -117,7 +117,7 @@ module.exports = {
             message: 'user Not Found',
           });
         }
-        let requestAdmin = user.isAdmin === true ? false : true
+        let requestAdmin = user.isAdmin === true ? false : true;
         return user
           .update({
             isRepoAdmin: req.body.isRepoAdmin,
@@ -129,58 +129,57 @@ module.exports = {
   },
 
   dataSourceUserList: async (req, res) => {
-    return Users.findAll().then(user => {
-      let userDisplay = []
-      user.forEach(item => {
-        const userData = {
-          value: item.id,
-          label: item.name
-        }
-        userDisplay.push(userData)
+    return Users.findAll()
+      .then(user => {
+        let userDisplay = [];
+        user.forEach(item => {
+          const userData = {
+            value: item.id,
+            label: item.name,
+          };
+          userDisplay.push(userData);
+        });
+        res.status(200).send(userDisplay);
       })
-      res.status(200).send(userDisplay);
-    })
       .catch(error => res.status(404).send(error));
   },
 
   exportListUser: async (req, res) => {
     return Users.findAll({
-      order: [
-        ['createdAt', 'DESC'],
-      ],
-    }).then(user => {
-      let userDisplay = []
-      user.forEach(item => {
-        const userData = {
-          ...item.dataValues
-        }
-        userDisplay.push(userData)
-      })
-
-      // header
-      let headingColumnIndex = 1;
-      Object.keys(userDisplay[0]).forEach((key) => {
-        ws.cell(1, headingColumnIndex++)
-          .string(key)
-      });
-
-      //Write Data in Excel file
-      let rowIndex = 2;
-      userDisplay.forEach(record => {
-        let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-          ws.cell(rowIndex, columnIndex++)
-            .string(record[columnName] == null ? "" : record[columnName].toString())
-        });
-        rowIndex++;
-      });
-
-      wb.write('list_user.xlsx', res)
+      order: [['createdAt', 'DESC']],
     })
-      .catch((err) => {
-        console.log(err)
-        res.status(404).json({ message: "masuk sini" })
-      })
+      .then(user => {
+        let userDisplay = [];
+        user.forEach(item => {
+          const userData = {
+            ...item.dataValues,
+          };
+          userDisplay.push(userData);
+        });
 
-  }
+        // header
+        let headingColumnIndex = 1;
+        Object.keys(userDisplay[0]).forEach(key => {
+          ws.cell(1, headingColumnIndex++).string(key);
+        });
+
+        //Write Data in Excel file
+        let rowIndex = 2;
+        userDisplay.forEach(record => {
+          let columnIndex = 1;
+          Object.keys(record).forEach(columnName => {
+            ws.cell(rowIndex, columnIndex++).string(
+              record[columnName] == null ? '' : record[columnName].toString()
+            );
+          });
+          rowIndex++;
+        });
+
+        wb.write('list_user.xlsx', res);
+      })
+      .catch(err => {
+        console.log(err);
+        res.status(404).json({ message: 'masuk sini' });
+      });
+  },
 };

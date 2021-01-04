@@ -66,6 +66,7 @@ function Borrowed(props) {
         <Modal
           title={bookBorrowSelected.code}
           open={showModal}
+          usingForDetail={true}
           onCLose={() => {
             setShowModal(false);
           }}

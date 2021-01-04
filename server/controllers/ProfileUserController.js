@@ -309,4 +309,32 @@ module.exports = {
         res.status(500).send(err);
       });
   },
+
+  approveBorrowBookAndEbook: async (req, res) => {
+    var userId = req.userId;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      where: { status: 'Dipinjam' },
+    };
+    let approvedBorrowBook = TransactionBook.findAndCountAll(paramQuerySQL).then(response => {
+      res.status(200).json({
+        status: true,
+        message: 'Ada Buku Yang Sukses Di approve Oleh Admin',
+      });
+    });
+
+    let approvedBorrowEBook = TransactionEbook.findAndCountAll(paramQuerySQL).then(response => {
+      res.status(200).json({
+        status: true,
+        message: 'Ada Ebook Yang Sukes Di approve Oleh Admin',
+      });
+    });
+
+    if (!approvedBorrowBook && !approvedBorrowEBook) {
+      res.status(200).json({
+        status: false,
+        message: 'tidak ada buku dan ebook yang di approve oleh admin',
+      });
+    }
+  },
 };
