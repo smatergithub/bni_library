@@ -184,7 +184,7 @@ function OrderBook(props) {
         )}
       </section>
       <Modal
-        title="Order Berhasil"
+        title="Peminjaman Berhasil"
         usingForDetail={true}
         open={showModalDeletion}
         onCLose={() => {
@@ -193,7 +193,9 @@ function OrderBook(props) {
         }}
         // handleSubmit={redirectProfile}
       >
-        <div className="my-5">Silahkan tunjukan invoice kepada admin perpustakaan </div>
+        <div className="my-5">
+          Peminjaman Buku Berhasil, Silahkan Tunjukan Invoice Untuk Pengambilan Buku Pinjaman{' '}
+        </div>
       </Modal>
       <FeedbackModal
         title="Action required"
