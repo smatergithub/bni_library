@@ -96,7 +96,6 @@ export const toggleUserIntoRepoAdmin = (id, body) => () => {
     });
 };
 
-
 export const deleteUser = id => () => {
   return UserApi.deleteUserList(id)
     .then(res => {
@@ -129,6 +128,24 @@ export const getMe = () => dispatch => {
       return { resp: false, msg: msg };
     });
 };
+
+// export const checkApproveBorrow = () => {
+//   return UserApi.getCheckApproveBorrow()
+//     .then(res => {
+//       console.log('data res', res);
+//       if (res) {
+//         return {
+//           resp: true,
+//           data: res,
+//         };
+//       }
+//     })
+//     .catch(err => {
+//       let msg = err.message || 'Something Wrong, request failed !';
+//       return { resp: false, msg: msg };
+//     });
+// };
+
 export const updateMe = data => () => {
   return UserApi.updateMe(data)
     .then(res => {

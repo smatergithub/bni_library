@@ -107,7 +107,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                     top: '2em',
                   }}
                 >
-                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tesedia'}
+                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
                 </div>
 
                 <div className="relative w-full mb-3">

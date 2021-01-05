@@ -11,6 +11,7 @@ function Profile(props) {
   let [isEditUser, setIsEditUser] = React.useState(false);
   let [processing, setProcessing] = React.useState(false);
   let [user, setUser] = React.useState(null);
+
   React.useEffect(() => {
     let { edit } = parsed;
 
@@ -24,6 +25,21 @@ function Profile(props) {
       }
     });
   }, []);
+
+  // React.useEffect(() => {
+  //   let { edit } = parsed;
+  //   props.checkApproveBorrow().then(res => {
+  //     setProcessing(false);
+  //     if (res.resp) {
+  //       console.log('res', res.resp);
+  //       // setIsApproveBorrow(res.data);
+  //       if (edit && edit === 'true') {
+  //         setIsEditUser(true);
+  //       }
+  //     }
+  //   });
+  // }, []);
+
   React.useEffect(() => {
     if (!isEditUser) {
       props.getMe().then(res => {
