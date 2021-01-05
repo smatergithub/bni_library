@@ -10,6 +10,7 @@ import {
   EditBookAction,
 } from '../../../../redux/action/books';
 import { ToastError, ToastSuccess } from '../../../../component';
+import Loader from '../../component/Loader';
 
 function CreateNewBook(props) {
   const parsed = queryString.parse(props.location.search);
@@ -19,6 +20,7 @@ function CreateNewBook(props) {
   let [statusValue, setStatusValue] = React.useState(null);
   let [publishDate, setPublishDate] = React.useState(null);
   let [books, setBooks] = React.useState(null);
+  let [isLoading, setIsLoading] = React.useState(false);
   let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
@@ -90,12 +92,13 @@ function CreateNewBook(props) {
 
     let reader = new FileReader();
     let file = e.target.files[0];
-
+    setIsLoading(true);
     reader.onloadend = () => {
       props.UploadBookFIle({ file }).then(res => {
         if (res) {
           ToastSuccess(res.msg);
           props.history.push('/admin/books');
+          setIsLoading(false);
         } else {
           ToastError(res.msg);
         }
@@ -121,285 +124,300 @@ function CreateNewBook(props) {
             <button
               type="button"
               onClick={() => exportFile.current.click()}
+              disabled={isLoading}
               className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             >
               <i className="fas fa-upload mr-3" /> Import Books
             </button>
           </div>
-          <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
-            <div className="leading-loose">
-              <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
-                <p className="text-lg text-gray-800 font-medium pb-4">Informasi Buku</p>
-                <input
-                  onChange={e => uploadPdf(e)}
-                  type="file"
-                  style={{
-                    display: 'none',
-                  }}
-                  ref={exportFile}
-                  className=""
-                  accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                  aria-label="Email"
-                />
-                <div className="">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_name">
-                    Judul
-                  </label>
-                  <input
-                    className="w-full px-2 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
-                    type="text"
-                    name="judul"
-                    defaultValue={book ? book.judul : ''}
-                    aria-label="Name"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                  />
-                  <div className="text-red-700">{errors.judul && errors.judul.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Pengarang
-                  </label>
-                  <input
-                    name="pengarang"
-                    defaultValue={book ? book.pengarang : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.pengarang && errors.pengarang.message}</div>
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Kategori Buku
-                  </label>
-                  <input
-                    name="kategori"
-                    defaultValue={book ? book.kategori : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.kategori && errors.kategori.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Stock
-                  </label>
-                  <input
-                    name="stockBuku"
-                    defaultValue={book ? book.stockBuku : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="number"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.stockBuku && errors.stockBuku.message}</div>
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Bahasa
-                  </label>
-                  <input
-                    name="bahasa"
-                    defaultValue={book ? book.bahasa : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.bahasa && errors.bahasa.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    ISBN
-                  </label>
-                  <input
-                    name="isbn"
-                    defaultValue={book ? book.isbn : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.isbn && errors.isbn.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Penerbit
-                  </label>
-                  <input
-                    name="penerbit"
-                    defaultValue={book ? book.penerbit : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Nomor Lemari
-                  </label>
-                  <input
-                    name="nomorLemari"
-                    defaultValue={book ? book.nomorLemari : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.nomorLemari && errors.nomorLemari.message}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Rak
-                  </label>
-                  <input
-                    name="rakLemari"
-                    defaultValue={book ? book.rakLemari : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.rakLemari && errors.rakLemari.message}</div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Lokasi Perpustakaan
-                  </label>
-                  <input
-                    name="lokasiPerpustakaan"
-                    defaultValue={book ? book.lokasiPerpustakaan : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.lokasiPerpustakaan && errors.lokasiPerpustakaan.message}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Status
-                  </label>
-                  <Checkbox.Group
-                    options={optionsStatus}
-                    value={statusValue}
-                    defaultValue={['Weeding']}
-                    onChange={onChangeStatus}
-                  />
-                  <div className="text-red-700"></div>
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Tahun Terbit
-                  </label>
-                  <Space direction="vertical">
-                    <DatePicker onChange={onChange} placeholder={publishDate} />
-                  </Space>
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Foto
-                  </label>
-
-                  <input
-                    onChange={e => uploadImage(e)}
-                    type="file"
-                    className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
-                    accept="image/png, image/jpeg"
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
-                </div>
-
-                <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Keterangan
-                  </label>
-                  <input
-                    name="keterangan"
-                    defaultValue={book ? book.keterangan : ''}
-                    className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    type="text"
-                    required=""
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.keterangan && errors.keterangan.message}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <label className=" block text-sm text-gray-600" htmlFor="message">
-                    Deskripsi
-                  </label>
-                  <textarea
-                    name="description"
-                    defaultValue={book ? book.description : ''}
-                    className="w-full px-2 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
-                    rows="6"
-                    ref={register({
-                      required: 'Field tidak boleh kosong',
-                    })}
-                    placeholder="Masukkan informasi buku"
-                    aria-label="Email"
-                  />
-                  <div className="text-red-700">
-                    {errors.description && errors.description.message}
-                  </div>
-                </div>
-
-                <div className="mt-6">
-                  <button
-                    className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
-                    type="submit"
-                  >
-                    SUBMIT
-                  </button>
-                </div>
-              </form>
+          {isLoading ? (
+            <div className="w-full lg:w-1/1 mt-32 pl-0 lg:pl-2">
+              <Loader />
             </div>
-          </div>
+          ) : (
+            <div className="w-full lg:w-1/1 mt-6 pl-0 lg:pl-2">
+              <div className="leading-loose">
+                <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
+                  <p className="text-lg text-gray-800 font-medium pb-4">Informasi Buku</p>
+                  <input
+                    onChange={e => uploadPdf(e)}
+                    type="file"
+                    style={{
+                      display: 'none',
+                    }}
+                    ref={exportFile}
+                    className=""
+                    accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    aria-label="Email"
+                  />
+                  <div className="">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_name">
+                      Judul
+                    </label>
+                    <input
+                      className="w-full px-2 py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline  "
+                      type="text"
+                      name="judul"
+                      defaultValue={book ? book.judul : ''}
+                      aria-label="Name"
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                    />
+                    <div className="text-red-700">{errors.judul && errors.judul.message}</div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Pengarang
+                    </label>
+                    <input
+                      name="pengarang"
+                      defaultValue={book ? book.pengarang : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.pengarang && errors.pengarang.message}
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Kategori Buku
+                    </label>
+                    <input
+                      name="kategori"
+                      defaultValue={book ? book.kategori : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">{errors.kategori && errors.kategori.message}</div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Stock
+                    </label>
+                    <input
+                      name="stockBuku"
+                      defaultValue={book ? book.stockBuku : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="number"
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.stockBuku && errors.stockBuku.message}
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Bahasa
+                    </label>
+                    <input
+                      name="bahasa"
+                      defaultValue={book ? book.bahasa : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">{errors.bahasa && errors.bahasa.message}</div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      ISBN
+                    </label>
+                    <input
+                      name="isbn"
+                      defaultValue={book ? book.isbn : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">{errors.isbn && errors.isbn.message}</div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Penerbit
+                    </label>
+                    <input
+                      name="penerbit"
+                      defaultValue={book ? book.penerbit : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Nomor Lemari
+                    </label>
+                    <input
+                      name="nomorLemari"
+                      defaultValue={book ? book.nomorLemari : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.nomorLemari && errors.nomorLemari.message}
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Rak
+                    </label>
+                    <input
+                      name="rakLemari"
+                      defaultValue={book ? book.rakLemari : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.rakLemari && errors.rakLemari.message}
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Lokasi Perpustakaan
+                    </label>
+                    <input
+                      name="lokasiPerpustakaan"
+                      defaultValue={book ? book.lokasiPerpustakaan : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.lokasiPerpustakaan && errors.lokasiPerpustakaan.message}
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Status
+                    </label>
+                    <Checkbox.Group
+                      options={optionsStatus}
+                      value={statusValue}
+                      defaultValue={['Weeding']}
+                      onChange={onChangeStatus}
+                    />
+                    <div className="text-red-700"></div>
+                  </div>
+
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Tahun Terbit
+                    </label>
+                    <Space direction="vertical">
+                      <DatePicker onChange={onChange} placeholder={publishDate} />
+                    </Space>
+                  </div>
+
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Foto
+                    </label>
+
+                    <input
+                      onChange={e => uploadImage(e)}
+                      type="file"
+                      className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
+                      accept="image/png, image/jpeg"
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.dateEbook && errors.dateEbook.message}
+                    </div>
+                  </div>
+
+                  <div className="mt-2">
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Keterangan
+                    </label>
+                    <input
+                      name="keterangan"
+                      defaultValue={book ? book.keterangan : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.keterangan && errors.keterangan.message}
+                    </div>
+                  </div>
+                  <div className="mt-2">
+                    <label className=" block text-sm text-gray-600" htmlFor="message">
+                      Deskripsi
+                    </label>
+                    <textarea
+                      name="description"
+                      defaultValue={book ? book.description : ''}
+                      className="w-full px-2 py-2 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                      rows="6"
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      placeholder="Masukkan informasi buku"
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.description && errors.description.message}
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <button
+                      className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
+                      type="submit"
+                    >
+                      SUBMIT
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>

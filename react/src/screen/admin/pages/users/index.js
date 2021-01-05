@@ -58,20 +58,18 @@ const Ebooks = props => {
     if (MakeAdmin === 'makeRisetAdmin') {
       let updateDetailData = {
         makeRisetAdmin: 1,
-        ...detailData[0]
-      }
+        ...detailData[0],
+      };
       setDetailData(updateDetailData);
       setShowModalMakeAdmin(true);
     } else if (MakeAdmin === 'makeAsUser') {
       let updateDetailData = {
         makeRisetAdmin: 2,
-        ...detailData[0]
-      }
+        ...detailData[0],
+      };
       setDetailData(updateDetailData);
       setShowModalMakeAdmin(true);
-    }
-
-    else if (MakeAdmin === 'isAdmin') {
+    } else if (MakeAdmin === 'isAdmin') {
       setDetailData(detailData[0]);
       setShowModalMakeAdmin(true);
     } else {
@@ -85,7 +83,7 @@ const Ebooks = props => {
     props
       .toggleUserIntoAdmin(detailData.id)
       .then(response => {
-        ToastSuccess('Update Berhasil.')
+        ToastSuccess('Update Berhasil.');
         retrieveDataUser();
         setLoading(false);
         setShowModalMakeAdmin(false);
@@ -101,7 +99,7 @@ const Ebooks = props => {
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: true })
         .then(response => {
           retrieveDataUser();
-          ToastSuccess('Update Berhasil.')
+          ToastSuccess('Update Berhasil.');
           setLoading(false);
           setShowModalMakeAdmin(false);
         })
@@ -112,7 +110,7 @@ const Ebooks = props => {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: false })
         .then(response => {
-          ToastSuccess('Update Berhasil.')
+          ToastSuccess('Update Berhasil.');
           retrieveDataUser();
           setLoading(false);
           setShowModalMakeAdmin(false);
@@ -121,8 +119,7 @@ const Ebooks = props => {
           ToastError('Tidak Bisa Akses Fitur Ini');
         });
     }
-
-  }
+  };
 
   const exportDataUser = () => {
     setLoading(true);
@@ -155,11 +152,18 @@ const Ebooks = props => {
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
-
       return {
         ...rowData,
-        isAdmin: <div style={{ color: rowData.isAdmin ? 'green' : 'red' }}>{rowData.isAdmin ? 'Yes' : 'No'}</div>,
-        isRepoAdmin: <div style={{ color: rowData.isRepoAdmin ? 'green' : 'red' }}>{rowData.isRepoAdmin ? 'Yes' : 'No'}</div>,
+        isAdmin: (
+          <div style={{ color: rowData.isAdmin ? 'green' : 'red' }}>
+            {rowData.isAdmin ? 'Yes' : 'No'}
+          </div>
+        ),
+        isRepoAdmin: (
+          <div style={{ color: rowData.isRepoAdmin ? 'green' : 'red' }}>
+            {rowData.isRepoAdmin ? 'Yes' : 'No'}
+          </div>
+        ),
         actions: (
           <React.Fragment>
             {props.me && props.me.id !== rowData.id && props.me.superAdmin ? (
@@ -184,14 +188,20 @@ const Ebooks = props => {
             {props.me && props.me.id !== rowData.id && !rowData.isAdmin ? (
               <React.Fragment>
                 <button
-                  className={`${rowData.isRepoAdmin ? 'bg-gray-800' : 'bg-orange-600'} text-white active:bg-indigo-600 text-xs  py-1 px-2 rounded outline-none focus:outline-none `}
+                  className={`${
+                    rowData.isRepoAdmin ? 'bg-gray-800' : 'bg-orange-600'
+                  } text-white active:bg-indigo-600 text-xs  py-1 px-2 rounded outline-none focus:outline-none `}
                   type="button"
                   style={{ marginRight: '5px' }}
-                  onClick={() => getDetailUser(rowData.id, !rowData.isRepoAdmin ? 'makeRisetAdmin' : 'makeAsUser')}
+                  onClick={() =>
+                    getDetailUser(
+                      rowData.id,
+                      !rowData.isRepoAdmin ? 'makeRisetAdmin' : 'makeAsUser'
+                    )
+                  }
                 >
                   {rowData.isRepoAdmin ? ' Make as User' : 'Make Riset Admin'}
                 </button>
-
               </React.Fragment>
             ) : null}
           </React.Fragment>
@@ -202,7 +212,7 @@ const Ebooks = props => {
 
   if (loading) return null;
   const { users } = props;
-  let checkActionIsUserRepoAdmin = detailData && detailData.makeRisetAdmin !== undefined
+  let checkActionIsUserRepoAdmin = detailData && detailData.makeRisetAdmin !== undefined;
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -221,7 +231,7 @@ const Ebooks = props => {
             className=" bg-orange-500 text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
             onClick={() => exportDataUser()}
           >
-            <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Export Data User
+            <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Export Data Pengguna
           </button>
         </div>
         {users.data !== undefined ? (
@@ -236,7 +246,6 @@ const Ebooks = props => {
               { name: 'actions', title: 'Action' },
             ]}
             columnExtensions={[
-
               {
                 columnName: 'actions',
                 width: 300,
@@ -244,15 +253,15 @@ const Ebooks = props => {
               },
             ]}
             rows={adjustIntegrationTable(users.data)}
-          // currentPage={currentPage}
-          // onCurrentPageChange={setCurrentPage}
-          // pageSize={pageSize}
-          // onPageSizeChange={setPageSize}
-          // totalCount={totalCount}
+            // currentPage={currentPage}
+            // onCurrentPageChange={setCurrentPage}
+            // pageSize={pageSize}
+            // onPageSizeChange={setPageSize}
+            // totalCount={totalCount}
           />
         ) : (
-            <NoData />
-          )}
+          <NoData />
+        )}
       </main>
       <Modal
         title="Konfirmasi"
@@ -269,7 +278,6 @@ const Ebooks = props => {
       <Modal
         title="Konfirmasi"
         open={showModalMakeAdmin}
-
         hideCloseBtn
         labelSubmitButton="Submit"
         onCLose={() => {
