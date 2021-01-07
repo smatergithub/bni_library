@@ -45,7 +45,7 @@ function Accounts(props) {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
-        localStorage.removeItem('bni_repoAdmin')
+        localStorage.removeItem('bni_repoAdmin');
         window.location.replace('/');
       }
     });
@@ -66,7 +66,7 @@ function Accounts(props) {
           <span className="mr-1 pt-2">
             <i class="fas fa-sign-out-alt"></i>
           </span>
-          Log Out
+          Keluar
         </button>
       </div>
       <div
