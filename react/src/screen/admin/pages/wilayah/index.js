@@ -12,10 +12,11 @@ import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import CreateEditWilayahModal from './createEditWilayahModal';
+import Loader from '../../component/Loader';
 
 const Wilayah = props => {
   const [loading, setLoading] = React.useState(false);
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalDetail, setShowModalDetail] = React.useState(false);
   const [detailData, setDetailData] = React.useState({});
@@ -76,15 +77,17 @@ const Wilayah = props => {
   //   retrieveSearchDataWilayah();
   // }, [searchValue]);
 
-  const uploadPdf = e => {
+  const uploadExcel = e => {
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
+    setIsLoading(true);
     reader.onloadend = () => {
       props.UploadWilayahFile({ file }).then(res => {
         if (res) {
           ToastSuccess(res.msg);
+          setIsLoading(false);
           retrieveDataWilayah();
         } else {
           ToastError(res.msg);
@@ -177,11 +180,12 @@ const Wilayah = props => {
             <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Tambah Wilayah
           </button>
           <input
-            onChange={e => uploadPdf(e)}
+            onChange={e => uploadExcel(e)}
             type="file"
             style={{
               display: 'none',
             }}
+            disabled={isLoading}
             ref={exportFile}
             className=""
             accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
@@ -197,24 +201,32 @@ const Wilayah = props => {
             <span style={{ color: 'black' }}>Import Wilayah</span>
           </button>
         </div>
-        {wilayah.data !== undefined ? (
-          <TableDevExtreme
-            columns={[
-              { name: 'codeWilayah', title: 'Code Wilayah' },
-              { name: 'wilayah', title: 'Wilayah' },
-              { name: 'alamat', title: 'Alamat' },
-              { name: 'actions', title: 'Action' },
-            ]}
-            rows={adjustIntegrationTable(wilayah.data)}
-            // currentPage={currentPage}
-            // onCurrentPageChange={setCurrentPage}
-            // pageSize={pageSize}
-            // onPageSizeChange={setPageSize}
-            // onValueChange={setSearchState}
-            // setLoading={isFetching}
-            // totalCount={totalCount}
-          />
-        ) : null}
+        {isLoading ? (
+          <div className="w-full lg:w-1/1 mt-32 pl-0 lg:pl-2">
+            <Loader />
+          </div>
+        ) : (
+          <React.Fragment>
+            {wilayah.data !== undefined ? (
+              <TableDevExtreme
+                columns={[
+                  { name: 'codeWilayah', title: 'Code Wilayah' },
+                  { name: 'wilayah', title: 'Wilayah' },
+                  { name: 'alamat', title: 'Alamat' },
+                  { name: 'actions', title: 'Action' },
+                ]}
+                rows={adjustIntegrationTable(wilayah.data)}
+                // currentPage={currentPage}
+                // onCurrentPageChange={setCurrentPage}
+                // pageSize={pageSize}
+                // onPageSizeChange={setPageSize}
+                // onValueChange={setSearchState}
+                // setLoading={isFetching}
+                // totalCount={totalCount}
+              />
+            ) : null}
+          </React.Fragment>
+        )}
       </main>
       <Modal
         title="Konfirmasi"

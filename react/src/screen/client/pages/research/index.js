@@ -10,8 +10,7 @@ function Reserach(props) {
     window.location.replace('/auth/login');
   }
   let isUserLogged = localStorage.getItem('bni_UserRole') === null;
-  let checkIsUserRepoAdmin = localStorage.getItem('bni_repoAdmin') === '1'
-
+  let checkIsUserRepoAdmin = localStorage.getItem('bni_repoAdmin') === '1';
 
   return (
     <React.Fragment>
@@ -81,20 +80,20 @@ function Reserach(props) {
                         </button>
                       </Link>
                     ) : (
-                        <button
-                          onClick={() => {
-                            if (isUserLogged) {
-                              setShowModalDeletion(true);
-                            }
-                          }}
-                          className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                        >
-                          Selengkapnya{' '}
-                          <span>
-                            <i className={`fas fa-arrow-right ml-3`} />
-                          </span>
-                        </button>
-                      )}
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
+                        Selengkapnya{' '}
+                        <span>
+                          <i className={`fas fa-arrow-right ml-3`} />
+                        </span>
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -127,20 +126,20 @@ function Reserach(props) {
                         </button>
                       </Link>
                     ) : (
-                        <button
-                          onClick={() => {
-                            if (isUserLogged) {
-                              setShowModalDeletion(true);
-                            }
-                          }}
-                          className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                        >
-                          Selengkapnya{' '}
-                          <span>
-                            <i className={`fas fa-arrow-right ml-3`} />
-                          </span>
-                        </button>
-                      )}
+                      <button
+                        onClick={() => {
+                          if (isUserLogged) {
+                            setShowModalDeletion(true);
+                          }
+                        }}
+                        className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
+                      >
+                        Selengkapnya{' '}
+                        <span>
+                          <i className={`fas fa-arrow-right ml-3`} />
+                        </span>
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -157,7 +156,7 @@ function Reserach(props) {
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
       >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
+        <div className="my-5">Silahkan Masuk terlebih dahulu</div>
       </Modal>
       <Footer />
     </React.Fragment>

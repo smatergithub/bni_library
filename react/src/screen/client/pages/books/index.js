@@ -307,7 +307,7 @@ function Books(props) {
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
       >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
+        <div className="my-5">Silahkan Masuk terlebih dahulu</div>
       </Modal>
     </main>
   );

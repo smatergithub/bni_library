@@ -61,7 +61,7 @@ function ResetPassword(props) {
                     <div>
                       <div className="py-5 text-lg text-center">
                         {' '}
-                        Password berhasil di ganti. Silahkan login dengan password baru.
+                        Password berhasil di ganti. Silahkan Masuk dengan password baru.
                       </div>
                       <button
                         onClick={() => window.location.replace('/auth/login')}

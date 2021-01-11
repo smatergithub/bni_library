@@ -195,7 +195,9 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    let location = `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
+    let location = req.body.image
+      ? req.body.image
+      : `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
 
     return Ebooks.create({
       kategori: req.body.kategori,
@@ -213,7 +215,7 @@ module.exports = {
       keterangan: req.body.keterangan,
       sourceLink: req.body.sourceLink,
       status: req.body.status,
-      image: location,
+      image: req.file ? location : req.file,
     })
       .then(response => {
         const createListBorrowEbook = ListBorrowEbook.create({

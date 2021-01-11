@@ -78,7 +78,7 @@ function Login(props) {
     <main>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Login | E-BNI</title>
+        <title>Masuk | E-BNI</title>
       </Helmet>
       <section className="absolute w-full h-full">
         <div

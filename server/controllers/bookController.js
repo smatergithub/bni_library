@@ -142,8 +142,10 @@ module.exports = {
   },
 
   add: async (req, res) => {
-    let location = `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
-
+    let location = req.body.image
+      ? req.body.image
+      : `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
+    console.log('aaa', 'adlfdsfhsdufhsdiufhdsiufhdsiufhsdiu');
     Books.create({
       kategori: req.body.kategori,
       judul: req.body.judul,
@@ -161,7 +163,7 @@ module.exports = {
       keterangan: req.body.keterangan,
       urlFile: req.body.urlFile,
       status: req.body.status,
-      image: location,
+      image: req.file ? location : null,
     })
       .then(response => {
         // console.log("response", response.id)
