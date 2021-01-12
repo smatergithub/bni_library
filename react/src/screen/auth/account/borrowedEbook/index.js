@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 import { getBorrowedEbookItem, getMe } from '../../../../redux/action/user';
+import { checkIsImageExist } from '../../helper';
 
 function BorrowedEbook(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -77,7 +78,13 @@ function BorrowedEbook(props) {
               <div className="lg:w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    src={ebooks.image}
+                    src={
+                      ebooks
+                        ? checkIsImageExist(ebooks.image)
+                          ? ebooks.image
+                          : require('../../../../assets/NoImage.png')
+                        : require('../../../../assets/NoImage.png')
+                    }
                     alt=""
                     style={{
                       height: 240,
