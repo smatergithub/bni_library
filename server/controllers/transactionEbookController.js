@@ -180,7 +180,7 @@ module.exports = {
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
 
       if (!ebook) {
-        return res.status(404).json({
+        return res.status(400).json({
           message: 'Ebook not Found',
         });
       }
@@ -198,11 +198,11 @@ module.exports = {
               isBorrowed: true,
             })
             .catch(err => {
-              return res.status(404).send(err);
+              return res.status(400).send(err);
             });
         })
         .catch(err => {
-          return res.status(404).send(err);
+          return res.status(400).send(err);
         });
 
       const createTransaction = await TransactionEbook.create({
@@ -219,7 +219,7 @@ module.exports = {
       });
 
       if (!createTransaction) {
-        return res.status(404).send('Failed Transaction');
+        return res.status(400).send('Failed Transaction');
       }
       ListBorrowEbook.findAll({
         where: {
@@ -253,11 +253,11 @@ module.exports = {
             endDate: req.body.endDate,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(400).send(err);
       });
     return res.status(200).json({
       message: 'Succesfully Update Ebook',
@@ -283,11 +283,11 @@ module.exports = {
             isGiveRating: false,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(500).send(err);
       });
 
     Ebooks.findByPk(transactionEbook.ebookId)
@@ -297,11 +297,11 @@ module.exports = {
             isBorrowed: false,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(500).send(err);
       });
 
     ListBorrowEbook.findAll({ where: { transactionEbookId: transactionId } }).then(
@@ -311,7 +311,7 @@ module.exports = {
             userId: null,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       }
     );

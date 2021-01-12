@@ -13,13 +13,16 @@ module.exports = {
 
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        [Op.and]: {
-          judul: {
-            [Op.like]: '%' + judul + '%',
-          },
-          kategori: {
-            [Op.like]: '%' + kategori + '%',
-          },
+        kategori: {
+          [Op.like]: '%' + kategori + '%',
+        },
+      };
+    }
+
+    if (judul != '' && typeof judul !== 'undefined') {
+      paramQuerySQL.where = {
+        judul: {
+          [Op.like]: '%' + judul + '%',
         },
       };
     }
@@ -53,6 +56,8 @@ module.exports = {
       sort = 'DESC';
     }
 
+    console.log('param sql', paramQuerySQL);
+
     return await Books.findAndCountAll(paramQuerySQL)
       .then(book => {
         let activePage = Math.ceil(book.count / req.body.limit);
@@ -65,7 +70,7 @@ module.exports = {
         });
       })
       .catch(err => {
-        res.status(500).send(err);
+        res.status(500).send({ message: err });
       });
   },
 
@@ -294,18 +299,17 @@ module.exports = {
         }
         ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
           if (
-            listBorrow[0].dataValues.transactionBookId === null &&
+            listBorrow[0].dataValues.transactionBookId === null ||
             listBorrow[0].dataValues.transactionBookId === undefined
           ) {
-            console.log('aaaa', listBorrow[0].dataValues.transactionBookId);
             listBorrow[0].destroy().then(() => {
               book
                 .destroy()
                 .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(404).send(error));
+                .catch(error => res.status(500).send(error));
             });
           } else {
-            res.status(404).send({ message: 'buku ini sedang dipakai di transaksi lainnya' });
+            res.status(500).send({ message: 'buku ini sedang dipakai di transaksi lainnya' });
           }
         });
       })

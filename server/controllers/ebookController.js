@@ -346,17 +346,17 @@ module.exports = {
         }
         ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
           if (
-            listBorrow[0].dataValues.transactionEbookId == null &&
+            listBorrow[0].dataValues.transactionEbookId == null ||
             listBorrow[0].dataValues.transactionEbookId == undefined
           ) {
             listBorrow[0].destroy().then(() => {
               ebook
                 .destroy()
                 .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(404).send(error));
+                .catch(error => res.status(500).send(error));
             });
           } else {
-            res.status(404).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
+            res.status(500).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
           }
         });
       })

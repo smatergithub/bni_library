@@ -185,14 +185,14 @@ module.exports = {
     });
 
     if (checkTransaction.length >= 2) {
-      return res.status(404).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
+      return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
     }
 
     books.forEach(async bookData => {
       let book = await Books.findByPk(bookData.bookId);
 
       if (!book) {
-        return res.status(404).json({
+        return res.status(400).json({
           message: 'Book not Found',
         });
       }
@@ -212,11 +212,11 @@ module.exports = {
               jumlahDipinjam: book.quantity + bookData.quantity,
             })
             .catch(err => {
-              return res.status(404).send(err);
+              return res.status(400).send(err);
             });
         })
         .catch(err => {
-          return res.status(404).send(err);
+          return res.status(500).send(err);
         });
 
       let requestPayload = {
@@ -237,13 +237,13 @@ module.exports = {
       let between = moment.duration(moment(end).diff(start)).asDays();
 
       if (between >= 14) {
-        return res.status(404).json({ message: 'Peminjaman maksimal 14 Hari' });
+        return res.status(400).json({ message: 'Peminjaman maksimal 14 Hari' });
       }
 
       const createTransaction = await TransactionBook.create(requestPayload);
 
       if (!createTransaction) {
-        return res.status(404).send('Failed Transaction');
+        return res.status(400).send('Failed Transaction');
       }
 
       ListBorrowBook.findAll({
@@ -278,11 +278,11 @@ module.exports = {
             endDate: req.body.endDate,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(500).send(err);
       });
     return res.status(200).json({
       message: 'Succesfully Update Book',
@@ -308,11 +308,11 @@ module.exports = {
             isGiveRating: false,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(500).send(err);
       });
 
     Books.findByPk(transactionBook.bookId)
@@ -323,11 +323,11 @@ module.exports = {
             jumlahDipinjam: book.quantity - transactionBook.quantity,
           })
           .catch(err => {
-            res.status(404).send(err);
+            res.status(400).send(err);
           });
       })
       .catch(err => {
-        res.status(404).send(err);
+        res.status(500).send(err);
       });
 
     ListBorrowBook.findAll({ where: { transactionBookId: transactionId } }).then(listBorrowBook => {
@@ -336,7 +336,7 @@ module.exports = {
           userId: null,
         })
         .catch(err => {
-          res.status(404).send(err);
+          res.status(400).send(err);
         });
     });
 
@@ -399,8 +399,7 @@ module.exports = {
         wb.write('list_history_book.xlsx', res);
       })
       .catch(err => {
-        console.log(err);
-        res.status(404).json({ message: 'masuk sini' });
+        res.status(500).json({ message: err });
       });
   },
 };

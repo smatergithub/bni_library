@@ -78,6 +78,7 @@ export const DeleteBookAction = id => () => {
     })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
+      console.log('msg', msg);
       return { resp: false, msg: msg };
     });
 };
