@@ -213,6 +213,9 @@ function Books(props) {
                             setShowModalDeletion(true);
                           } else {
                             props.addBookWishlist(book);
+
+                            // let data = [...book];
+                            // localStorage.setItem('bni_book', JSON.stringify(data));
                           }
                         }}
                       >

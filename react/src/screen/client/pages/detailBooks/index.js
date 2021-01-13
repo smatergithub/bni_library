@@ -34,8 +34,11 @@ function DetailBooks(props) {
     setIsWishlistClick(!isWishlistClick);
     if (isWishlistClick) {
       props.removeBookWishlist(book);
+      //localStorage.removeItem('bni_ebook', book);
     } else {
       props.addBookWishlist(book);
+      // let data = [...book];
+      // localStorage.setItem('bni_book', JSON.stringify(data));
     }
   }
 

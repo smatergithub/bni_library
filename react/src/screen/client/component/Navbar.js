@@ -89,8 +89,13 @@ function NavBar(props) {
     };
   });
 
+  let localBook = JSON.parse(localStorage.getItem('bni_book'));
+  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
+  let book = localBook !== null ? localBook : [];
+  let ebook = localEbook !== null ? localEbook : [];
+
   let badge =
-    props.ebooks.length + props.books.length !== 0 ? (
+    book.length + ebook.length !== 0 ? (
       <div
         style={{
           width: 20,
@@ -106,7 +111,7 @@ function NavBar(props) {
           alignItems: 'center',
         }}
       >
-        {props.ebooks.length + props.books.length}
+        {ebook.length + book.length}
       </div>
     ) : (
       ''
