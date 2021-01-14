@@ -15,13 +15,16 @@ module.exports = {
 
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
-        [Op.and]: {
-          kategori: {
-            [Op.like]: '%' + kategori + '%',
-          },
-          judul: {
-            [Op.like]: '%' + judul + '%',
-          },
+        kategori: {
+          [Op.like]: '%' + kategori + '%',
+        },
+      };
+    }
+
+    if (judul != '' && typeof judul !== 'undefined') {
+      paramQuerySQL.where = {
+        judul: {
+          [Op.like]: '%' + judul + '%',
         },
       };
     }
@@ -346,17 +349,17 @@ module.exports = {
         }
         ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
           if (
-            listBorrow[0].dataValues.transactionEbookId == null &&
+            listBorrow[0].dataValues.transactionEbookId == null ||
             listBorrow[0].dataValues.transactionEbookId == undefined
           ) {
             listBorrow[0].destroy().then(() => {
               ebook
                 .destroy()
                 .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(404).send(error));
+                .catch(error => res.status(500).send(error));
             });
           } else {
-            res.status(404).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
+            res.status(500).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
           }
         });
       })

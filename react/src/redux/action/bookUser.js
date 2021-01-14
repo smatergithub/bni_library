@@ -2,6 +2,7 @@ import BookUserApi from '../client/BookUserApi';
 import { BOOK_USERS } from '../type';
 
 export const getAllBook = params => dispatch => {
+  console.log('params', params);
   return BookUserApi.get(params)
     .then(res => {
       if (res) {

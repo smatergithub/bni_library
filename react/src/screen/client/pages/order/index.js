@@ -46,20 +46,24 @@ function OrderBook(props) {
               setBooks(null);
             }
           });
-          props.getBorrowedBookItem(userId, 'rating=true').then(res => {
-            if (res.data.length !== 0) {
-              if (res.data.data.length > 1) {
-                setIsUserHaveActiveBook(true);
+          props
+            .getBorrowedBookItem(userId, 'rating=true')
+            .then(res => {
+              if (res.data.length !== 0) {
+                // if (res.data.data.length > 1) {
+                //   setIsUserHaveActiveBook(true);
+                // }
+                let checkIsBorrowed = res.data.data.some(
+                  book => book.status === 'Dikembalikan' && !book.isGiveRating
+                );
+                setIsBorrowReview(checkIsBorrowed);
+              } else {
+                setIsBorrowReview(false);
               }
-
-              let checkIsBorrowed = res.data.data.some(
-                book => book.status === 'Dikembalikan' && !book.isGiveRating
-              );
-              setIsBorrowReview(checkIsBorrowed);
-            } else {
-              setIsBorrowReview(false);
-            }
-          });
+            })
+            .catch(err => {
+              setIsUserHaveActiveBook(true);
+            });
         } else {
           props.getEbookById(id).then(res => {
             setProcessing(false);
@@ -114,7 +118,7 @@ function OrderBook(props) {
       if (type === 'book') {
         if (isUserhaveActiveBook) {
           ToastError(
-            'Maksimal peminjaman hanya 1 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
+            'Maksimal peminjaman hanya 2 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
           );
         } else {
           props.orderBook(formData).then(res => {

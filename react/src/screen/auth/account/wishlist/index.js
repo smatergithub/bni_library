@@ -7,7 +7,12 @@ import { removeBookWishlist, removeEbookWishlist } from '../../../../redux/actio
 import Card from '../component/card';
 
 function Wishlist(props) {
-  let wishlist = props.books.concat(props.ebooks);
+  //let wishlist = props.books.concat(props.ebooks);
+  let localBook = JSON.parse(localStorage.getItem('bni_book'));
+  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
+  let book = localBook !== null ? localBook : [];
+  let ebook = localEbook !== null ? localEbook : [];
+  let wishlist = book.concat(ebook);
 
   function removeWishlist(data, isBook) {
     if (isBook) {
