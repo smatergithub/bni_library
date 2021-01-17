@@ -38,6 +38,7 @@ function BorrowedEbook(props) {
       </Helmet>
       <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">PINJAMAN</div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
+        <iframe src="http://localhost:2000/api/ebook/renderIframe?url=https://google.com" width="600" height="300" />
         {borrowItem &&
           borrowItem.data.map(borrow => {
             return (

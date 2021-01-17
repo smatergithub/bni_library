@@ -1,4 +1,5 @@
 const Ebooks = require('../models/').ebooks;
+
 const ListBorrowEbook = require('../models').listBorrowEbook;
 const Sequelize = require('sequelize');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
@@ -9,6 +10,14 @@ require('dotenv').config();
 const readXlsxFile = require('read-excel-file/node');
 
 module.exports = {
+  renderIframe: async (req, res) => {
+    console.log(req.query.url)
+    res.createIframe({
+      url: req.query.url,
+      baseHref: req.query.baseHref, // optional: determine how to control link redirects,
+      config: { cors: { script: true } }, // optional: determine element cors or inlining #shape src/iframe.ts#L34
+    });
+  },
   getEbookList: async (req, res) => {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};

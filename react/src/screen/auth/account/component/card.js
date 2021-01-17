@@ -1,6 +1,14 @@
 import React from 'react';
 import moment from 'moment';
 const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) => {
+
+  function onReadEbook(url) {
+    window.open(url, 'liveMatches', 'width=720,height=800,toolbar=0,location=0, directories=0, status=0, menubar=0');
+    // window.open(url, 'winname', 'directories=no,titlebar=no,toolbar=no,location=no,status=no,menubar=no,scrollbars=no,resizable=no,width=400,height=350');
+    // window.open("https://darvinsinaga.com", "_blank", "height=400, width=550, status=yes, toolbar=no, menubar=no, location=no, addressbar=no, top=200, left=300");
+
+
+  }
   return (
     <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">
@@ -52,12 +60,14 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
         </button>
         {type === 'borrow' && data.sourceLink && (
           <a
-            href={data.sourceLink}
+            // href={data.sourceLink}
+            onClick={() => onReadEbook(data.sourceLink
+            )}
             className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
             style={{
               right: '2em',
             }}
-            download
+          // download
           >
             BACA
           </a>

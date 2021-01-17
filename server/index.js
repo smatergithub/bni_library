@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const createIframe = require("./utils/iframe").createIframe;
 // const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -21,25 +22,34 @@ var corsOptions = {
 };
 
 const app = express();
-
 // app.use(cookieParser());
+app.use(createIframe);
 app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use('/api/', UserRoute);
 app.use('/api/admin/', AdminRoute);
 app.use('/img/', express.static(path.join(__dirname, 'public')));
+app.use('/core/', express.static(path.join(__dirname, 'core')));
+app.use('/apps/', express.static(path.join(__dirname, 'apps')));
+app.use('/js/', express.static(path.join(__dirname, 'js')));
 app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
 
 app.get('*', (req, res) =>
   res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
 );
 
+
 const port = process.env.PORT_BACKEND;
 var db = require('./models');
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   // console.log('database connection success');
 });
 if (process.env.NODE_ENV === 'production') {
@@ -53,7 +63,7 @@ if (process.env.NODE_ENV === 'production') {
   };
   https.createServer(https_options, app).listen(port);
 } else
-  app.listen(port, function() {
+  app.listen(port, function () {
     console.log(`Server running in PORT: ${port}`);
   });
 {
