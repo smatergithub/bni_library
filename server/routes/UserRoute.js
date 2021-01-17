@@ -38,6 +38,11 @@ router.get('/isValidToken', AuthenticationController.isTokenValid);
 router.get('/profile/me', [AuthJWT.verifyToken], ProfileUserController.profileUser);
 router.post('/profile/updateProfile', [AuthJWT.verifyToken], ProfileUserController.updateProfile);
 router.get(
+  '/profile/approveBorrow',
+  [AuthJWT.verifyToken],
+  ProfileUserController.approveBorrowBookAndEbook
+);
+router.get(
   '/profile/listBorrowBook/:id',
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowBookUser

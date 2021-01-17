@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
+import { checkIsImageExist } from '../../component/helper';
 
 function DetailBooks(props) {
   const parsed = queryString.parse(props.location.search);
@@ -33,8 +34,11 @@ function DetailBooks(props) {
     setIsWishlistClick(!isWishlistClick);
     if (isWishlistClick) {
       props.removeBookWishlist(book);
+      //localStorage.removeItem('bni_ebook', book);
     } else {
       props.addBookWishlist(book);
+      // let data = [...book];
+      // localStorage.setItem('bni_book', JSON.stringify(data));
     }
   }
 
@@ -63,7 +67,14 @@ function DetailBooks(props) {
                 <div className=" rounded-lg  border-gray-300">
                   <img
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
-                    src={books.book.image}
+                    //src={books.book.image}
+                    src={
+                      books.book
+                        ? checkIsImageExist(books.book.image)
+                          ? books.book.image
+                          : require('../../../../assets/NoImage.png')
+                        : require('../../../../assets/NoImage.png')
+                    }
                     alt=""
                     style={{
                       height: 400,
@@ -206,7 +217,7 @@ function DetailBooks(props) {
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
       >
-        <div className="my-5">Silahkan Login terlebih dahulu</div>
+        <div className="my-5">Silahkan Masuk terlebih dahulu</div>
       </Modal>
     </div>
   );

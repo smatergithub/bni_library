@@ -17,46 +17,66 @@ function Home() {
             <div className="pr-20 md:mt-0 sm:mt-64">
               <div className="md:flex h-48  ">
                 <div className="md:ml-8 mt-4 md:mt-0  ">
-                  <img src={require('../../../../assets/katalog.png')} className="w-32  h-32" />
-
-                  <h4 className="text-xl font-bold leading-tight">Katalog</h4>
-                  <p className="mt-2 leading-relaxed">
-                    Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
-                  </p>
-                  <Link to="/books">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
-                      Buku
-                      <span>
-                        <i className={`fas fa-arrow-right ml-3`} />
-                      </span>
-                    </button>
-                  </Link>
-                  <Link to="/ebooks">
-                    <button className="ml-4  hover:underline bg-orange-500 text-white  rounded-lg  py-2 px-6 shadow-lg">
-                      Ebook
-                      <span>
-                        <i className={`fas fa-arrow-right ml-3`} />
-                      </span>
-                    </button>
-                  </Link>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      // paddingTop: '20px',
+                    }}
+                  >
+                    <div style={{ paddingTop: '42px' }}>
+                      <h4 className="text-xl font-bold leading-tight">Katalog</h4>
+                      <p className="mt-2 leading-relaxed">
+                        Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
+                      </p>
+                      <Link to="/books">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
+                          Buku
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                      <Link to="/ebooks">
+                        <button className="ml-4  hover:underline bg-orange-500 text-white  rounded-lg  py-2 px-6 shadow-lg">
+                          Ebook
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    </div>
+                    <img src={require('../../../../assets/katalog.png')} className="w-64  h-64" />
+                  </div>
                 </div>
               </div>
-              <div className="pt-32">
+              <div style={{ paddingTop: '48px' }}>
                 <div className="md:ml-8 mt-10 md:mt-0">
-                  <img src={require('../../../../assets/riset.png')} className="w-32  h-32" />
-
-                  <h4 className="text-xl font-bold leading-tight">Riset</h4>
-                  <p className="mt-2 leading-relaxed">
-                    Buat kamu yang ingin melakukan riset di BNI, temui detailnya di bagian FAQ, ya!
-                  </p>
-                  <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
-                      Selengkapnya..
-                      <span>
-                        <i className={`fas fa-arrow-right ml-3`} />
-                      </span>
-                    </button>
-                  </Link>
+                  <div
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div style={{ paddingTop: '42px' }}>
+                      <h4 className="text-xl font-bold leading-tight">Riset</h4>
+                      <p className="mt-2 leading-relaxed">
+                        Buat kamu yang ingin melakukan riset di BNI, temui detailnya di bagian FAQ,
+                        ya!
+                      </p>
+                      <Link to="/riset">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                          Selengkapnya..
+                          <span>
+                            <i className={`fas fa-arrow-right ml-3`} />
+                          </span>
+                        </button>
+                      </Link>
+                    </div>
+                    <img src={require('../../../../assets/riset.png')} className="w-64  h-64" />
+                  </div>
                 </div>
               </div>
             </div>

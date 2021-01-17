@@ -19,6 +19,7 @@ const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptio
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
       } else if (error.response.status === 404) {
+        console.log('error', error);
         window.location.replace('/not-found');
       } else {
         throw responseOptions.fullResponse ? error.response : error.response.data;

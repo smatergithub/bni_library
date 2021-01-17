@@ -284,6 +284,7 @@ function Ebooks(props) {
                     {props.ebooks.activePage} of {props.ebooks.totalPage}
                   </div>
 
+<<<<<<< HEAD
                   <div
                     onClick={next}
                     className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
@@ -332,6 +333,56 @@ function Ebooks(props) {
             </Modal>
           </section>
         )}
+=======
+                <div
+                  onClick={next}
+                  className="-ml-px relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-400 focus:z-10 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-100 active:text-gray-500 transition ease-in-out duration-150"
+                  aria-label="Next"
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      clipRule="evenodd"
+                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
+              </nav>
+            </div>
+          )}
+          <Modal
+            title="Otentikasi diperlukan"
+            open={showModalDeletion}
+            onCLose={() => {
+              setShowModalDeletion(false);
+            }}
+            handleSubmit={redirectToLogin}
+            labelSubmitButton="Masuk"
+          >
+            <div className="my-5">Silahkan Masuk terlebih dahulu</div>
+          </Modal>
+          <Modal
+            title="Preview"
+            large={true}
+            open={showPreview.open}
+            onCLose={() => {
+              setShowPreview({
+                open: false,
+                file: null,
+              });
+            }}
+            handleSubmit={() => {
+              setShowPreview({
+                open: false,
+                file: null,
+              });
+            }}
+          >
+            <Preview id={showPreview.file} />
+          </Modal>
+        </section>
+      )}
+>>>>>>> 42e37104509040fc107826ddcd1caf9b51fe4fd2
     </main>
   );
 }

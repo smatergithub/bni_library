@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/admin/aproval',
-    name: 'Approval',
+    name: 'Butuh Tindakan',
     icon: 'fas fa-check-circle',
     params: 'aproval',
     notif: true,
@@ -47,7 +47,7 @@ const routes = [
   },
   {
     path: '/admin/users',
-    name: 'Daftar User',
+    name: 'Daftar Pengguna',
     icon: 'fas fa-id-badge',
     params: 'users',
     notif: false,

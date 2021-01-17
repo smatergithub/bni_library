@@ -4,6 +4,8 @@ import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { ToastError } from '../../../../component';
+import { checkIsImageExist } from '../../component/helper';
+
 function FormOrder({ data, type, onOrderItem, user }) {
   const parsed = queryString.parse(window.location.search);
   const { handleSubmit, register, errors } = useForm();
@@ -57,6 +59,13 @@ function FormOrder({ data, type, onOrderItem, user }) {
             <img
               // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
               src={data.image}
+              src={
+                data
+                  ? checkIsImageExist(data.image)
+                    ? data.image
+                    : require('../../../../assets/NoImage.png')
+                  : require('../../../../assets/NoImage.png')
+              }
               alt=""
               style={{
                 height: 440,
@@ -107,7 +116,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                     top: '2em',
                   }}
                 >
-                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tesedia'}
+                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
                 </div>
 
                 <div className="relative w-full mb-3">

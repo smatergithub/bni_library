@@ -8,6 +8,7 @@ import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
+import { ToastError, ToastSuccess } from '../../../../component';
 
 const Books = props => {
   const [loading, setLoading] = React.useState(false);
@@ -55,12 +56,16 @@ const Books = props => {
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => console.log('err', err));
+      .catch(res => {
+        setLoading(false);
+        ToastError('buku ini sedang dipakai di transaksi lainnya');
+      });
   };
 
   // useEffect(() => {
   //   mappingDataSourceBookList();
   // }, [currentPage, totalCount, pageSize]);
+
   useEffect(() => {
     mappingDataSourceBookList();
   }, []);

@@ -24,7 +24,6 @@ module.exports = {
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {
-
       return await Users.scope('withPassword')
         .findOne({
           where: {
@@ -62,19 +61,27 @@ module.exports = {
           } else {
             var passwordIsValid = bcrypt.compareSync(password, user.password);
             if (!passwordIsValid) {
-              user.update({
-                password: bcrypt.hashSync(password, 8),
-              }).then(() => {
-                return res.status(200).send({ message: 'firstLogin' });
-              }).catch(err => {
-                res.status(500).send({ message: err.message });
-              });
+              user
+                .update({
+                  password: bcrypt.hashSync(password, 8),
+                })
+                .then(() => {
+                  return res.status(200).send({ message: 'firstLogin' });
+                })
+                .catch(err => {
+                  res.status(500).send({ message: err.message });
+                });
             }
             var token = jwt.sign(
-              { id: user.id, isAdmin: user.isAdmin, isRepoAdmin: user.isRepoAdmin, superAdmin: user.superAdmin },
+              {
+                id: user.id,
+                isAdmin: user.isAdmin,
+                isRepoAdmin: user.isRepoAdmin,
+                superAdmin: user.superAdmin,
+              },
               process.env.SECRET_TOKEN,
               {
-                expiresIn: 86400, // 24 hours
+                expiresIn: 26400, // 24 hours
               }
             );
             // res.cookie('access_token', token, setJWTCookieOption());
@@ -82,7 +89,7 @@ module.exports = {
               accessToken: token,
               email: user.email,
               role: user.superAdmin ? '3' : user.isAdmin ? '2' : '1',
-              isRepoAdmin: user.isRepoAdmin ? 1 : 0
+              isRepoAdmin: user.isRepoAdmin ? 1 : 0,
             });
           }
         })

@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/home',
     params: 'home',
-    name: 'HOME',
+    name: 'BERANDA',
     dropdown: null,
   },
   {
@@ -58,7 +58,7 @@ const routes = [
   {
     path: '/about',
     params: 'about',
-    name: 'ABOUT',
+    name: 'TENTANG KAMI ',
     dropdown: null,
   },
   {
@@ -89,8 +89,13 @@ function NavBar(props) {
     };
   });
 
+  let localBook = JSON.parse(localStorage.getItem('bni_book'));
+  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
+  let book = localBook !== null ? localBook : [];
+  let ebook = localEbook !== null ? localEbook : [];
+
   let badge =
-    props.ebooks.length + props.books.length !== 0 ? (
+    book.length + ebook.length !== 0 ? (
       <div
         style={{
           width: 20,
@@ -106,11 +111,11 @@ function NavBar(props) {
           alignItems: 'center',
         }}
       >
-        {props.ebooks.length + props.books.length}
+        {ebook.length + book.length}
       </div>
     ) : (
-        ''
-      );
+      ''
+    );
   return (
     <nav
       id="header"
@@ -155,9 +160,11 @@ function NavBar(props) {
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
-                      className={`relative inline-block text-sm ${selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
-                        } no-underline hover:text-gray-500  py-2 px-4 ${selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
-                        } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
+                      className={`relative inline-block text-sm ${
+                        selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
+                      } no-underline hover:text-gray-500  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
+                      } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
                       <div className="relative">
                         {rt.name}{' '}
@@ -212,9 +219,11 @@ function NavBar(props) {
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
-                      className={`relative inline-block text-sm ${selectedMenu === rt.params ? 'text-white' : 'text-gray-900'
-                        } no-underline hover:text-white  py-2 px-4 ${selectedMenu === rt.params ? 'border-b-2 border-white' : ''
-                        } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
+                      className={`relative inline-block text-sm ${
+                        selectedMenu === rt.params ? 'text-white' : 'text-gray-900'
+                      } no-underline hover:text-white  py-2 px-4 ${
+                        selectedMenu === rt.params ? 'border-b-2 border-white' : ''
+                      } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
                     >
                       <div className="relative">
                         {rt.name}{' '}
@@ -256,7 +265,7 @@ function NavBar(props) {
                         <div
                           href="#"
                           className="block px-4 py-2 account-link hover:text-white"
-                        // onClick={() => updateProfile()}
+                          // onClick={() => updateProfile()}
                         >
                           Akun
                         </div>
