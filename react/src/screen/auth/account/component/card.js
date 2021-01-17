@@ -1,11 +1,16 @@
 import React from 'react';
 import moment from 'moment';
+import { checkIsImageExist } from '../../helper';
 const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) => {
   return (
     <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">
         <img
-          src={data.image}
+          src={data.image
+            ? checkIsImageExist(data.image)
+              ? data.image
+              : data.image + '/preview'
+            : require('../../../../assets/NoImage.png')}
           style={{
             height: 120,
             width: 140,
