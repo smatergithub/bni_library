@@ -83,7 +83,7 @@ function Borrowed(props) {
                     books
                       ? checkIsImageExist(books.image)
                         ? books.image
-                        : require('../../../../assets/NoImage.png')
+                        : books.image + '/preview'
                       : require('../../../../assets/NoImage.png')
                   }
                   alt=""

@@ -190,7 +190,7 @@ function Books(props) {
                       book.image
                         ? checkIsImageExist(book.image)
                           ? book.image
-                          : require('../../../../assets/NoImage.png')
+                          : book.image + '/preview'
                         : require('../../../../assets/NoImage.png')
                     }
                   />
