@@ -72,7 +72,7 @@ function DetailBooks(props) {
                       books.book
                         ? checkIsImageExist(books.book.image)
                           ? books.book.image
-                          : require('../../../../assets/NoImage.png')
+                          :  books.book.image + '/preview'
                         : require('../../../../assets/NoImage.png')
                     }
                     alt=""

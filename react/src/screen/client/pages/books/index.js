@@ -190,7 +190,7 @@ function Books(props) {
                       book.image
                         ? checkIsImageExist(book.image)
                           ? book.image
-                          : require('../../../../assets/NoImage.png')
+                          : book.image + '/preview'
                         : require('../../../../assets/NoImage.png')
                     }
                   />
@@ -236,6 +236,7 @@ function Books(props) {
                     <ReactStars
                       count={6}
                       // isHalf={false}
+
                       value={
                         book.totalRead
                           ? book.countRating

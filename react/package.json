@@ -18,12 +18,8 @@
     "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "npm-run-all": "^4.1.5",
-<<<<<<< HEAD
-    "postcss-cli": "^8.3.0",
-=======
     "postcss": "^8.2.2",
     "postcss-cli": "^8.1.0",
->>>>>>> 847023e4655978e4de61197885d9c05e07c6e576
     "purgecss": "^3.0.0",
     "query-string": "^6.13.1",
     "react": "^16.12.0",
