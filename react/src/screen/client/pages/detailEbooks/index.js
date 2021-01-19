@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
@@ -81,17 +81,11 @@ function DetailEbooks(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <ReactStars
-                      count={6}
-                      value={
-                        ebooks.ebook.totalRead
-                          ? ebooks.ebook.countRating
-                            ? ebooks.ebook.countRating / ebooks.ebook.totalRead
-                            : 0
-                          : 0
-                      }
-                      size={20}
-                      activeColor="#ffd700"
+                    <Rating
+                      defaultRating={ebooks.ebook.countRating}
+                      maxRating={6}
+                      icon="star"
+                      disabled
                     />
                     <span className="ml-3">
                       {' '}

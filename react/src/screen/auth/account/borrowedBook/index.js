@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { Helmet } from 'react-helmet';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
@@ -104,18 +104,7 @@ function Borrowed(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <ReactStars
-                      count={6}
-                      value={
-                        books.totalRead
-                          ? books.countRating
-                            ? books.countRating / books.totalRead
-                            : 0
-                          : 0
-                      }
-                      size={20}
-                      activeColor="#ffd700"
-                    />
+                    <Rating defaultRating={books.countRating} maxRating={6} icon="star" disabled />
                     <span className="ml-3"> {books.totalRead ? books.totalRead : 0} Views</span>
                   </div>
                 </div>

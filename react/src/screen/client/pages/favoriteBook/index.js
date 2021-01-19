@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Modal, NoData } from '../../../../component';
 import { getfavorite } from 'redux/action/books';
+import { checkIsImageExist } from '../../component/helper';
 
 function FavoriteBooks(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
@@ -50,7 +51,11 @@ function FavoriteBooks(props) {
                         <img
                           className="hover:grow hover:shadow-lg h-64"
                           src={
-                            book.image ? book.image : require('../../../../assets/default-book.svg')
+                            book.image
+                              ? checkIsImageExist(book.image)
+                                ? book.image
+                                : require('../../../../assets/NoImage.png')
+                              : require('../../../../assets/NoImage.png')
                           }
                         />
                         <div className="h-16 pt-1 flex items-start justify-between">
@@ -59,18 +64,11 @@ function FavoriteBooks(props) {
 
                         <div className="pt-1 text-gray-900">{book.pengarang}</div>
                         <div className="flex items-center justify-between">
-                          <ReactStars
-                            count={6}
-                            // isHalf={false}
-                            value={
-                              book.totalRead
-                                ? book.countRating
-                                  ? book.countRating / book.totalRead
-                                  : 0
-                                : 0
-                            }
-                            size={20}
-                            activeColor="#ffd700"
+                          <Rating
+                            defaultRating={book.countRating}
+                            maxRating={6}
+                            icon="star"
+                            disabled
                           />
                           <span>
                             <i className="fas fa-heart text-yellow-700" />{' '}

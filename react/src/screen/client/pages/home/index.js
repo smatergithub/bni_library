@@ -138,17 +138,14 @@ function Home() {
                     klik melalui smartphone Anda. */}
                     Mohon maaf, saat ini sistem masih dalam pengembangan.
                   </div>
-                  {/* <Link to="/favorite-ebook"> */}
-                  <button
-                    disabled
-                    className="mx-auto lg:mx-0 hover:underline bg-gray-400 text-white  rounded-lg my-2 py-2 px-5 shadow-lg"
-                  >
-                    Selengkapnya{' '}
-                    <span>
-                      <i className={`fas fa-arrow-right ml-3`} />
-                    </span>
-                  </button>
-                  {/* </Link> */}
+                  <Link to="/favorite-ebook">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-gray-400 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                      Selengkapnya{' '}
+                      <span>
+                        <i className={`fas fa-arrow-right ml-3`} />
+                      </span>
+                    </button>
+                  </Link>
                 </div>
               </div>
 
