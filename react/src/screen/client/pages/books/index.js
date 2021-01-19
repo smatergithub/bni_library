@@ -236,6 +236,7 @@ function Books(props) {
                     <ReactStars
                       count={6}
                       // isHalf={false}
+
                       value={
                         book.totalRead
                           ? book.countRating
