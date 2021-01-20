@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getBookById } from '../../../../redux/action/bookUser';
@@ -69,10 +69,10 @@ function DetailBooks(props) {
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     //src={books.book.image}
                     src={
-                      books.book
+                      (books.book && books.book.image) !== null
                         ? checkIsImageExist(books.book.image)
                           ? books.book.image
-                          :  books.book.image + '/preview'
+                          : books.book.image + '/preview'
                         : require('../../../../assets/NoImage.png')
                     }
                     alt=""
@@ -93,17 +93,11 @@ function DetailBooks(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <ReactStars
-                      count={6}
-                      value={
-                        books.book.totalRead
-                          ? books.book.countRating
-                            ? books.book.countRating / books.book.totalRead
-                            : 0
-                          : 0
-                      }
-                      size={20}
-                      activeColor="#ffd700"
+                    <Rating
+                      defaultRating={books.book.countRating}
+                      maxRating={6}
+                      icon="star"
+                      disabled
                     />
                     <span className="ml-3">
                       {' '}
