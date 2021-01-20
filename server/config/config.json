@@ -1,20 +1,20 @@
 {
-    "development": {
-        "username": "root",
-        "password": "root",
-        "database": "db_library_beta",
-        "host": "127.0.0.1",
-        "dialect": "mariadb",
-        "operatorsAliases": false,
-        "logging": false
-    },
-    "production": {
-        "username": "elibrary",
-        "password": "L1Br4r1BCV2020",
-        "database": "db_library_beta",
-        "host": "127.0.0.1",
-        "dialect": "mariadb",
-        "operatorsAliases": false,
-        "logging": false
-    }
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "db_library_beta",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false,
+    "logging": false
+  },
+  "production": {
+    "username": "elibrary",
+    "password": "L1Br4r1BCV2020",
+    "database": "db_library_beta",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false,
+    "logging": false
+  }
 }

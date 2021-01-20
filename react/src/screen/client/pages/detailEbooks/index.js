@@ -7,6 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
+import { checkIsImageExist } from '../../component/helper';
 let img =
   'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
 function DetailEbooks(props) {
@@ -61,8 +62,13 @@ function DetailEbooks(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${ebooks.image.split('/').pop()}`}
-                    src={ebooks.ebook.image}
+                    src={
+                      ebooks.book
+                        ? checkIsImageExist(ebooks.book.image)
+                          ? ebooks.book.image
+                          : ebooks.book.image + '/preview'
+                        : require('../../../../assets/NoImage.png')
+                    }
                     alt=""
                     style={{
                       height: 400,

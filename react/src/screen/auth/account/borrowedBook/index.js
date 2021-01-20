@@ -101,9 +101,9 @@ function Borrowed(props) {
                   }
                   alt=""
                   style={{
-                    height: 240,
+                    height: 300,
                     width: 300,
-                    objectFit: 'cover',
+                    objectFit: 'fill',
                   }}
                 />
               </div>

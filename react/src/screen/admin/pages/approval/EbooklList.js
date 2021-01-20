@@ -7,6 +7,7 @@ import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/
 import ModalDetailEbook from './ModalDetailEBook';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
+import moment from 'moment';
 
 import { IsEmptyObject } from '../../component/IsEmptyObject';
 
@@ -75,6 +76,8 @@ function EbookList(props) {
         nama: rowData.user ? rowData.user.nama : '',
         npp: rowData.user ? rowData.user.npp : '',
         tahunTerbit: rowData.ebook.tahunTerbit,
+        startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
+        endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
         actions: (
           <React.Fragment>
             <button
@@ -125,9 +128,10 @@ function EbookList(props) {
             { name: 'code', title: 'Code' },
             { name: 'judul', title: 'Judul' },
             { name: 'tahunTerbit', title: 'Tahun Terbit' },
-            { name: 'quantity', title: 'Jumlah ' },
             { name: 'nama', title: 'Peminjam' },
             { name: 'npp', title: 'NPP' },
+            { name: 'startDate', title: 'Tanggal Pinjam' },
+            { name: 'endDate', title: 'Tanggal Kembali' },
             { name: 'status', title: 'Status' },
             { name: 'actions', title: 'Action' },
           ]}
@@ -158,8 +162,13 @@ function EbookList(props) {
               wordWrapEnabled: true,
             },
             {
-              columnName: 'quantity',
-              width: 100,
+              columnName: 'startDate',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'endDate',
+              width: 150,
               wordWrapEnabled: true,
             },
             {

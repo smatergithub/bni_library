@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { ToastError } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
+import { Rating } from 'semantic-ui-react';
 
 function FormOrder({ data, type, onOrderItem, user }) {
   const parsed = queryString.parse(window.location.search);
@@ -83,14 +84,20 @@ function FormOrder({ data, type, onOrderItem, user }) {
             }}
           ></div>
           <div className="flex mt-3 ">
-            <div className="flex items-center">
+            {/* <div className="flex items-center">
               <i className="fas fa-star text-yellow-700" />
               <i className="fas fa-star text-yellow-700" />
               <i className="fas fa-star text-yellow-700" />
               <i className="fas fa-star text-yellow-700" />
               <i className="far fa-star text-yellow-700" />
             </div>
-            <div> 4.48 (606,907 ratings by Goodreads)</div>
+            <div> 4.48 (606,907 ratings by Goodreads)</div> */}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div>
+                <Rating defaultRating={data.countRating} maxRating={6} icon="star" disabled />
+              </div>
+              <span style={{ paddingLeft: '12px' }}>{data.countRating} Views</span>
+            </div>
           </div>
           <div> Paperback | {data.bahasa}</div>
           <div>{`By (author) ${data.pengarang}`}</div>
