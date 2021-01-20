@@ -6,6 +6,7 @@ import { pdfjs } from 'react-pdf';
 import ReactStars from 'react-rating-stars-component';
 import { Input, Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
+import {checkIsImageExist} from '../../component/helper'
 import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import { getCategory } from 'redux/action/bookUser';
@@ -16,7 +17,7 @@ import Maintenance from './component/maintenance';
  * because the real UI of ebook still on progress
  * once the the function/ui ready, we can change the value of the const to false
  */
-const isMaintenance = true;
+const isMaintenance = false;
 
 const { Search } = Input;
 const { Option } = Select;
@@ -193,7 +194,12 @@ function Ebooks(props) {
                     <img
                       className="hover:grow hover:shadow-lg h-64 w-full"
                       src={
-                        ebook.image ? ebook.image : require('../../../../assets/default-book.svg')
+                        ebook.image
+                        ? checkIsImageExist(ebook.image)
+                          ? ebook.image
+                          : ebook.image + '/preview'
+                        : require('../../../../assets/NoImage.png')
+
                       }
                     />
                     <div className="h-16 pt-2 flex items-start justify-between">

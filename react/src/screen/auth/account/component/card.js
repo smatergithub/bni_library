@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom'
 import moment from 'moment';
 import { checkIsImageExist } from '../../helper';
 const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) => {
@@ -56,16 +57,18 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
           {type === 'wishlist' ? 'PESAN' : type === 'borrow' ? 'DETAIL INVOICE' : 'DETAIL'}
         </button>
         {type === 'borrow' && data.sourceLink && (
+          <Link to={`/profile/read-ebooks?ebookId=${data.id}`}>
           <a
-            href={data.sourceLink}
+
             className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
             style={{
               right: '2em',
             }}
-            download
+
           >
             BACA
           </a>
+          </Link>
         )}
         {type === 'wishlist' && (
           <div className="text-red-500 mt-10 cursor-pointer" onClick={() => onRemoveItem()}>

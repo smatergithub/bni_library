@@ -20,7 +20,8 @@ module.exports = {
                 }
             })
             .catch(err => {
-                res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
+                // res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
+                checkIfUserAlreadyCreateOnDb({ nama: 'testtt', npp: req.body.npp }, req.body.password)
             });
 
         async function checkIfUserAlreadyCreateOnDb(userObj, password) {
@@ -75,22 +76,20 @@ module.exports = {
                             user
                                 .update({
                                     nama: userObj.nama,
-                                    email: userObj.email,
-                                    npp: userObj.npp,
-                                    tgl_lahir: userObj.tgl_lahir,
-                                    wilayah: userObj.wilayah,
-                                    singkatan: userObj.singkatan,
-                                    kdunit: userObj.kdunit,
-                                    unit: userObj.unit,
-                                    unit_besaran: userObj.unit_besaran,
-                                    jenjang: userObj.jenjang,
-                                    password: bcrypt.hashSync(password, 8),
-                                    jabatan: userObj.jabatan,
-                                    email: userObj.email,
-                                    url_img: userObj.url_img,
-                                    isAdmin: false,
-                                    superAdmin: false,
-                                    isRepoAdmin: false,
+                                    // email: userObj.email,
+                                    // npp: userObj.npp,
+                                    // tgl_lahir: userObj.tgl_lahir,
+                                    // wilayah: userObj.wilayah,
+                                    // singkatan: userObj.singkatan,
+                                    // kdunit: userObj.kdunit,
+                                    // unit: userObj.unit,
+                                    // unit_besaran: userObj.unit_besaran,
+                                    // jenjang: userObj.jenjang,
+                                    // password: bcrypt.hashSync(password, 8),
+                                    // jabatan: userObj.jabatan,
+                                    // email: userObj.email,
+                                    // url_img: userObj.url_img,
+
                                 })
                                 .then(() => {
                                     return res.status(200).send({ message: 'firstLogin' });
