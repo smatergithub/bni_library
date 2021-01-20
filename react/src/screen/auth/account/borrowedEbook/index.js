@@ -6,6 +6,7 @@ import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 import { getBorrowedEbookItem, getMe } from '../../../../redux/action/user';
 import { checkIsImageExist } from '../../helper';
+import LoadingPreview from './Loader';
 
 function BorrowedEbook(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -29,7 +30,19 @@ function BorrowedEbook(props) {
     setEbookBorrowSelected(data);
   }
 
-  if (borrowItem === null) return <div>Loading</div>;
+  if (borrowItem === null)
+    return (
+      <div
+        style={{
+          height: '500px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <LoadingPreview />
+      </div>
+    );
   let ebooks = ebookBorrowSelected ? ebookBorrowSelected.ebook : null;
   return (
     <React.Fragment>

@@ -7,6 +7,7 @@ import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
 import { checkIsImageExist } from '../../helper';
+import LoadingPreview from './Loader';
 
 function Borrowed(props) {
   let [borrowItem, setBorrowItem] = React.useState(null);
@@ -29,7 +30,19 @@ function Borrowed(props) {
     setShowModal(true);
     setBookBorrowSelected(data);
   }
-  if (borrowItem === null) return <div>Loading</div>;
+  if (borrowItem === null)
+    return (
+      <div
+        style={{
+          height: '500px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <LoadingPreview />
+      </div>
+    );
   let books = bookBorrowSelected ? bookBorrowSelected.book : null;
 
   return (
