@@ -55,6 +55,11 @@ function EbookList(props) {
   React.useEffect(() => {
     mappingDataSourceTransactionEbookList();
   }, []);
+
+  React.useEffect(() => {
+    mappingDataSourceTransactionEbookList();
+  }, [showModalEdit]);
+
   function returnEbook(id) {
     props.MakeReturnEbook(id).then(res => {
       if (res.resp) {
@@ -70,6 +75,12 @@ function EbookList(props) {
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
+      let duration = '';
+      if (rowData && moment().diff(moment(rowData.endDate), 'days') === -1) {
+        duration = 'Lewat masa peminjaman';
+      } else {
+        duration = rowData && moment().diff(moment(rowData.endDate), 'days') + 'hari';
+      }
       return {
         ...rowData,
         judul: rowData.ebook.judul,
@@ -78,6 +89,7 @@ function EbookList(props) {
         tahunTerbit: rowData.ebook.tahunTerbit,
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
+        duration: duration,
         actions: (
           <React.Fragment>
             <button
@@ -132,6 +144,7 @@ function EbookList(props) {
             { name: 'npp', title: 'NPP' },
             { name: 'startDate', title: 'Tanggal Pinjam' },
             { name: 'endDate', title: 'Tanggal Kembali' },
+            { name: 'duration', title: 'Sisa Durasi' },
             { name: 'status', title: 'Status' },
             { name: 'actions', title: 'Action' },
           ]}
@@ -169,6 +182,11 @@ function EbookList(props) {
             {
               columnName: 'endDate',
               width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'duration',
+              width: 200,
               wordWrapEnabled: true,
             },
             {

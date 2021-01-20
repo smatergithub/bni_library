@@ -69,10 +69,10 @@ function DetailBooks(props) {
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     //src={books.book.image}
                     src={
-                      books.book
+                      (books.book && books.book.image) !== null
                         ? checkIsImageExist(books.book.image)
                           ? books.book.image
-                          :  books.book.image + '/preview'
+                          : books.book.image + '/preview'
                         : require('../../../../assets/NoImage.png')
                     }
                     alt=""

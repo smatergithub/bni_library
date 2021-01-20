@@ -40,6 +40,10 @@ function BookList(props) {
     mappingDataSourceTransactionBookList();
   }, []);
 
+  React.useEffect(() => {
+    mappingDataSourceTransactionBookList();
+  }, [showModalEdit]);
+
   function returnBook(id) {
     props.MakeReturnBook(id).then(res => {
       if (res.resp) {
@@ -65,6 +69,12 @@ function BookList(props) {
 
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
+      let duration = '';
+      if (rowData && moment().diff(moment(rowData.endDate), 'days') === -1) {
+        duration = 'Lewat masa peminjaman';
+      } else {
+        duration = rowData && moment().diff(moment(rowData.endDate), 'days') + 'hari';
+      }
       return {
         ...rowData,
         judul: rowData.book && rowData.book.judul,
@@ -74,6 +84,7 @@ function BookList(props) {
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
         quantity: rowData.quantity,
+        duration: duration,
         actions: (
           <React.Fragment>
             <button
@@ -128,6 +139,7 @@ function BookList(props) {
             { name: 'npp', title: 'NPP' },
             { name: 'startDate', title: 'Tanggal Pinjam' },
             { name: 'endDate', title: 'Tanggal Kembali' },
+            { name: 'duration', title: 'Sisa Durasi' },
             { name: 'status', title: 'Status' },
             { name: 'actions', title: 'Action' },
           ]}
@@ -164,6 +176,11 @@ function BookList(props) {
             },
             {
               columnName: 'endDate',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'duration',
               width: 150,
               wordWrapEnabled: true,
             },
