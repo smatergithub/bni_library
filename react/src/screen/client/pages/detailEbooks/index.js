@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import queryString from 'query-string';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import { getEbookById } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
-let img =
-  'https://images.unsplash.com/photo-1569360457068-0e24f0d88117?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=600&q=80';
+import { checkIsImageExist } from '../../component/helper';
+
 function DetailEbooks(props) {
   const parsed = queryString.parse(props.location.search);
   let { history } = props;
@@ -40,6 +40,17 @@ function DetailEbooks(props) {
   }
   if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
+  let img = '';
+
+  if (ebooks !== null && ebooks.ebook.image !== null && checkIsImageExist(ebooks.ebook.image)) {
+    img = ebooks.ebook.image;
+  } else if (ebooks !== null && ebooks.ebook.image !== null) {
+    img = ebooks.ebook.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <Helmet>
@@ -61,8 +72,7 @@ function DetailEbooks(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    // src={`http://localhost:2000/img/images/${ebooks.image.split('/').pop()}`}
-                    src={ebooks.ebook.image}
+                    src={img}
                     alt=""
                     style={{
                       height: 400,
@@ -81,17 +91,11 @@ function DetailEbooks(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <ReactStars
-                      count={6}
-                      value={
-                        ebooks.ebook.totalRead
-                          ? ebooks.ebook.countRating
-                            ? ebooks.ebook.countRating / ebooks.ebook.totalRead
-                            : 0
-                          : 0
-                      }
-                      size={20}
-                      activeColor="#ffd700"
+                    <Rating
+                      defaultRating={ebooks.ebook.countRating}
+                      maxRating={6}
+                      icon="star"
+                      disabled
                     />
                     <span className="ml-3">
                       {' '}

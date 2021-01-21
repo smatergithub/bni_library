@@ -6,7 +6,7 @@ import { TRANSACTION_BOOKS, TRANSACTION_EBOOKS } from '../type';
  * just return the response (true/false) to the UI
  */
 
- export const EditTransactionBook = (id, data) => () => {
+export const EditTransactionBook = (id, data) => () => {
   return TransactionApi.editTransactionBook(id, data)
     .then(res => {
       if (res) {
@@ -23,7 +23,7 @@ import { TRANSACTION_BOOKS, TRANSACTION_EBOOKS } from '../type';
 };
 
 export const EditTransactionEbook = (id, data) => () => {
-  return TransactionApi.editTransactionEBook(id, data)
+  return TransactionApi.editTransactionEbook(id, data)
     .then(res => {
       if (res) {
         return {
