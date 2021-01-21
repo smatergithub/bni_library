@@ -44,6 +44,16 @@ function BorrowedEbook(props) {
       </div>
     );
   let ebooks = ebookBorrowSelected ? ebookBorrowSelected.ebook : null;
+  let img = '';
+
+  if (ebooks !== null && ebooks.image !== null && checkIsImageExist(ebooks.image)) {
+    img = ebooks.image;
+  } else if (ebooks !== null && ebooks.image !== null) {
+    img = ebooks.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <React.Fragment>
       <Helmet>
@@ -90,13 +100,7 @@ function BorrowedEbook(props) {
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <div className="bg-white rounded-lg  border-gray-300">
                 <img
-                  src={
-                    ebooks
-                      ? checkIsImageExist(ebooks.image)
-                        ? ebooks.image
-                        : require('../../../../assets/NoImage.png')
-                      : require('../../../../assets/NoImage.png')
-                  }
+                  src={img}
                   alt=""
                   style={{
                     height: 300,

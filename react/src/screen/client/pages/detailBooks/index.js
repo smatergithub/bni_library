@@ -45,6 +45,16 @@ function DetailBooks(props) {
   if (processing && books == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
 
+  let img = '';
+
+  if (books !== null && books.book.image !== null && checkIsImageExist(books.book.image)) {
+    img = books.book.image;
+  } else if (books !== null && books.book.image !== null) {
+    img = books.book.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <section className="py-16 lg:py-24 w-full">
@@ -68,13 +78,7 @@ function DetailBooks(props) {
                   <img
                     // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
                     //src={books.book.image}
-                    src={
-                      (books.book && books.book.image) !== null
-                        ? checkIsImageExist(books.book.image)
-                          ? books.book.image
-                          : books.book.image + '/preview'
-                        : require('../../../../assets/NoImage.png')
-                    }
+                    src={img}
                     alt=""
                     style={{
                       height: 400,

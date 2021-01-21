@@ -134,12 +134,12 @@ function Home() {
                     EBOOKS
                   </h4>
                   <div class="mt-2 text-sm text-gray-700">
-                    {/* Buku elektronik yang dapat dibaca kapan saja, di mana saja. Hanya dengan sekali
-                    klik melalui smartphone Anda. */}
-                    Mohon maaf, saat ini sistem masih dalam pengembangan.
+                    Buku elektronik yang dapat dibaca kapan saja, di mana saja. Hanya dengan sekali
+                    klik melalui smartphone Anda.
+                    {/* Mohon maaf, saat ini sistem masih dalam pengembangan. */}
                   </div>
                   <Link to="/favorite-ebook">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-gray-400 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />

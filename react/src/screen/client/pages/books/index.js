@@ -180,20 +180,18 @@ function Books(props) {
           {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
-              // console.log(checkIsImageExist(book.image));
+              let img = '';
+              if (book.image !== null && checkIsImageExist(book.image)) {
+                img = book.image;
+              } else if (book.image !== null) {
+                img = book.image + '/preview';
+              } else {
+                img = require('../../../../assets/NoImage.png');
+              }
               let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img
-                    className="hover:grow hover:shadow-lg h-64"
-                    src={
-                      book.image
-                        ? checkIsImageExist(book.image)
-                          ? book.image
-                          : book.image + '/preview'
-                        : require('../../../../assets/NoImage.png')
-                    }
-                  />
+                  <img className="hover:grow hover:shadow-lg h-64" src={img} />
                   <div className="h-16 pt-1 flex items-start justify-between">
                     <Tooltip placement="bottom" title={book.judul}>
                       <h2
