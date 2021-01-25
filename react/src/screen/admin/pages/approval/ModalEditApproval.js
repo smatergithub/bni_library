@@ -38,11 +38,10 @@ const ModalEditApproval = props => {
       request.id = detailData.id;
       request.startDate = startDate ? startDate : detailData.startDate;
       request.endDate = endDate ? endDate : detailData.endDate;
-      props.EditTransactionEbook(data.id, request).then(res => {
+      props.EditTransactionEbook(detailData.id, request).then(res => {
         if (res.resp) {
           ToastSuccess(res.msg);
           onCloseModal();
-          window.location.reload();
         } else {
           ToastError(res.msg);
         }
@@ -61,7 +60,7 @@ const ModalEditApproval = props => {
   return (
     <>
       <Modal
-        title={!IsEmptyObject(detailData) ? 'Ubah Approval' : ''}
+        title={!IsEmptyObject(detailData) ? 'Ubah Tanggal' : ''}
         open={showModalDetail}
         onCLose={onCloseModal}
         handleSubmit={handleSubmitModal}
@@ -70,7 +69,7 @@ const ModalEditApproval = props => {
         <div className="text-yellow-800">Maksimal Peminjaman item ada 14 hari.</div>
         <div className="mt-2">
           <label className="block text-sm text-gray-600" htmlFor="cus_email">
-            Start Date
+            Tanggal Pinjam
           </label>
           <DatePicker
             style={{
@@ -85,7 +84,7 @@ const ModalEditApproval = props => {
         </div>
         <div className="mt-2">
           <label className="block text-sm text-gray-600" htmlFor="cus_email">
-            End Date
+            Tanggal Kembali
           </label>
           <DatePicker
             style={{

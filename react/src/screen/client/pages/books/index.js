@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { Dropdown, Input } from 'semantic-ui-react';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'semantic-ui-react';
 import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
@@ -180,20 +180,18 @@ function Books(props) {
           {props.books && props.books.data.length === 0 && <NoData />}
           {props.books &&
             props.books.data.map((book, key) => {
-              // console.log(checkIsImageExist(book.image));
+              let img = '';
+              if (book.image !== null && checkIsImageExist(book.image)) {
+                img = book.image;
+              } else if (book.image !== null) {
+                img = book.image + '/preview';
+              } else {
+                img = require('../../../../assets/NoImage.png');
+              }
               let isAdd = wishlist.some(ws => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img
-                    className="hover:grow hover:shadow-lg h-64"
-                    src={
-                      book.image
-                        ? checkIsImageExist(book.image)
-                          ? book.image
-                          : book.image + '/preview'
-                        : require('../../../../assets/NoImage.png')
-                    }
-                  />
+                  <img className="hover:grow hover:shadow-lg h-64" src={img} />
                   <div className="h-16 pt-1 flex items-start justify-between">
                     <Tooltip placement="bottom" title={book.judul}>
                       <h2
@@ -229,24 +227,11 @@ function Books(props) {
                     )}
                   </div>
 
-                  <div className="pt-1 text-gray-900" style={{ fontSize: '10px' }}>
+                  <div className="pt-1 text-gray-900" style={{ fontSize: '11px' }}>
                     {book.pengarang}
                   </div>
                   <div className="flex items-center justify-between">
-                    <ReactStars
-                      count={6}
-                      // isHalf={false}
-
-                      value={
-                        book.totalRead
-                          ? book.countRating
-                            ? book.countRating / book.totalRead
-                            : 0
-                          : 0
-                      }
-                      size={20}
-                      activeColor="#ffd700"
-                    />
+                    <Rating defaultRating={book.countRating} maxRating={6} icon="star" disabled />
                     <span>
                       <i className="fas fa-heart text-yellow-700" />{' '}
                       {book.totalRead ? book.totalRead : 0}

@@ -100,6 +100,7 @@ function DetailResearch(props) {
                   </div>
                   <div> 4.48 (606,907 ratings by Goodreads)</div>
                 </div> */}
+
                 <div> Paperback | {research.bahasa}</div>
                 <div>{`By (author) ${research.name}`}</div>
                 <div className="py-1 font-bold">Description:</div>
