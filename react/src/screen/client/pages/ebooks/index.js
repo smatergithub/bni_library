@@ -217,10 +217,12 @@ function Ebooks(props) {
                     {!isAdd && (
                       <div
                         onClick={() => {
+                          ebook.type = 'ebook';
+                          console.log('onClick', ebook);
                           if (!isUserLogged) {
                             setShowModalDeletion(true);
                           } else {
-                            props.addBookWishlist(ebook);
+                            props.addEbookWishlist(ebook);
 
                             // let data = [...book];
                             // localStorage.setItem('bni_book', JSON.stringify(data));
@@ -231,7 +233,7 @@ function Ebooks(props) {
                       </div>
                     )}
                     {isAdd && (
-                      <div onClick={() => props.removeBookWishlist(ebook)}>
+                      <div onClick={() => props.removeEbookWishlist(ebook)}>
                         <i className="fas fa-cart-plus text-3xl text-green-500"></i>
                       </div>
                     )}
