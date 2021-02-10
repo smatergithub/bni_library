@@ -75,9 +75,9 @@ function OrderBook(props) {
           });
           props.getBorrowedEbookItem(userId, 'rating=true').then(res => {
             if (res.data.length !== 0) {
-              if (res.data.data.length > 1) {
-                setIsUserHaveActiveEbook(true);
-              }
+              // if (res.data.data.length > 1) {
+              //   setIsUserHaveActiveEbook(true);
+              // }
               let checkIsBorrowed = res.data.data.some(
                 ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
               );
@@ -131,7 +131,7 @@ function OrderBook(props) {
       } else if (type === 'ebook') {
         if (isUserhaveActiveEbook) {
           ToastError(
-            'Maksimal peminjaman hanya 1 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
+            'Maksimal peminjaman hanya 2 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
           );
         } else {
           props.orderEbook(formData).then(res => {

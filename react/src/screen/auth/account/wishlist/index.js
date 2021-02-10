@@ -15,7 +15,8 @@ function Wishlist(props) {
   let wishlist = book.concat(ebook);
 
   function removeWishlist(data, isBook) {
-    if (isBook) {
+    console.log('aaa', isBook);
+    if (isBook === 'book') {
       props.removeBookWishlist(data);
     } else {
       props.removeEbookWishlist(data);
@@ -47,8 +48,12 @@ function Wishlist(props) {
                 <Card
                   type="wishlist"
                   data={borrow}
-                  onDetailClick={() => onOrderItem(borrow, borrow.sourceLink ? 'ebook' : 'book')}
-                  onRemoveItem={() => removeWishlist(borrow, borrow.sourceLink ? 'ebook' : 'book')}
+                  onDetailClick={() =>
+                    onOrderItem(borrow, borrow.type === 'ebook' ? 'ebook' : 'book')
+                  }
+                  onRemoveItem={() =>
+                    removeWishlist(borrow, borrow.type === 'ebook' ? 'ebook' : 'book')
+                  }
                 />
                 <div
                   className="bg-gray-600 w-full"

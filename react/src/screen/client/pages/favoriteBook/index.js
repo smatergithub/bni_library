@@ -51,10 +51,8 @@ function FavoriteBooks(props) {
                         <img
                           className="hover:grow hover:shadow-lg h-64"
                           src={
-                            book.image
-                              ? checkIsImageExist(book.image)
-                                ? book.image
-                                : require('../../../../assets/NoImage.png')
+                            book.image !== null
+                              ? book.image + '/preview'
                               : require('../../../../assets/NoImage.png')
                           }
                         />

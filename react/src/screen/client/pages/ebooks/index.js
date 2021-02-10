@@ -12,6 +12,7 @@ import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/
 import { getCategory } from 'redux/action/bookUser';
 import Preview from './component/preview';
 import Maintenance from './component/maintenance';
+
 import { Dropdown, Input } from 'semantic-ui-react';
 import { checkIsImageExist } from '../../component/helper';
 
@@ -188,20 +189,19 @@ function Ebooks(props) {
           {props.ebooks && props.ebooks.data.length === 0 && <NoData />}
           {props.ebooks &&
             props.ebooks.data.map((ebook, key) => {
-              // console.log(checkIsImageExist(book.image));
+              let img = '';
+              if (ebook.image !== null && checkIsImageExist(ebook.image)) {
+                img = ebook.image;
+              } else if (ebook.image !== null) {
+                img = ebook.image + '/preview';
+              } else {
+                img = require('../../../../assets/NoImage.png');
+              }
+
               let isAdd = wishlist.some(ws => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
-                  <img
-                    className="hover:grow hover:shadow-lg h-64"
-                    src={
-                      ebook.image
-                        ? checkIsImageExist(ebook.image)
-                          ? ebook.image
-                          : require('../../../../assets/NoImage.png')
-                        : require('../../../../assets/NoImage.png')
-                    }
-                  />
+                  <img className="hover:grow hover:shadow-lg h-64" src={img} />
                   <div className="h-16 pt-1 flex items-start justify-between">
                     <Tooltip placement="bottom" title={ebook.judul}>
                       <h2
@@ -217,10 +217,12 @@ function Ebooks(props) {
                     {!isAdd && (
                       <div
                         onClick={() => {
+                          ebook.type = 'ebook';
+                          console.log('onClick', ebook);
                           if (!isUserLogged) {
                             setShowModalDeletion(true);
                           } else {
-                            props.addBookWishlist(ebook);
+                            props.addEbookWishlist(ebook);
 
                             // let data = [...book];
                             // localStorage.setItem('bni_book', JSON.stringify(data));
@@ -231,7 +233,7 @@ function Ebooks(props) {
                       </div>
                     )}
                     {isAdd && (
-                      <div onClick={() => props.removeBookWishlist(ebook)}>
+                      <div onClick={() => props.removeEbookWishlist(ebook)}>
                         <i className="fas fa-cart-plus text-3xl text-green-500"></i>
                       </div>
                     )}

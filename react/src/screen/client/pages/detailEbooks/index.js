@@ -40,6 +40,17 @@ function DetailEbooks(props) {
   }
   if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
+  let img = '';
+
+  if (ebooks !== null && ebooks.ebook.image !== null && checkIsImageExist(ebooks.ebook.image)) {
+    img = ebooks.ebook.image;
+  } else if (ebooks !== null && ebooks.ebook.image !== null) {
+    img = ebooks.ebook.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <Helmet>
@@ -61,13 +72,7 @@ function DetailEbooks(props) {
               <div className="w-2/5 ">
                 <div className="bg-white rounded-lg  border-gray-300">
                   <img
-                    src={
-                      ebooks.book && ebooks.book.image !== null
-                        ? checkIsImageExist(ebooks.book.image)
-                          ? ebooks.book.image
-                          : ebooks.book.image + '/preview'
-                        : require('../../../../assets/NoImage.png')
-                    }
+                    src={img}
                     alt=""
                     style={{
                       height: 400,

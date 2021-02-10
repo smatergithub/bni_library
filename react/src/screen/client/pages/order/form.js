@@ -52,6 +52,17 @@ function FormOrder({ data, type, onOrderItem, user }) {
       }
     }
   }
+
+  let img = '';
+
+  if (data !== null && data.image !== null && checkIsImageExist(data.image)) {
+    img = data.image;
+  } else if (data !== null && data.image !== null) {
+    img = data.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div class="flex  w-full">
       <div class="lg:flex w-full text-gray-700 bg-white lg:px-20 lg:py-20  m-2">
@@ -59,14 +70,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
           <div className="bg-white rounded-lg  border-gray-300">
             <img
               // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
-              src={data.image}
-              src={
-                data
-                  ? checkIsImageExist(data.image)
-                    ? data.image
-                    : require('../../../../assets/NoImage.png')
-                  : require('../../../../assets/NoImage.png')
-              }
+              src={img}
               alt=""
               style={{
                 height: 440,
