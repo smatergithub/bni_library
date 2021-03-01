@@ -1,0 +1,73 @@
+{
+  "name": "bni_library",
+  "version": "0.1.0",
+  "private": true,
+  "proxy": "http://localhost:2000",
+  "dependencies": {
+    "@devexpress/dx-react-core": "^2.7.2",
+    "@devexpress/dx-react-grid": "^2.7.2",
+    "@devexpress/dx-react-grid-material-ui": "^2.7.2",
+    "@fullhuman/postcss-purgecss": "^1.3.0",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/icons": "^4.9.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "antd": "^4.2.4",
+    "axios": "^0.19.0",
+    "moment": "^2.27.0",
+    "node-sass": "^4.14.1",
+    "npm-run-all": "^4.1.5",
+    "postcss": "^8.2.2",
+    "postcss-cli": "^8.1.0",
+    "purgecss": "^3.0.0",
+    "query-string": "^6.13.1",
+    "react": "^16.12.0",
+    "react-calendar": "^3.1.0",
+    "react-datepicker": "^3.1.3",
+    "react-dom": "^16.12.0",
+    "react-helmet": "^6.1.0",
+    "react-hook-form": "^5.7.2",
+    "react-loader-spinner": "^3.1.14",
+    "react-pdf": "^5.0.0",
+    "react-promise-tracker": "^2.1.0",
+    "react-rating-stars-component": "^2.2.0",
+    "react-redux": "^7.1.3",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.4.0",
+    "react-toastify": "^6.0.5",
+    "redux": "^4.0.5",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.1",
+    "tailwindcss": "^1.9.5"
+  },
+  "scripts": {
+    "start": "npm run watch:css && react-app-rewired start",
+    "build": "npm run build:css && react-scripts build  ",
+    "reduce-css": "purgecss --css build/static/css/*.*.css --content build/index.html build/static/js/*.js --output build/static/css",
+    "eject": "react-scripts eject",
+    "build:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
+    "watch:css": "postcss src/styles/tailwind.css -o src/styles/main.css",
+    "test-coverage": "react-scripts test --silent --coverage --watchAll=false",
+    "test": "react-scripts test --verbose"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "customize-cra": "^1.0.0",
+    "customize-cra-react-refresh": "^1.1.0",
+    "kcd-scripts": "^5.9.0",
+    "react-app-rewired": "^2.1.8"
+  }
+}
