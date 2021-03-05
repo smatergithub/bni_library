@@ -30,7 +30,7 @@ function CreateNewBook(props) {
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
-      props.CreateNewBookAction(formData).then(res => {
+      props.CreateNewBookAction(formData).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           props.history.push('/admin/books');
@@ -45,7 +45,7 @@ function CreateNewBook(props) {
       formData['status'] =
         statusValue !== null ? (statusValue === 'Ada' ? 'Ada' : 'Kosong') : book.status;
 
-      props.EditBookAction(id, formData).then(res => {
+      props.EditBookAction(id, formData).then((res) => {
         if (res.resp) {
           props.history.push('/admin/books');
           ToastSuccess(res.msg);
@@ -55,7 +55,7 @@ function CreateNewBook(props) {
       });
     }
   }
-  let uploadImage = e => {
+  let uploadImage = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -69,7 +69,7 @@ function CreateNewBook(props) {
   };
   React.useEffect(() => {
     if (id) {
-      props.getDetailBook(id).then(res => {
+      props.getDetailBook(id).then((res) => {
         if (res.resp) {
           setBooks(res.data);
           setStatusValue(res.data.book.status);
@@ -87,14 +87,14 @@ function CreateNewBook(props) {
   function onChangeStatus(value) {
     setStatusValue(value[0]);
   }
-  let uploadPdf = e => {
+  let uploadPdf = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
     setIsLoading(true);
     reader.onloadend = () => {
-      props.UploadBookFIle({ file }).then(res => {
+      props.UploadBookFIle({ file }).then((res) => {
         if (res) {
           ToastSuccess(res.msg);
           props.history.push('/admin/books');
@@ -140,7 +140,7 @@ function CreateNewBook(props) {
                 <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                   <p className="text-lg text-gray-800 font-medium pb-4">Informasi Buku</p>
                   <input
-                    onChange={e => uploadPdf(e)}
+                    onChange={(e) => uploadPdf(e)}
                     type="file"
                     style={{
                       display: 'none',
@@ -356,7 +356,7 @@ function CreateNewBook(props) {
                     </label>
 
                     <input
-                      onChange={e => uploadImage(e)}
+                      onChange={(e) => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"

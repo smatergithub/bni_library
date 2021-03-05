@@ -15,7 +15,7 @@ function Profile(props) {
   React.useEffect(() => {
     let { edit } = parsed;
 
-    props.getMe().then(res => {
+    props.getMe().then((res) => {
       setProcessing(false);
       if (res.resp) {
         setUser(res.data);
@@ -42,7 +42,7 @@ function Profile(props) {
 
   React.useEffect(() => {
     if (!isEditUser) {
-      props.getMe().then(res => {
+      props.getMe().then((res) => {
         setProcessing(false);
         if (res.resp) {
           setUser(res.data);

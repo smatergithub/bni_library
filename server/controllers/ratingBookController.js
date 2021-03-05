@@ -16,9 +16,9 @@ module.exports = {
         userId: userId,
       },
     })
-      .then(async transaction => {
-        let dataTransactionReturned = transaction.filter(x => x.status === 'Dikembalikan');
-        let dataTransactionRating = dataTransactionReturned.filter(x => x.isGiveRating === false);
+      .then(async (transaction) => {
+        let dataTransactionReturned = transaction.filter((x) => x.status === 'Dikembalikan');
+        let dataTransactionRating = dataTransactionReturned.filter((x) => x.isGiveRating === false);
         if (!dataTransactionRating) {
           res.status(500).json({ message: 'transaction book not found' });
         }
@@ -35,52 +35,52 @@ module.exports = {
         }
 
         await TransactionBook.findByPk(dataTransactionRating[0].id)
-          .then(transaksi => {
+          .then((transaksi) => {
             transaksi
               .update({
                 isGiveRating: true,
               })
-              .then(response => {
+              .then((response) => {
                 return res.status(201).json({
                   message: 'Process Succesfully input rating',
                 });
               })
-              .catch(err => {});
+              .catch((err) => {});
           })
-          .catch(err => {});
+          .catch((err) => {});
 
         await Books.findByPk(dataTransactionRating[0].bookId)
-          .then(book => {
+          .then((book) => {
             book
               .update({
                 countRating: book.countRating + req.body.rating,
                 totalRead: book.totalRead + 1,
               })
-              .then(response => {
+              .then((response) => {
                 return res.status(201).json({
                   message: 'Process Succesfully input rating',
                 });
               })
-              .catch(err => {});
+              .catch((err) => {});
           })
-          .catch(err => {});
+          .catch((err) => {});
 
         await ListBorrowBook.findAll({ where: { transactionBookId: dataTransactionRating[0].id } })
-          .then(listBorrow => {
+          .then((listBorrow) => {
             listBorrow[0]
               .update({
                 transactionBookId: null,
               })
-              .then(response => {
+              .then((response) => {
                 return res.status(201).json({
                   message: 'Process Succesfully input rating',
                 });
               })
-              .catch(err => {});
+              .catch((err) => {});
           })
-          .catch(err => {});
+          .catch((err) => {});
       })
-      .catch(err => {
+      .catch((err) => {
         return res.status(200).json({
           message: 'no rating input ',
         });
@@ -92,9 +92,9 @@ module.exports = {
       limit: 5,
       order: [['countRating', 'DESC']],
     };
-    const RatingList = await Books.findAndCountAll(paramQuerySQL).then(response => {
-      let list = response.rows.filter(x => x.countRating !== null)
-      console.log("rating List",list)
+    const RatingList = await Books.findAndCountAll(paramQuerySQL).then((response) => {
+      let list = response.rows.filter((x) => x.countRating !== null);
+      console.log('rating List', list);
       return {
         count: response.count,
         data: list,

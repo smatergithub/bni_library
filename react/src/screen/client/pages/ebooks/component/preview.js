@@ -19,7 +19,7 @@ function EbookPreview(props) {
     setLoading(true);
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     let { id } = props;
-    props.getEbookPreview(id).then(res => {
+    props.getEbookPreview(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         setEbook(res.data);

@@ -61,7 +61,7 @@ function CreateNewRepo(props) {
       formData['methodology'] = methodologyResearch;
       formData['strata'] = strata;
       formData['releaseYear'] = releaseYear;
-      props.CreateNewRepositoryAction(formData).then(res => {
+      props.CreateNewRepositoryAction(formData).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           props.history.push('/admin/repository');
@@ -77,7 +77,7 @@ function CreateNewRepo(props) {
       formData['strata'] = strata ? strata : repo.strata;
       formData['releaseYear'] = releaseYear ? releaseYear : repo.releaseYear;
 
-      props.EditRepositoryAction(id, formData).then(res => {
+      props.EditRepositoryAction(id, formData).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           props.history.push('/admin/repository');
@@ -115,7 +115,7 @@ function CreateNewRepo(props) {
 
   React.useEffect(() => {
     if (id) {
-      props.getDetailRepository(id).then(res => {
+      props.getDetailRepository(id).then((res) => {
         if (res.resp) {
           setRepo(res.data);
         } else {
@@ -240,9 +240,9 @@ function CreateNewRepo(props) {
                     className="wilayah"
                     name="wilayah"
                     value={repo ? repo.methodology : ''}
-                    onSelect={e => setMethodoloyResearch(e)}
+                    onSelect={(e) => setMethodoloyResearch(e)}
                   >
-                    {methodology.map(op => {
+                    {methodology.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -256,9 +256,9 @@ function CreateNewRepo(props) {
                     value={repo ? repo.strata : ''}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={e => setStrata(e)}
+                    onSelect={(e) => setStrata(e)}
                   >
-                    {strataOpt.map(op => {
+                    {strataOpt.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -282,7 +282,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'abstrack')}
+                    onChange={(e) => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -296,7 +296,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'document')}
+                    onChange={(e) => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"

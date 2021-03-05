@@ -38,7 +38,7 @@ function Register(props) {
       //   ? formData.email
       //   : formData.email + '@bni.co.id';
 
-      props.signUp(formData).then(res => {
+      props.signUp(formData).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
 
@@ -97,7 +97,7 @@ function Register(props) {
                   )}
 
                   {!isRegisterSuccess && (
-                    <form onSubmit={e => onFormSubmit(e)}>
+                    <form onSubmit={(e) => onFormSubmit(e)}>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -107,7 +107,7 @@ function Register(props) {
                         </label>
                         <input
                           type="text"
-                          onChange={e => setFormData({ ...formData, nama: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
                           className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                           placeholder="Nama"
                           style={{
@@ -120,7 +120,7 @@ function Register(props) {
                           Email
                         </label>
                         <input
-                          onChange={e => setFormData({ ...formData, email: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                           type="text"
                           className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                           placeholder="Email"
@@ -170,9 +170,9 @@ function Register(props) {
                           style={{
                             height: 45,
                           }}
-                          onChange={e => setFormData({ ...formData, password: e.target.value })}
+                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                           placeholder="Password"
-                          iconRender={visible =>
+                          iconRender={(visible) =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
                         />
@@ -188,11 +188,11 @@ function Register(props) {
                           style={{
                             height: 45,
                           }}
-                          onChange={e =>
+                          onChange={(e) =>
                             setFormData({ ...formData, confirmPassword: e.target.value })
                           }
                           placeholder="Confirm Password"
-                          iconRender={visible =>
+                          iconRender={(visible) =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
                         />

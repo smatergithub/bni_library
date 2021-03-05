@@ -7,12 +7,12 @@ import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
 import { DeleteRepositoryAction, EditRepositoryAction } from 'redux/action/repositorys';
 
-const ModalRepositoriesComfirmation = props => {
+const ModalRepositoriesComfirmation = (props) => {
   const { type, id, showModalDetail, onCloseModal, callback } = props;
 
   function onSubmit() {
     if (type === 'delete') {
-      props.DeleteRepositoryAction(id).then(res => {
+      props.DeleteRepositoryAction(id).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           callback();
@@ -21,7 +21,7 @@ const ModalRepositoriesComfirmation = props => {
         }
       });
     } else {
-      props.EditRepositoryAction(id, { isApproved: true }).then(res => {
+      props.EditRepositoryAction(id, { isApproved: true }).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           callback();

@@ -5,26 +5,22 @@ import Modal from '../../../../component/Modal';
 import queryString from 'query-string';
 import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
-import {
-  CreateNewWilayahAction,
-  EditWilayahAction
-} from '../../../../redux/action/wilayah';
+import { CreateNewWilayahAction, EditWilayahAction } from '../../../../redux/action/wilayah';
 
-const CreateEditWilayahModal = props => {
+const CreateEditWilayahModal = (props) => {
   const { handleSubmit, register, errors } = useForm();
 
-  const IsEmptyObject = object =>
+  const IsEmptyObject = (object) =>
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
 
-
   function onSubmit(data) {
     if (!detailData.id) {
-      props.CreateNewWilayahAction(data).then(res => {
+      props.CreateNewWilayahAction(data).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
-          onCloseModal()
+          onCloseModal();
           window.location.reload();
         } else {
           ToastError(res.msg);
@@ -32,10 +28,10 @@ const CreateEditWilayahModal = props => {
       });
     } else {
       data.id = detailData.id;
-      props.EditWilayahAction(data.id, data).then(res => {
+      props.EditWilayahAction(data.id, data).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
-          onCloseModal()
+          onCloseModal();
           window.location.reload();
         } else {
           ToastError(res.msg);
@@ -43,7 +39,6 @@ const CreateEditWilayahModal = props => {
       });
     }
   }
-
 
   return (
     <>
@@ -120,7 +115,7 @@ const CreateEditWilayahModal = props => {
             className="px-4 bg-transparent p-3 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
           >
             Close
-                  </button>
+          </button>
           <button
             onClick={handleSubmit(onSubmit)}
             className="modal-close px-6 bg-orange-500  rounded-sm text-white hover:bg-orange-800"
@@ -133,8 +128,7 @@ const CreateEditWilayahModal = props => {
   );
 };
 
-
 export default connect(null, {
   CreateNewWilayahAction,
-  EditWilayahAction
+  EditWilayahAction,
 })(CreateEditWilayahModal);

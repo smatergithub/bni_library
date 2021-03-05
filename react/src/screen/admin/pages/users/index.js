@@ -14,7 +14,7 @@ import { NoData } from '../../../../component';
 import { ToastError, ToastSuccess } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme/index';
 
-const Ebooks = props => {
+const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
@@ -31,11 +31,11 @@ const Ebooks = props => {
     };
     props
       .getUsersListToAdmin(pagination)
-      .then(res => {
+      .then((res) => {
         setTotalCount(props.users.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -54,7 +54,7 @@ const Ebooks = props => {
 
   const getDetailUser = (id, MakeAdmin) => {
     const { users } = props;
-    let detailData = users.data.filter(item => item.id === id);
+    let detailData = users.data.filter((item) => item.id === id);
     if (MakeAdmin === 'makeRisetAdmin') {
       let updateDetailData = {
         makeRisetAdmin: 1,
@@ -82,13 +82,13 @@ const Ebooks = props => {
     setLoading(true);
     props
       .toggleUserIntoAdmin(detailData.id)
-      .then(response => {
+      .then((response) => {
         ToastSuccess('Update Berhasil.');
         retrieveDataUser();
         setLoading(false);
         setShowModalMakeAdmin(false);
       })
-      .catch(err => {
+      .catch((err) => {
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
@@ -97,25 +97,25 @@ const Ebooks = props => {
     if (detailData && detailData.makeRisetAdmin === 1) {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: true })
-        .then(response => {
+        .then((response) => {
           retrieveDataUser();
           ToastSuccess('Update Berhasil.');
           setLoading(false);
           setShowModalMakeAdmin(false);
         })
-        .catch(err => {
+        .catch((err) => {
           ToastError('Tidak Bisa Akses Fitur Ini');
         });
     } else {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: false })
-        .then(response => {
+        .then((response) => {
           ToastSuccess('Update Berhasil.');
           retrieveDataUser();
           setLoading(false);
           setShowModalMakeAdmin(false);
         })
-        .catch(err => {
+        .catch((err) => {
           ToastError('Tidak Bisa Akses Fitur Ini');
         });
     }
@@ -125,11 +125,11 @@ const Ebooks = props => {
     setLoading(true);
     props
       .exportDataUser()
-      .then(response => {
+      .then((response) => {
         ToastSuccess('Sukses Export User');
         window.location.reload();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
@@ -139,19 +139,19 @@ const Ebooks = props => {
     setLoading(true);
     props
       .deleteUser(detailData.id)
-      .then(response => {
+      .then((response) => {
         retrieveDataUser();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         isAdmin: (
@@ -292,7 +292,7 @@ const Ebooks = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     users: state.users.users,
     role: state.users.role,

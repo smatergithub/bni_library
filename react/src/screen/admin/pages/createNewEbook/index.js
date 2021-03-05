@@ -35,7 +35,7 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'add');
       } else {
-        props.CreateNewEbookAction(formData).then(res => {
+        props.CreateNewEbookAction(formData).then((res) => {
           if (res.resp) {
             ToastSuccess(res.msg);
             props.history.push('/admin/ebooks');
@@ -53,7 +53,7 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'edit', id);
       } else {
-        props.EditEbookAction(id, formData).then(res => {
+        props.EditEbookAction(id, formData).then((res) => {
           if (res.resp) {
             ToastSuccess(res.msg);
             props.history.push('/admin/ebooks');
@@ -64,7 +64,7 @@ function CreateNewEBook(props) {
       }
     }
   }
-  let uploadImage = e => {
+  let uploadImage = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -77,14 +77,14 @@ function CreateNewEBook(props) {
     reader.readAsDataURL(file);
   };
 
-  let uploadDocument = e => {
+  let uploadDocument = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
     setIsLoading(true);
     reader.onloadend = () => {
-      props.UploadEbookFIle({ file }).then(res => {
+      props.UploadEbookFIle({ file }).then((res) => {
         if (res.resp) {
           ToastSuccess(res.msg);
           setIsLoading(false);
@@ -101,11 +101,11 @@ function CreateNewEBook(props) {
 
   function uploadPdfAndGetLink(formData, type, id) {
     if (ebookFile) {
-      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
+      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then((res) => {
         if (res) {
           if (type === 'add') {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.CreateNewEbookAction(formData).then(res => {
+            props.CreateNewEbookAction(formData).then((res) => {
               if (res.resp) {
                 ToastSuccess(res.msg);
                 props.history.push('/admin/ebooks');
@@ -115,7 +115,7 @@ function CreateNewEBook(props) {
             });
           } else {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.EditEbookAction(id, formData).then(res => {
+            props.EditEbookAction(id, formData).then((res) => {
               if (res.resp) {
                 ToastSuccess(res.msg);
                 props.history.push('/admin/ebooks');
@@ -133,7 +133,7 @@ function CreateNewEBook(props) {
 
   React.useEffect(() => {
     if (id) {
-      props.getDetailEbook(id).then(res => {
+      props.getDetailEbook(id).then((res) => {
         if (res.resp) {
           setEbooks(res.data);
           setStatusValue(res.data.ebook.status);
@@ -186,7 +186,7 @@ function CreateNewEBook(props) {
                 <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                   <p className="text-lg text-gray-800 font-medium pb-4">Informasi Ebook</p>
                   <input
-                    onChange={e => uploadDocument(e)}
+                    onChange={(e) => uploadDocument(e)}
                     type="file"
                     style={{
                       display: 'none',
@@ -404,7 +404,7 @@ function CreateNewEBook(props) {
                     </label>
 
                     <input
-                      onChange={e => uploadImage(e)}
+                      onChange={(e) => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"

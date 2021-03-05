@@ -1,6 +1,6 @@
 import axios from 'axios';
 function formatUrl(url) {
-  let checkIsParamsExit = url.split('').find(text => text === '?');
+  let checkIsParamsExit = url.split('').find((text) => text === '?');
   return url + `${checkIsParamsExit ? '&' : '?'}token=${localStorage.getItem('access_token_ebni')}`;
 }
 const defaultResponseOptions = {
@@ -11,8 +11,8 @@ const defaultResponseOptions = {
 
 const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
   axios(requestOptions)
-    .then(response => (responseOptions.fullResponse ? response : response.data))
-    .catch(error => {
+    .then((response) => (responseOptions.fullResponse ? response : response.data))
+    .catch((error) => {
       if (error.response.status === 401 || error.response.status === 403) {
         //place your reentry code
         window.location.replace('/auth/login');

@@ -76,7 +76,7 @@ function NavBar(props) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const ref = React.useRef(null);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
       setShowMobileMenu(false);
     }
@@ -152,7 +152,7 @@ function NavBar(props) {
         </div>
         {showMobileMenu && (
           <div className="bg-white w-full text-right lg:hidden">
-            {routes.map(rt => {
+            {routes.map((rt) => {
               return (
                 <li className="mr-3">
                   <Link
@@ -211,7 +211,7 @@ function NavBar(props) {
           id="nav-content"
         >
           <ul className="list-reset lg:flex justify-end flex-1 items-center">
-            {routes.map(rt => {
+            {routes.map((rt) => {
               return (
                 <li className="mr-3">
                   <Link
@@ -298,7 +298,7 @@ function NavBar(props) {
     </nav>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     books: state.wishlist.books,
     ebooks: state.wishlist.ebooks,

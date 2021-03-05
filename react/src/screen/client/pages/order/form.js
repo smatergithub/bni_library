@@ -158,7 +158,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 Dari Tanggal
               </label>
               <Space direction="vertical">
-                <DatePicker onChange={onChangeStartDate} disabledDate={date => date < moment()} />
+                <DatePicker onChange={onChangeStartDate} disabledDate={(date) => date < moment()} />
               </Space>
             </div>
             <div className="mt-2">
@@ -168,12 +168,9 @@ function FormOrder({ data, type, onOrderItem, user }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={onChangeEndDate}
-                  disabledDate={date =>
+                  disabledDate={(date) =>
                     date < moment(startDate).add(1, 'days') ||
-                    date >
-                      moment(startDate)
-                        .add(14, 'days')
-                        .endOf('days')
+                    date > moment(startDate).add(14, 'days').endOf('days')
                   }
                 />
               </Space>

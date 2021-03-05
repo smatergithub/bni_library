@@ -77,7 +77,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -87,7 +87,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -160,7 +160,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -170,7 +170,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -188,7 +188,7 @@ module.exports = {
       return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
     }
 
-    books.forEach(async bookData => {
+    books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);
 
       if (!book) {
@@ -204,18 +204,18 @@ module.exports = {
       }
 
       await Books.findByPk(bookData.bookId)
-        .then(book => {
+        .then((book) => {
           book
             .update({
               stockBuku: book.stockBuku - bookData.quantity,
               status: book.stockBuku < 0 ? 'Ada' : 'Kosong',
               jumlahDipinjam: book.quantity + bookData.quantity,
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(400).send(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(500).send(err);
         });
 
@@ -251,14 +251,14 @@ module.exports = {
           bookId: bookData.bookId,
         },
       })
-        .then(response => {
+        .then((response) => {
           response[0].update({
             bookId: response.bookId,
             transactionBookId: createTransaction.id,
             userId: createTransaction.userId,
           });
         })
-        .catch(err => {});
+        .catch((err) => {});
 
       return res.status(201).json({
         message: 'Process Succesfully create Transaction Borrow Book',
@@ -271,17 +271,17 @@ module.exports = {
     const { transactionId } = req.params;
 
     TransactionBook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             startDate: req.body.startDate,
             endDate: req.body.endDate,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
     return res.status(200).json({
@@ -301,44 +301,46 @@ module.exports = {
     }
 
     TransactionBook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             status: 'Dikembalikan',
             isGiveRating: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     Books.findByPk(transactionBook.bookId)
-      .then(book => {
+      .then((book) => {
         book
           .update({
             stockBuku: book.stockBuku + transactionBook.quantity,
             jumlahDipinjam: book.quantity - transactionBook.quantity,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
-    ListBorrowBook.findAll({ where: { transactionBookId: transactionId } }).then(listBorrowBook => {
-      listBorrowBook[0]
-        .update({
-          userId: null,
-        })
-        .catch(err => {
-          res.status(400).send(err);
-        });
-    });
+    ListBorrowBook.findAll({ where: { transactionBookId: transactionId } }).then(
+      (listBorrowBook) => {
+        listBorrowBook[0]
+          .update({
+            userId: null,
+          })
+          .catch((err) => {
+            res.status(400).send(err);
+          });
+      }
+    );
 
     return res.status(200).json({
       message: 'Succesfully Return Book',
@@ -351,9 +353,9 @@ module.exports = {
       where: { status: 'Dikembalikan' },
       include: ['book', 'user'],
     })
-      .then(user => {
+      .then((user) => {
         let userDisplay = [];
-        user.forEach(item => {
+        user.forEach((item) => {
           const userData = {
             code: item.dataValues.code,
             transDate: item.dataValues.transDate,
@@ -380,15 +382,15 @@ module.exports = {
 
         // header
         let headingColumnIndex = 1;
-        Object.keys(userDisplay[0]).forEach(key => {
+        Object.keys(userDisplay[0]).forEach((key) => {
           ws.cell(1, headingColumnIndex++).string(key);
         });
 
         //Write Data in Excel file
         let rowIndex = 2;
-        userDisplay.forEach(record => {
+        userDisplay.forEach((record) => {
           let columnIndex = 1;
-          Object.keys(record).forEach(columnName => {
+          Object.keys(record).forEach((columnName) => {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
             );
@@ -398,7 +400,7 @@ module.exports = {
 
         wb.write('list_history_book.xlsx', res);
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).json({ message: err });
       });
   },

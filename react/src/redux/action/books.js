@@ -6,14 +6,14 @@ import { BOOKS, DETAIL_BOOK } from '../type';
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewBookAction = book => () => {
+export const CreateNewBookAction = (book) => () => {
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
   }
 
   return BookApi.create(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -21,19 +21,19 @@ export const CreateNewBookAction = book => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const UploadBookFIle = book => () => {
+export const UploadBookFIle = (book) => () => {
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
   }
 
   return BookApi.uploadEbookFile(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -41,7 +41,7 @@ export const UploadBookFIle = book => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -52,7 +52,7 @@ export const EditBookAction = (id, book) => () => {
     formdata.append(key, book[key]);
   }
   return BookApi.update(id, formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -60,15 +60,15 @@ export const EditBookAction = (id, book) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const DeleteBookAction = id => () => {
+export const DeleteBookAction = (id) => () => {
   return BookApi.delete(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -76,16 +76,16 @@ export const DeleteBookAction = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       console.log('msg', msg);
       return { resp: false, msg: msg };
     });
 };
 
-export const getBooks = body => dispatch => {
+export const getBooks = (body) => (dispatch) => {
   return BookApi.list(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: BOOKS, payload: res });
         return {
@@ -94,15 +94,15 @@ export const getBooks = body => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getDetailBook = id => dispatch => {
+export const getDetailBook = (id) => (dispatch) => {
   return BookApi.detail(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: DETAIL_BOOK, payload: res });
         return {
@@ -112,14 +112,14 @@ export const getDetailBook = id => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const getfavorite = () => dispatch => {
+export const getfavorite = () => (dispatch) => {
   return BookApi.favorite()
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -128,7 +128,7 @@ export const getfavorite = () => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

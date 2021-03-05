@@ -22,16 +22,16 @@ function BookList(props) {
     limit: 5,
   });
 
-  const mappingDataSourceRepoApproval = filterOptions => {
+  const mappingDataSourceRepoApproval = (filterOptions) => {
     setLoading(true);
     props
       .getRepositoryApprovalList(filterOptions)
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -48,7 +48,7 @@ function BookList(props) {
   // };
 
   function returnBook(id) {
-    props.MakeReturnBook(id).then(res => {
+    props.MakeReturnBook(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceRepoApproval(filterOptions);
@@ -60,7 +60,7 @@ function BookList(props) {
     });
   }
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -69,8 +69,8 @@ function BookList(props) {
     mappingDataSourceRepoApproval(filterOptions);
   }, [filterOptions]);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         title: rowData.title,
@@ -216,7 +216,7 @@ function BookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     repositories: state.repositorys.approval,
   };

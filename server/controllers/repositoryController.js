@@ -8,13 +8,8 @@ const Op = Sequelize.Op;
 function generateFileLocation(file) {
   return `${process.env.PUBLIC_URL}/img/documentRepository/${file}`;
 }
-var LINK = function() {
-  return (
-    '_' +
-    Math.random()
-      .toString(10)
-      .substr(2, 9)
-  );
+var LINK = function () {
+  return '_' + Math.random().toString(10).substr(2, 9);
 };
 module.exports = {
   list: async (req, res) => {
@@ -76,7 +71,7 @@ module.exports = {
     }
 
     return Repositorys.findAndCountAll(paramQuerySQL)
-      .then(repository => {
+      .then((repository) => {
         let totalPage = Math.ceil(repository.count / paramQuerySQL.limit);
 
         res.status(200).json({
@@ -85,7 +80,7 @@ module.exports = {
           data: repository.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -130,7 +125,7 @@ module.exports = {
     }
 
     return Repositorys.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let totalPage = Math.ceil(result.count / paramQuerySQL.limit);
         res.status(200).json({
           totalPage: totalPage,
@@ -138,14 +133,14 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
 
   getById: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
-      .then(repository => {
+      .then((repository) => {
         if (!repository) {
           return res.status(404).send({
             message: 'repository Not Found',
@@ -160,12 +155,12 @@ module.exports = {
 
         return res.status(200).send(repository);
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
   getPreviewById: async (req, res) => {
     let { type } = req.query;
     return Repositorys.findByPk(req.params.id)
-      .then(repository => {
+      .then((repository) => {
         if (!repository) {
           return res.status(404).send({
             message: 'repository Not Found',
@@ -176,7 +171,7 @@ module.exports = {
             async function copyPages() {
               // Fetch first existing PDF document
 
-              const firstDonorPdfBytes = await fetch(repository[type]).then(res =>
+              const firstDonorPdfBytes = await fetch(repository[type]).then((res) =>
                 res.arrayBuffer()
               );
               const firstDonorPdfDoc = await PDFDocument.load(firstDonorPdfBytes);
@@ -209,10 +204,10 @@ module.exports = {
           }
         }
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
   add: async (req, res) => {
-    UploadMultipleDocument(req, res, err => {
+    UploadMultipleDocument(req, res, (err) => {
       if (err) throw err;
 
       return Repositorys.create({
@@ -236,18 +231,18 @@ module.exports = {
             ? generateFileLocation(req.files['abstrack'][0].filename)
             : null,
       })
-        .then(response =>
+        .then((response) =>
           res.status(201).json({ message: 'Succesfully Create Repository', data: response })
         )
-        .catch(err => res.status(500).send(err));
+        .catch((err) => res.status(500).send(err));
     });
   },
 
   update: async (req, res) => {
-    UploadMultipleDocument(req, res, err => {
+    UploadMultipleDocument(req, res, (err) => {
       if (err) throw err;
       return Repositorys.findByPk(req.params.id)
-        .then(repo => {
+        .then((repo) => {
           if (!repo) {
             return res.status(400).send({ message: 'repo not found' });
           }
@@ -274,26 +269,26 @@ module.exports = {
                   ? generateFileLocation(req.files['abstrack'][0].filename)
                   : repo.abstrack,
             })
-            .then(response =>
+            .then((response) =>
               res.status(201).json({ message: 'Succesfully Create Repository', data: response })
             )
-            .catch(err => res.status(500).send(err));
+            .catch((err) => res.status(500).send(err));
         })
-        .catch(err => res.status(500).send(err));
+        .catch((err) => res.status(500).send(err));
     });
   },
 
   delete: async (req, res) => {
     return Repositorys.findByPk(req.params.id)
-      .then(repository => {
+      .then((repository) => {
         if (!repository) {
           return res.status(404).send({ message: 'repository not found' });
         }
         return repository
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 };

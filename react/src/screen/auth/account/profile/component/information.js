@@ -13,7 +13,7 @@ function Information({ user, changePages }) {
     }
   });
   if (user === null) return null;
-  const ParserHTML = htmlDocument => {
+  const ParserHTML = (htmlDocument) => {
     return {
       __html: htmlDocument,
     };

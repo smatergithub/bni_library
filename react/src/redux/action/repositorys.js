@@ -6,13 +6,13 @@ import { REPOSITORYS, DETAIL_REPOSITORY, REPOSITORYS_APPROVAL } from '../type';
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewRepositoryAction = Ebook => () => {
+export const CreateNewRepositoryAction = (Ebook) => () => {
   var formdata = new FormData();
   for (var key in Ebook) {
     formdata.append(key, Ebook[key]);
   }
   return RepositoryApi.create(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -20,7 +20,7 @@ export const CreateNewRepositoryAction = Ebook => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -32,7 +32,7 @@ export const EditRepositoryAction = (id, Ebook) => () => {
     formdata.append(key, Ebook[key]);
   }
   return RepositoryApi.update(id, formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -40,15 +40,15 @@ export const EditRepositoryAction = (id, Ebook) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const DeleteRepositoryAction = id => () => {
+export const DeleteRepositoryAction = (id) => () => {
   return RepositoryApi.delete(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -56,15 +56,15 @@ export const DeleteRepositoryAction = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getRepositorys = param => dispatch => {
+export const getRepositorys = (param) => (dispatch) => {
   return RepositoryApi.list(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: REPOSITORYS, payload: res });
         return {
@@ -73,14 +73,14 @@ export const getRepositorys = param => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const getRepositoryApprovalList = param => dispatch => {
+export const getRepositoryApprovalList = (param) => (dispatch) => {
   return RepositoryApi.listAproval(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: REPOSITORYS_APPROVAL, payload: res });
         return {
@@ -89,15 +89,15 @@ export const getRepositoryApprovalList = param => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getDetailRepository = id => dispatch => {
+export const getDetailRepository = (id) => (dispatch) => {
   return RepositoryApi.detail(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: DETAIL_REPOSITORY, payload: res });
         return {
@@ -107,19 +107,19 @@ export const getDetailRepository = id => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const CreateNewRepositoryUserAction = research => () => {
+export const CreateNewRepositoryUserAction = (research) => () => {
   var formdata = new FormData();
   for (var key in research) {
     formdata.append(key, research[key]);
   }
   return RepositoryApi.createByUser(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -127,14 +127,14 @@ export const CreateNewRepositoryUserAction = research => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const getRepositorysByUser = param => () => {
+export const getRepositorysByUser = (param) => () => {
   return RepositoryApi.listByUser(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -143,14 +143,14 @@ export const getRepositorysByUser = param => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const getDetailRepositoryByUser = id => () => {
+export const getDetailRepositoryByUser = (id) => () => {
   return RepositoryApi.detailResearchByUser(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -159,14 +159,14 @@ export const getDetailRepositoryByUser = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 export const getPreviewResearchByUser = (id, type) => () => {
   return RepositoryApi.getPreviewResearchByUser(id, type)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -175,7 +175,7 @@ export const getPreviewResearchByUser = (id, type) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

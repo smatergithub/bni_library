@@ -14,10 +14,10 @@ function History(props) {
     setLoading(true);
     props
       .exportBookHistory()
-      .then(response => {
+      .then((response) => {
         ToastSuccess('Sukses Export History Book');
       })
-      .catch(err => {
+      .catch((err) => {
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
@@ -26,10 +26,10 @@ function History(props) {
     setLoading(true);
     props
       .exportDataEbookHistory()
-      .then(response => {
+      .then((response) => {
         ToastSuccess('Sukses Export History Ebook');
       })
-      .catch(err => {
+      .catch((err) => {
         ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
@@ -109,7 +109,7 @@ function History(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {};
 };
 

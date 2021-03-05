@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Karla:400,700&display=swap");
+@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
 .font-family-karla {
   font-family: karla;
 }
@@ -74,10 +74,10 @@
   display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
 }
 /*# sourceMappingURL=index.css.map */

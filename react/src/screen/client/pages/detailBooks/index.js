@@ -20,7 +20,7 @@ function DetailBooks(props) {
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
-    props.getBookById(id).then(res => {
+    props.getBookById(id).then((res) => {
       setProcessing(false);
       if (res.resp) {
         setBooks(res.data);

@@ -24,7 +24,7 @@ function Routes(props) {
     </>
   );
 }
-let mapState = state => {
+let mapState = (state) => {
   let { user } = state;
 
   return { user };

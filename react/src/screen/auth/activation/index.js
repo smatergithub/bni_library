@@ -12,7 +12,7 @@ function Activation(props) {
 
   function onFormSubmit(e) {
     e.preventDefault();
-    props.verificationUser(`email=${email}&token=${token}`).then(res => {
+    props.verificationUser(`email=${email}&token=${token}`).then((res) => {
       if (res.resp) {
         ToastSuccess(res.msg);
         history.push('/auth/login');
@@ -45,7 +45,7 @@ function Activation(props) {
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form onSubmit={e => onFormSubmit(e)}>
+                  <form onSubmit={(e) => onFormSubmit(e)}>
                     <div className="relative w-full mb-3">
                       <label
                         className="block uppercase text-gray-700 text-xs font-bold mb-2"

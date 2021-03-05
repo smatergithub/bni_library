@@ -16,9 +16,9 @@ function Borrowed(props) {
   let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
-    props.getMe().then(res => {
+    props.getMe().then((res) => {
       if (res.resp) {
-        props.getBorrowedBookItem(res.data.id, 'borrowed=true').then(res => {
+        props.getBorrowedBookItem(res.data.id, 'borrowed=true').then((res) => {
           if (res.resp) {
             setBorrowItem(res.data);
           }
@@ -63,7 +63,7 @@ function Borrowed(props) {
       <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">PINJAMAN</div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {borrowItem &&
-          borrowItem.data.map(borrow => {
+          borrowItem.data.map((borrow) => {
             return (
               <>
                 <Card

@@ -20,7 +20,7 @@ const Wishlist = (state = initialValue, action) => {
     }
     case REMOVE_BOOK_WISHLIST: {
       let newState = Object.assign({}, state);
-      newState.books = state.books.filter(item => item.id !== action.payload.id);
+      newState.books = state.books.filter((item) => item.id !== action.payload.id);
       localStorage.removeItem('bni_book', newState.books);
       return newState;
     }
@@ -40,7 +40,7 @@ const Wishlist = (state = initialValue, action) => {
     // };
     case REMOVE_EBOOK_WISHLIST: {
       let newState = Object.assign({}, state);
-      newState.ebooks = state.ebooks.filter(item => item.id !== action.payload.id);
+      newState.ebooks = state.ebooks.filter((item) => item.id !== action.payload.id);
       localStorage.removeItem('bni_ebook', newState.ebooks);
       return newState;
     }

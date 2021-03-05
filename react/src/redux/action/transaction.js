@@ -8,7 +8,7 @@ import { TRANSACTION_BOOKS, TRANSACTION_EBOOKS } from '../type';
 
 export const EditTransactionBook = (id, data) => () => {
   return TransactionApi.editTransactionBook(id, data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -16,7 +16,7 @@ export const EditTransactionBook = (id, data) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -24,7 +24,7 @@ export const EditTransactionBook = (id, data) => () => {
 
 export const EditTransactionEbook = (id, data) => () => {
   return TransactionApi.editTransactionEbook(id, data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -32,15 +32,15 @@ export const EditTransactionEbook = (id, data) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const MakeReturnBook = id => () => {
+export const MakeReturnBook = (id) => () => {
   return TransactionApi.returnBook(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -48,15 +48,15 @@ export const MakeReturnBook = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const ListTransactionBook = body => dispatch => {
+export const ListTransactionBook = (body) => (dispatch) => {
   return TransactionApi.getListTransactionBook(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: TRANSACTION_BOOKS, payload: res });
         return {
@@ -65,15 +65,15 @@ export const ListTransactionBook = body => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const MakeReturnEbook = id => () => {
+export const MakeReturnEbook = (id) => () => {
   return TransactionApi.returnEbook(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -81,15 +81,15 @@ export const MakeReturnEbook = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const ListTransactionEbook = body => dispatch => {
+export const ListTransactionEbook = (body) => (dispatch) => {
   return TransactionApi.getListTransactionEbook(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: TRANSACTION_EBOOKS, payload: res });
         return {
@@ -98,14 +98,14 @@ export const ListTransactionEbook = body => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const orderBook = body => () => {
+export const orderBook = (body) => () => {
   return TransactionApi.orderBook(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -114,14 +114,14 @@ export const orderBook = body => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const orderEbook = body => () => {
+export const orderEbook = (body) => () => {
   return TransactionApi.orderEbook(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -130,7 +130,7 @@ export const orderEbook = body => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

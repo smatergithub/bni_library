@@ -7,7 +7,7 @@ import { NoData, Modal, ToastSuccess, ToastError } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import moment from 'moment';
 
-const Repository = props => {
+const Repository = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [selectedRepo, setSelectedRepo] = React.useState(null);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
@@ -17,7 +17,7 @@ const Repository = props => {
     judul: '',
   });
 
-  const paginationOptions = pagination => {
+  const paginationOptions = (pagination) => {
     if (pagination.judul) {
       setFilterOptions({
         judul: pagination.judul,
@@ -33,16 +33,16 @@ const Repository = props => {
     }
   };
 
-  const retrieveDataRepository = filterOptions => {
+  const retrieveDataRepository = (filterOptions) => {
     setLoading(true);
     props
       .getRepositorys(filterOptions)
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -53,7 +53,7 @@ const Repository = props => {
   const handleActionDeleteRepo = () => {
     props
       .DeleteRepositoryAction(selectedRepo)
-      .then(response => {
+      .then((response) => {
         if (response.resp) {
           ToastSuccess(response.msg);
         } else {
@@ -63,14 +63,14 @@ const Repository = props => {
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => console.log('err', err));
+      .catch((err) => console.log('err', err));
   };
 
   if (loading) return null;
   const { repositorys } = props;
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         createdAt: moment(rowData.createdAt).format('DD MMM YYYY'),
@@ -156,7 +156,7 @@ const Repository = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     repositorys: state.repositorys.repositorys,
   };

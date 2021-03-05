@@ -59,7 +59,7 @@ module.exports = {
     console.log('param sql', paramQuerySQL);
 
     return await Books.findAndCountAll(paramQuerySQL)
-      .then(book => {
+      .then((book) => {
         let activePage = Math.ceil(book.count / req.body.limit);
         let page = req.body.page;
         res.status(200).json({
@@ -69,7 +69,7 @@ module.exports = {
           data: book.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send({ message: err });
       });
   },
@@ -82,7 +82,7 @@ module.exports = {
       },
     };
     return await ListBorrowBook.findAll(paramQuerySQL)
-      .then(book => {
+      .then((book) => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
@@ -90,7 +90,7 @@ module.exports = {
         }
         return res.status(200).send(book[0]);
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   list: async (req, res) => {
@@ -111,7 +111,7 @@ module.exports = {
     // }
 
     return await ListBorrowBook.findAndCountAll(paramQuerySQL)
-      .then(book => {
+      .then((book) => {
         let totalPage = Math.ceil(book.count / req.body.limit);
         let page = Math.ceil(req.body.page);
 
@@ -122,7 +122,7 @@ module.exports = {
           data: book.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -135,7 +135,7 @@ module.exports = {
       },
     };
     return await ListBorrowBook.findAll(paramQuerySQL)
-      .then(book => {
+      .then((book) => {
         if (!book) {
           return res.status(404).send({
             message: 'book Not Found',
@@ -143,7 +143,7 @@ module.exports = {
         }
         return res.status(200).send(book[0]);
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   add: async (req, res) => {
@@ -170,7 +170,7 @@ module.exports = {
       status: req.body.status,
       image: req.file ? location : null,
     })
-      .then(response => {
+      .then((response) => {
         // console.log("response", response.id)
         const createListBorrowBook = ListBorrowBook.create({
           bookId: response.id,
@@ -185,13 +185,13 @@ module.exports = {
           data: response,
         });
       })
-      .catch(err => res.status(500).send(err));
+      .catch((err) => res.status(500).send(err));
   },
 
   update: async (req, res) => {
     return Books.findByPk(req.params.id)
 
-      .then(book => {
+      .then((book) => {
         if (!book) {
           return res.status(400).send({ message: 'Book not found' });
         }
@@ -219,12 +219,12 @@ module.exports = {
             status: req.body.status,
             image: req.file ? location : req.file,
           })
-          .then(response => {
+          .then((response) => {
             res.status(200).json({ message: 'successfully update book', data: response });
           })
-          .catch(err => res.status(404).send(err));
+          .catch((err) => res.status(404).send(err));
       })
-      .catch(error => res.status(500).json({ test: error }));
+      .catch((error) => res.status(500).json({ test: error }));
   },
 
   uploadBook: async (req, res) => {
@@ -235,13 +235,13 @@ module.exports = {
 
       let path = __basedir + '/server/public/document/' + req.file.filename;
 
-      readXlsxFile(path).then(rows => {
+      readXlsxFile(path).then((rows) => {
         // skip header
         rows.shift();
 
         let Databooks = [];
 
-        rows.forEach(row => {
+        rows.forEach((row) => {
           let rowBook = {
             kategori: row[1],
             judul: row[2],
@@ -266,8 +266,8 @@ module.exports = {
         });
 
         Books.bulkCreate(Databooks)
-          .then(response => {
-            response.map(item => {
+          .then((response) => {
+            response.map((item) => {
               return ListBorrowBook.create({
                 bookId: item.id,
               });
@@ -276,7 +276,7 @@ module.exports = {
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log({ error });
             res.status(500).json({
               message: 'Fail to import data into database!',
@@ -293,11 +293,11 @@ module.exports = {
 
   delete: async (req, res) => {
     return Books.findByPk(req.params.id)
-      .then(book => {
+      .then((book) => {
         if (!book) {
           return res.status(404).send({ message: 'Book not found' });
         }
-        ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
+        ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then((listBorrow) => {
           if (
             listBorrow[0].dataValues.transactionBookId === null ||
             listBorrow[0].dataValues.transactionBookId === undefined
@@ -306,13 +306,13 @@ module.exports = {
               book
                 .destroy()
                 .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(500).send(error));
+                .catch((error) => res.status(500).send(error));
             });
           } else {
             res.status(500).send({ message: 'buku ini sedang dipakai di transaksi lainnya' });
           }
         });
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 };

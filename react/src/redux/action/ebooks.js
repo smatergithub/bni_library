@@ -6,13 +6,13 @@ import { EBOOKS, DETAIL_EBOOK } from '../type';
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewEbookAction = Ebook => () => {
+export const CreateNewEbookAction = (Ebook) => () => {
   var formdata = new FormData();
   for (var key in Ebook) {
     formdata.append(key, Ebook[key]);
   }
   return EbookApi.create(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -20,19 +20,19 @@ export const CreateNewEbookAction = Ebook => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const UploadEbookFIle = book => () => {
+export const UploadEbookFIle = (book) => () => {
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
   }
 
   return EbookApi.uploadEbookFile(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -40,20 +40,20 @@ export const UploadEbookFIle = book => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const UploadSingleEbookFIle = book => () => {
+export const UploadSingleEbookFIle = (book) => () => {
   var formdata = new FormData();
   for (var key in book) {
     formdata.append(key, book[key]);
   }
 
   return EbookApi.uploadSingleEbookFile(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -62,7 +62,7 @@ export const UploadSingleEbookFIle = book => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -74,7 +74,7 @@ export const EditEbookAction = (id, Ebook) => () => {
     formdata.append(key, Ebook[key]);
   }
   return EbookApi.update(id, formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -82,15 +82,15 @@ export const EditEbookAction = (id, Ebook) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const DeleteEbookAction = id => () => {
+export const DeleteEbookAction = (id) => () => {
   return EbookApi.delete(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -98,15 +98,15 @@ export const DeleteEbookAction = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getEbooks = param => dispatch => {
+export const getEbooks = (param) => (dispatch) => {
   return EbookApi.list(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: EBOOKS, payload: res });
         return {
@@ -115,15 +115,15 @@ export const getEbooks = param => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getDetailEbook = id => dispatch => {
+export const getDetailEbook = (id) => (dispatch) => {
   return EbookApi.detail(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: DETAIL_EBOOK, payload: res });
         return {
@@ -133,14 +133,14 @@ export const getDetailEbook = id => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const getfavorite = () => dispatch => {
+export const getfavorite = () => (dispatch) => {
   return EbookApi.favorite()
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -149,7 +149,7 @@ export const getfavorite = () => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

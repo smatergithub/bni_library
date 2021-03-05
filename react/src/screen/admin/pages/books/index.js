@@ -10,7 +10,7 @@ import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
 import { ToastError, ToastSuccess } from '../../../../component';
 
-const Books = props => {
+const Books = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
@@ -28,21 +28,21 @@ const Books = props => {
     };
     props
       .getBooks(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(props.books.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getDetailDataDeleteBook = data => {
+  const getDetailDataDeleteBook = (data) => {
     setDetailData(data);
     setShowModalDeletion(true);
   };
@@ -51,12 +51,12 @@ const Books = props => {
     setLoading(true);
     props
       .DeleteBookAction(detailData.id)
-      .then(response => {
+      .then((response) => {
         mappingDataSourceBookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(res => {
+      .catch((res) => {
         setLoading(false);
         ToastError('buku ini sedang dipakai di transaksi lainnya');
       });
@@ -70,8 +70,8 @@ const Books = props => {
     mappingDataSourceBookList();
   }, []);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         judul: rowData.book.judul,
@@ -221,7 +221,7 @@ const Books = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     books: state.books.books,
   };

@@ -29,7 +29,7 @@ function EditUser(props) {
     setIsLoading(true);
     props
       .updateMe(formData)
-      .then(res => {
+      .then((res) => {
         setIsLoading(true);
         if (res.resp) {
           ToastSuccess(res.msg);
@@ -43,7 +43,7 @@ function EditUser(props) {
           ToastError(res.msg);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoading(false);
         console.log('err', err);
       });
@@ -58,22 +58,22 @@ function EditUser(props) {
   }, []);
 
   const getWilayah = () => {
-    props.getWilayah().then(response => {
-      let data = response.data.data.map(item => {
+    props.getWilayah().then((response) => {
+      let data = response.data.data.map((item) => {
         return { label: item.wilayah, value: item.id };
       });
       setDataWilayah(data);
     });
   };
   const getCodeWilayahAndAlamat = () => {
-    props.getWilayah().then(response => {
-      let data = response.data.data.map(item => {
+    props.getWilayah().then((response) => {
+      let data = response.data.data.map((item) => {
         return { label: item.codeWilayah, value: item.id };
       });
-      let alamat = response.data.data.map(item => {
+      let alamat = response.data.data.map((item) => {
         return { label: item.alamat, value: item.id };
       });
-      let linkMap = response.data.data.map(item => {
+      let linkMap = response.data.data.map((item) => {
         return { label: item.linkGoogleMap, value: item.id };
       });
 
@@ -89,8 +89,8 @@ function EditUser(props) {
   }, []);
 
   function handleChange(value) {
-    let data = alamat.filter(item => item.value === value);
-    let lokasiMap = linkMap.filter(item => item.value === value);
+    let data = alamat.filter((item) => item.value === value);
+    let lokasiMap = linkMap.filter((item) => item.value === value);
     setSelectedLinkMap(lokasiMap[0]);
     setSelectedAlamat(data[0]);
     setTimeout(() => {
@@ -99,7 +99,7 @@ function EditUser(props) {
     }, 3000);
   }
 
-  const ParserHTML = htmlDocument => {
+  const ParserHTML = (htmlDocument) => {
     return {
       __html: htmlDocument,
     };
@@ -325,7 +325,7 @@ function EditUser(props) {
     </div>
   );
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.users.me,
   };

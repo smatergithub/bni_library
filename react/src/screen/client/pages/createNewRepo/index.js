@@ -54,7 +54,7 @@ function CreateNewRepo(props) {
     formData['strata'] = strata;
     formData['releaseYear'] = releaseYear;
 
-    props.CreateNewRepositoryUserAction(formData).then(res => {
+    props.CreateNewRepositoryUserAction(formData).then((res) => {
       if (res.resp) {
         ToastSuccess(res.msg);
         props.history.push('/riset-sukses');
@@ -197,9 +197,9 @@ function CreateNewRepo(props) {
                     ref={register()}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={e => setMethodoloyResearch(e)}
+                    onSelect={(e) => setMethodoloyResearch(e)}
                   >
-                    {methodology.map(op => {
+                    {methodology.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -213,9 +213,9 @@ function CreateNewRepo(props) {
                     ref={register()}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={e => setStrata(e)}
+                    onSelect={(e) => setStrata(e)}
                   >
-                    {strataOpt.map(op => {
+                    {strataOpt.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -235,7 +235,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'abstrack')}
+                    onChange={(e) => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -249,7 +249,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'document')}
+                    onChange={(e) => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"

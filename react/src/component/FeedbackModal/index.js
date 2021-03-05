@@ -3,10 +3,10 @@ import ReactStars from 'react-rating-stars-component';
 export default function Modal({ open, title, handleSubmit }) {
   let [note, setNote] = React.useState('');
   let [rating, setRating] = React.useState(null);
-  const ratingChanged = newRating => {
+  const ratingChanged = (newRating) => {
     setRating(newRating);
   };
-  const onFormSubmit = e => {
+  const onFormSubmit = (e) => {
     e.preventDefault();
     let formData = {};
     formData['note'] = note;
@@ -25,7 +25,7 @@ export default function Modal({ open, title, handleSubmit }) {
               }}
             >
               <div className="modal-content py-4 text-left px-6">
-                <form onSubmit={e => onFormSubmit(e)}>
+                <form onSubmit={(e) => onFormSubmit(e)}>
                   <div className="flex justify-between items-center pb-3">
                     <p className="text-2xl text-center font-bold">{title}</p>
                   </div>
@@ -46,7 +46,7 @@ export default function Modal({ open, title, handleSubmit }) {
                     </label>
                     <textarea
                       type="text"
-                      onChange={e => setNote(e.target.value)}
+                      onChange={(e) => setNote(e.target.value)}
                       className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
                       placeholder="Masukkan komentar"
                       style={{

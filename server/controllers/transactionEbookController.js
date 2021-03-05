@@ -73,7 +73,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -83,7 +83,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -156,7 +156,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -166,7 +166,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -176,7 +176,7 @@ module.exports = {
     const { ebooks } = req.body;
     var userId = req.userId;
 
-    ebooks.forEach(async ebookData => {
+    ebooks.forEach(async (ebookData) => {
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
 
       if (!ebook) {
@@ -192,16 +192,16 @@ module.exports = {
       // }
 
       await Ebooks.findByPk(ebookData.ebookId)
-        .then(book => {
+        .then((book) => {
           book
             .update({
               isBorrowed: true,
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(400).send(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(400).send(err);
         });
 
@@ -226,14 +226,14 @@ module.exports = {
           ebookId: ebookData.ebookId,
         },
       })
-        .then(response => {
+        .then((response) => {
           response[0].update({
             ebookId: response.ebookId,
             transactionEbookId: createTransaction.id,
             userId: createTransaction.userId,
           });
         })
-        .catch(err => {});
+        .catch((err) => {});
 
       return res.status(201).json({
         message: 'Process Succesfully create Transaction Borrow Ebook',
@@ -246,17 +246,17 @@ module.exports = {
     const { transactionId } = req.params;
 
     TransactionEbook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             startDate: req.body.startDate,
             endDate: req.body.endDate,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(400).send(err);
       });
     return res.status(200).json({
@@ -276,41 +276,41 @@ module.exports = {
     }
 
     TransactionEbook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             status: 'Dikembalikan',
             isGiveRating: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     Ebooks.findByPk(transactionEbook.ebookId)
-      .then(ebook => {
+      .then((ebook) => {
         ebook
           .update({
             isBorrowed: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     ListBorrowEbook.findAll({ where: { transactionEbookId: transactionId } }).then(
-      listBorrowEbook => {
+      (listBorrowEbook) => {
         listBorrowEbook[0]
           .update({
             userId: null,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       }
@@ -327,9 +327,9 @@ module.exports = {
       where: { status: 'Dikembalikan' },
       include: ['ebook', 'user'],
     })
-      .then(user => {
+      .then((user) => {
         let userDisplay = [];
-        user.forEach(item => {
+        user.forEach((item) => {
           const userData = {
             code: item.dataValues.code,
             transDate: item.dataValues.transDate,
@@ -356,15 +356,15 @@ module.exports = {
 
         // header
         let headingColumnIndex = 1;
-        Object.keys(userDisplay[0]).forEach(key => {
+        Object.keys(userDisplay[0]).forEach((key) => {
           ws.cell(1, headingColumnIndex++).string(key);
         });
 
         //Write Data in Excel file
         let rowIndex = 2;
-        userDisplay.forEach(record => {
+        userDisplay.forEach((record) => {
           let columnIndex = 1;
-          Object.keys(record).forEach(columnName => {
+          Object.keys(record).forEach((columnName) => {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
             );
@@ -374,7 +374,7 @@ module.exports = {
 
         wb.write('list_history_ebook.xlsx', res);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
         res.status(404).json({ message: 'problem occured' });
       });

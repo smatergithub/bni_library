@@ -68,7 +68,7 @@ function Wishlist(props) {
     </React.Fragment>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     books: state.wishlist.books,
     ebooks: state.wishlist.ebooks,

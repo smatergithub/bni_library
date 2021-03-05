@@ -78,7 +78,7 @@ function Sidebar({ url, createNewBook, user }) {
         </button> */}
       </div>
       <nav className="text-white text-base font-semibold pt-3">
-        {routes.map(rt => {
+        {routes.map((rt) => {
           return (
             <Link to={`${rt.path}`} onClick={() => setSelectedMenu(rt.params)}>
               <div

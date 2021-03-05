@@ -34,11 +34,11 @@ function OrderBook(props) {
 
   function getBorrowInfo() {
     let { id } = parsed;
-    props.getMe().then(res => {
+    props.getMe().then((res) => {
       if (res.resp) {
         let userId = res.data.id;
         if (type === 'book') {
-          props.getBookById(id).then(res => {
+          props.getBookById(id).then((res) => {
             setProcessing(false);
             if (res.resp) {
               setBooks(res.data);
@@ -48,24 +48,24 @@ function OrderBook(props) {
           });
           props
             .getBorrowedBookItem(userId, 'rating=true')
-            .then(res => {
+            .then((res) => {
               if (res.data.length !== 0) {
                 // if (res.data.data.length > 1) {
                 //   setIsUserHaveActiveBook(true);
                 // }
                 let checkIsBorrowed = res.data.data.some(
-                  book => book.status === 'Dikembalikan' && !book.isGiveRating
+                  (book) => book.status === 'Dikembalikan' && !book.isGiveRating
                 );
                 setIsBorrowReview(checkIsBorrowed);
               } else {
                 setIsBorrowReview(false);
               }
             })
-            .catch(err => {
+            .catch((err) => {
               setIsUserHaveActiveBook(true);
             });
         } else {
-          props.getEbookById(id).then(res => {
+          props.getEbookById(id).then((res) => {
             setProcessing(false);
             if (res.resp) {
               setEbooks(res.data);
@@ -73,13 +73,13 @@ function OrderBook(props) {
               setEbooks(null);
             }
           });
-          props.getBorrowedEbookItem(userId, 'rating=true').then(res => {
+          props.getBorrowedEbookItem(userId, 'rating=true').then((res) => {
             if (res.data.length !== 0) {
               // if (res.data.data.length > 1) {
               //   setIsUserHaveActiveEbook(true);
               // }
               let checkIsBorrowed = res.data.data.some(
-                ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+                (ebook) => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
               );
               setIsBorrowReview(checkIsBorrowed);
             } else {
@@ -121,7 +121,7 @@ function OrderBook(props) {
             'Maksimal peminjaman hanya 2 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
           );
         } else {
-          props.orderBook(formData).then(res => {
+          props.orderBook(formData).then((res) => {
             if (res.resp) {
               removeWishlist(books.book);
               setShowModalDeletion(true);
@@ -134,7 +134,7 @@ function OrderBook(props) {
             'Maksimal peminjaman hanya 2 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
           );
         } else {
-          props.orderEbook(formData).then(res => {
+          props.orderEbook(formData).then((res) => {
             if (res.resp) {
               removeWishlist(ebooks.ebook);
               setShowModalDeletion(true);
@@ -146,14 +146,14 @@ function OrderBook(props) {
   }
   function onFeedbackSubmit(formData) {
     if (type == 'book') {
-      props.createBookFeeback(formData).then(res => {
+      props.createBookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
         }
       });
     } else {
-      props.createEbookFeeback(formData).then(res => {
+      props.createEbookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
@@ -204,7 +204,7 @@ function OrderBook(props) {
       <FeedbackModal
         title="Action required"
         open={isBorrowReview}
-        handleSubmit={formData => onFeedbackSubmit(formData)}
+        handleSubmit={(formData) => onFeedbackSubmit(formData)}
         labelSubmitButton="Masuk"
       >
         <div className="my-5">Silahkan Masuk terlebih dahulu</div>
