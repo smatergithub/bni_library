@@ -6,7 +6,6 @@ import queryString from 'query-string';
 import { getMe } from '../../../../redux/action/user';
 import Information from './component/information';
 import EditUser from './component/editForm';
-
 function Profile(props) {
   const parsed = queryString.parse(props.location.search);
   let [isEditUser, setIsEditUser] = React.useState(false);
@@ -16,7 +15,7 @@ function Profile(props) {
   React.useEffect(() => {
     let { edit } = parsed;
 
-    props.getMe().then(res => {
+    props.getMe().then((res) => {
       setProcessing(false);
       if (res.resp) {
         setUser(res.data);
@@ -43,7 +42,7 @@ function Profile(props) {
 
   React.useEffect(() => {
     if (!isEditUser) {
-      props.getMe().then(res => {
+      props.getMe().then((res) => {
         setProcessing(false);
         if (res.resp) {
           setUser(res.data);

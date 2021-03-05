@@ -16,14 +16,12 @@ const RatingEbookController = require('../controllers/ratingEbookController');
 const Repository = require('../controllers/repositoryController');
 
 router.post('/book/list', BookController.getBookList);
-
 router.get('/book/detail/:id', BookController.getBookById);
 
 router.get('/categoryBook', DataSourceFilterBookController.getCategory);
 router.get('/tahunTerbitBook', DataSourceFilterBookController.getTahunTerbit);
 
 router.post('/ebook/list', EbookController.getEbookList);
-
 router.get('/ebook/detail/:id', EbookController.getEbookById);
 router.get('/ebook/preview/:id', EbookController.getEbookPreviewById);
 
@@ -42,17 +40,6 @@ router.get(
   ProfileUserController.approveBorrowBookAndEbook
 );
 router.get(
-  '/profile/book/no-rated/:id',
-  [AuthJWT.verifyToken],
-  ProfileUserController.getBookListNeedRated
-);
-router.get(
-  '/profile/ebook/no-rated/:id',
-  [AuthJWT.verifyToken],
-  ProfileUserController.getEbookListNeedRated
-);
-
-router.get(
   '/profile/listBorrowBook/:id',
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowBookUser
@@ -62,7 +49,6 @@ router.get(
   [AuthJWT.verifyToken],
   ProfileUserController.listBorrowEbookUser
 );
-
 router.get(
   '/profile/listHistoryBorrowBook',
   [AuthJWT.verifyToken],

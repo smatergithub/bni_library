@@ -15,6 +15,7 @@ function Wishlist(props) {
   let wishlist = book.concat(ebook);
 
   function removeWishlist(data, isBook) {
+    console.log('aaa', isBook);
     if (isBook === 'book') {
       props.removeBookWishlist(data);
     } else {
@@ -48,10 +49,10 @@ function Wishlist(props) {
                   type="wishlist"
                   data={borrow}
                   onDetailClick={() =>
-                    onOrderItem(borrow, borrow.type === 'BorrowBook' ? 'book' : 'ebook')
+                    onOrderItem(borrow, borrow.type === 'ebook' ? 'ebook' : 'book')
                   }
                   onRemoveItem={() =>
-                    removeWishlist(borrow, borrow.type === 'BorrowBook' ? 'book' : 'ebook')
+                    removeWishlist(borrow, borrow.type === 'ebook' ? 'ebook' : 'book')
                   }
                 />
                 <div
@@ -67,7 +68,7 @@ function Wishlist(props) {
     </React.Fragment>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     books: state.wishlist.books,
     ebooks: state.wishlist.ebooks,

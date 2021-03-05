@@ -1,75 +1,73 @@
 import { SIGN_IN, SIGN_OUT, USERS, ME } from '../type';
+import UserApi from '../client/UserApi';
+import WilayahApi from '../client/wilayahApi';
 
-import UserApi from '../../api/UserApi';
-import WilayahApi from '../../api/wilayahApi';
-
-export const signIn = user => dispatch => {
+export const signIn = (user) => (dispatch) => {
   return UserApi.login(user)
-    .then(res => {
+    .then((res) => {
       if (res) {
-        localStorage.setItem('bni_UserRole', res.data.role);
-        localStorage.setItem('bni_repoAdmin', res.data.isRepoAdmin);
-        localStorage.setItem('access_token_ebni', res.data.accessToken);
-        dispatch({ type: SIGN_IN, payload: res.data });
-        return { resp: true, msg: '', data: res.data };
+        localStorage.setItem('bni_UserRole', res.role);
+        localStorage.setItem('bni_repoAdmin', res.isRepoAdmin);
+        dispatch({ type: SIGN_IN, payload: res });
+        return { resp: true, msg: '', data: res };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   return UserApi.logout()
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: SIGN_OUT });
         return { resp: true, msg: '' };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-// export const signUp = user => () => {
-//   return UserApi.register(user)
-//     .then(res => {
-//       if (res) {
-//         return {
-//           resp: true,
-//           msg: 'Request was successfully, Please check your email to complete the registration!',
-//           token: res.verificationToken,
-//           email: res.email,
-//         };
-//       }
-//     })
-//     .catch(err => {
-//       let msg = err.message || 'Something Wrong, request failed !';
-//       return { resp: false, msg: msg };
-//     });
-// };
-export const verificationUser = param => () => {
+export const signUp = (user) => () => {
+  return UserApi.register(user)
+    .then((res) => {
+      if (res) {
+        return {
+          resp: true,
+          msg: 'Request was successfully, Please check your email to complete the registration!',
+          token: res.verificationToken,
+          email: res.email,
+        };
+      }
+    })
+    .catch((err) => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const verificationUser = (param) => () => {
   return UserApi.verificationUser(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
           msg: 'Registration was successfully, Now you can  login  with your account !',
-          token: res.data.verificationToken,
-          email: res.data.email,
+          token: res.verificationToken,
+          email: res.email,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const toggleUserIntoAdmin = id => () => {
+export const toggleUserIntoAdmin = (id) => () => {
   return UserApi.toggleUserIntoAdmin(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -77,14 +75,14 @@ export const toggleUserIntoAdmin = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 export const toggleUserIntoRepoAdmin = (id, body) => () => {
   return UserApi.toggleUserIntoRepoAdmin(id, body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -92,15 +90,15 @@ export const toggleUserIntoRepoAdmin = (id, body) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const deleteUser = id => () => {
+export const deleteUser = (id) => () => {
   return UserApi.deleteUserList(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -108,24 +106,24 @@ export const deleteUser = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getMe = () => dispatch => {
+export const getMe = () => (dispatch) => {
   return UserApi.getMe()
-    .then(res => {
+    .then((res) => {
       if (res) {
-        dispatch({ type: ME, payload: res.data });
+        dispatch({ type: ME, payload: res });
         return {
           resp: true,
-          data: res.data,
+          data: res,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -148,107 +146,106 @@ export const getMe = () => dispatch => {
 //     });
 // };
 
-export const updateMe = data => () => {
+export const updateMe = (data) => () => {
   return UserApi.updateMe(data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
-          data: res.data,
+          data: res,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getUsersListToAdmin = param => dispatch => {
+export const getUsersListToAdmin = (param) => (dispatch) => {
   return UserApi.listUserAdmin(param)
-    .then(res => {
+    .then((res) => {
       if (res) {
-        dispatch({ type: USERS, payload: res.data });
+        dispatch({ type: USERS, payload: res });
         return {
           resp: true,
           msg: '',
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getBorrowedBookItem = (id, params) => () => {
+  return UserApi.getBorrowedBookItem(id, params)
+    .then((res) => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch((err) => {
+      let msg = err.message || 'Something Wrong, request failed !';
+      return { resp: false, msg: msg };
+    });
+};
+export const getBorrowedEbookItem = (id, params) => () => {
+  return UserApi.getBorrowedEbookItem(id, params)
+    .then((res) => {
+      if (res) {
+        return {
+          resp: true,
+          msg: '',
+          data: res,
+        };
+      }
+    })
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-// export const getBorrowedBookItem = (id, params) => () => {
-//   return UserApi.getBorrowedBookItem(id, params)
-//     .then(res => {
-//       if (res) {
-//         return {
-//           resp: true,
-//           msg: '',
-//           data: res.data,
-//         };
-//       }
-//     })
-//     .catch(err => {
-//       let msg = err.response.data.message || 'Something Wrong, request failed !';
-//       return { resp: false, msg: msg };
-//     });
-// };
-// export const getBorrowedEbookItem = (id, params) => () => {
-//   return UserApi.getBorrowedEbookItem(id, params)
-//     .then(res => {
-//       if (res) {
-//         return {
-//           resp: true,
-//           msg: '',
-//           data: res.data,
-//         };
-//       }
-//     })
-//     .catch(err => {
-//       let msg = err.response.data.message || 'Something Wrong, request failed !';
-//       return { resp: false, msg: msg };
-//     });
-// };
-
-export const createBookFeeback = userData => () => {
+export const createBookFeeback = (userData) => () => {
   return UserApi.createBookFeeback(userData)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
           msg: '',
-          data: res.data,
+          data: res,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const createEbookFeeback = userData => () => {
+export const createEbookFeeback = (userData) => () => {
   return UserApi.createEbookFeeback(userData)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
           msg: '',
-          data: res.data,
+          data: res,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 export const toogleIsAdmin = (userData, id) => () => {
   return UserApi.toggleUserIntoAdmin(userData, id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -256,15 +253,15 @@ export const toogleIsAdmin = (userData, id) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const exportDataUser = (from, to) => () => {
-  return UserApi.exportDataUser(from, to)
-    .then(response => {
+export const exportDataUser = () => () => {
+  return UserApi.exportDataUser()
+    .then((response) => {
       const filename = 'list_data_user';
       if (navigator.msSaveBlob) {
         navigator.msSaveBlob(response, filename);
@@ -278,7 +275,7 @@ export const exportDataUser = (from, to) => () => {
         a.click();
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -286,65 +283,65 @@ export const exportDataUser = (from, to) => () => {
 
 export const getWilayah = () => () => {
   return WilayahApi.list()
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
           msg: '',
-          data: res.data,
+          data: res,
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const forgotPassword = data => () => {
+export const forgotPassword = (data) => () => {
   return UserApi.forgotPassword(data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return { resp: true, msg: '' };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 export const resetPassword = (data, query) => () => {
   return UserApi.resetPassword(data, query)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return { resp: true, msg: '' };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
-export const contactUs = data => () => {
+export const contactUs = (data) => () => {
   return UserApi.contactUs(data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return { resp: true, msg: '' };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 export const isValidToken = () => () => {
   return UserApi.isValidToken()
-    .then(res => {
+    .then((res) => {
       if (res) {
-        return { resp: true, msg: res.data.message };
+        return { resp: true, msg: res.message };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

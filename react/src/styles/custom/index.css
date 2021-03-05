@@ -57,13 +57,6 @@
   background-color: #43425d !important;
 }
 
-.ant-btn:hover,
-.ant-btn:focus {
-  color: #ed8935 !important;
-  background: #fff !important;
-  border-color: #ed8935 !important;
-}
-
 .ant-picker.ant-picker-focused {
   width: 100% !important;
 }

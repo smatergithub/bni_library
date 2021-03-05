@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { NoData } from '../../../../component';
+import TableApproval from '../../component/TableApproval';
 import { connect } from 'react-redux';
-import swal from 'sweetalert';
+import { ToastSuccess, ToastError } from '../../../../component';
 import { MakeReturnEbook, ListTransactionEbook } from '../../../../redux/action/transaction';
 import ModalDetailEbook from './ModalDetailEBook';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
 import moment from 'moment';
-import Loader from '../../component/Loader';
+
+import { IsEmptyObject } from '../../component/IsEmptyObject';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -22,16 +24,16 @@ function EbookList(props) {
   const mappingDataSourceTransactionEbookList = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage,
+      page: currentPage + 1,
       limit: pageSize,
     };
     props
       .ListTransactionEbook(pagination)
-      .then(res => {
-        // setTotalCount(props.transactionEbooks.count);
+      .then((res) => {
+        setTotalCount(props.transactionEbooks.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -40,12 +42,12 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList();
   }, []);
 
-  const getEditTransactionEBook = data => {
+  const getEditTransactionEBook = (data) => {
     setDetailData(data);
     setShowModalEdit(true);
   };
 
-  const getDetailDataEbook = data => {
+  const getDetailDataEbook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -59,26 +61,25 @@ function EbookList(props) {
   }, [showModalEdit]);
 
   function returnEbook(id) {
-    props.MakeReturnEbook(id).then(res => {
+    props.MakeReturnEbook(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceTransactionEbookList();
-        swal('Message!', res.msg, 'success');
+        ToastSuccess(res.msg);
       } else {
         setLoading(false);
-        swal('Error!', res.msg, 'error');
+        ToastError(res.msg);
       }
     });
   }
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       let duration = '';
-
-      if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
+      if (rowData && moment().diff(moment(rowData.endDate), 'days') === -1) {
         duration = 'Lewat masa peminjaman';
       } else {
-        duration = rowData && moment(rowData.endDate).diff(moment(), 'days') + 'hari';
+        duration = rowData && moment().diff(moment(rowData.endDate), 'days') + 'hari';
       }
       return {
         ...rowData,
@@ -126,24 +127,14 @@ function EbookList(props) {
     });
   };
 
+  if (loading) return null;
   const { transactionEbooks } = props;
 
   return (
     <React.Fragment>
-      {loading ? (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            height: '600px',
-            flex: '1 1 0',
-            alignItems: 'center',
-          }}
-        >
-          <Loader />
-        </div>
-      ) : transactionEbooks.data !== undefined && transactionEbooks.data.length > 0 ? (
+      {!IsEmptyObject(transactionEbooks) &&
+      transactionEbooks.data !== undefined &&
+      transactionEbooks.data.length !== 0 ? (
         <TableDevExtreme
           columns={[
             { name: 'code', title: 'Code' },
@@ -217,9 +208,8 @@ function EbookList(props) {
           // totalCount={totalCount}
         />
       ) : (
-        <NoData />
+        <NoData msg="Belum ada request Dari user!" isEmpty />
       )}
-
       <ModalDetailEbook
         showModalDetail={showModalDetail}
         detailData={detailData}
@@ -243,7 +233,7 @@ function EbookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     transactionEbooks: state.transactions.transactionEbooks,
   };

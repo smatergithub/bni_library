@@ -1,19 +1,24 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
+import { useForm } from 'react-hook-form';
 import queryString from 'query-string';
 import moment from 'moment';
-import swal from 'sweetalert';
+
 import { withRouter } from 'react-router-dom';
-import UserAPI from '../../../../api/UserApi';
-import { Modal, NoData, FeedbackModal } from '../../../../component';
-import BookUserAPI from '../../../../api/BookUserApi';
-import EbookUserAPI from '../../../../api/EbookUserApi';
-import { createBookFeeback, createEbookFeeback, getMe } from '../../../../redux/action/user';
+import { Modal, ToastError, NoData, FeedbackModal } from '../../../../component';
+import { getBookById } from '../../../../redux/action/bookUser';
+import { getEbookById } from '../../../../redux/action/ebookUser';
+import {
+  getBorrowedEbookItem,
+  getBorrowedBookItem,
+  createBookFeeback,
+  createEbookFeeback,
+  getMe,
+} from '../../../../redux/action/user';
 import { removeBookWishlist, removeEbookWishlist } from 'redux/action/wishlist';
 import { orderBook, orderEbook } from '../../../../redux/action/transaction';
 import Form from './form';
-
 function OrderBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { type } = parsed;
@@ -26,64 +31,55 @@ function OrderBook(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [isUserhaveActiveBook, setIsUserHaveActiveBook] = React.useState(false);
   let [isUserhaveActiveEbook, setIsUserHaveActiveEbook] = React.useState(false);
-  let [getIdUser, setGetIdUser] = React.useState('');
-  let localBook = JSON.parse(localStorage.getItem('bni_book'));
-  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
-  let book = localBook !== null ? localBook : [];
-  let ebook = localEbook !== null ? localEbook : [];
-  let wishlist = book.concat(ebook);
 
   function getBorrowInfo() {
     let { id } = parsed;
-    props.getMe().then(res => {
-      if (res.data) {
+    props.getMe().then((res) => {
+      if (res.resp) {
         let userId = res.data.id;
-        setGetIdUser(userId);
         if (type === 'book') {
-          BookUserAPI.getById(id).then(res => {
+          props.getBookById(id).then((res) => {
             setProcessing(false);
-            if (res.data) {
+            if (res.resp) {
               setBooks(res.data);
             } else {
               setBooks(null);
             }
           });
-          UserAPI.getBorrowedBookItem(userId, 'rating=true')
-            .then(res => {
+          props
+            .getBorrowedBookItem(userId, 'rating=true')
+            .then((res) => {
               if (res.data.length !== 0) {
                 // if (res.data.data.length > 1) {
                 //   setIsUserHaveActiveBook(true);
                 // }
-
                 let checkIsBorrowed = res.data.data.some(
-                  book => book.status === 'Dikembalikan' && !book.isGiveRating
+                  (book) => book.status === 'Dikembalikan' && !book.isGiveRating
                 );
-
                 setIsBorrowReview(checkIsBorrowed);
               } else {
                 setIsBorrowReview(false);
               }
             })
-            .catch(err => {
-              // setIsUserHaveActiveBook(true);
+            .catch((err) => {
+              setIsUserHaveActiveBook(true);
             });
         } else {
-          EbookUserAPI.getById(id).then(res => {
+          props.getEbookById(id).then((res) => {
             setProcessing(false);
-            if (res.data) {
+            if (res.resp) {
               setEbooks(res.data);
             } else {
               setEbooks(null);
             }
           });
-          UserAPI.getBorrowedEbookItem(userId, 'rating=true').then(res => {
+          props.getBorrowedEbookItem(userId, 'rating=true').then((res) => {
             if (res.data.length !== 0) {
               // if (res.data.data.length > 1) {
               //   setIsUserHaveActiveEbook(true);
               // }
-
               let checkIsBorrowed = res.data.data.some(
-                ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+                (ebook) => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
               );
               setIsBorrowReview(checkIsBorrowed);
             } else {
@@ -105,72 +101,59 @@ function OrderBook(props) {
       props.history.push('/profile/ebooks');
     }
   }
-
-  function removeWishlist(data, isBook) {
-    if (isBook === 'book') {
+  function removeWishlist(data) {
+    let { type } = parsed;
+    if (type === 'book') {
       props.removeBookWishlist(data);
     } else {
       props.removeEbookWishlist(data);
     }
   }
-
   function onOrderItem(formData) {
     if (moment(formData.startDate).valueOf() > moment(formData.endDate).valueOf()) {
-      swal('Error!', 'Tanggal Pengembalian harus lebih besar daripada tanggal pinjam', 'error');
+      ToastError('Tanggal Pengembalian harus lebih besar daripada tanggal pinjam');
     } else {
       let { type } = parsed;
 
       if (type === 'book') {
-        props.orderBook(formData).then(res => {
-          if (res.data) {
-            if (wishlist.length > 1) {
-              let dataCart = wishlist.filter(item => item.id === books.id);
-              removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+        if (isUserhaveActiveBook) {
+          ToastError(
+            'Maksimal peminjaman hanya 2 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
+          );
+        } else {
+          props.orderBook(formData).then((res) => {
+            if (res.resp) {
+              removeWishlist(books.book);
+              setShowModalDeletion(true);
             }
-            setShowModalDeletion(true);
-          } else {
-            setShowModalDeletion(false);
-            swal('Error!', res.msg, 'error');
-          }
-        });
-        // if (isUserhaveActiveBook) {
-        //   ToastError(
-        //     'Maksimal peminjaman hanya 2 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
-        //   );
-        // } else {
-        // }
+          });
+        }
       } else if (type === 'ebook') {
-        // if (isUserhaveActiveEbook) {
-        //   ToastError(
-        //     'Maksimal peminjaman hanya 2 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
-        //   );
-        // } else {
-        // }
-        props.orderEbook(formData).then(res => {
-          if (res.data) {
-            if (wishlist.length > 1) {
-              let dataCart = wishlist.filter(item => item.id === books.id);
-              removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+        if (isUserhaveActiveEbook) {
+          ToastError(
+            'Maksimal peminjaman hanya 2 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
+          );
+        } else {
+          props.orderEbook(formData).then((res) => {
+            if (res.resp) {
+              removeWishlist(ebooks.ebook);
+              setShowModalDeletion(true);
             }
-            setShowModalDeletion(true);
-          } else {
-            setShowModalDeletion(false);
-            swal('Error!', res.msg, 'error');
-          }
-        });
+          });
+        }
       }
     }
   }
   function onFeedbackSubmit(formData) {
     if (type == 'book') {
-      props.createBookFeeback(formData).then(res => {
+      props.createBookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
         }
       });
     } else {
-      props.createEbookFeeback(formData).then(res => {
+      props.createEbookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
@@ -198,10 +181,10 @@ function OrderBook(props) {
         {books === null && type === 'book' && <NoData msg="Buku tidak di temukan" />}
         {ebooks === null && type === 'ebook' && <NoData msg="Ebook tidak di temukan" />}
         {type === 'ebook' && ebooks !== null && (
-          <Form type="ebook" data={ebooks} onOrderItem={onOrderItem} />
+          <Form type="ebook" data={ebooks.ebook} onOrderItem={onOrderItem} user={null} />
         )}
         {type === 'book' && books !== null && (
-          <Form type="book" data={books} onOrderItem={onOrderItem} />
+          <Form type="book" data={books.book} onOrderItem={onOrderItem} user={books.user} />
         )}
       </section>
       <Modal
@@ -218,33 +201,25 @@ function OrderBook(props) {
           Peminjaman Berhasil, Silahkan Tunjukan Invoice Untuk Pengambilan Pinjaman{' '}
         </div>
       </Modal>
-      {isBorrowReview && (
-        <FeedbackModal
-          title="Action required"
-          open={isBorrowReview}
-          handleSubmit={formData => onFeedbackSubmit(formData)}
-          labelSubmitButton="Masuk"
-          userId={getIdUser}
-        >
-          <div className="my-5">Silahkan Masuk terlebih dahulu</div>
-        </FeedbackModal>
-      )}
+      <FeedbackModal
+        title="Action required"
+        open={isBorrowReview}
+        handleSubmit={(formData) => onFeedbackSubmit(formData)}
+        labelSubmitButton="Masuk"
+      >
+        <div className="my-5">Silahkan Masuk terlebih dahulu</div>
+      </FeedbackModal>
     </div>
   );
 }
-
-let mapStateToProps = state => {
-  return {
-    // cartBook: state.wishlist.books,
-    // cartEbook: state.wishlist.ebooks,
-  };
-};
 export default withRouter(
-  connect(mapStateToProps, {
+  connect(null, {
+    getBookById,
+    getEbookById,
     orderEbook,
     orderBook,
-    // getBorrowedEbookItem,
-    // getBorrowedBookItem,
+    getBorrowedEbookItem,
+    getBorrowedBookItem,
     createBookFeeback,
     createEbookFeeback,
     getMe,

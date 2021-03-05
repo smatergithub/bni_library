@@ -1,4 +1,4 @@
-import WilayahApi from '../../api/wilayahApi';
+import WilayahApi from '../client/wilayahApi';
 import { WILAYAHS, DETAIL_WILAYAH } from '../type';
 /**
  * note: for book creation doesn't need to dispatch //
@@ -6,9 +6,9 @@ import { WILAYAHS, DETAIL_WILAYAH } from '../type';
  * just return the response (true/false) to the UI
  */
 
-export const CreateNewWilayahAction = data => () => {
+export const CreateNewWilayahAction = (data) => () => {
   return WilayahApi.create(data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -16,7 +16,7 @@ export const CreateNewWilayahAction = data => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
@@ -24,7 +24,7 @@ export const CreateNewWilayahAction = data => () => {
 
 export const EditWilayahAction = (id, data) => () => {
   return WilayahApi.update(id, data)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -32,15 +32,15 @@ export const EditWilayahAction = (id, data) => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const DeleteWilayahAction = id => () => {
+export const DeleteWilayahAction = (id) => () => {
   return WilayahApi.delete(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -48,15 +48,15 @@ export const DeleteWilayahAction = id => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getWilayah = body => dispatch => {
+export const getWilayah = (body) => (dispatch) => {
   return WilayahApi.list(body)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: WILAYAHS, payload: res });
         return {
@@ -65,15 +65,15 @@ export const getWilayah = body => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const getDetailWilayah = id => dispatch => {
+export const getDetailWilayah = (id) => (dispatch) => {
   return WilayahApi.detail(id)
-    .then(res => {
+    .then((res) => {
       if (res) {
         dispatch({ type: DETAIL_WILAYAH, payload: res });
         return {
@@ -83,20 +83,20 @@ export const getDetailWilayah = id => dispatch => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });
 };
 
-export const UploadWilayahFile = wilayah => () => {
+export const UploadWilayahFile = (wilayah) => () => {
   var formdata = new FormData();
   for (var key in wilayah) {
     formdata.append(key, wilayah[key]);
   }
 
   return WilayahApi.uploadWilayahFile(formdata)
-    .then(res => {
+    .then((res) => {
       if (res) {
         return {
           resp: true,
@@ -104,7 +104,7 @@ export const UploadWilayahFile = wilayah => () => {
         };
       }
     })
-    .catch(err => {
+    .catch((err) => {
       let msg = err.message || 'Something Wrong, request failed !';
       return { resp: false, msg: msg };
     });

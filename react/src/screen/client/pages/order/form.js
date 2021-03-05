@@ -3,7 +3,7 @@ import { DatePicker, Space } from 'antd';
 import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
-import swal from 'sweetalert';
+import { ToastError } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
 import { Rating } from 'semantic-ui-react';
 
@@ -21,18 +21,18 @@ function FormOrder({ data, type, onOrderItem, user }) {
   }
   function onSubmit(formData) {
     if (moment(startDate).valueOf() > moment(endDate).valueOf()) {
-      swal('Error!', 'Tanggal Pengembalian harus lebih besar daripada tanggal pinjam', 'error');
+      ToastError('Tanggal Pengembalian harus lebih besar daripada tanggal pinjam');
     } else if (!endDate || !startDate) {
-      swal('Error!', 'Tanggal Peminjaman harus di lengkapi!', 'error');
+      ToastError('Tanggal Peminjaman harus di lengkapi!');
     } else {
       let { id, type } = parsed;
       formData['startDate'] = startDate;
       formData['endDate'] = endDate;
       if (type === 'book') {
         if (Number(formData.quantity) > data.stockBuku) {
-          swal('Error!', 'Stock buku tidak cukup!', 'error');
+          ToastError('Stock buku tidak cukup!');
         } else if (data.stockBuku == 0) {
-          swal('Error!', 'Buku tidak Tersedia!', 'error');
+          ToastError('Buku tidak Tersedia!');
         } else {
           formData['books'] = [
             {
@@ -87,32 +87,28 @@ function FormOrder({ data, type, onOrderItem, user }) {
               height: 1,
             }}
           ></div>
-          {data.countRating !== null && (
-            <div className="flex mt-3 ">
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <div>
-                  <Rating defaultRating={data.countRating} maxRating={6} icon="star" disabled />
-                </div>
-                <span style={{ paddingLeft: '12px' }}>{data.totalRead} Views</span>
-              </div>
+          <div className="flex mt-3 ">
+            {/* <div className="flex items-center">
+              <i className="fas fa-star text-yellow-700" />
+              <i className="fas fa-star text-yellow-700" />
+              <i className="fas fa-star text-yellow-700" />
+              <i className="fas fa-star text-yellow-700" />
+              <i className="far fa-star text-yellow-700" />
             </div>
-          )}
-
-          <div className="mt-3">{`By (author) ${data.pengarang}`}</div>
-          <div> Paperback : {data.bahasa}</div>
-          <div className="mt-3">
-            {' '}
-            Lokasi perpustakaan : {data.lokasiPerpustakaan ? data.lokasiPerpustakaan : '-'}
+            <div> 4.48 (606,907 ratings by Goodreads)</div> */}
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              <div>
+                <Rating defaultRating={data.countRating} maxRating={6} icon="star" disabled />
+              </div>
+              <span style={{ paddingLeft: '12px' }}>{data.countRating} Views</span>
+            </div>
           </div>
-          <div className="mt-3">
-            {' '}
-            Stock Buku : {data.stockBuku == null || data.stockBuku == 0 ? '-' : data.stockBuku}
-          </div>
-
+          <div> Paperback | {data.bahasa}</div>
+          <div>{`By (author) ${data.pengarang}`}</div>
           <form onSubmit={handleSubmit(onSubmit)} className="mt-5">
             {type === 'book' && (
               <React.Fragment>
-                {/* <div className="text-lg font-bold">Peminjam</div>
+                <div className="text-lg font-bold">Peminjam</div>
                 <div
                   className="bg-gray-400 w-full mt-2"
                   style={{
@@ -121,17 +117,17 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 ></div>
                 <div className="mt-3">Peminjam : {user ? user.nama : '-'}</div>
                 {user ? <div>Unit : {user ? user.unit : ''}</div> : null}
-                {user ? <div>Alamat : {user ? user.alamat : ''}</div> : null} */}
+                {user ? <div>Alamat : {user ? user.alamat : ''}</div> : null}
                 <div
-                  className={`font-bold w-40 my-5 ${
-                    data.stockBuku == null || data.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
+                  className={`font-bold w-32 my-5 ${
+                    data.stockBuku == 0 ? 'bg-red-600' : 'bg-green-500'
                   } text-white py-1 px-3 rounded`}
                   style={{
                     right: '2em',
                     top: '2em',
                   }}
                 >
-                  {data.stockBuku == null || data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
+                  {data.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
                 </div>
 
                 <div className="relative w-full mb-3">
@@ -162,7 +158,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 Dari Tanggal
               </label>
               <Space direction="vertical">
-                <DatePicker onChange={onChangeStartDate} disabledDate={date => date < moment()} />
+                <DatePicker onChange={onChangeStartDate} disabledDate={(date) => date < moment()} />
               </Space>
             </div>
             <div className="mt-2">
@@ -172,14 +168,10 @@ function FormOrder({ data, type, onOrderItem, user }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={onChangeEndDate}
-                  // disabledDate={date =>
-                  //   date < moment(startDate).add(1, 'days') ||
-                  //   date >
-                  //     moment(startDate)
-                  //       .add(14, 'days')
-                  //       .endOf('days')
-                  // }
-                  disabledDate={date => date < moment()}
+                  disabledDate={(date) =>
+                    date < moment(startDate).add(1, 'days') ||
+                    date > moment(startDate).add(14, 'days').endOf('days')
+                  }
                 />
               </Space>
             </div>

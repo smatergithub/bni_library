@@ -2,32 +2,47 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getRepositorys, DeleteRepositoryAction } from '../../../../redux/action/repositorys';
-import swal from 'sweetalert';
-import { NoData, Modal } from '../../../../component';
+import Table from '../../component/Table';
+import { NoData, Modal, ToastSuccess, ToastError } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import moment from 'moment';
-import Loader from '../../component/Loader';
 
-const Repository = props => {
+const Repository = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [selectedRepo, setSelectedRepo] = React.useState(null);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [filterOptions, setFilterOptions] = React.useState({
     page: 1,
-    limit: 999999,
+    limit: 5,
     judul: '',
   });
 
-  const retrieveDataRepository = filterOptions => {
+  const paginationOptions = (pagination) => {
+    if (pagination.judul) {
+      setFilterOptions({
+        judul: pagination.judul,
+        page: pagination.page,
+        limit: pagination.limit,
+      });
+    } else {
+      setFilterOptions({
+        page: pagination.page,
+        limit: pagination.limit,
+        judul: '',
+      });
+    }
+  };
+
+  const retrieveDataRepository = (filterOptions) => {
     setLoading(true);
     props
       .getRepositorys(filterOptions)
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -35,27 +50,27 @@ const Repository = props => {
   React.useEffect(() => {
     retrieveDataRepository(filterOptions);
   }, []);
-
   const handleActionDeleteRepo = () => {
     props
       .DeleteRepositoryAction(selectedRepo)
-      .then(response => {
+      .then((response) => {
         if (response.resp) {
-          swal('Message!', response.msg, 'success');
+          ToastSuccess(response.msg);
         } else {
-          swal('Error!', response.msg, 'error');
+          ToastError(response.msg);
         }
         retrieveDataRepository(filterOptions);
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => console.log('err', err));
+      .catch((err) => console.log('err', err));
   };
 
+  if (loading) return null;
   const { repositorys } = props;
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         createdAt: moment(rowData.createdAt).format('DD MMM YYYY'),
@@ -97,21 +112,8 @@ const Repository = props => {
             marginBottom: '14px',
           }}
         >
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-            className="mb-10"
-          >
-            <div>
-              <p style={{ fontSize: '26px' }} className="text-black">
-                Daftar Repository
-              </p>
-            </div>
-          </div>
-          {/* <Link to="/admin/new-repository">
+          <h1 className="w-full text-3xl text-black ">Daftar Repository</h1>
+          <Link to="/admin/new-repository">
             <button
               style={{ width: '380px', height: '34px' }}
               type="button"
@@ -119,37 +121,22 @@ const Repository = props => {
             >
               <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Repository Baru
             </button>
-          </Link> */}
+          </Link>
         </div>
-        {loading ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              height: '600px',
-              flex: '1 1 0',
-              alignItems: 'center',
-            }}
-          >
-            <Loader />
-          </div>
-        ) : repositorys.data !== undefined && repositorys.data.length > 0 ? (
-          <React.Fragment>
-            <TableDevExtreme
-              columns={[
-                { name: 'name', title: 'Nama' },
-                { name: 'university', title: 'Universitas' },
-                { name: 'title', title: 'Judul' },
-                { name: 'category', title: 'Kategori' },
-                { name: 'methodology', title: 'Methodology' },
-                { name: 'faculty', title: 'Fakultas' },
-                { name: 'strata', title: 'Strata' },
-                { name: 'actions', title: 'Action' },
-              ]}
-              rows={adjustIntegrationTable(repositorys.data)}
-            />
-          </React.Fragment>
+        {repositorys.data !== undefined && repositorys.data.length !== 0 ? (
+          <TableDevExtreme
+            columns={[
+              { name: 'name', title: 'Nama' },
+              { name: 'university', title: 'Universitas' },
+              { name: 'title', title: 'Judul' },
+              { name: 'category', title: 'Kategori' },
+              { name: 'methodology', title: 'Methodology' },
+              { name: 'faculty', title: 'Fakultas' },
+              { name: 'strata', title: 'Strata' },
+              { name: 'actions', title: 'Action' },
+            ]}
+            rows={adjustIntegrationTable(repositorys.data)}
+          />
         ) : (
           <NoData msg="Data Belum Tersedia !" />
         )}
@@ -169,7 +156,7 @@ const Repository = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     repositorys: state.repositorys.repositorys,
   };

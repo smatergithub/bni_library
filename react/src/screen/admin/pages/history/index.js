@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import BookList from './BookList';
 import EbookList from './EbooklList';
+import { ToastError, ToastSuccess } from '../../../../component';
 import { exportBookHistory, exportDataEbookHistory } from '../../../../redux/action/history';
-import swal from 'sweetalert';
-import { Button } from 'antd';
-import { Link } from 'react-router-dom';
 
 function History(props) {
   const [activeTabs, setActiveTabs] = useState('book');
@@ -16,11 +14,11 @@ function History(props) {
     setLoading(true);
     props
       .exportBookHistory()
-      .then(response => {
-        swal('Message!', 'Sukses Export History Book', 'success');
+      .then((response) => {
+        ToastSuccess('Sukses Export History Book');
       })
-      .catch(err => {
-        swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
+      .catch((err) => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
 
@@ -28,42 +26,17 @@ function History(props) {
     setLoading(true);
     props
       .exportDataEbookHistory()
-      .then(response => {
-        swal('Message!', 'Sukses Export History Ebook', 'success');
+      .then((response) => {
+        ToastSuccess('Sukses Export History Ebook');
       })
-      .catch(err => {
-        swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
+      .catch((err) => {
+        ToastError('Tidak Bisa Akses Fitur Ini');
       });
   };
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-          className="mb-10"
-        >
-          <div>
-            <p style={{ fontSize: '26px' }} className="text-black">
-              History Pinjam
-            </p>
-          </div>
-          <div>
-            <Link to="/admin/daftar-pinjam">
-              <Button
-                type="primary"
-                size={'large'}
-                style={{ borderRadius: '8px' }}
-                disabled={loading}
-              >
-                Daftar Pinjam
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <h1 className="w-full text-3xl text-black pb-6">History Transaksi</h1>
 
         <div className="flex flex-wrap mt-5 px-1">
           <div className="w-full xl:w-12/12 mb-12 xl:mb-0">
@@ -91,7 +64,7 @@ function History(props) {
                     >
                       EBOOK
                     </div>
-                    {/* {activeTabs === 'book' && (
+                    {activeTabs === 'book' && (
                       <div className="w-full py-2 flex justify-end">
                         <button
                           type="button"
@@ -120,7 +93,7 @@ function History(props) {
                           </span>
                         </button>
                       </div>
-                    )} */}
+                    )}
                   </div>
                 </div>
               </div>
@@ -136,7 +109,7 @@ function History(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {};
 };
 

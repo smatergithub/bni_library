@@ -1,75 +1,18 @@
 import React from 'react';
-import UserAPI from '../../api/UserApi';
 import ReactStars from 'react-rating-stars-component';
-import { Form, Input, Button, Select } from 'antd';
-const { Option } = Select;
-const { TextArea } = Input;
-
-export default function Modal(props) {
-  const { open, title, handleSubmit, userId } = props;
+export default function Modal({ open, title, handleSubmit }) {
+  let [note, setNote] = React.useState('');
   let [rating, setRating] = React.useState(null);
-  let [loading, setLoading] = React.useState(false);
-  let [listBorrowBook, setListBorrowBook] = React.useState(false);
-  let [listborrowEbook, setListBorrowEbook] = React.useState(false);
-
-  const ratingChanged = newRating => {
+  const ratingChanged = (newRating) => {
     setRating(newRating);
   };
-
-  const [form] = Form.useForm();
-
-  const onBookList = value => {
-    console.log('value', value);
-  };
-
-  const getLisDropdownListBorrowBook = () => {
-    setLoading(true);
-    UserAPI.getBorrowedBookItemNoRated(userId)
-      .then(res => {
-        setListBorrowBook(res.data);
-      })
-      .catch(err => console.log(err))
-      .finally(() => setLoading(false));
-  };
-
-  const getLisDropdownListBorrowEbook = () => {
-    setLoading(true);
-    UserAPI.getBorrowedEbookItemNoRated(userId)
-      .then(res => {
-        setListBorrowEbook(res.data);
-      })
-      .catch(err => console.log(err))
-      .finally(() => setLoading(false));
-  };
-
-  React.useEffect(() => {
-    getLisDropdownListBorrowBook();
-    getLisDropdownListBorrowEbook();
-  }, [userId]);
-
-  const onFinish = values => {
-    console.log(values);
+  const onFormSubmit = (e) => {
+    e.preventDefault();
     let formData = {};
-    formData['note'] = values.note;
+    formData['note'] = note;
     formData['rating'] = rating;
-
     handleSubmit(formData);
   };
-
-  const RenderListDropdown = () => {
-    let dropdownList;
-    if (listBorrowBook.length > 0) {
-      dropdownList = listBorrowBook.map(item => {
-        return <Option value={item.label}>{item.label}</Option>;
-      });
-    } else if (listborrowEbook.length > 0) {
-      dropdownList = listborrowEbook.map(item => {
-        return <Option value={item.label}>{item.label}</Option>;
-      });
-    }
-    return dropdownList;
-  };
-
   return (
     <>
       {open ? (
@@ -82,63 +25,55 @@ export default function Modal(props) {
               }}
             >
               <div className="modal-content py-4 text-left px-6">
-                <div className="flex justify-between items-center pb-3">
-                  <p className="text-2xl text-center font-bold">{title}</p>
-                </div>
-                <div
-                  className="px-10 pb-4"
-                  style={{
-                    textAlign: 'center',
-                    fontSize: '14px',
-                  }}
-                >
-                  Silahkan isi rating terlebih dahulu untuk dapat memesan buku selanjutnya
-                </div>
-                <Form layout="vertical" form={form} name="control-hooks" onFinish={onFinish}>
-                  <Form.Item
-                    name="ratingBorrow"
-                    label={`Daftar Pinjam ${listBorrowBook.length > 0 ? 'Buku' : 'Ebook'}`}
-                    rules={[
-                      {
-                        required: true,
-                        message: 'tolong pilih buku yang anda ingin beri rating',
-                      },
-                    ]}
+                <form onSubmit={(e) => onFormSubmit(e)}>
+                  <div className="flex justify-between items-center pb-3">
+                    <p className="text-2xl text-center font-bold">{title}</p>
+                  </div>
+                  <div
+                    className="px-10 pb-20 text-lg"
+                    style={{
+                      textAlign: 'center',
+                    }}
                   >
-                    <Select allowClear>{RenderListDropdown()}</Select>
-                  </Form.Item>
-                  <Form.Item name="note" label="Note">
-                    <TextArea rows={4} />
-                  </Form.Item>
-                  <div>
-                    {' '}
+                    Silahkan isi rating terlebih dahulu untuk dapat memesan buku selanjutnya
+                  </div>
+                  <div className="relative w-full mb-3">
                     <label
-                      className="block uppercase text-gray-700 text-xs font-bold"
+                      className="block uppercase text-gray-700 text-xs font-bold mb-2"
                       for="grid-password"
                     >
-                      Rating
+                      Komentar
                     </label>
-                    <ReactStars
-                      count={6}
-                      onChange={ratingChanged}
-                      size={40}
-                      activeColor="#ffd700"
-                    />
-                  </div>
-                  <Form.Item>
-                    <Button
-                      className={`bg-orange-500 text-white active:bg-gray-700 text-sm mt-10 font-bold uppercase px-1 py-1 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full`}
-                      disabled={loading}
+                    <textarea
+                      type="text"
+                      onChange={(e) => setNote(e.target.value)}
+                      className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm shadow focus:outline-none focus:shadow-outline w-full"
+                      placeholder="Masukkan komentar"
                       style={{
                         transition: 'all 0.15s ease 0s',
                       }}
-                      type="primary"
-                      htmlType="submit"
-                    >
-                      Submit
-                    </Button>
-                  </Form.Item>
-                </Form>
+                    />
+                  </div>
+                  <label
+                    className="block uppercase text-gray-700 text-xs font-bold"
+                    for="grid-password"
+                  >
+                    Rating
+                  </label>
+                  <ReactStars count={6} onChange={ratingChanged} size={40} activeColor="#ffd700" />
+                  <button
+                    className={`${
+                      note.trim().length === 0 || rating === null ? 'bg-gray-400' : 'bg-orange-500'
+                    } text-white active:bg-gray-700 text-sm mt-10 font-bold uppercase px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full`}
+                    type="submit"
+                    disabled={note.trim().length === 0 || rating === null}
+                    style={{
+                      transition: 'all 0.15s ease 0s',
+                    }}
+                  >
+                    SUBMIT
+                  </button>
+                </form>
               </div>
             </div>
           </div>

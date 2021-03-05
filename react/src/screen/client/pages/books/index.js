@@ -7,18 +7,15 @@ import { Rating } from 'semantic-ui-react';
 import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
-import Loader from '../../component/Loader';
-
-import BookUserAPI from '../../../../api/BookUserApi';
+import { getAllBook, getCategory } from '../../../../redux/action/bookUser';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
-// const { Search } = Input;
-// const { Option } = Select;
+const { Search } = Input;
+const { Option } = Select;
 
 function Books(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-  let [books, setBooks] = React.useState([]);
 
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [pagination, setPagination] = React.useState({
@@ -29,36 +26,25 @@ function Books(props) {
   });
 
   function getAllBook(params) {
-    setProcessing(true);
-    BookUserAPI.get(params)
-      .then(response => {
-        setProcessing(false);
-        setBooks(response.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        setProcessing(false);
-      });
+    props.getAllBook(params).then(() => {
+      setProcessing(false);
+    });
   }
-
   function getCategory() {
-    BookUserAPI.getCategory().then(res => {
-      if (res.data) {
+    props.getCategory().then((res) => {
+      if (res.resp) {
         if (res.data.length > 0) {
           let filterCategories = res.data
-            .map(e => e['label'])
+            .map((e) => e['label'])
             .map((e, i, final) => final.indexOf(e) === i && i)
-            .filter(e => res.data[e])
-            .map(e => res.data[e]);
-          let categories = filterCategories.map(e => ({ text: e.label, value: e.label }));
+            .filter((e) => res.data[e])
+            .map((e) => res.data[e]);
+          let categories = filterCategories.map((e) => ({ text: e.label, value: e.label }));
           setCategory(categories);
         }
       }
     });
   }
-
   React.useEffect(() => {
     setProcessing(true);
     getAllBook(pagination);
@@ -66,20 +52,20 @@ function Books(props) {
   }, []);
 
   function prev() {
-    if (books.activePage > 1) {
+    if (props.books.activePage > 1) {
       setPagination({
         ...pagination,
-        page: books.activePage - 1,
+        page: props.books.activePage - 1,
         judul: '',
       });
     }
   }
   function next() {
-    if (books.totalPage !== books.activePage) {
-      if (books.data.length !== 0) {
+    if (props.books.totalPage !== props.books.activePage) {
+      if (props.books.data.length !== 0) {
         setPagination({
           ...pagination,
-          page: books.activePage + 1,
+          page: props.books.activePage + 1,
           judul: '',
         });
       }
@@ -105,12 +91,11 @@ function Books(props) {
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
-  if (processing && books === null) return null;
+  if (processing && props.books === null) return null;
 
   const { wishlist } = props;
 
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
-
   return (
     <main>
       <Helmet>
@@ -145,7 +130,7 @@ function Books(props) {
                       type="text"
                       placeholder="Search..."
                       value={pagination.judul}
-                      onChange={value => handleSearch(value.target.value)}
+                      onChange={(value) => handleSearch(value.target.value)}
                     />
                     <i
                       onClick={() => {
@@ -162,6 +147,16 @@ function Books(props) {
                       style={{ cursor: 'pointer' }}
                     ></i>
                   </div>
+                  {/* <Search
+                    style={{
+                      borderRadius: '10px',
+                    }}
+                    placeholder="Masukkan Judul"
+                    id="searchBook"
+                    enterButton="Cari"
+                    size="large"
+                    onSearch={value => handleSearch(value)}
+                  /> */}
                 </div>
                 <div
                   className="ml-10 cursor-pointer"
@@ -182,21 +177,9 @@ function Books(props) {
               </div>
             </div>
           </nav>
-          {processing ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                height: '600px',
-                flex: '1 1 0',
-                alignItems: 'center',
-              }}
-            >
-              <Loader />
-            </div>
-          ) : books.data !== undefined ? (
-            books.data.map((book, key) => {
+          {props.books && props.books.data.length === 0 && <NoData />}
+          {props.books &&
+            props.books.data.map((book, key) => {
               let img = '';
               if (book.image !== null && checkIsImageExist(book.image)) {
                 img = book.image;
@@ -205,7 +188,7 @@ function Books(props) {
               } else {
                 img = require('../../../../assets/NoImage.png');
               }
-              let isAdd = wishlist.some(ws => ws.id === book.id);
+              let isAdd = wishlist.some((ws) => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -224,12 +207,13 @@ function Books(props) {
                     {!isAdd && (
                       <div
                         onClick={() => {
-                          // let cloneBook = Object.assign({}, book);
-                          book.type = 'BorrowBook';
                           if (!isUserLogged) {
                             setShowModalDeletion(true);
                           } else {
                             props.addBookWishlist(book);
+
+                            // let data = [...book];
+                            // localStorage.setItem('bni_book', JSON.stringify(data));
                           }
                         }}
                       >
@@ -261,12 +245,9 @@ function Books(props) {
                   </button>
                 </div>
               );
-            })
-          ) : (
-            <NoData />
-          )}
+            })}
         </div>
-        {books && (
+        {props.books && props.books.data.length !== 0 && (
           <div className="flex justify-center  mt-10">
             <nav className="relative z-0 inline-flex shadow-sm">
               <div
@@ -286,7 +267,7 @@ function Books(props) {
                 href="#"
                 className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
               >
-                {books.activePage} of {books.totalPage}
+                {props.books.activePage} of {props.books.totalPage}
               </div>
 
               <div
@@ -320,11 +301,13 @@ function Books(props) {
     </main>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
-    // books: state.userBooks.books,
+    books: state.userBooks.books,
     wishlist: state.wishlist.books,
   };
 };
 
-export default withRouter(connect(mapStateToProps, { addBookWishlist, removeBookWishlist })(Books));
+export default withRouter(
+  connect(mapStateToProps, { getAllBook, getCategory, addBookWishlist, removeBookWishlist })(Books)
+);

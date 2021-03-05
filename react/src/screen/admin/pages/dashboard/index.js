@@ -4,7 +4,7 @@ import FavoriteBookAndEbookList from '../../component/FavoriteBookAndEbookList';
 import { connect } from 'react-redux';
 import { getDashboardSummary } from '../../../../redux/action/dashboard';
 
-const Dashboard = props => {
+const Dashboard = (props) => {
   const [loading, setLoading] = React.useState(false);
 
   const { history } = props;
@@ -19,12 +19,12 @@ const Dashboard = props => {
     setLoading(true);
     props
       .getDashboardSummary()
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -40,7 +40,7 @@ const Dashboard = props => {
   const dataSourceBook =
     dashboardSummary.ratingBook === undefined
       ? null
-      : dashboardSummary.ratingBook.map(item => {
+      : dashboardSummary.ratingBook.map((item) => {
           return {
             title: item.book.judul,
             tahunTerbit: item.book.tahunTerbit,
@@ -48,11 +48,10 @@ const Dashboard = props => {
             rating: item.totalRating,
           };
         });
-
   const dataSourceEbook =
     dashboardSummary.ratingEbook === undefined
       ? null
-      : dashboardSummary.ratingEbook.map(item => {
+      : dashboardSummary.ratingEbook.map((item) => {
           return {
             judul: item.ebook.judul,
             tahunTerbit: item.ebook.tahunTerbit,
@@ -106,7 +105,7 @@ const Dashboard = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     dashboardSummary: state.dashboard.dashboardSummary,
   };

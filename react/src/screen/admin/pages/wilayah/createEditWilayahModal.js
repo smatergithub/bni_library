@@ -3,38 +3,38 @@ import { useForm } from 'react-hook-form';
 import { DatePicker, Space, Checkbox } from 'antd';
 import Modal from '../../../../component/Modal';
 import queryString from 'query-string';
-import swal from 'sweetalert';
+import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
 import { CreateNewWilayahAction, EditWilayahAction } from '../../../../redux/action/wilayah';
 
-const CreateEditWilayahModal = props => {
+const CreateEditWilayahModal = (props) => {
   const { handleSubmit, register, errors } = useForm();
 
-  const IsEmptyObject = object =>
+  const IsEmptyObject = (object) =>
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
 
   function onSubmit(data) {
     if (!detailData.id) {
-      props.CreateNewWilayahAction(data).then(res => {
+      props.CreateNewWilayahAction(data).then((res) => {
         if (res.resp) {
-          swal('Message!', res.msg, 'success');
+          ToastSuccess(res.msg);
           onCloseModal();
           window.location.reload();
         } else {
-          swal('Error!', res.msg, 'error');
+          ToastError(res.msg);
         }
       });
     } else {
       data.id = detailData.id;
-      props.EditWilayahAction(data.id, data).then(res => {
+      props.EditWilayahAction(data.id, data).then((res) => {
         if (res.resp) {
-          swal('Message!', res.msg, 'success');
+          ToastSuccess(res.msg);
           onCloseModal();
           window.location.reload();
         } else {
-          swal('Error!', res.msg, 'error');
+          ToastError(res.msg);
         }
       });
     }

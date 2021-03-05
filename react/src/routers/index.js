@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import Loader from '../component/Loader';
 import Dashboard from '../screen/admin/pages';
 import Home from '../screen/client/pages';
 import Auth from '../screen/auth';
@@ -23,7 +24,7 @@ function Routes(props) {
     </>
   );
 }
-let mapState = state => {
+let mapState = (state) => {
   let { user } = state;
 
   return { user };

@@ -19,14 +19,12 @@ import User from './users';
 import Wilayah from './wilayah';
 import Approval from './approval';
 import History from './history';
-import DaftarPinjam from './daftarPinjam';
-import Laporan from './laporan';
 
 const routes = [
   {
     path: '/admin/dashboard',
     exact: false,
-    main: props => <Dashboard {...props} />,
+    main: (props) => <Dashboard {...props} />,
   },
   {
     path: '/admin/books',
@@ -46,12 +44,12 @@ const routes = [
   {
     path: '/admin/new-repository',
     exact: false,
-    main: props => <CreateNewRepo {...props} />,
+    main: (props) => <CreateNewRepo {...props} />,
   },
   {
     path: '/admin/edit-repository',
     exact: false,
-    main: props => <CreateNewRepo {...props} />,
+    main: (props) => <CreateNewRepo {...props} />,
   },
   {
     path: '/admin/analytics',
@@ -71,42 +69,32 @@ const routes = [
   {
     path: '/admin/add-new-book',
     exact: false,
-    main: props => <CreateNewBook {...props} />,
+    main: (props) => <CreateNewBook {...props} />,
   },
   {
     path: '/admin/edit-book',
     exact: false,
-    main: props => <CreateNewBook {...props} />,
+    main: (props) => <CreateNewBook {...props} />,
   },
   {
     path: '/admin/edit-ebook',
     exact: false,
-    main: props => <CreateNewEbook {...props} />,
+    main: (props) => <CreateNewEbook {...props} />,
   },
   {
     path: '/admin/add-new-ebook',
     exact: false,
-    main: props => <CreateNewEbook {...props} />,
+    main: (props) => <CreateNewEbook {...props} />,
   },
   {
     path: '/admin/aproval',
     exact: false,
-    main: props => <Approval {...props} />,
+    main: (props) => <Approval {...props} />,
   },
   {
     path: '/admin/history',
     exact: false,
-    main: props => <History {...props} />,
-  },
-  {
-    path: '/admin/daftar-pinjam',
-    exact: false,
-    main: props => <DaftarPinjam {...props} />,
-  },
-  {
-    path: '/admin/laporan',
-    exact: false,
-    main: props => <Laporan {...props} />,
+    main: (props) => <History {...props} />,
   },
 ];
 
@@ -116,7 +104,7 @@ function HomeAdmin(props) {
     history.push('/admin/add-new-book');
   }
   function logoutUser() {
-    props.logout().then(res => {
+    props.logout().then((res) => {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
@@ -162,7 +150,7 @@ function HomeAdmin(props) {
     </div>
   );
 }
-let mapState = state => {
+let mapState = (state) => {
   let { user } = state;
 
   return { user };

@@ -73,7 +73,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -83,7 +83,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -156,7 +156,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -166,7 +166,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -176,7 +176,7 @@ module.exports = {
     const { ebooks } = req.body;
     var userId = req.userId;
 
-    ebooks.forEach(async ebookData => {
+    ebooks.forEach(async (ebookData) => {
       let ebook = await Ebooks.findByPk(ebookData.ebookId);
 
       if (!ebook) {
@@ -192,16 +192,16 @@ module.exports = {
       // }
 
       await Ebooks.findByPk(ebookData.ebookId)
-        .then(book => {
+        .then((book) => {
           book
             .update({
               isBorrowed: true,
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(400).send(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(400).send(err);
         });
 
@@ -226,14 +226,14 @@ module.exports = {
           ebookId: ebookData.ebookId,
         },
       })
-        .then(response => {
+        .then((response) => {
           response[0].update({
             ebookId: response.ebookId,
             transactionEbookId: createTransaction.id,
             userId: createTransaction.userId,
           });
         })
-        .catch(err => { });
+        .catch((err) => {});
 
       return res.status(201).json({
         message: 'Process Succesfully create Transaction Borrow Ebook',
@@ -246,17 +246,17 @@ module.exports = {
     const { transactionId } = req.params;
 
     TransactionEbook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             startDate: req.body.startDate,
             endDate: req.body.endDate,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(400).send(err);
       });
     return res.status(200).json({
@@ -276,41 +276,41 @@ module.exports = {
     }
 
     TransactionEbook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             status: 'Dikembalikan',
             isGiveRating: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     Ebooks.findByPk(transactionEbook.ebookId)
-      .then(ebook => {
+      .then((ebook) => {
         ebook
           .update({
             isBorrowed: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     ListBorrowEbook.findAll({ where: { transactionEbookId: transactionId } }).then(
-      listBorrowEbook => {
+      (listBorrowEbook) => {
         listBorrowEbook[0]
           .update({
             userId: null,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       }
@@ -322,133 +322,61 @@ module.exports = {
   },
 
   exportListHistoryEbook: async (req, res) => {
-    try {
-      const startDate = req.query.startDate;
-      const endDate = req.query.endDate;
-
-      if (!startDate || !endDate) {
-        return res.status(400).json({ message: 'Missing date from or to on query params' });
-      }
-
-      const transactions = await TransactionEbook.findAll({
-        order: [['createdAt', 'DESC']],
-        where: {
-          status: 'Dikembalikan',
-          [Op.or]: {
-            startDate: {
-              [Op.between]: [startDate, endDate]
-            },
-            endDate: {
-              [Op.between]: [startDate, endDate]
-            }
-          }
-        },
-        include: ['book', 'user'],
-      });
-
-      if (transactions.length < 1) {
-        return res.status(404).json({
-          message: 'Transaction history not found'
+    return TransactionEbook.findAll({
+      order: [['createdAt', 'DESC']],
+      where: { status: 'Dikembalikan' },
+      include: ['ebook', 'user'],
+    })
+      .then((user) => {
+        let userDisplay = [];
+        user.forEach((item) => {
+          const userData = {
+            code: item.dataValues.code,
+            transDate: item.dataValues.transDate,
+            status: item.dataValues.status,
+            note: item.dataValues.note,
+            quantity: item.dataValues.quantity,
+            startDate: item.dataValues.startDate,
+            kategori: item.dataValues.ebook && item.dataValues.ebook.dataValues.kategori,
+            judul: item.dataValues.ebook && item.dataValues.ebook.dataValues.judul,
+            stockBuku: item.dataValues.ebook && item.dataValues.ebook.dataValues.stockBuku,
+            countRating: item.dataValues.ebook && item.dataValues.ebook.dataValues.countRating,
+            npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
+            nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
+            phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
+            tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
+            wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
+            singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
+            jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
+            alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
+            email: item.dataValues.user && item.dataValues.user.dataValues.email,
+          };
+          userDisplay.push(userData);
         });
-      }
 
-      // const wb = new xl.Workbook();
-      // const ws = wb.addWorksheet('Sheet 1');
-
-      let transactionDisplay = [];
-      transactions.forEach(item => {
-        const transactionData = {
-          ...item.dataValues,
-        };
-        transactionDisplay.push(transactionData);
-      });
-
-      // header
-      let headingColumnIndex = 1;
-      Object.keys(transactionDisplay[0]).forEach(key => {
-        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
+        // header
+        let headingColumnIndex = 1;
+        Object.keys(userDisplay[0]).forEach((key) => {
           ws.cell(1, headingColumnIndex++).string(key);
-        }
-      });
+        });
 
-      //Write Data in Excel file
-      let rowIndex = 2;
-      transactionDisplay.forEach(record => {
-        let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-          if (columnName != 'user' && columnName != 'book') {
+        //Write Data in Excel file
+        let rowIndex = 2;
+        userDisplay.forEach((record) => {
+          let columnIndex = 1;
+          Object.keys(record).forEach((columnName) => {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
             );
-          }
+          });
+          rowIndex++;
         });
-        rowIndex++;
+
+        wb.write('list_history_ebook.xlsx', res);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).json({ message: 'problem occured' });
       });
-
-      wb.write(`Report Transaction Book - ${new Date().getTime() / 1000}.xlsx`, res);
-      // res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
-      // wb.writeToBuffer('Excel.xlsx').then((buffer) => {
-      //   res.end(new Buffer(buffer, 'base64'));
-      // });
-    } catch (error) {
-      console.log(error);
-    }
-
-    // return TransactionEbook.findAll({
-    //   order: [['createdAt', 'DESC']],
-    //   where: { status: 'Dikembalikan' },
-    //   include: ['ebook', 'user'],
-    // })
-    //   .then(user => {
-    //     let userDisplay = [];
-    //     user.forEach(item => {
-    //       const userData = {
-    //         code: item.dataValues.code,
-    //         transDate: item.dataValues.transDate,
-    //         status: item.dataValues.status,
-    //         note: item.dataValues.note,
-    //         quantity: item.dataValues.quantity,
-    //         startDate: item.dataValues.startDate,
-    //         kategori: item.dataValues.ebook && item.dataValues.ebook.dataValues.kategori,
-    //         judul: item.dataValues.ebook && item.dataValues.ebook.dataValues.judul,
-    //         stockBuku: item.dataValues.ebook && item.dataValues.ebook.dataValues.stockBuku,
-    //         countRating: item.dataValues.ebook && item.dataValues.ebook.dataValues.countRating,
-    //         npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
-    //         nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
-    //         phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
-    //         tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
-    //         wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
-    //         singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
-    //         jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
-    //         alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
-    //         email: item.dataValues.user && item.dataValues.user.dataValues.email,
-    //       };
-    //       userDisplay.push(userData);
-    //     });
-
-    //     // header
-    //     let headingColumnIndex = 1;
-    //     Object.keys(userDisplay[0]).forEach(key => {
-    //       ws.cell(1, headingColumnIndex++).string(key);
-    //     });
-
-    //     //Write Data in Excel file
-    //     let rowIndex = 2;
-    //     userDisplay.forEach(record => {
-    //       let columnIndex = 1;
-    //       Object.keys(record).forEach(columnName => {
-    //         ws.cell(rowIndex, columnIndex++).string(
-    //           record[columnName] == null ? '' : record[columnName].toString()
-    //         );
-    //       });
-    //       rowIndex++;
-    //     });
-
-    //     wb.write('list_history_ebook.xlsx', res);
-    //   })
-    //   .catch(err => {
-    //     console.log(err);
-    //     res.status(404).json({ message: 'problem occured' });
-    //   });
   },
 };

@@ -16,14 +16,14 @@ global.__locationdir = __dirname;
 
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require('./routes/AdminRoute');
-// var corsOptions = {
-//   origin: 'http://localhost:3001',
-// };
+var corsOptions = {
+  origin: 'http://localhost:3001',
+};
 
 const app = express();
 
 // app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -39,7 +39,7 @@ app.get('*', (req, res) =>
 
 const port = process.env.PORT_BACKEND;
 var db = require('./models');
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   // console.log('database connection success');
 });
 if (process.env.NODE_ENV === 'production') {
@@ -53,7 +53,7 @@ if (process.env.NODE_ENV === 'production') {
   };
   https.createServer(https_options, app).listen(port);
 } else
-  app.listen(port, function() {
+  app.listen(port, function () {
     console.log(`Server running in PORT: ${port}`);
   });
 {

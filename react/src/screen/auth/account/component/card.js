@@ -60,37 +60,27 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
         </button>
         {type === 'borrow' && data.sourceLink && (
           <Link to={`/profile/read-ebooks?ebookId=${data.id}`}>
-            <button
-              className="lg:mx-0 hover:underline  bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
+            <a
+              className="lg:mx-0 hover:underline bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
               style={{
                 right: '2em',
-                width: '189px',
+                width: '184px',
               }}
             >
               BACA
-            </button>
+            </a>
           </Link>
         )}
-
         {type === 'wishlist' && (
-          <button
-            onClick={() => onRemoveItem()}
-            className="lg:mx-0 hover:underline  bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
-            style={{
-              right: '2em',
-            }}
-          >
+          <div className="text-red-500 mt-10 cursor-pointer" onClick={() => onRemoveItem()}>
             HAPUS
-          </button>
-          // <div className="text-red-500 mt-10 cursor-pointer" onClick={() => onRemoveItem()}>
-          //   HAPUS
-          //   <i
-          //     className="fas fa-times-circle text-xl text-red-500 "
-          //     style={{
-          //       marginLeft: 10,
-          //     }}
-          //   />
-          // </div>
+            <i
+              className="fas fa-times-circle text-xl text-red-500 "
+              style={{
+                marginLeft: 10,
+              }}
+            />
+          </div>
         )}
       </div>
     </div>

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
-import swal from 'sweetalert';
+import { ToastSuccess, ToastError } from '../../../../component';
 import ModalDetailBook from './modalDetailBook';
 import { ListTransactionBook, MakeReturnBook } from '../../../../redux/action/transaction';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
+import { IsEmptyObject } from '../../component/IsEmptyObject';
 import moment from 'moment';
-import Loader from '../../component/Loader';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -27,11 +27,11 @@ function BookList(props) {
     };
     props
       .ListTransactionBook(pagination)
-      .then(res => {
-        // setTotalCount(props.transactionBooks.count);
+      .then((res) => {
+        setTotalCount(props.transactionBooks.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -45,36 +45,35 @@ function BookList(props) {
   }, [showModalEdit]);
 
   function returnBook(id) {
-    props.MakeReturnBook(id).then(res => {
+    props.MakeReturnBook(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceTransactionBookList();
-        swal('Message!', res.msg, 'success');
+        ToastSuccess(res.msg);
       } else {
         setLoading(false);
-        swal('Error!', res.msg, 'error');
+        ToastError(res.msg);
       }
     });
   }
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getEditTransactionBook = data => {
+  const getEditTransactionBook = (data) => {
     setDetailData(data);
     setShowModalEdit(true);
   };
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       let duration = '';
-
-      if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
+      if (rowData && moment().diff(moment(rowData.endDate), 'days') === -1) {
         duration = 'Lewat masa peminjaman';
       } else {
-        duration = rowData && moment(rowData.endDate).diff(moment(), 'days') + 'hari';
+        duration = rowData && moment().diff(moment(rowData.endDate), 'days') + 'hari';
       }
       return {
         ...rowData,
@@ -123,108 +122,94 @@ function BookList(props) {
     });
   };
 
+  if (loading) return null;
   const { transactionBooks } = props;
-
   return (
     <React.Fragment>
-      {loading ? (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'center',
-            height: '600px',
-            flex: '1 1 0',
-            alignItems: 'center',
-          }}
-        >
-          <Loader />
-        </div>
-      ) : transactionBooks.data !== undefined && transactionBooks.data.length > 0 ? (
-        <React.Fragment>
-          <TableDevExtreme
-            columns={[
-              { name: 'code', title: 'Code' },
-              { name: 'judul', title: 'Judul' },
-              { name: 'tahunTerbit', title: 'Tahun Terbit' },
-              { name: 'quantity', title: 'Jumlah' },
-              { name: 'nama', title: 'Peminjam' },
-              { name: 'npp', title: 'NPP' },
-              { name: 'startDate', title: 'Tanggal Pinjam' },
-              { name: 'endDate', title: 'Tanggal Kembali' },
-              { name: 'duration', title: 'Sisa Durasi' },
-              { name: 'status', title: 'Status' },
-              { name: 'actions', title: 'Action' },
-            ]}
-            columnExtensions={[
-              {
-                columnName: 'code',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'judul',
-                width: 300,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'nama',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'npp',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'tahunTerbit',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'startDate',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'endDate',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'duration',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'quantity',
-                width: 100,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'status',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'actions',
-                width: 300,
-                wordWrapEnabled: true,
-              },
-            ]}
-            rows={adjustIntegrationTable(transactionBooks.data)}
-            // currentPage={currentPage}
-            // onCurrentPageChange={setCurrentPage}
-            // pageSize={pageSize}
-            // onPageSizeChange={setPageSize}
-            // totalCount={totalCount}
-          />
-        </React.Fragment>
+      {!IsEmptyObject(transactionBooks) &&
+      transactionBooks.data !== undefined &&
+      transactionBooks.data.length !== 0 ? (
+        <TableDevExtreme
+          columns={[
+            { name: 'code', title: 'Code' },
+            { name: 'judul', title: 'Judul' },
+            { name: 'tahunTerbit', title: 'Tahun Terbit' },
+            { name: 'quantity', title: 'Jumlah' },
+            { name: 'nama', title: 'Peminjam' },
+            { name: 'npp', title: 'NPP' },
+            { name: 'startDate', title: 'Tanggal Pinjam' },
+            { name: 'endDate', title: 'Tanggal Kembali' },
+            { name: 'duration', title: 'Sisa Durasi' },
+            { name: 'status', title: 'Status' },
+            { name: 'actions', title: 'Action' },
+          ]}
+          columnExtensions={[
+            {
+              columnName: 'code',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'judul',
+              width: 300,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'nama',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'npp',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'tahunTerbit',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'startDate',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'endDate',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'duration',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'quantity',
+              width: 100,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'status',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
+              columnName: 'actions',
+              width: 300,
+              wordWrapEnabled: true,
+            },
+          ]}
+          rows={adjustIntegrationTable(transactionBooks.data)}
+          // currentPage={currentPage}
+          // onCurrentPageChange={setCurrentPage}
+          // pageSize={pageSize}
+          // onPageSizeChange={setPageSize}
+          // totalCount={totalCount}
+        />
       ) : (
-        <NoData />
+        <NoData msg="Belum ada request dari user!" isEmpty />
       )}
-
       <ModalDetailBook
         showModalDetail={showModalDetail}
         detailData={detailData}
@@ -248,7 +233,7 @@ function BookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     transactionBooks: state.transactions.transactionBooks,
   };

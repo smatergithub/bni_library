@@ -5,11 +5,11 @@ import queryString from 'query-string';
 import { DatePicker, Space, Checkbox, Select } from 'antd';
 import {
   CreateNewRepositoryAction,
+  getDetailRepository,
   EditRepositoryAction,
 } from '../../../../redux/action/repositorys';
-import RepoAPI from '../../../../api/RepositoryApi';
-import swal from 'sweetalert';
 
+import { ToastError, ToastSuccess } from '../../../../component';
 const { Option } = Select;
 const optionsResearch = [
   { label: 'Pusat', value: 'Pusat' },
@@ -61,12 +61,12 @@ function CreateNewRepo(props) {
       formData['methodology'] = methodologyResearch;
       formData['strata'] = strata;
       formData['releaseYear'] = releaseYear;
-      props.CreateNewRepositoryAction(formData).then(res => {
+      props.CreateNewRepositoryAction(formData).then((res) => {
         if (res.resp) {
-          swal('Message!', res.msg, 'success');
+          ToastSuccess(res.msg);
           props.history.push('/admin/repository');
         } else {
-          swal('Error!', res.msg, 'error');
+          ToastError(res.msg);
         }
       });
     } else {
@@ -77,12 +77,12 @@ function CreateNewRepo(props) {
       formData['strata'] = strata ? strata : repo.strata;
       formData['releaseYear'] = releaseYear ? releaseYear : repo.releaseYear;
 
-      props.EditRepositoryAction(id, formData).then(res => {
+      props.EditRepositoryAction(id, formData).then((res) => {
         if (res.resp) {
-          swal('Message!', res.msg, 'success');
+          ToastSuccess(res.msg);
           props.history.push('/admin/repository');
         } else {
-          swal('Error!', res.msg, 'error');
+          ToastError(res.msg);
         }
       });
     }
@@ -115,8 +115,8 @@ function CreateNewRepo(props) {
 
   React.useEffect(() => {
     if (id) {
-      RepoAPI.detail(id).then(res => {
-        if (res.data) {
+      props.getDetailRepository(id).then((res) => {
+        if (res.resp) {
           setRepo(res.data);
         } else {
           setRepo(null);
@@ -240,9 +240,9 @@ function CreateNewRepo(props) {
                     className="wilayah"
                     name="wilayah"
                     value={repo ? repo.methodology : ''}
-                    onSelect={e => setMethodoloyResearch(e)}
+                    onSelect={(e) => setMethodoloyResearch(e)}
                   >
-                    {methodology.map(op => {
+                    {methodology.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -256,9 +256,9 @@ function CreateNewRepo(props) {
                     value={repo ? repo.strata : ''}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={e => setStrata(e)}
+                    onSelect={(e) => setStrata(e)}
                   >
-                    {strataOpt.map(op => {
+                    {strataOpt.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -271,7 +271,7 @@ function CreateNewRepo(props) {
                     <DatePicker
                       onChange={onChange}
                       placeholder={repo ? repo.releaseYear : ''}
-                      picker="year"
+                      format="DD/MM/YYYY"
                     />
                   </Space>
                 </div>
@@ -282,7 +282,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'abstrack')}
+                    onChange={(e) => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -296,7 +296,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'document')}
+                    onChange={(e) => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -344,5 +344,6 @@ function CreateNewRepo(props) {
 
 export default connect(null, {
   CreateNewRepositoryAction,
+  getDetailRepository,
   EditRepositoryAction,
 })(CreateNewRepo);

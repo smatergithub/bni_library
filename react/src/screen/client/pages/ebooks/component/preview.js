@@ -4,7 +4,7 @@ import queryString from 'query-string';
 import Loader from 'react-loader-spinner';
 import { withRouter } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
-import EbookUserAPI from '../../../../../api/EbookUserApi';
+import { getEbookPreview } from '../../../../../redux/action/ebookUser';
 
 function EbookPreview(props) {
   const parsed = queryString.parse(props.location.search);
@@ -19,7 +19,7 @@ function EbookPreview(props) {
     setLoading(true);
     pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
     let { id } = props;
-    EbookUserAPI.getPreviewByid(id).then(res => {
+    props.getEbookPreview(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         setEbook(res.data);
@@ -96,4 +96,4 @@ function EbookPreview(props) {
     </div>
   );
 }
-export default connect(null)(withRouter(EbookPreview));
+export default connect(null, { getEbookPreview })(withRouter(EbookPreview));

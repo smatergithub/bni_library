@@ -2,7 +2,8 @@ const Users = require('../models').users;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const xl = require('excel4node');
-
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Worksheet Name');
 
 module.exports = {
   list: async (req, res) => {
@@ -36,9 +37,9 @@ module.exports = {
     }
 
     return Users.findAndCountAll(paramQuerySQL)
-      .then(user => {
+      .then((user) => {
         let data = [];
-        user.rows.forEach(item => {
+        user.rows.forEach((item) => {
           let dataUser = {
             id: item.id,
             npp: item.npp,
@@ -69,14 +70,14 @@ module.exports = {
           data: data,
         });
       })
-      .catch(error => {
+      .catch((error) => {
         res.status(404).send(error);
       });
   },
 
   deleteUser: async (req, res) => {
     return Users.findByPk(req.params.id)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).send({
             message: 'user Not Found',
@@ -85,14 +86,14 @@ module.exports = {
         return user
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   toggleUserIsAdmin: async (req, res) => {
     return Users.findByPk(req.params.id)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).send({
             message: 'user Not Found',
@@ -104,13 +105,13 @@ module.exports = {
             isAdmin: requestAdmin,
           })
           .then(() => res.status(200).send(user))
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       })
-      .catch(error => res.status(404).send(error));
+      .catch((error) => res.status(404).send(error));
   },
   toggleUserIsRepoAdmin: async (req, res) => {
     return Users.findByPk(req.params.id)
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).send({
             message: 'user Not Found',
@@ -122,16 +123,16 @@ module.exports = {
             isRepoAdmin: req.body.isRepoAdmin,
           })
           .then(() => res.status(200).send(user))
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       })
-      .catch(error => res.status(404).send(error));
+      .catch((error) => res.status(404).send(error));
   },
 
   dataSourceUserList: async (req, res) => {
     return Users.findAll()
-      .then(user => {
+      .then((user) => {
         let userDisplay = [];
-        user.forEach(item => {
+        user.forEach((item) => {
           const userData = {
             value: item.id,
             label: item.name,
@@ -140,67 +141,45 @@ module.exports = {
         });
         res.status(200).send(userDisplay);
       })
-      .catch(error => res.status(404).send(error));
+      .catch((error) => res.status(404).send(error));
   },
 
   exportListUser: async (req, res) => {
+    return Users.findAll({
+      order: [['createdAt', 'DESC']],
+    })
+      .then((user) => {
+        let userDisplay = [];
+        user.forEach((item) => {
+          const userData = {
+            ...item.dataValues,
+          };
+          userDisplay.push(userData);
+        });
 
-    try {
-      const from = req.query.from;
-      const to = req.query.to;
-
-      if (!from || !to) {
-        return res.status(400).json({ message: 'Missing date from or to on query params' });
-      }
-
-      const users = await Users.findAll({
-        where: {
-          createdAt: {
-            [Op.between]: [from, to]
-          },
-        }
-      });
-
-      const wb = new xl.Workbook();
-      const ws = wb.addWorksheet('Sheet 1');
-
-      let userDisplay = [];
-      users.forEach(item => {
-        const userData = {
-          ...item.dataValues,
-        };
-        userDisplay.push(userData);
-      });
-
-      // header
-      let headingColumnIndex = 1;
-      Object.keys(userDisplay[0]).forEach(key => {
-        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
+        // header
+        let headingColumnIndex = 1;
+        Object.keys(userDisplay[0]).forEach((key) => {
           ws.cell(1, headingColumnIndex++).string(key);
-        }
-      });
+        });
 
-      //Write Data in Excel file
-      let rowIndex = 2;
-      userDisplay.forEach(record => {
-        let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-          if (columnName != 'isAdmin' && columnName != 'superAdmin' && columnName != 'isRepoAdmin') {
+        //Write Data in Excel file
+        let rowIndex = 2;
+        userDisplay.forEach((record) => {
+          let columnIndex = 1;
+          Object.keys(record).forEach((columnName) => {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
             );
-          }
+          });
+          rowIndex++;
         });
-        rowIndex++;
-      });
 
-      wb.write(`Report User - ${new Date().getTime() / 1000}.xlsx`, res);
-      // res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
-      // wb.writeToBuffer('Excel.xlsx').then((buffer) => {
-      //   res.end(new Buffer(buffer, 'base64'));
-      // });
-    } catch (error) {
-      console.log(error);
-    }
+        wb.write('list_user.xlsx', res);
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(404).json({ message: 'masuk sini' });
+      });
   },
 };

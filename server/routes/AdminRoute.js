@@ -36,7 +36,6 @@ router.get('/manage-user/export', [AuthJWT.isAdmin], UserManageController.export
 router.get('/dashboard', DashboardController.dashboardSummary);
 
 router.post('/book', [AuthJWT.isAdmin], BookController.list);
-router.get('/book/sample', [AuthJWT.isAdmin], BookController.downloadSampleExcel);
 router.get('/book/:id', [AuthJWT.isAdmin], BookController.getById);
 router.post('/book/create', [AuthJWT.isAdmin], UploadImage.single('image'), BookController.add);
 router.put('/book/:id', [AuthJWT.isAdmin], UploadImage.single('image'), BookController.update);
@@ -49,7 +48,6 @@ router.post(
 router.delete('/book/:id', [AuthJWT.isAdmin], BookController.delete);
 
 router.post('/ebook', [AuthJWT.isAdmin], EbookController.list);
-router.get('/ebook/sample', [AuthJWT.isAdmin], EbookController.downloadSampleExcel);
 router.get('/ebook/:id', [AuthJWT.isAdmin], EbookController.getById);
 router.post('/ebook/create', [AuthJWT.isAdmin], UploadImage.single('image'), EbookController.add);
 router.put('/ebook/:id', [AuthJWT.isAdmin], UploadImage.single('image'), EbookController.update);

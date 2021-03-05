@@ -2,22 +2,24 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { connect } from 'react-redux';
+import { pdfjs } from 'react-pdf';
+import ReactStars from 'react-rating-stars-component';
 import { Rating } from 'semantic-ui-react';
 import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
-import EbookUserAPI from '../../../../api/EbookUserApi';
+import { getAllEbooks, getEbookCategory } from '../../../../redux/action/ebookUser';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
-// import Preview from './component/preview';
-// import Maintenance from './component/maintenance';
-import Loader from '../../component/Loader';
-import { Dropdown } from 'semantic-ui-react';
+import { getCategory } from 'redux/action/bookUser';
+import Preview from './component/preview';
+import Maintenance from './component/maintenance';
+
+import { Dropdown, Input } from 'semantic-ui-react';
 import { checkIsImageExist } from '../../component/helper';
 
 function Ebooks(props) {
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [category, setCategory] = React.useState([]);
-  let [ebooks, setEbooks] = React.useState([]);
   let [showPreview, setShowPreview] = React.useState({
     open: false,
     file: null,
@@ -32,30 +34,21 @@ function Ebooks(props) {
   });
 
   function getAllEbook(params) {
-    setProcessing(true);
-    EbookUserAPI.get(params)
-      .then(response => {
-        setProcessing(false);
-        setEbooks(response.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-      .finally(() => {
-        setProcessing(false);
-      });
+    props.getAllEbooks(params).then(() => {
+      setProcessing(false);
+    });
   }
 
   function getCategory() {
-    EbookUserAPI.getCategory().then(res => {
-      if (res.data) {
+    props.getCategory().then((res) => {
+      if (res.resp) {
         if (res.data.length > 0) {
           let filterCategories = res.data
-            .map(e => e['label'])
+            .map((e) => e['label'])
             .map((e, i, final) => final.indexOf(e) === i && i)
-            .filter(e => res.data[e])
-            .map(e => res.data[e]);
-          let categories = filterCategories.map(e => ({ text: e.label, value: e.label }));
+            .filter((e) => res.data[e])
+            .map((e) => res.data[e]);
+          let categories = filterCategories.map((e) => ({ text: e.label, value: e.label }));
           setCategory(categories);
         }
       }
@@ -68,20 +61,20 @@ function Ebooks(props) {
   }, []);
 
   function prev() {
-    if (ebooks.activePage > 1) {
+    if (props.ebooks.activePage > 1) {
       setPagination({
         ...pagination,
-        page: ebooks.activePage - 1,
+        page: props.ebooks.activePage - 1,
         judul: '',
       });
     }
   }
   function next() {
-    if (ebooks.totalPage !== ebooks.activePage) {
-      if (ebooks.data.length !== 0) {
+    if (props.ebooks.totalPage !== props.ebooks.activePage) {
+      if (props.ebooks.data.length !== 0) {
         setPagination({
           ...pagination,
-          page: ebooks.activePage + 1,
+          page: props.ebooks.activePage + 1,
           judul: '',
         });
       }
@@ -107,7 +100,7 @@ function Ebooks(props) {
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
-  if (processing && ebooks === null) return null;
+  if (processing && props.ebooks === null) return null;
 
   const { wishlist } = props;
 
@@ -146,7 +139,7 @@ function Ebooks(props) {
                       type="text"
                       placeholder="Search..."
                       value={pagination.judul}
-                      onChange={value => handleSearch(value.target.value)}
+                      onChange={(value) => handleSearch(value.target.value)}
                     />
                     <i
                       onClick={() => {
@@ -163,6 +156,16 @@ function Ebooks(props) {
                       style={{ cursor: 'pointer' }}
                     ></i>
                   </div>
+                  {/* <Search
+                    style={{
+                      borderRadius: '10px',
+                    }}
+                    placeholder="Masukkan Judul"
+                    id="searchBook"
+                    enterButton="Cari"
+                    size="large"
+                    onSearch={value => handleSearch(value)}
+                  /> */}
                 </div>
                 <div
                   className="ml-10 cursor-pointer"
@@ -183,21 +186,9 @@ function Ebooks(props) {
               </div>
             </div>
           </nav>
-          {processing ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                height: '600px',
-                flex: '1 1 0',
-                alignItems: 'center',
-              }}
-            >
-              <Loader />
-            </div>
-          ) : ebooks.data !== undefined ? (
-            ebooks.data.map((ebook, key) => {
+          {props.ebooks && props.ebooks.data.length === 0 && <NoData />}
+          {props.ebooks &&
+            props.ebooks.data.map((ebook, key) => {
               let img = '';
               if (ebook.image !== null && checkIsImageExist(ebook.image)) {
                 img = ebook.image;
@@ -207,7 +198,7 @@ function Ebooks(props) {
                 img = require('../../../../assets/NoImage.png');
               }
 
-              let isAdd = wishlist.some(ws => ws.id === ebook.id);
+              let isAdd = wishlist.some((ws) => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -226,12 +217,15 @@ function Ebooks(props) {
                     {!isAdd && (
                       <div
                         onClick={() => {
-                          // let cloneEbook = Object.assign({}, ebook);
-                          ebook.type = 'BorrowEbook';
+                          ebook.type = 'ebook';
+                          console.log('onClick', ebook);
                           if (!isUserLogged) {
                             setShowModalDeletion(true);
                           } else {
                             props.addEbookWishlist(ebook);
+
+                            // let data = [...book];
+                            // localStorage.setItem('bni_book', JSON.stringify(data));
                           }
                         }}
                       >
@@ -277,12 +271,9 @@ function Ebooks(props) {
                   </button>
                 </div>
               );
-            })
-          ) : (
-            <NoData />
-          )}
+            })}
         </div>
-        {ebooks && (
+        {props.ebooks && props.ebooks.data.length !== 0 && (
           <div className="flex justify-center  mt-10">
             <nav className="relative z-0 inline-flex shadow-sm">
               <div
@@ -302,7 +293,7 @@ function Ebooks(props) {
                 href="#"
                 className="-ml-px relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm leading-5 font-medium text-gray-700  transition ease-in-out duration-150"
               >
-                {ebooks.activePage} of {ebooks.totalPage}
+                {props.ebooks.activePage} of {props.ebooks.totalPage}
               </div>
 
               <div
@@ -336,15 +327,19 @@ function Ebooks(props) {
     </main>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
+    ebooks: state.userEbooks.ebooks,
     wishlist: state.wishlist.ebooks,
   };
 };
 
 export default withRouter(
   connect(mapStateToProps, {
+    getAllEbooks,
+    getCategory,
     addEbookWishlist,
     removeEbookWishlist,
+    getEbookCategory,
   })(Ebooks)
 );
