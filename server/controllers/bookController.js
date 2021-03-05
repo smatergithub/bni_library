@@ -1,5 +1,5 @@
 const Books = require('../models').books;
-const ListBorrowBook = require('../models').listBorrowBook;
+const TransactionBook = require('../models').transactionBook;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const fs = require('fs');
@@ -95,6 +95,30 @@ module.exports = {
       return res.status(500).json(error.message);
     }
   },
+
+  // getBookListNeedRated: async (req, res) => {
+  //   try {
+  //     let paramQuerySQL = {
+  //       where: {
+  //         isGiveRating: false,
+  //         userId: req.params.userId
+  //       },
+  //       include: 'book'
+  //     }
+
+  //     const transactionBook = await TransactionBook.findAll(paramQuerySQL);
+  //     if (transactionBook.length < 1) {
+  //       return res.status(404).send({
+  //         message: 'book Not Found',
+  //       });
+  //     }
+
+  //     return res.status(200).send(transactionBook);
+  //   } catch (error) {
+  //     console.log(error);
+  //     return res.status(500).json(error.message);
+  //   }
+  // },
 
   list: async (req, res) => {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
@@ -216,13 +240,6 @@ module.exports = {
     })
       .then(response => {
         // console.log("response", response.id)
-        const createListBorrowBook = ListBorrowBook.create({
-          bookId: response.id,
-        });
-
-        if (!createListBorrowBook) {
-          return res.status(404).send('Failed create Book');
-        }
 
         return res.status(201).json({
           message: 'Process Succesfully create Book',
@@ -311,11 +328,6 @@ module.exports = {
 
         Books.bulkCreate(Databooks)
           .then(response => {
-            response.map(item => {
-              return ListBorrowBook.create({
-                bookId: item.id,
-              });
-            });
             return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
@@ -341,21 +353,6 @@ module.exports = {
         if (!book) {
           return res.status(404).send({ message: 'Book not found' });
         }
-        ListBorrowBook.findAll({ where: { bookId: req.params.id } }).then(listBorrow => {
-          if (
-            listBorrow[0].dataValues.transactionBookId === null ||
-            listBorrow[0].dataValues.transactionBookId === undefined
-          ) {
-            listBorrow[0].destroy().then(() => {
-              book
-                .destroy()
-                .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(500).send(error));
-            });
-          } else {
-            res.status(500).send({ message: 'buku ini sedang dipakai di transaksi lainnya' });
-          }
-        });
       })
       .catch(error => res.status(500).send(error));
   },
@@ -363,13 +360,15 @@ module.exports = {
   downloadSampleExcel: async (req, res) => {
     try {
       const excel = fs.readFileSync(`${__dirname}/../file/example-book-format.xlsx`);
-      res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
+      res.writeHead(200, [
+        ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+      ]);
       return res.end(new Buffer(excel, 'base64'));
     } catch (error) {
       console.log(error);
       return res.status(500).json({
-        message: 'something went wrong'
+        message: 'something went wrong',
       });
     }
-  }
+  },
 };

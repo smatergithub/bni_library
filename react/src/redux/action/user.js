@@ -181,38 +181,38 @@ export const getUsersListToAdmin = param => dispatch => {
     });
 };
 
-export const getBorrowedBookItem = (id, params) => () => {
-  return UserApi.getBorrowedBookItem(id, params)
-    .then(res => {
-      if (res) {
-        return {
-          resp: true,
-          msg: '',
-          data: res.data,
-        };
-      }
-    })
-    .catch(err => {
-      let msg = err.response.data.message || 'Something Wrong, request failed !';
-      return { resp: false, msg: msg };
-    });
-};
-export const getBorrowedEbookItem = (id, params) => () => {
-  return UserApi.getBorrowedEbookItem(id, params)
-    .then(res => {
-      if (res) {
-        return {
-          resp: true,
-          msg: '',
-          data: res.data,
-        };
-      }
-    })
-    .catch(err => {
-      let msg = err.response.data.message || 'Something Wrong, request failed !';
-      return { resp: false, msg: msg };
-    });
-};
+// export const getBorrowedBookItem = (id, params) => () => {
+//   return UserApi.getBorrowedBookItem(id, params)
+//     .then(res => {
+//       if (res) {
+//         return {
+//           resp: true,
+//           msg: '',
+//           data: res.data,
+//         };
+//       }
+//     })
+//     .catch(err => {
+//       let msg = err.response.data.message || 'Something Wrong, request failed !';
+//       return { resp: false, msg: msg };
+//     });
+// };
+// export const getBorrowedEbookItem = (id, params) => () => {
+//   return UserApi.getBorrowedEbookItem(id, params)
+//     .then(res => {
+//       if (res) {
+//         return {
+//           resp: true,
+//           msg: '',
+//           data: res.data,
+//         };
+//       }
+//     })
+//     .catch(err => {
+//       let msg = err.response.data.message || 'Something Wrong, request failed !';
+//       return { resp: false, msg: msg };
+//     });
+// };
 
 export const createBookFeeback = userData => () => {
   return UserApi.createBookFeeback(userData)

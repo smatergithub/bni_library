@@ -85,6 +85,66 @@ module.exports = {
       });
   },
 
+  getBookListNeedRated: async (req, res) => {
+    var userId = req.params.id;
+    try {
+      let paramQuerySQL = {
+        where: {
+          isGiveRating: false,
+          userId: userId,
+        },
+        include: 'book',
+      };
+
+      const transactionBook = await TransactionBook.findAll(paramQuerySQL);
+      if (transactionBook.length < 1) {
+        return res.status(404).send({
+          message: 'book Not Found',
+        });
+      }
+      let data = transactionBook.map(item => {
+        return {
+          label: item.book.judul,
+          id: item.book.id,
+        };
+      });
+      return res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error.message);
+    }
+  },
+
+  getEbookListNeedRated: async (req, res) => {
+    var userId = req.params.id;
+    try {
+      let paramQuerySQL = {
+        where: {
+          isGiveRating: false,
+          userId: userId,
+        },
+        include: 'book',
+      };
+
+      const transactionEbook = await TransactionEbook.findAll(paramQuerySQL);
+      if (transactionEbook.length < 1) {
+        return res.status(404).send({
+          message: 'book Not Found',
+        });
+      }
+      let data = transactionEbook.map(item => {
+        return {
+          label: item.ebook.judul,
+          id: item.ebook.id,
+        };
+      });
+      return res.status(200).send(data);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error.message);
+    }
+  },
+
   listBorrowBookUser: async (req, res) => {
     var userId = req.params.id;
     let { q, order, sort, page, limit, rating, borrowed } = req.query;
@@ -119,49 +179,6 @@ module.exports = {
       };
     }
     paramQuerySQL.include = ['book'];
-
-    //limit
-    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
-      paramQuerySQL.limit = parseInt(limit);
-    }
-    // offset
-    if (page != '' && typeof page !== 'undefined' && page > 0) {
-      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
-    }
-
-    // sort par defaut si param vide ou inexistant
-    if (typeof sort === 'undefined' || sort == '') {
-      sort = 'ASC';
-    }
-    // order by
-    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
-      paramQuerySQL.order = [[order, sort]];
-    }
-
-    TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
-        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
-        let page = paramQuerySQL.page;
-        res.status(200).json({
-          count: result.count,
-          totalPage: activePage,
-          activePage: page,
-          data: result.rows,
-        });
-      })
-      .catch(err => {
-        res.status(500).send(err);
-      });
-  },
-
-  listHistoryBorrowBookUser: async (req, res) => {
-    var userId = req.userId;
-    let { q, order, sort, limit, page } = req.query;
-    let paramQuerySQL = {
-      where: { userId: userId },
-      where: { status: 'Dikembalikan' },
-      include: ['book', 'user'],
-    };
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -251,6 +268,49 @@ module.exports = {
     }
 
     TransactionEbook.findAndCountAll(paramQuerySQL)
+      .then(result => {
+        let activePage = Math.ceil(result.count / paramQuerySQL.limit);
+        let page = paramQuerySQL.page;
+        res.status(200).json({
+          count: result.count,
+          totalPage: activePage,
+          activePage: page,
+          data: result.rows,
+        });
+      })
+      .catch(err => {
+        res.status(500).send(err);
+      });
+  },
+
+  listHistoryBorrowBookUser: async (req, res) => {
+    var userId = req.userId;
+    let { q, order, sort, limit, page } = req.query;
+    let paramQuerySQL = {
+      where: { userId: userId },
+      where: { status: 'Dikembalikan' },
+      include: ['book', 'user'],
+    };
+
+    //limit
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.query.limit);
+    }
+
+    // sort par defaut si param vide ou inexistant
+    if (typeof sort === 'undefined' || sort == '') {
+      sort = 'ASC';
+    }
+    // order by
+    if (order != '' && typeof order !== 'undefined' && ['name'].includes(order.toLowerCase())) {
+      paramQuerySQL.order = [[order, sort]];
+    }
+
+    TransactionBook.findAndCountAll(paramQuerySQL)
       .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;

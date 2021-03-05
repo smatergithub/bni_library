@@ -93,7 +93,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 <div>
                   <Rating defaultRating={data.countRating} maxRating={6} icon="star" disabled />
                 </div>
-                <span style={{ paddingLeft: '12px' }}>{data.countRating} Views</span>
+                <span style={{ paddingLeft: '12px' }}>{data.totalRead} Views</span>
               </div>
             </div>
           )}

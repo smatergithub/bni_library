@@ -382,12 +382,25 @@ function CreateNewEBook(props) {
                   </div>
 
                   <div className="mt-6">
-                    <button
-                      className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
-                      type="submit"
-                    >
-                      SUBMIT
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <div>
+                        {' '}
+                        <button
+                          className="px-4 py-1 text-black font-light tracking-wider bg-gray-400 rounded"
+                          type="submit"
+                        >
+                          BACK
+                        </button>
+                      </div>
+                      <div style={{ paddingLeft: '24px' }}>
+                        <button
+                          className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
+                          type="submit"
+                        >
+                          SUBMIT
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </div>

@@ -37,8 +37,6 @@ const Dashboard = props => {
 
   const { dashboardSummary } = props;
 
-  console.log('aaa', dashboardSummary);
-
   const dataSourceBook =
     dashboardSummary.ratingBook === undefined
       ? null
@@ -50,6 +48,7 @@ const Dashboard = props => {
             rating: item.totalRating,
           };
         });
+
   const dataSourceEbook =
     dashboardSummary.ratingEbook === undefined
       ? null

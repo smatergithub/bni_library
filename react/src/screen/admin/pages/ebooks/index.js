@@ -109,7 +109,7 @@ const Ebooks = props => {
   };
 
   let uploadDocument = e => {
-    e.preventDefault();
+    // e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];

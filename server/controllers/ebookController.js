@@ -1,6 +1,6 @@
 const Ebooks = require('../models/').ebooks;
-const ListBorrowEbook = require('../models').listBorrowEbook;
 const Sequelize = require('sequelize');
+const TransactionEbook = require('../models').transactionEbook;
 // const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 // const fetch = require('node-fetch');
 const Op = Sequelize.Op;
@@ -110,6 +110,30 @@ module.exports = {
       return res.status(500).json(error.message);
     }
   },
+
+  // getEbookListNeedRated: async (req, res) => {
+  //   try {
+  //     let paramQuerySQL = {
+  //       where: {
+  //         isGiveRating: false,
+  //         userId: req.params.userId
+  //       },
+  //       include: 'book'
+  //     }
+
+  //     const transactionEbook = await TransactionEbook.findAll(paramQuerySQL);
+  //     if (transactionEbook.length < 1) {
+  //       return res.status(404).send({
+  //         message: 'book Not Found',
+  //       });
+  //     }
+
+  //     return res.status(200).send(transactionEbook);
+  //   } catch (error) {
+  //     console.log(error);
+  //     return res.status(500).json(error.message);
+  //   }
+  // },
 
   list: async (req, res) => {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
@@ -230,14 +254,6 @@ module.exports = {
       image: req.file ? location : req.file,
     })
       .then(response => {
-        const createListBorrowEbook = ListBorrowEbook.create({
-          EbookId: response.id,
-        });
-
-        if (!createListBorrowEbook) {
-          return res.status(404).send('Failed create Ebook');
-        }
-
         return res.status(201).json({
           message: 'Process Succesfully create Ebook',
           data: response,
@@ -289,11 +305,6 @@ module.exports = {
 
         Ebooks.bulkCreate(Databooks)
           .then(response => {
-            response.map(item => {
-              return ListBorrowEbook.create({
-                ebookId: item.id,
-              });
-            });
             return res.status(200).json({
               message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
@@ -356,21 +367,6 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-        ListBorrowEbook.findAll({ where: { ebookId: req.params.id } }).then(listBorrow => {
-          if (
-            listBorrow[0].dataValues.transactionEbookId == null ||
-            listBorrow[0].dataValues.transactionEbookId == undefined
-          ) {
-            listBorrow[0].destroy().then(() => {
-              ebook
-                .destroy()
-                .then(() => res.status(200).send({ message: 'succesfully delete' }))
-                .catch(error => res.status(500).send(error));
-            });
-          } else {
-            res.status(500).send({ message: 'Buku ini sedang dipakai di transaksi lainnya' });
-          }
-        });
       })
       .catch(error => res.status(500).send(error));
   },
@@ -378,13 +374,15 @@ module.exports = {
   downloadSampleExcel: async (req, res) => {
     try {
       const excel = fs.readFileSync(`${__dirname}/../file/example-ebook-format.xlsx`);
-      res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
+      res.writeHead(200, [
+        ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+      ]);
       return res.end(new Buffer(excel, 'base64'));
     } catch (error) {
       console.log(error);
       return res.status(500).json({
-        message: 'something went wrong'
+        message: 'something went wrong',
       });
     }
-  }
+  },
 };

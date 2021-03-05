@@ -56,6 +56,13 @@ $ npm install
 $ npm run setup-dev
 ```
 
+After Install Depedencies , need to add Requirement folder in location path server/public
+
+```sh
+$ add folder location path server/public , name folder is document
+$ add folder location path server/public , name folder is images
+```
+
 ```sh
 $ npm run dev
 ```
@@ -71,6 +78,9 @@ Frontend Only
 ```sh
 $ npm run dev-react
 ```
+
+
+
 
 ## Deployment
 

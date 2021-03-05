@@ -67,6 +67,16 @@ export default class UsersApi {
     const url = `/api/profile/listBorrowEbook/${id}?${params}`;
     return Request.getWithAuth(url);
   }
+
+  static getBorrowedBookItemNoRated(id, params) {
+    const url = `/api/profile/book/no-rated/${id}?${params}`;
+    return Request.getWithAuth(url);
+  }
+  static getBorrowedEbookItemNoRated(id, params) {
+    const url = `/api/profile/book/no-rated/${id}?${params}`;
+    return Request.getWithAuth(url);
+  }
+
   static createBookFeeback(userData) {
     const url = `/api/ratingBook`;
     return Request.postWithAuth(url, userData, false, false);

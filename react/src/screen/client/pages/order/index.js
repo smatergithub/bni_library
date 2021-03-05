@@ -26,8 +26,7 @@ function OrderBook(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [isUserhaveActiveBook, setIsUserHaveActiveBook] = React.useState(false);
   let [isUserhaveActiveEbook, setIsUserHaveActiveEbook] = React.useState(false);
-  let [listborrowBook, setListBorrowBook] = React.useState([]);
-  let [listborrowEbook, setListBorrowEbook] = React.useState([]);
+  let [getIdUser, setGetIdUser] = React.useState('');
   let localBook = JSON.parse(localStorage.getItem('bni_book'));
   let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
   let book = localBook !== null ? localBook : [];
@@ -39,6 +38,7 @@ function OrderBook(props) {
     props.getMe().then(res => {
       if (res.data) {
         let userId = res.data.id;
+        setGetIdUser(userId);
         if (type === 'book') {
           BookUserAPI.getById(id).then(res => {
             setProcessing(false);
@@ -54,7 +54,7 @@ function OrderBook(props) {
                 // if (res.data.data.length > 1) {
                 //   setIsUserHaveActiveBook(true);
                 // }
-                setListBorrowBook(res.data.data);
+
                 let checkIsBorrowed = res.data.data.some(
                   book => book.status === 'Dikembalikan' && !book.isGiveRating
                 );
@@ -81,7 +81,7 @@ function OrderBook(props) {
               // if (res.data.data.length > 1) {
               //   setIsUserHaveActiveEbook(true);
               // }
-              setListBorrowEbook(res.data.data);
+
               let checkIsBorrowed = res.data.data.some(
                 ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
               );
@@ -179,8 +179,6 @@ function OrderBook(props) {
     }
   }
 
-  console.log('aaa', listborrowBook);
-
   if (processing && books == null) return null;
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
@@ -220,16 +218,17 @@ function OrderBook(props) {
           Peminjaman Berhasil, Silahkan Tunjukan Invoice Untuk Pengambilan Pinjaman{' '}
         </div>
       </Modal>
-      <FeedbackModal
-        title="Action required"
-        open={isBorrowReview}
-        handleSubmit={formData => onFeedbackSubmit(formData)}
-        labelSubmitButton="Masuk"
-        listBorrowBook={listborrowBook}
-        listborrowEbook={listborrowEbook}
-      >
-        <div className="my-5">Silahkan Masuk terlebih dahulu</div>
-      </FeedbackModal>
+      {isBorrowReview && (
+        <FeedbackModal
+          title="Action required"
+          open={isBorrowReview}
+          handleSubmit={formData => onFeedbackSubmit(formData)}
+          labelSubmitButton="Masuk"
+          userId={getIdUser}
+        >
+          <div className="my-5">Silahkan Masuk terlebih dahulu</div>
+        </FeedbackModal>
+      )}
     </div>
   );
 }

@@ -9,13 +9,13 @@ export default class HistoryApi {
     return Request.postWithAuth(url, body, false);
   }
 
-  static exportDataBook() {
-    const url = `/api/admin/transactionBook/history/export`;
+  static exportDataBook(from, to) {
+    const url = `/api/admin/transactionBook/history/export?from=${from}&to=${to}`;
     return Request.getFileWithAuth(url);
   }
 
-  static exportDataEbook() {
-    const url = `/api/admin/transactionEbook/history/export`;
+  static exportDataEbook(from, to) {
+    const url = `/api/admin/transactionEbook/history/export?from=${from}&to=${to}`;
     return Request.getFileWithAuth(url);
   }
 }

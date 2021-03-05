@@ -33,10 +33,10 @@ module.exports = {
           checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
         if (response.status === 401) {
-          checkIfUserAlreadyCreateOnDb({
-            npp: 'D000001'
-          }, 'password');
-          // res.status(402).send({ message: response.message });
+          // checkIfUserAlreadyCreateOnDb({
+          //   npp: 'D000001'
+          // }, 'password');
+          res.status(402).send({ message: response.message });
         }
         console.log(response);
       })
