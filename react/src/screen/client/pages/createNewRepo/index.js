@@ -1,13 +1,12 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { connect } from 'react-redux';
-
+import swal from 'sweetalert';
 import { withRouter } from 'react-router-dom';
-
 import { DatePicker, Space, Checkbox, Select } from 'antd';
-import { ToastError, ToastSuccess } from '../../../../component';
 import { CreateNewRepositoryUserAction } from '../../../../redux/action/repositorys';
 const { Option } = Select;
+
 const optionsResearch = [
   { label: 'Pusat', value: 'Pusat' },
   { label: 'Wilayah', value: 'Wilayah' },
@@ -54,12 +53,12 @@ function CreateNewRepo(props) {
     formData['strata'] = strata;
     formData['releaseYear'] = releaseYear;
 
-    props.CreateNewRepositoryUserAction(formData).then((res) => {
+    props.CreateNewRepositoryUserAction(formData).then(res => {
       if (res.resp) {
-        ToastSuccess(res.msg);
+        swal('Message!', 'Repository Berhasil di Kirim', 'success');
         props.history.push('/riset-sukses');
       } else {
-        ToastError(res.msg);
+        swal('Error!', res.msg, 'error');
       }
     });
   }
@@ -110,6 +109,7 @@ function CreateNewRepo(props) {
                       required: 'Field tidak boleh kosong',
                     })}
                   />
+                  <div className="text-red-700">{errors.name && errors.name.message}</div>
                 </div>
 
                 <div className="mt-2">
@@ -121,11 +121,11 @@ function CreateNewRepo(props) {
                     className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
-                    aria-label="Email"
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
                   />
+                  <div className="text-red-700">{errors.title && errors.title.message}</div>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -135,11 +135,14 @@ function CreateNewRepo(props) {
                     style={{
                       width: '100% ',
                     }}
+                    name="kategoriRiset"
                     options={optionsResearch}
                     value={typeResearch}
                     onChange={onChangeTypeResearch}
                   />
-                  <div className="text-red-700"></div>
+                  <div className="text-red-700">
+                    {errors.kategoriRiset && errors.kategoriRiset.message}
+                  </div>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -150,11 +153,13 @@ function CreateNewRepo(props) {
                     className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
-                    aria-label="Email"
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
                   />
+                  <div className="text-red-700">
+                    {errors.university && errors.university.message}
+                  </div>
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
@@ -165,11 +170,11 @@ function CreateNewRepo(props) {
                     className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
-                    aria-label="Email"
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
                   />
+                  <div className="text-red-700">{errors.faculty && errors.faculty.message}</div>
                 </div>
 
                 <div className="mt-2">
@@ -181,11 +186,11 @@ function CreateNewRepo(props) {
                     className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
                     type="text"
                     required=""
-                    aria-label="Email"
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
                   />
+                  <div className="text-red-700">{errors.city && errors.city.message}</div>
                 </div>
 
                 <div className="mt-2">
@@ -197,9 +202,9 @@ function CreateNewRepo(props) {
                     ref={register()}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={(e) => setMethodoloyResearch(e)}
+                    onSelect={e => setMethodoloyResearch(e)}
                   >
-                    {methodology.map((op) => {
+                    {methodology.map(op => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -213,9 +218,9 @@ function CreateNewRepo(props) {
                     ref={register()}
                     className="wilayah"
                     name="wilayah"
-                    onSelect={(e) => setStrata(e)}
+                    onSelect={e => setStrata(e)}
                   >
-                    {strataOpt.map((op) => {
+                    {strataOpt.map(op => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -225,8 +230,19 @@ function CreateNewRepo(props) {
                     Tahun
                   </label>
                   <Space direction="vertical">
-                    <DatePicker onChange={onChange} format="DD/MM/YYYY" />
+                    <DatePicker
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      name="releaseYear"
+                      onChange={onChange}
+                      // format="DD/MM/YYYY"
+                      picker="year"
+                    />
                   </Space>
+                  <div className="text-red-700">
+                    {errors.releaseYear && errors.releaseYear.message}
+                  </div>
                 </div>
 
                 <div className="mt-2">
@@ -235,11 +251,10 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={(e) => uploadImage(e, 'abstrack')}
+                    onChange={e => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
-                    aria-label="Email"
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
@@ -249,11 +264,10 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={(e) => uploadImage(e, 'document')}
+                    onChange={e => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
-                    aria-label="Email"
                   />
                   <div className="text-red-700">{errors.dateEbook && errors.dateEbook.message}</div>
                 </div>
@@ -270,7 +284,6 @@ function CreateNewRepo(props) {
                       required: 'Field tidak boleh kosong',
                     })}
                     placeholder="Masukkan informasi buku"
-                    aria-label="Email"
                   />
                   <div className="text-red-700">
                     {errors.description && errors.description.message}

@@ -76,7 +76,7 @@ function NavBar(props) {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const ref = React.useRef(null);
 
-  const handleClick = (e) => {
+  const handleClick = e => {
     if (ref.current && !ref.current.contains(e.target)) {
       setShowMobileMenu(false);
     }
@@ -152,7 +152,7 @@ function NavBar(props) {
         </div>
         {showMobileMenu && (
           <div className="bg-white w-full text-right lg:hidden">
-            {routes.map((rt) => {
+            {routes.map(rt => {
               return (
                 <li className="mr-3">
                   <Link
@@ -211,7 +211,7 @@ function NavBar(props) {
           id="nav-content"
         >
           <ul className="list-reset lg:flex justify-end flex-1 items-center">
-            {routes.map((rt) => {
+            {routes.map(rt => {
               return (
                 <li className="mr-3">
                   <Link
@@ -242,7 +242,17 @@ function NavBar(props) {
                   </Link>
                 </li>
               );
-            })}
+            })}{' '}
+            {props.isAuth && (
+              <li className="ml-3">
+                <a href="/profile/wishlist" style={{ textDecoration: 'none' }}>
+                  <div className="cursor-pointer relative bg-orange-500 p-2  rounded-full w-8 h-8 flex justify-center content-center">
+                    <i class="fas fa-shopping-cart text-white"></i>
+                    {badge}
+                  </div>
+                </a>
+              </li>
+            )}
             <li className="ml-3">
               {props.isAuth && (
                 <React.Fragment>
@@ -251,7 +261,6 @@ function NavBar(props) {
                     className="cursor-pointer relative bg-orange-500 p-2  rounded-full w-8 h-8 flex justify-center content-center"
                   >
                     <i className="fas fa-user text-lg text-white"></i>
-                    {badge}
                   </div>
                   {showHeaderMenu ? (
                     <div
@@ -298,7 +307,7 @@ function NavBar(props) {
     </nav>
   );
 }
-let mapStateToProps = (state) => {
+let mapStateToProps = state => {
   return {
     books: state.wishlist.books,
     ebooks: state.wishlist.ebooks,

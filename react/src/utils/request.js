@@ -1,30 +1,26 @@
 import axios from 'axios';
 function formatUrl(url) {
-  let checkIsParamsExit = url.split('').find((text) => text === '?');
+  let checkIsParamsExit = url.split('').find(text => text === '?');
   return url + `${checkIsParamsExit ? '&' : '?'}token=${localStorage.getItem('access_token_ebni')}`;
 }
-const defaultResponseOptions = {
-  fullResponse: false,
+
+const makeAxiosRequest = async requestOptions => {
+  try {
+    const res = await axios(requestOptions);
+    if (res.status >= 200 && res.status < 400) {
+      return res;
+    } else if (res.status === 401) {
+      localStorage.removeItem('access_token_ebni');
+      localStorage.removeItem('bni_UserRole');
+      window.location.replace('/auth/login');
+      window.location.reload();
+    } else if (res.status === 404) {
+      window.location.replace('/not-found');
+    }
+  } catch (error) {
+    throw error;
+  }
 };
-
-// );
-
-const makeAxiosRequest = (requestOptions, responseOptions = defaultResponseOptions) =>
-  axios(requestOptions)
-    .then((response) => (responseOptions.fullResponse ? response : response.data))
-    .catch((error) => {
-      if (error.response.status === 401 || error.response.status === 403) {
-        //place your reentry code
-        window.location.replace('/auth/login');
-        localStorage.removeItem('access_token_ebni');
-        localStorage.removeItem('bni_UserRole');
-      } else if (error.response.status === 404) {
-        console.log('error', error);
-        window.location.replace('/not-found');
-      } else {
-        throw responseOptions.fullResponse ? error.response : error.response.data;
-      }
-    });
 
 export default class Request {
   static get(url, params) {
@@ -52,24 +48,25 @@ export default class Request {
     const requestOptions = {
       method: 'get',
       url,
-      // headers: {
-      //   'x-access-token': localStorage.getItem('access_token_ebni'),
-      // },
+      headers: {
+        // 'x-access-token': localStorage.getItem('access_token_ebni'),
+        'Content-Type': 'application/json',
+      },
       responseType: 'blob',
     };
     return makeAxiosRequest(requestOptions);
   }
 
-  static post(url, data, options) {
+  static post(url, data) {
     url = formatUrl(url);
     const requestOptions = {
       method: 'post',
       url,
       data,
     };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
-  static postWithAuth(url, data, options, isFormData) {
+  static postWithAuth(url, data, isFormData) {
     url = formatUrl(url);
     const requestOptions = {
       method: 'post',
@@ -80,10 +77,10 @@ export default class Request {
         // 'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 
-  static postFileWithAuth(url, data, options, isFormData) {
+  static postFileWithAuth(url, data, isFormData) {
     url = formatUrl(url);
     const requestOptions = {
       method: 'post',
@@ -95,16 +92,16 @@ export default class Request {
       },
       responseType: 'blob',
     };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 
-  static put(url, data, options) {
+  static put(url, data) {
     url = formatUrl(url);
     const requestOptions = { method: 'put', url, data };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 
-  static putWithAuth(url, data, options, isFormData) {
+  static putWithAuth(url, data, isFormData) {
     url = formatUrl(url);
     const requestOptions = {
       method: 'put',
@@ -115,16 +112,16 @@ export default class Request {
         // 'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 
-  static delete(url, params, options) {
+  static delete(url, params) {
     url = formatUrl(url);
     const requestOptions = { method: 'delete', url, params };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 
-  static deleteWithAuth(url, data, options, isFormData) {
+  static deleteWithAuth(url, data, isFormData) {
     url = formatUrl(url);
     const requestOptions = {
       method: 'delete',
@@ -135,6 +132,6 @@ export default class Request {
         // 'x-access-token': localStorage.getItem('access_token_ebni'),
       },
     };
-    return makeAxiosRequest(requestOptions, options);
+    return makeAxiosRequest(requestOptions);
   }
 }

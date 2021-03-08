@@ -107,24 +107,7 @@ const UsersList = props => {
             </p>
           </div>
         </div>
-        {/* {loading ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              height: '600px',
-              flex: '1 1 0',
-              alignItems: 'center',
-            }}
-          >
-            <Loader />
-          </div>
-        ) : users.data !== undefined && users.data.length > 0 ? (
 
-        ) : (
-          <NoData />
-        )} */}
         <React.Fragment>
           <div
             className="min-w-full bg-white"

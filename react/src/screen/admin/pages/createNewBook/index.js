@@ -3,15 +3,10 @@ import { DatePicker, Space, Checkbox } from 'antd';
 import queryString from 'query-string';
 import { connect } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import {
-  CreateNewBookAction,
-  UploadBookFIle,
-  getDetailBook,
-  EditBookAction,
-} from '../../../../redux/action/books';
-import { ToastError, ToastSuccess } from '../../../../component';
+import BookAPI from '../../../../api/BookApi';
+import { CreateNewBookAction, EditBookAction } from '../../../../redux/action/books';
+import swal from 'sweetalert';
 import Loader from '../../component/Loader';
-
 function CreateNewBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
@@ -21,7 +16,6 @@ function CreateNewBook(props) {
   let [publishDate, setPublishDate] = React.useState(null);
   let [books, setBooks] = React.useState(null);
   let [isLoading, setIsLoading] = React.useState(false);
-  let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
     if (!id) {
@@ -30,12 +24,12 @@ function CreateNewBook(props) {
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
-      props.CreateNewBookAction(formData).then((res) => {
+      props.CreateNewBookAction(formData).then(res => {
         if (res.resp) {
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
           props.history.push('/admin/books');
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     } else {
@@ -45,17 +39,18 @@ function CreateNewBook(props) {
       formData['status'] =
         statusValue !== null ? (statusValue === 'Ada' ? 'Ada' : 'Kosong') : book.status;
 
-      props.EditBookAction(id, formData).then((res) => {
+      props.EditBookAction(id, formData).then(res => {
         if (res.resp) {
           props.history.push('/admin/books');
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     }
   }
-  let uploadImage = (e) => {
+
+  let uploadImage = e => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -67,13 +62,14 @@ function CreateNewBook(props) {
 
     reader.readAsDataURL(file);
   };
+
   React.useEffect(() => {
     if (id) {
-      props.getDetailBook(id).then((res) => {
-        if (res.resp) {
+      BookAPI.detail(id).then(res => {
+        if (res.data) {
           setBooks(res.data);
-          setStatusValue(res.data.book.status);
-          setPublishDate(res.data.book.tahunTerbit);
+          setStatusValue(res.data.status);
+          setPublishDate(res.data.tahunTerbit);
         } else {
           setBooks(null);
         }
@@ -87,49 +83,23 @@ function CreateNewBook(props) {
   function onChangeStatus(value) {
     setStatusValue(value[0]);
   }
-  let uploadPdf = (e) => {
-    e.preventDefault();
 
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    setIsLoading(true);
-    reader.onloadend = () => {
-      props.UploadBookFIle({ file }).then((res) => {
-        if (res) {
-          ToastSuccess(res.msg);
-          props.history.push('/admin/books');
-          setIsLoading(false);
-        } else {
-          ToastError(res.msg);
-        }
-      });
-      // setSourceLink(file);
-    };
-
-    reader.readAsDataURL(file);
-  };
   const optionsStatus = [
     { label: 'Ada', value: 'Ada' },
     { label: 'Kosong', value: 'Kosong' },
   ];
+
   if (!books && id) return null;
-  let book = id ? books.book : books;
+  let book = id ? books : books;
+  let titleFormat = id ? 'Ubah Buku' : 'Buku Baru';
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
-        <h1 className="w-full text-3xl text-black pb-6">Biografi Buku</h1>
+        <p style={{ fontSize: '24px' }} className="text-black">
+          {titleFormat}
+        </p>
 
         <div className="flex flex-wrap">
-          <div className="w-2/12 absolute" style={{ right: '3em', top: '5em' }}>
-            <button
-              type="button"
-              onClick={() => exportFile.current.click()}
-              disabled={isLoading}
-              className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-            >
-              <i className="fas fa-upload mr-3" /> Import Books
-            </button>
-          </div>
           {isLoading ? (
             <div className="w-full lg:w-1/1 mt-32 pl-0 lg:pl-2">
               <Loader />
@@ -139,17 +109,7 @@ function CreateNewBook(props) {
               <div className="leading-loose">
                 <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                   <p className="text-lg text-gray-800 font-medium pb-4">Informasi Buku</p>
-                  <input
-                    onChange={(e) => uploadPdf(e)}
-                    type="file"
-                    style={{
-                      display: 'none',
-                    }}
-                    ref={exportFile}
-                    className=""
-                    accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                    aria-label="Email"
-                  />
+
                   <div className="">
                     <label className="block text-sm text-gray-600" htmlFor="cus_name">
                       Judul
@@ -346,7 +306,7 @@ function CreateNewBook(props) {
                       Tahun Terbit
                     </label>
                     <Space direction="vertical">
-                      <DatePicker onChange={onChange} placeholder={publishDate} />
+                      <DatePicker onChange={onChange} placeholder={publishDate} picker="year" />
                     </Space>
                   </div>
 
@@ -356,7 +316,7 @@ function CreateNewBook(props) {
                     </label>
 
                     <input
-                      onChange={(e) => uploadImage(e)}
+                      onChange={e => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"
@@ -407,12 +367,25 @@ function CreateNewBook(props) {
                   </div>
 
                   <div className="mt-6">
-                    <button
-                      className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
-                      type="submit"
-                    >
-                      SUBMIT
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <div>
+                        {' '}
+                        <button
+                          className="px-4 py-1 text-black font-light tracking-wider bg-gray-400 rounded"
+                          type="submit"
+                        >
+                          BACK
+                        </button>
+                      </div>
+                      <div style={{ paddingLeft: '24px' }}>
+                        <button
+                          className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
+                          type="submit"
+                        >
+                          SUBMIT
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -426,7 +399,5 @@ function CreateNewBook(props) {
 
 export default connect(null, {
   CreateNewBookAction,
-  UploadBookFIle,
-  getDetailBook,
   EditBookAction,
 })(CreateNewBook);

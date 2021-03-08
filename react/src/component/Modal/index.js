@@ -26,7 +26,10 @@ export default function Modal({
                 width: '90% !important',
               }}
             >
-              <div className="modal-content py-4 text-left px-6">
+              <div
+                className="modal-content py-4 text-left px-6"
+                style={{ border: 'none', paddingBottom: '24px' }}
+              >
                 <div className="flex justify-between items-center pb-3">
                   <p className="text-2xl font-bold">{title}</p>
                   <div className="modal-close cursor-pointer z-50" onClick={() => onCLose()}>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { DatePicker, Input } from 'antd';
 import { Helmet } from 'react-helmet';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { ToastError, ToastSuccess } from '../../../component';
+import swal from 'sweetalert';
 import { signUp } from '../../../redux/action/user';
 
 const dateFormat = 'DD-MM-YYYY';
@@ -26,26 +26,26 @@ function Register(props) {
     let checkemail = formData.email.split('@');
 
     if (formData.email.trim().length === 0 && formData.password.trim().length === 0) {
-      ToastError('Email atau password tidak boleh kosong');
+      swal('Error!', 'Email atau password tidak boleh kosong', 'error');
     } else if (formData.password !== formData.confirmPassword) {
-      ToastError('Konfirmasi Password tidak sesuai !');
+      swal('Error!', 'Konfirmasi Password tidak sesuai !', 'error');
     } else if (checkemail.length === 2 && checkemail[1] === 'bni.co.id') {
       // user can input another email domain for testing, later the email must accept @bni.co.id only
-      ToastError('Anda belum menginput alamat email BNI Anda');
+      swal('Error!', 'Anda belum menginput alamat email BNI Anda', 'error');
     } else {
       // formData.email =
       // checkemail.length === 2 && checkemail[1] === 'bni.co.id'
       //   ? formData.email
       //   : formData.email + '@bni.co.id';
 
-      props.signUp(formData).then((res) => {
+      props.signUp(formData).then(res => {
         if (res.resp) {
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
 
           setIsRequestSuccess(true);
           // history.push('/auth/login');
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     }
@@ -97,7 +97,7 @@ function Register(props) {
                   )}
 
                   {!isRegisterSuccess && (
-                    <form onSubmit={(e) => onFormSubmit(e)}>
+                    <form onSubmit={e => onFormSubmit(e)}>
                       <div className="relative w-full mb-3">
                         <label
                           className="block uppercase text-gray-700 text-xs font-bold mb-2"
@@ -107,7 +107,7 @@ function Register(props) {
                         </label>
                         <input
                           type="text"
-                          onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                          onChange={e => setFormData({ ...formData, nama: e.target.value })}
                           className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                           placeholder="Nama"
                           style={{
@@ -120,7 +120,7 @@ function Register(props) {
                           Email
                         </label>
                         <input
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          onChange={e => setFormData({ ...formData, email: e.target.value })}
                           type="text"
                           className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                           placeholder="Email"
@@ -170,9 +170,9 @@ function Register(props) {
                           style={{
                             height: 45,
                           }}
-                          onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                          onChange={e => setFormData({ ...formData, password: e.target.value })}
                           placeholder="Password"
-                          iconRender={(visible) =>
+                          iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
                         />
@@ -188,11 +188,11 @@ function Register(props) {
                           style={{
                             height: 45,
                           }}
-                          onChange={(e) =>
+                          onChange={e =>
                             setFormData({ ...formData, confirmPassword: e.target.value })
                           }
                           placeholder="Confirm Password"
-                          iconRender={(visible) =>
+                          iconRender={visible =>
                             visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                           }
                         />

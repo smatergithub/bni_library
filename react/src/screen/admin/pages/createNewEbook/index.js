@@ -5,13 +5,12 @@ import { useForm } from 'react-hook-form';
 import queryString from 'query-string';
 import {
   CreateNewEbookAction,
-  getDetailEbook,
   EditEbookAction,
   UploadSingleEbookFIle,
 } from '../../../../redux/action/ebooks';
-import { UploadEbookFIle } from '../../../../redux/action/ebooks';
-import { ToastError, ToastSuccess } from '../../../../component';
+import EbookAPI from '../../../../api/EbookApi';
 import Loader from '../../component/Loader';
+import swal from 'sweetalert';
 
 function CreateNewEBook(props) {
   const { handleSubmit, register, errors } = useForm();
@@ -35,12 +34,12 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'add');
       } else {
-        props.CreateNewEbookAction(formData).then((res) => {
+        props.CreateNewEbookAction(formData).then(res => {
           if (res.resp) {
-            ToastSuccess(res.msg);
+            swal('Message!', res.msg, 'success');
             props.history.push('/admin/ebooks');
           } else {
-            ToastError(res.msg);
+            swal('Error!', res.msg, 'error');
           }
         });
       }
@@ -53,18 +52,18 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'edit', id);
       } else {
-        props.EditEbookAction(id, formData).then((res) => {
+        props.EditEbookAction(id, formData).then(res => {
           if (res.resp) {
-            ToastSuccess(res.msg);
+            swal('Message!', res.msg, 'success');
             props.history.push('/admin/ebooks');
           } else {
-            ToastError(res.msg);
+            swal('Error!', res.msg, 'error');
           }
         });
       }
     }
   }
-  let uploadImage = (e) => {
+  let uploadImage = e => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -77,55 +76,33 @@ function CreateNewEBook(props) {
     reader.readAsDataURL(file);
   };
 
-  let uploadDocument = (e) => {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    setIsLoading(true);
-    reader.onloadend = () => {
-      props.UploadEbookFIle({ file }).then((res) => {
-        if (res.resp) {
-          ToastSuccess(res.msg);
-          setIsLoading(false);
-          props.history.push('/admin/ebooks');
-        } else {
-          ToastError(res.msg);
-        }
-      });
-      // setSourceLink(file);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
   function uploadPdfAndGetLink(formData, type, id) {
     if (ebookFile) {
-      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then((res) => {
+      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
         if (res) {
           if (type === 'add') {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.CreateNewEbookAction(formData).then((res) => {
+            props.CreateNewEbookAction(formData).then(res => {
               if (res.resp) {
-                ToastSuccess(res.msg);
+                swal('Message!', res.msg, 'success');
                 props.history.push('/admin/ebooks');
               } else {
-                ToastError(res.msg);
+                swal('Error!', res.msg, 'error');
               }
             });
           } else {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.EditEbookAction(id, formData).then((res) => {
+            props.EditEbookAction(id, formData).then(res => {
               if (res.resp) {
-                ToastSuccess(res.msg);
+                swal('Message!', res.msg, 'success');
                 props.history.push('/admin/ebooks');
               } else {
-                ToastError(res.msg);
+                swal('Error!', res.msg, 'error');
               }
             });
           }
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     }
@@ -133,12 +110,12 @@ function CreateNewEBook(props) {
 
   React.useEffect(() => {
     if (id) {
-      props.getDetailEbook(id).then((res) => {
-        if (res.resp) {
+      EbookAPI.detail(id).then(res => {
+        if (res.data) {
           setEbooks(res.data);
-          setStatusValue(res.data.ebook.status);
+          setStatusValue(res.data.status);
 
-          setPublishDate(res.data.ebook.tahunTerbit);
+          setPublishDate(res.data.tahunTerbit);
         } else {
           setEbooks(null);
         }
@@ -157,25 +134,15 @@ function CreateNewEBook(props) {
     { label: 'Kosong', value: 'Kosong' },
   ];
   if (id && !ebooks) return null;
-  let ebook = id ? ebooks.ebook : ebooks;
+  let ebook = id ? ebooks : ebooks;
+
+  let titleFormat = id ? 'Ubah Ebook' : 'Ebook Baru';
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
-        <h1 className="w-full text-3xl text-black pb-6">Biografi Ebook</h1>
+        <h1 className="w-full text-3xl text-black pb-6">{titleFormat}</h1>
 
         <div className="flex flex-wrap relative">
-          {!id && (
-            <div className="w-2/12 absolute" style={{ right: '3em', top: '-5em' }}>
-              <button
-                type="button"
-                onClick={() => exportFile.current.click()}
-                disabled={isLoading}
-                className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-              >
-                <i className="fas fa-upload mr-3" /> Import Ebook
-              </button>
-            </div>
-          )}
           {isLoading ? (
             <div className="w-full lg:w-1/1 mt-32 pl-0 lg:pl-2">
               <Loader />
@@ -185,17 +152,6 @@ function CreateNewEBook(props) {
               <div className="leading-loose">
                 <form className="p-10 bg-white rounded shadow-xl" onSubmit={handleSubmit(onSubmit)}>
                   <p className="text-lg text-gray-800 font-medium pb-4">Informasi Ebook</p>
-                  <input
-                    onChange={(e) => uploadDocument(e)}
-                    type="file"
-                    style={{
-                      display: 'none',
-                    }}
-                    ref={exportFile}
-                    className=""
-                    accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                    aria-label="Email"
-                  />
                   <div className="">
                     <label className="block text-sm text-gray-600" htmlFor="cus_name">
                       Judul
@@ -213,9 +169,7 @@ function CreateNewEBook(props) {
                     <div className="text-red-700">{errors.judul && errors.judul.message}</div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Pengarang
-                    </label>
+                    <label className="block text-sm text-gray-600">Pengarang</label>
                     <input
                       name="pengarang"
                       defaultValue={ebook ? ebook.pengarang : ''}
@@ -232,9 +186,7 @@ function CreateNewEBook(props) {
                   </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Kategori Ebook
-                    </label>
+                    <label className="block text-sm text-gray-600">Kategori Ebook</label>
                     <input
                       name="kategori"
                       defaultValue={ebook ? ebook.kategori : ''}
@@ -249,9 +201,7 @@ function CreateNewEBook(props) {
                   </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Bahasa
-                    </label>
+                    <label className="block text-sm text-gray-600">Bahasa</label>
                     <input
                       name="bahasa"
                       defaultValue={ebook ? ebook.bahasa : ''}
@@ -266,9 +216,7 @@ function CreateNewEBook(props) {
                     <div className="text-red-700">{errors.bahasa && errors.bahasa.message}</div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      ISBN
-                    </label>
+                    <label className="block text-sm text-gray-600">ISBN</label>
                     <input
                       name="isbn"
                       defaultValue={ebook ? ebook.isbn : ''}
@@ -283,9 +231,7 @@ function CreateNewEBook(props) {
                     <div className="text-red-700">{errors.isbn && errors.isbn.message}</div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Penerbit
-                    </label>
+                    <label className="block text-sm text-gray-600">Penerbit</label>
                     <input
                       name="penerbit"
                       defaultValue={ebook ? ebook.penerbit : ''}
@@ -300,31 +246,25 @@ function CreateNewEBook(props) {
                     <div className="text-red-700">{errors.penerbit && errors.penerbit.message}</div>
                   </div>
 
-                  <div className="mt-2 flex ">
-                    <div className="w-1/2">
-                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                        Link File
-                      </label>
-                      <input
-                        name="sourceLink"
-                        defaultValue={ebook ? ebook.sourceLink : ''}
-                        className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
-                        type="text"
-                        required=""
-                        ref={register({
-                          required: 'Field tidak boleh kosong',
-                        })}
-                        aria-label="Email"
-                      />
-                      <div className="text-red-700">
-                        {errors.sourceLink && errors.sourceLink.message}
-                      </div>
+                  <div className="mt-2  ">
+                    <label className="block text-sm text-gray-600">Link File</label>
+                    <input
+                      name="sourceLink"
+                      defaultValue={ebook ? ebook.sourceLink : ''}
+                      className="w-full px-2  py-1 text-gray-700 bg-gray-100 rounded outline-none border"
+                      type="text"
+                      required=""
+                      ref={register({
+                        required: 'Field tidak boleh kosong',
+                      })}
+                      aria-label="Email"
+                    />
+                    <div className="text-red-700">
+                      {errors.sourceLink && errors.sourceLink.message}
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Nomor Lemari
-                    </label>
+                    <label className="block text-sm text-gray-600">Nomor Lemari</label>
                     <input
                       name="nomorLemari"
                       defaultValue={ebook ? ebook.nomorLemari : ''}
@@ -341,9 +281,7 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Rak
-                    </label>
+                    <label className="block text-sm text-gray-600">Rak</label>
                     <input
                       name="rakLemari"
                       defaultValue={ebook ? ebook.rakLemari : ''}
@@ -360,9 +298,7 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Lokasi Perpustakaan
-                    </label>
+                    <label className="block text-sm text-gray-600">Lokasi Perpustakaan</label>
                     <input
                       name="lokasiPerpustakaan"
                       defaultValue={ebook ? ebook.lokasiPerpustakaan : ''}
@@ -379,9 +315,7 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Status
-                    </label>
+                    <label className="block text-sm text-gray-600">Status</label>
                     <Checkbox.Group
                       options={optionsStatus}
                       value={statusValue}
@@ -390,21 +324,17 @@ function CreateNewEBook(props) {
                     <div className="text-red-700"></div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Tahun Terbit
-                    </label>
+                    <label className="block text-sm text-gray-600">Tahun Terbit</label>
                     <Space direction="vertical">
-                      <DatePicker onChange={onChange} placeholder={publishDate} />
+                      <DatePicker onChange={onChange} placeholder={publishDate} picker="year" />
                     </Space>
                   </div>
 
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Foto
-                    </label>
+                    <label className="block text-sm text-gray-600">Image</label>
 
                     <input
-                      onChange={(e) => uploadImage(e)}
+                      onChange={e => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"
@@ -415,9 +345,7 @@ function CreateNewEBook(props) {
                     </div>
                   </div>
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Keterangan
-                    </label>
+                    <label className="block text-sm text-gray-600">Keterangan</label>
                     <input
                       name="keterangan"
                       defaultValue={ebook ? ebook.keterangan : ''}
@@ -454,12 +382,25 @@ function CreateNewEBook(props) {
                   </div>
 
                   <div className="mt-6">
-                    <button
-                      className="px-4 py-1 text-white font-light tracking-wider bg-gray-900 rounded"
-                      type="submit"
-                    >
-                      SUBMIT
-                    </button>
+                    <div style={{ display: 'flex', flexDirection: 'row' }}>
+                      <div>
+                        {' '}
+                        <button
+                          className="px-4 py-1 text-black font-light tracking-wider bg-gray-400 rounded"
+                          type="submit"
+                        >
+                          BACK
+                        </button>
+                      </div>
+                      <div style={{ paddingLeft: '24px' }}>
+                        <button
+                          className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
+                          type="submit"
+                        >
+                          SUBMIT
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </form>
               </div>
@@ -473,8 +414,7 @@ function CreateNewEBook(props) {
 
 export default connect(null, {
   CreateNewEbookAction,
-  UploadEbookFIle,
-  getDetailEbook,
+
   EditEbookAction,
   UploadSingleEbookFIle,
 })(CreateNewEBook);

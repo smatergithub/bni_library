@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import {
-  getUsersListToAdmin,
   toggleUserIntoAdmin,
   toggleUserIntoRepoAdmin,
   deleteUser,
   getMe,
   exportDataUser,
 } from '../../../../redux/action/user';
-import Table from '../../component/Table';
+import UserAPI from '../../../../api/UserApi';
 import Modal from '../../../../component/Modal';
 import { NoData } from '../../../../component';
-import { ToastError, ToastSuccess } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme/index';
+import swal from 'sweetalert';
+import { Button } from 'antd';
+import Loader from '../../component/Loader';
 
-const Ebooks = (props) => {
+const UsersList = props => {
   const [loading, setLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
@@ -22,6 +23,7 @@ const Ebooks = (props) => {
   const [totalCount, setTotalCount] = useState(0);
   const [pageSize, setPageSize] = useState(9999999999);
   const [currentPage, setCurrentPage] = useState(0);
+  const [users, setUsers] = useState([]);
 
   const retrieveDataUser = () => {
     setLoading(true);
@@ -29,13 +31,13 @@ const Ebooks = (props) => {
       page: currentPage,
       limit: pageSize,
     };
-    props
-      .getUsersListToAdmin(pagination)
-      .then((res) => {
-        setTotalCount(props.users.count);
+    UserAPI.listUserAdmin(pagination)
+      .then(res => {
+        // setTotalCount(res.data.count);
         setLoading(false);
+        setUsers(res.data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   };
@@ -53,8 +55,7 @@ const Ebooks = (props) => {
   // }
 
   const getDetailUser = (id, MakeAdmin) => {
-    const { users } = props;
-    let detailData = users.data.filter((item) => item.id === id);
+    let detailData = users.data.filter(item => item.id === id);
     if (MakeAdmin === 'makeRisetAdmin') {
       let updateDetailData = {
         makeRisetAdmin: 1,
@@ -82,14 +83,14 @@ const Ebooks = (props) => {
     setLoading(true);
     props
       .toggleUserIntoAdmin(detailData.id)
-      .then((response) => {
-        ToastSuccess('Update Berhasil.');
-        retrieveDataUser();
-        setLoading(false);
+      .then(response => {
         setShowModalMakeAdmin(false);
+        setLoading(false);
+        swal('Message!', 'Update Berhasil', 'success');
+        retrieveDataUser();
       })
-      .catch((err) => {
-        ToastError('Tidak Bisa Akses Fitur Ini');
+      .catch(err => {
+        swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
   };
   const makeRepoAdmin = () => {
@@ -97,26 +98,26 @@ const Ebooks = (props) => {
     if (detailData && detailData.makeRisetAdmin === 1) {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: true })
-        .then((response) => {
-          retrieveDataUser();
-          ToastSuccess('Update Berhasil.');
-          setLoading(false);
+        .then(response => {
           setShowModalMakeAdmin(false);
+          setLoading(false);
+          swal('Message!', 'Update Berhasil', 'success');
+          retrieveDataUser();
         })
-        .catch((err) => {
-          ToastError('Tidak Bisa Akses Fitur Ini');
+        .catch(err => {
+          swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
         });
     } else {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: false })
-        .then((response) => {
-          ToastSuccess('Update Berhasil.');
+        .then(response => {
+          swal('Message!', 'Update Berhasil', 'success');
           retrieveDataUser();
           setLoading(false);
           setShowModalMakeAdmin(false);
         })
-        .catch((err) => {
-          ToastError('Tidak Bisa Akses Fitur Ini');
+        .catch(err => {
+          swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
         });
     }
   };
@@ -125,13 +126,13 @@ const Ebooks = (props) => {
     setLoading(true);
     props
       .exportDataUser()
-      .then((response) => {
-        ToastSuccess('Sukses Export User');
+      .then(response => {
+        swal('Message!', 'Update Berhasil', 'success');
         window.location.reload();
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('err', err);
-        ToastError('Tidak Bisa Akses Fitur Ini');
+        swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
   };
 
@@ -139,19 +140,20 @@ const Ebooks = (props) => {
     setLoading(true);
     props
       .deleteUser(detailData.id)
-      .then((response) => {
+      .then(response => {
         retrieveDataUser();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('err', err);
-        ToastError('Tidak Bisa Akses Fitur Ini');
+        swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
   };
 
-  const adjustIntegrationTable = (dataSource) => {
-    return dataSource.map((rowData) => {
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
+      console.log('aa', rowData);
       return {
         ...rowData,
         isAdmin: (
@@ -210,55 +212,70 @@ const Ebooks = (props) => {
     });
   };
 
-  if (loading) return null;
-  const { users } = props;
   let checkActionIsUserRepoAdmin = detailData && detailData.makeRisetAdmin !== undefined;
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <div
           style={{
             display: 'flex',
-            flexDirection: 'row',
             justifyContent: 'space-between',
-            marginBottom: '14px',
+            alignItems: 'center',
           }}
+          className="mb-10"
         >
-          <h1 className="w-full text-3xl text-black ">Daftar Pengguna</h1>
-          <button
-            style={{ width: '380px', height: '34px' }}
-            type="button"
-            className=" bg-orange-500 text-white font-semibold py-2 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
-            onClick={() => exportDataUser()}
-          >
-            <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Export Data Pengguna
-          </button>
+          <div>
+            <p style={{ fontSize: '26px' }} className="text-black">
+              Daftar Pengguna
+            </p>
+          </div>
+          {/* <div>
+            <Button onClick={() => exportDataUser()} disabled={loading} size={'large'}>
+              Export Data Pengguna
+            </Button>
+          </div> */}
         </div>
-        {users.data !== undefined ? (
-          <TableDevExtreme
-            columns={[
-              { name: 'nama', title: 'Nama' },
-              { name: 'alamat', title: 'Alamat' },
-              { name: 'email', title: 'Email' },
-              { name: 'phoneNumber', title: 'Phone Number' },
-              { name: 'isRepoAdmin', title: 'Riset Admin' },
-              { name: 'isAdmin', title: 'Admin' },
-              { name: 'actions', title: 'Action' },
-            ]}
-            columnExtensions={[
-              {
-                columnName: 'actions',
-                width: 300,
-                wordWrapEnabled: true,
-              },
-            ]}
-            rows={adjustIntegrationTable(users.data)}
-            // currentPage={currentPage}
-            // onCurrentPageChange={setCurrentPage}
-            // pageSize={pageSize}
-            // onPageSizeChange={setPageSize}
-            // totalCount={totalCount}
-          />
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: '600px',
+              flex: '1 1 0',
+              alignItems: 'center',
+            }}
+          >
+            <Loader />
+          </div>
+        ) : users.data !== undefined && users.data.length > 0 ? (
+          <React.Fragment>
+            <TableDevExtreme
+              columns={[
+                { name: 'nama', title: 'Nama' },
+                { name: 'alamat', title: 'Alamat' },
+                { name: 'email', title: 'Email' },
+                { name: 'phoneNumber', title: 'Phone Number' },
+                { name: 'isRepoAdmin', title: 'Riset Admin' },
+                { name: 'isAdmin', title: 'Admin' },
+                { name: 'actions', title: 'Action' },
+              ]}
+              columnExtensions={[
+                {
+                  columnName: 'actions',
+                  width: 300,
+                  wordWrapEnabled: true,
+                },
+              ]}
+              rows={adjustIntegrationTable(users.data)}
+              // currentPage={currentPage}
+              // onCurrentPageChange={setCurrentPage}
+              // pageSize={pageSize}
+              // onPageSizeChange={setPageSize}
+              // totalCount={totalCount}
+            />
+          </React.Fragment>
         ) : (
           <NoData />
         )}
@@ -292,19 +309,17 @@ const Ebooks = (props) => {
   );
 };
 
-let mapStateToProps = (state) => {
+let mapStateToProps = state => {
   return {
-    users: state.users.users,
     role: state.users.role,
     me: state.users.me,
   };
 };
 
 export default connect(mapStateToProps, {
-  getUsersListToAdmin,
   toggleUserIntoAdmin,
   toggleUserIntoRepoAdmin,
   deleteUser,
   getMe,
   exportDataUser,
-})(Ebooks);
+})(UsersList);

@@ -1,6 +1,5 @@
 const Books = require('../models/').books;
 const TransactionBook = require('../models').transactionBook;
-const ListBorrowBook = require('../models').listBorrowBook;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const moment = require('moment');
@@ -77,7 +76,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then((result) => {
+      .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -87,7 +86,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send(err);
       });
   },
@@ -160,7 +159,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then((result) => {
+      .then(result => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -170,7 +169,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send(err);
       });
   },
@@ -188,7 +187,7 @@ module.exports = {
       return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
     }
 
-    books.forEach(async (bookData) => {
+    books.forEach(async bookData => {
       let book = await Books.findByPk(bookData.bookId);
 
       if (!book) {
@@ -204,18 +203,18 @@ module.exports = {
       }
 
       await Books.findByPk(bookData.bookId)
-        .then((book) => {
+        .then(book => {
           book
             .update({
               stockBuku: book.stockBuku - bookData.quantity,
               status: book.stockBuku < 0 ? 'Ada' : 'Kosong',
               jumlahDipinjam: book.quantity + bookData.quantity,
             })
-            .catch((err) => {
+            .catch(err => {
               return res.status(400).send(err);
             });
         })
-        .catch((err) => {
+        .catch(err => {
           return res.status(500).send(err);
         });
 
@@ -246,20 +245,6 @@ module.exports = {
         return res.status(400).send('Failed Transaction');
       }
 
-      ListBorrowBook.findAll({
-        where: {
-          bookId: bookData.bookId,
-        },
-      })
-        .then((response) => {
-          response[0].update({
-            bookId: response.bookId,
-            transactionBookId: createTransaction.id,
-            userId: createTransaction.userId,
-          });
-        })
-        .catch((err) => {});
-
       return res.status(201).json({
         message: 'Process Succesfully create Transaction Borrow Book',
         data: createTransaction,
@@ -271,17 +256,17 @@ module.exports = {
     const { transactionId } = req.params;
 
     TransactionBook.findByPk(transactionId)
-      .then((transaction) => {
+      .then(transaction => {
         transaction
           .update({
             startDate: req.body.startDate,
             endDate: req.body.endDate,
           })
-          .catch((err) => {
+          .catch(err => {
             res.status(400).send(err);
           });
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send(err);
       });
     return res.status(200).json({
@@ -301,46 +286,34 @@ module.exports = {
     }
 
     TransactionBook.findByPk(transactionId)
-      .then((transaction) => {
+      .then(transaction => {
         transaction
           .update({
             status: 'Dikembalikan',
             isGiveRating: false,
           })
-          .catch((err) => {
+          .catch(err => {
             res.status(400).send(err);
           });
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send(err);
       });
 
     Books.findByPk(transactionBook.bookId)
-      .then((book) => {
+      .then(book => {
         book
           .update({
             stockBuku: book.stockBuku + transactionBook.quantity,
             jumlahDipinjam: book.quantity - transactionBook.quantity,
           })
-          .catch((err) => {
+          .catch(err => {
             res.status(400).send(err);
           });
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send(err);
       });
-
-    ListBorrowBook.findAll({ where: { transactionBookId: transactionId } }).then(
-      (listBorrowBook) => {
-        listBorrowBook[0]
-          .update({
-            userId: null,
-          })
-          .catch((err) => {
-            res.status(400).send(err);
-          });
-      }
-    );
 
     return res.status(200).json({
       message: 'Succesfully Return Book',
@@ -348,60 +321,132 @@ module.exports = {
   },
 
   exportListHistoryBook: async (req, res) => {
-    return TransactionBook.findAll({
-      order: [['createdAt', 'DESC']],
-      where: { status: 'Dikembalikan' },
-      include: ['book', 'user'],
-    })
-      .then((user) => {
-        let userDisplay = [];
-        user.forEach((item) => {
-          const userData = {
-            code: item.dataValues.code,
-            transDate: item.dataValues.transDate,
-            status: item.dataValues.status,
-            note: item.dataValues.note,
-            quantity: item.dataValues.quantity,
-            startDate: item.dataValues.startDate,
-            kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
-            judul: item.dataValues.book && item.dataValues.book.dataValues.judul,
-            stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
-            countRating: item.dataValues.book && item.dataValues.book.dataValues.countRating,
-            npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
-            nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
-            phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
-            tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
-            wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
-            singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
-            jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
-            alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
-            email: item.dataValues.user && item.dataValues.user.dataValues.email,
-          };
-          userDisplay.push(userData);
-        });
+    try {
+      const startDate = req.query.startDate;
+      const endDate = req.query.endDate;
 
-        // header
-        let headingColumnIndex = 1;
-        Object.keys(userDisplay[0]).forEach((key) => {
+      if (!startDate || !endDate) {
+        return res.status(400).json({ message: 'Missing date from or to on query params' });
+      }
+
+      const transactions = await TransactionBook.findAll({
+        order: [['createdAt', 'DESC']],
+        where: {
+          status: 'Dikembalikan',
+          [Op.or]: {
+            startDate: {
+              [Op.between]: [startDate, endDate]
+            },
+            endDate: {
+              [Op.between]: [startDate, endDate]
+            }
+          }
+        },
+        include: ['book', 'user'],
+      });
+
+      if (transactions.length < 1) {
+        return res.status(404).json({
+          message: 'Transaction history not found'
+        });
+      }
+
+      // const wb = new xl.Workbook();
+      // const ws = wb.addWorksheet('Sheet 1');
+
+      let transactionDisplay = [];
+      transactions.forEach(item => {
+        const transactionData = {
+          ...item.dataValues,
+        };
+        transactionDisplay.push(transactionData);
+      });
+
+      // header
+      let headingColumnIndex = 1;
+      Object.keys(transactionDisplay[0]).forEach(key => {
+        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
           ws.cell(1, headingColumnIndex++).string(key);
-        });
+        }
+      });
 
-        //Write Data in Excel file
-        let rowIndex = 2;
-        userDisplay.forEach((record) => {
-          let columnIndex = 1;
-          Object.keys(record).forEach((columnName) => {
+      //Write Data in Excel file
+      let rowIndex = 2;
+      transactionDisplay.forEach(record => {
+        let columnIndex = 1;
+        Object.keys(record).forEach(columnName => {
+          if (columnName != 'user' && columnName != 'book') {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
             );
-          });
-          rowIndex++;
+          }
         });
-
-        wb.write('list_history_book.xlsx', res);
-      })
-      .catch((err) => {
-        res.status(500).json({ message: err });
+        rowIndex++;
       });
+
+      wb.write(`Report Transaction Book - ${new Date().getTime() / 1000}.xlsx`, res);
+      // res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
+      // wb.writeToBuffer('Excel.xlsx').then((buffer) => {
+      //   res.end(new Buffer(buffer, 'base64'));
+      // });
+    } catch (error) {
+      console.log(error);
+    }
+
+    // return TransactionBook.findAll({
+    //   order: [['createdAt', 'DESC']],
+    //   where: { status: 'Dikembalikan' },
+    //   include: ['book', 'user'],
+    // })
+    //   .then(user => {
+    //     let userDisplay = [];
+    //     user.forEach(item => {
+    //       const userData = {
+    //         code: item.dataValues.code,
+    //         transDate: item.dataValues.transDate,
+    //         status: item.dataValues.status,
+    //         note: item.dataValues.note,
+    //         quantity: item.dataValues.quantity,
+    //         startDate: item.dataValues.startDate,
+    //         kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
+    //         judul: item.dataValues.book && item.dataValues.book.dataValues.judul,
+    //         stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
+    //         countRating: item.dataValues.book && item.dataValues.book.dataValues.countRating,
+    //         npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
+    //         nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
+    //         phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
+    //         tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
+    //         wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
+    //         singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
+    //         jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
+    //         alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
+    //         email: item.dataValues.user && item.dataValues.user.dataValues.email,
+    //       };
+    //       userDisplay.push(userData);
+    //     });
+
+    //     // header
+    //     let headingColumnIndex = 1;
+    //     Object.keys(userDisplay[0]).forEach(key => {
+    //       ws.cell(1, headingColumnIndex++).string(key);
+    //     });
+
+    //     //Write Data in Excel file
+    //     let rowIndex = 2;
+    //     userDisplay.forEach(record => {
+    //       let columnIndex = 1;
+    //       Object.keys(record).forEach(columnName => {
+    //         ws.cell(rowIndex, columnIndex++).string(
+    //           record[columnName] == null ? '' : record[columnName].toString()
+    //         );
+    //       });
+    //       rowIndex++;
+    //     });
+
+    //     wb.write('list_history_book.xlsx', res);
+    //   })
+    //   .catch(err => {
+    //     res.status(500).json({ message: err });
+    //   });
   },
 };

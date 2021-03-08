@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { NoData } from '../../../../component';
-import { ToastSuccess, ToastError } from '../../../../component';
-import ModalDetailBook from './modalDetailBook';
+import swal from 'sweetalert';
 import { getRepositoryApprovalList } from 'redux/action/repositorys';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import ModalDetailRepository from './ModalDetailRepositories';
 import ModalRepoAction from './ModalRepoAction';
+import Loader from '../../component/Loader';
 
 function BookList(props) {
   const [loading, setLoading] = React.useState(false);
@@ -22,16 +22,16 @@ function BookList(props) {
     limit: 5,
   });
 
-  const mappingDataSourceRepoApproval = (filterOptions) => {
+  const mappingDataSourceRepoApproval = filterOptions => {
     setLoading(true);
     props
       .getRepositoryApprovalList(filterOptions)
-      .then((res) => {
+      .then(res => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   };
@@ -48,19 +48,19 @@ function BookList(props) {
   // };
 
   function returnBook(id) {
-    props.MakeReturnBook(id).then((res) => {
+    props.MakeReturnBook(id).then(res => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceRepoApproval(filterOptions);
-        ToastSuccess(res.msg);
+        swal('Message!', res.msg, 'success');
       } else {
         setLoading(false);
-        ToastError(res.msg);
+        swal('Error!', res.msg, 'error');
       }
     });
   }
 
-  const getDetailDataBook = (data) => {
+  const getDetailDataBook = data => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -69,8 +69,8 @@ function BookList(props) {
     mappingDataSourceRepoApproval(filterOptions);
   }, [filterOptions]);
 
-  const adjustIntegrationTable = (dataSource) => {
-    return dataSource.map((rowData) => {
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
       return {
         ...rowData,
         title: rowData.title,
@@ -127,11 +127,23 @@ function BookList(props) {
     });
   };
 
-  if (loading) return null;
   const { repositories } = props;
   return (
     <React.Fragment>
-      {repositories.data !== undefined && repositories.data.length !== 0 ? (
+      {loading ? (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            height: '600px',
+            flex: '1 1 0',
+            alignItems: 'center',
+          }}
+        >
+          <Loader />
+        </div>
+      ) : repositories.data !== undefined && repositories.data.length > 0 ? (
         <TableDevExtreme
           columns={[
             { name: 'title', title: 'Judul' },
@@ -184,6 +196,7 @@ function BookList(props) {
       ) : (
         <NoData msg="Belum ada request dari user!" isEmpty />
       )}
+
       <ModalDetailRepository
         showModalDetail={showModalDetail}
         detailData={detailData}
@@ -216,7 +229,7 @@ function BookList(props) {
   );
 }
 
-let mapStateToProps = (state) => {
+let mapStateToProps = state => {
   return {
     repositories: state.repositorys.approval,
   };

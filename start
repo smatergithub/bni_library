@@ -1,0 +1,4 @@
+[PM2] Spawning PM2 daemon with pm2_home=C:\Users\hendra.g\.pm2
+[PM2] PM2 Successfully daemonized
+[PM2] Starting C:\Users\hendra.g\Documents\bni_library\run.js in fork_mode (1 instance)
+[PM2] Done.

@@ -1,6 +1,5 @@
 import React from 'react';
-let imgDefault =
-  'https://images.unsplash.com/photo-1521310192545-4ac7951413f0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=400&h=400&q=80';
+
 function Information({ user, changePages }) {
   React.useEffect(() => {
     if (user && user.mapUrl) {
@@ -13,7 +12,7 @@ function Information({ user, changePages }) {
     }
   });
   if (user === null) return null;
-  const ParserHTML = (htmlDocument) => {
+  const ParserHTML = htmlDocument => {
     return {
       __html: htmlDocument,
     };
@@ -37,10 +36,11 @@ function Information({ user, changePages }) {
           className="absolute lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm h-10 px-5"
           style={{
             right: '2em',
+            textDecoration: 'none',
           }}
           onClick={() => changePages(true)}
         >
-          UBAH
+          Selengkapnya
         </button>
       </div>
       {user.mapUrl ? (
