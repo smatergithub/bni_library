@@ -388,6 +388,9 @@ function CreateNewEBook(props) {
                         <button
                           className="px-4 py-1 text-black font-light tracking-wider bg-gray-400 rounded"
                           type="submit"
+                          onClick={() => {
+                            props.history.push('/admin/ebooks');
+                          }}
                         >
                           BACK
                         </button>

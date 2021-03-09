@@ -30,7 +30,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -50,7 +50,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -70,7 +70,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -162,7 +162,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker disabled={isLoading || getDate} onChange={onChangeExportUser} />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportUser} />
                     </div>
                   </Space>
                 </div>
@@ -194,10 +194,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker
-                        disabled={isLoading || getDate}
-                        onChange={onChangeExportBorrowBook}
-                      />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportBorrowBook} />
                     </div>
                   </Space>
                 </div>
@@ -229,10 +226,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker
-                        disabled={isLoading || getDate}
-                        onChange={onChangeExportBorrowEbook}
-                      />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportBorrowEbook} />
                     </div>
                   </Space>
                 </div>

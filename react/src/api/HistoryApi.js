@@ -10,12 +10,12 @@ export default class HistoryApi {
   }
 
   static exportDataBook(from, to) {
-    const url = `/api/admin/transactionBook/history/export?from=${from}&to=${to}`;
+    const url = `/api/admin/transactionBook/history/export?startDate=${from}&endDate=${to}`;
     return Request.getFileWithAuth(url);
   }
 
   static exportDataEbook(from, to) {
-    const url = `/api/admin/transactionEbook/history/export?from=${from}&to=${to}`;
+    const url = `/api/admin/transactionEbook/history/export?startDate=${from}&endDate=${to}`;
     return Request.getFileWithAuth(url);
   }
 }

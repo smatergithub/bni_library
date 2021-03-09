@@ -78,8 +78,18 @@ const Books = props => {
       .then(response => {
         var reader = new FileReader();
         reader.readAsDataURL(response.data);
-        reader.onload = function() {
-          window.open(reader.result, '_blank');
+        reader.onload = function(e) {
+          // window.open(reader.result, '_blank');
+          const filename = 'example_book_export';
+          if (navigator.msSaveBlob) {
+            navigator.msSaveBlob(reader.result, filename);
+          } else {
+            let a = document.createElement('a');
+            a.setAttribute('download', filename);
+            a.href = reader.result;
+            document.body.appendChild(a);
+            a.click();
+          }
         };
         reader.onerror = function(error) {
           console.log('Error: ', error);

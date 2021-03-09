@@ -5,8 +5,14 @@ function formatUrl(url) {
 }
 
 const makeAxiosRequest = async requestOptions => {
+  const request = {
+    ...requestOptions,
+    'Cache-Control': 'no-cache',
+    Pragma: 'no-cache',
+    Expires: '0',
+  };
   try {
-    const res = await axios(requestOptions);
+    const res = await axios(request);
     if (res.status >= 200 && res.status < 400) {
       return res;
     } else if (res.status === 401) {
