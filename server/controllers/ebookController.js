@@ -367,13 +367,10 @@ module.exports = {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
-<<<<<<< HEAD
-=======
         return ebook
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
           .catch(error => res.status(404).send(error));
->>>>>>> 00cea15f7b5abc94937f3c872ea6662ceacdd988
       })
       .catch(error => res.status(500).send(error));
   },
