@@ -30,7 +30,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -50,7 +50,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -70,7 +70,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Gagal Export Laporan', 'error');
+        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
       });
   };
 
@@ -107,24 +107,7 @@ const UsersList = props => {
             </p>
           </div>
         </div>
-        {/* {loading ? (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-              height: '600px',
-              flex: '1 1 0',
-              alignItems: 'center',
-            }}
-          >
-            <Loader />
-          </div>
-        ) : users.data !== undefined && users.data.length > 0 ? (
 
-        ) : (
-          <NoData />
-        )} */}
         <React.Fragment>
           <div
             className="min-w-full bg-white"
@@ -179,7 +162,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker disabled={isLoading || getDate} onChange={onChangeExportUser} />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportUser} />
                     </div>
                   </Space>
                 </div>
@@ -211,10 +194,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker
-                        disabled={isLoading || getDate}
-                        onChange={onChangeExportBorrowBook}
-                      />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportBorrowBook} />
                     </div>
                   </Space>
                 </div>
@@ -246,10 +226,7 @@ const UsersList = props => {
                       </div>
                     </div>
                     <div style={{ width: '400px' }}>
-                      <RangePicker
-                        disabled={isLoading || getDate}
-                        onChange={onChangeExportBorrowEbook}
-                      />
+                      <RangePicker disabled={isLoading} onChange={onChangeExportBorrowEbook} />
                     </div>
                   </Space>
                 </div>

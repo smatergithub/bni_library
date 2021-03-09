@@ -123,6 +123,7 @@ module.exports = {
   list: async (req, res) => {
     let { judul, kategori, tahunTerbit, limit, page, order, sort } = req.body;
     let paramQuerySQL = {};
+<<<<<<< HEAD
 
     if (kategori != '' && typeof kategori !== 'undefined') {
       paramQuerySQL.where = {
@@ -156,6 +157,41 @@ module.exports = {
       paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
     }
 
+=======
+
+    if (kategori != '' && typeof kategori !== 'undefined') {
+      paramQuerySQL.where = {
+        kategori: {
+          [Op.like]: '%' + kategori + '%',
+        },
+      };
+    }
+
+    if (judul != '' && typeof judul !== 'undefined') {
+      paramQuerySQL.where = {
+        judul: {
+          [Op.like]: '%' + judul + '%',
+        },
+      };
+    }
+
+    if (tahunTerbit != '' && typeof tahunTerbit !== 'undefined') {
+      paramQuerySQL.where = {
+        tahunTerbit: {
+          [Op.like]: '%' + tahunTerbit + '%',
+        },
+      };
+    }
+
+    if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
+      paramQuerySQL.limit = parseInt(limit);
+    }
+    // offset
+    if (page != '' && typeof page !== 'undefined' && page > 0) {
+      paramQuerySQL.offset = parseInt((page - 1) * req.body.limit);
+    }
+
+>>>>>>> 00cea15f7b5abc94937f3c872ea6662ceacdd988
     // order by
     if (
       order != '' &&
@@ -353,6 +389,13 @@ module.exports = {
         if (!book) {
           return res.status(404).send({ message: 'Book not found' });
         }
+<<<<<<< HEAD
+=======
+        return book
+          .destroy()
+          .then(() => res.status(200).send({ message: 'succesfully delete' }))
+          .catch(error => res.status(404).send(error));
+>>>>>>> 00cea15f7b5abc94937f3c872ea6662ceacdd988
       })
       .catch(error => res.status(500).send(error));
   },
