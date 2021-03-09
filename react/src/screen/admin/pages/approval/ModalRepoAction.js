@@ -2,31 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { DatePicker, Space } from 'antd';
 import moment from 'moment';
+import swal from 'sweetalert';
 import Modal from '../../../../component/Modal';
-import { ToastError, ToastSuccess } from '../../../../component';
 import { connect } from 'react-redux';
 import { DeleteRepositoryAction, EditRepositoryAction } from 'redux/action/repositorys';
 
-const ModalRepositoriesComfirmation = (props) => {
+const ModalRepositoriesComfirmation = props => {
   const { type, id, showModalDetail, onCloseModal, callback } = props;
 
   function onSubmit() {
     if (type === 'delete') {
-      props.DeleteRepositoryAction(id).then((res) => {
+      props.DeleteRepositoryAction(id).then(res => {
         if (res.resp) {
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
           callback();
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     } else {
-      props.EditRepositoryAction(id, { isApproved: true }).then((res) => {
+      props.EditRepositoryAction(id, { isApproved: true }).then(res => {
         if (res.resp) {
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
           callback();
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       });
     }

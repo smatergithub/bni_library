@@ -4,10 +4,10 @@ import LoadingPreview from './Loader';
 import { useForm } from 'react-hook-form';
 import moment from 'moment';
 import { DatePicker } from 'antd';
+import swal from 'sweetalert';
 import { withRouter } from 'react-router-dom';
-import { Input, Select } from 'antd';
+import { Select } from 'antd';
 import { updateMe, getWilayah } from '../../../../../redux/action/user';
-import { ToastSuccess, ToastError } from '../../../../../component';
 const { Option } = Select;
 
 function EditUser(props) {
@@ -29,10 +29,10 @@ function EditUser(props) {
     setIsLoading(true);
     props
       .updateMe(formData)
-      .then((res) => {
+      .then(res => {
         setIsLoading(true);
         if (res.resp) {
-          ToastSuccess(res.msg);
+          swal('Message!', res.msg, 'success');
           if (isAdmin) {
             // window.location.replace('/admin/dashboard');
             props.history.push('/admin/dashboard');
@@ -40,10 +40,10 @@ function EditUser(props) {
             props.changePages(false);
           }
         } else {
-          ToastError(res.msg);
+          swal('Error!', res.msg, 'error');
         }
       })
-      .catch((err) => {
+      .catch(err => {
         setIsLoading(false);
         console.log('err', err);
       });
@@ -58,22 +58,22 @@ function EditUser(props) {
   }, []);
 
   const getWilayah = () => {
-    props.getWilayah().then((response) => {
-      let data = response.data.data.map((item) => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
         return { label: item.wilayah, value: item.id };
       });
       setDataWilayah(data);
     });
   };
   const getCodeWilayahAndAlamat = () => {
-    props.getWilayah().then((response) => {
-      let data = response.data.data.map((item) => {
+    props.getWilayah().then(response => {
+      let data = response.data.data.map(item => {
         return { label: item.codeWilayah, value: item.id };
       });
-      let alamat = response.data.data.map((item) => {
+      let alamat = response.data.data.map(item => {
         return { label: item.alamat, value: item.id };
       });
-      let linkMap = response.data.data.map((item) => {
+      let linkMap = response.data.data.map(item => {
         return { label: item.linkGoogleMap, value: item.id };
       });
 
@@ -89,8 +89,8 @@ function EditUser(props) {
   }, []);
 
   function handleChange(value) {
-    let data = alamat.filter((item) => item.value === value);
-    let lokasiMap = linkMap.filter((item) => item.value === value);
+    let data = alamat.filter(item => item.value === value);
+    let lokasiMap = linkMap.filter(item => item.value === value);
     setSelectedLinkMap(lokasiMap[0]);
     setSelectedAlamat(data[0]);
     setTimeout(() => {
@@ -99,7 +99,7 @@ function EditUser(props) {
     }, 3000);
   }
 
-  const ParserHTML = (htmlDocument) => {
+  const ParserHTML = htmlDocument => {
     return {
       __html: htmlDocument,
     };
@@ -110,8 +110,6 @@ function EditUser(props) {
 
   let { user } = props;
   if (!user) return null;
-
-  console.log('isloading', isLoading);
 
   return (
     <div class="bg-gray-100 rounded-lg shadow-lg xs:pl-0 md:pl-10 relative">
@@ -127,7 +125,7 @@ function EditUser(props) {
                   ref={register()}
                   defaultValue={user.npp}
                   type="text"
-                  disabled={isLoading}
+                  disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                   placeholder="Npp"
@@ -143,7 +141,7 @@ function EditUser(props) {
                   ref={register()}
                   defaultValue={user.nama}
                   type="text"
-                  disabled={isLoading}
+                  disabled={true}
                   name="nama"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
                   placeholder="Nama"
@@ -174,7 +172,7 @@ function EditUser(props) {
                   style={{
                     height: 45,
                   }}
-                  disabled={isLoading}
+                  disabled={true}
                   // defaultValue={moment('15/01/2010', dateFormat)}
                   // value={moment().format(dateFormat)}
                   placeholder={moment(user.tgl_lahir).format('YYYY-MM-DD')}
@@ -189,7 +187,7 @@ function EditUser(props) {
                 <input
                   defaultValue={user.wilayah}
                   ref={register()}
-                  disabled={isLoading}
+                  disabled={true}
                   name="wilayah"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
                   placeholder="Wilayah"
@@ -206,7 +204,7 @@ function EditUser(props) {
                 <input
                   defaultValue={user.singkatan}
                   ref={register()}
-                  disabled={isLoading}
+                  disabled={true}
                   name="singkatan"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
                   placeholder="Wilayah"
@@ -220,7 +218,7 @@ function EditUser(props) {
                 <input
                   defaultValue={user.unit}
                   ref={register()}
-                  disabled={isLoading}
+                  disabled={true}
                   name="unit"
                   type="text"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
@@ -236,7 +234,7 @@ function EditUser(props) {
                 <input
                   defaultValue={user.kdunit}
                   ref={register()}
-                  disabled={isLoading}
+                  disabled={true}
                   name="kdunit"
                   type="text"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
@@ -252,7 +250,7 @@ function EditUser(props) {
                 <input
                   ref={register()}
                   defaultValue={user.jenjang}
-                  disabled={isLoading}
+                  disabled={true}
                   type="text"
                   name="jenjang"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
@@ -268,7 +266,7 @@ function EditUser(props) {
                 </label>
                 <input
                   defaultValue={user.jabatan}
-                  disabled={isLoading}
+                  disabled={true}
                   ref={register()}
                   name="jabatan"
                   type="text"
@@ -325,7 +323,7 @@ function EditUser(props) {
     </div>
   );
 }
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   return {
     user: state.users.me,
   };

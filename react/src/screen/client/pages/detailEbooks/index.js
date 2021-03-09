@@ -5,9 +5,10 @@ import queryString from 'query-string';
 import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
-import { getEbookById } from '../../../../redux/action/ebookUser';
+import EbookUserAPI from '../../../../api/EbookUserApi';
 import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
 import { checkIsImageExist } from '../../component/helper';
+import Loader from '../../component/Loader';
 
 function DetailEbooks(props) {
   const parsed = queryString.parse(props.location.search);
@@ -17,36 +18,41 @@ function DetailEbooks(props) {
   let [isWishlistClick, setIsWishlistClick] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [showMore, setShowMore] = React.useState(false);
+
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
-    props.getEbookById(id).then((res) => {
+    EbookUserAPI.getById(id).then(res => {
       setProcessing(false);
-      if (res.resp) {
+      if (res.data) {
         setEbooks(res.data);
       }
     });
   }, []);
+
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
+
   function onWishlistClick(ebook) {
     setIsWishlistClick(!isWishlistClick);
+    // let cloneEbook = Object.assign({}, ebook);
+    ebook.type = 'BorrowEbook';
     if (isWishlistClick) {
       props.removeEbookWishlist(ebook);
     } else {
       props.addEbookWishlist(ebook);
     }
   }
-  if (processing && ebooks == null) return null;
+  // if (processing && ebooks == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
 
   let img = '';
 
-  if (ebooks !== null && ebooks.ebook.image !== null && checkIsImageExist(ebooks.ebook.image)) {
-    img = ebooks.ebook.image;
-  } else if (ebooks !== null && ebooks.ebook.image !== null) {
-    img = ebooks.ebook.image + '/preview';
+  if (ebooks !== null && ebooks.image !== null && checkIsImageExist(ebooks.image)) {
+    img = ebooks.image;
+  } else if (ebooks !== null && ebooks.image !== null) {
+    img = ebooks.image + '/preview';
   } else {
     img = require('../../../../assets/NoImage.png');
   }
@@ -66,121 +72,141 @@ function DetailEbooks(props) {
           {' '}
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
-        {ebooks !== null && (
-          <div class="lg:flex  w-full">
-            <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
-              <div className="w-2/5 ">
-                <div className="bg-white rounded-lg  border-gray-300">
-                  <img
-                    src={img}
-                    alt=""
+        {processing ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: '600px',
+              flex: '1 1 0',
+              alignItems: 'center',
+            }}
+          >
+            <Loader />
+          </div>
+        ) : (
+          ebooks !== null && (
+            <div class="lg:flex  w-full">
+              <div class="flex w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
+                <div className="w-2/5 ">
+                  <div className="bg-white rounded-lg  border-gray-300">
+                    <img
+                      src={img}
+                      alt=""
+                      style={{
+                        height: 400,
+                        width: 320,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="w-3/5 px-5">
+                  <div className="text-lg font-bold">{ebooks.judul}</div>
+                  <div
+                    className="bg-gray-400 w-full mt-2"
                     style={{
-                      height: 400,
-                      width: 320,
+                      height: 1,
                     }}
-                  />
+                  ></div>
+                  <div className="flex mt-3 ">
+                    <div className="flex items-center justify-between">
+                      {ebooks.countRating !== null && (
+                        <>
+                          <Rating
+                            defaultRating={ebooks.countRating}
+                            maxRating={6}
+                            icon="star"
+                            disabled
+                          />
+                          <span className="ml-3">
+                            {' '}
+                            {ebooks.totalRead ? ebooks.totalRead : 0} Views
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div> Paperback | {ebooks.bahasa}</div>
+                  <div>{`By (author) ${ebooks.pengarang}`}</div>
+                  <div className="py-1 font-bold">Deskripsi:</div>
+
+                  <div style={{ textAlign: 'justify' }}>
+                    {ebooks.description !== null && ebooks.description.length > 505
+                      ? ebooks.description.slice(0, showMore ? ebooks.description.length : 500)
+                      : null}
+                  </div>
+                  {ebooks.description !== null && ebooks.description.length > 505 && (
+                    <div
+                      onClick={() => setShowMore(!showMore)}
+                      className="text-blue-400 underline cursor-pointer"
+                    >
+                      {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="w-3/5 px-5">
-                <div className="text-lg font-bold">{ebooks.ebook.judul}</div>
+              <div class="w-2/6  bg-white px-10 py-10 m-2">
+                <div className="text-lg font-bold">Detail E-Book</div>
                 <div
-                  className="bg-gray-400 w-full mt-2"
+                  className="bg-gray-400 w-full mt-2 mb-2"
                   style={{
                     height: 1,
                   }}
                 ></div>
-                <div className="flex mt-3 ">
-                  <div className="flex items-center justify-between">
-                    <Rating
-                      defaultRating={ebooks.ebook.countRating}
-                      maxRating={6}
-                      icon="star"
-                      disabled
-                    />
-                    <span className="ml-3">
-                      {' '}
-                      {ebooks.ebook.totalRead ? ebooks.ebook.totalRead : 0} Views
-                    </span>
-                  </div>
-                </div>
-                <div> Paperback | {ebooks.ebook.bahasa}</div>
-                <div>{`By (author) ${ebooks.ebook.pengarang}`}</div>
-                <div className="py-1 font-bold">Deskripsi:</div>
 
+                <div> Author : {ebooks.pengarang}</div>
+                <div> ISBN : {ebooks.isbn}</div>
+                <div> Publishers : {ebooks.penerbit}</div>
+                <div> Tahun Terbit: {ebooks.tahunTerbit}</div>
                 <div>
-                  {ebooks.ebook.description !== null && ebooks.ebook.description.length > 505
-                    ? ebooks.ebook.description.slice(
-                        0,
-                        showMore ? ebooks.ebook.description.length : 500
-                      )
-                    : null}
+                  {' '}
+                  Lokasi perpustakaan :{' '}
+                  {ebooks.lokasiPerpustakaan == null || ebooks.lokasiPerpustakaan == 0
+                    ? '-'
+                    : ebooks.lokasiPerpustakaan}
                 </div>
-                {ebooks.ebook.description !== null && ebooks.ebook.description.length > 505 && (
-                  <div
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-blue-400 underline cursor-pointer"
-                  >
-                    {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
-                  </div>
-                )}
+                {/* <div className="text-lg font-bold mt-5">Peminjam</div>
+                <div
+                  className="bg-gray-400 w-full mt-2 mb-2"
+                  style={{
+                    height: 1,
+                  }}
+                ></div>
+                <div>Peminjam : {ebooks.user ? ebooks.user.nama : 'Tidak Ada Peminjam'}</div>
+                {ebooks.user ? <div>Unit : {ebooks.user ? ebooks.user.unit : ''}</div> : null}
+                {ebooks.user ? <div>Alamat : {ebooks.user ? ebooks.user.alamat : ''}</div> : null} */}
+                <button
+                  onClick={() => {
+                    if (!isUserLogged) {
+                      setShowModalDeletion(true);
+                    } else {
+                      props.history.push(`/order?id=${ebooks.id}&type=ebook`);
+                    }
+                  }}
+                  className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                >
+                  Pinjam Sekarang
+                </button>
+                <button
+                  className={`w-full  ${
+                    isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
+                  }  rounded-lg my-1 py-2 px-10 border ${
+                    isWishlistClick ? 'border-red-600' : 'border-gray-600'
+                  }`}
+                  onClick={() => {
+                    if (!isUserLogged) {
+                      setShowModalDeletion(true);
+                    } else {
+                      onWishlistClick(ebooks);
+                    }
+                  }}
+                >
+                  {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
+                </button>
               </div>
             </div>
-            <div class="w-2/6  bg-white px-10 py-10 m-2">
-              <div className="text-lg font-bold">Detail E-Book</div>
-              <div
-                className="bg-gray-400 w-full mt-2 mb-2"
-                style={{
-                  height: 1,
-                }}
-              ></div>
-
-              <div> Author : {ebooks.ebook.pengarang}</div>
-              <div> ISBN : {ebooks.ebook.isbn}</div>
-              <div> Format : Hardback</div>
-              <div> Publishers : {ebooks.ebook.penerbit}</div>
-              <div> Publication date : {ebooks.ebook.tahunTerbit}</div>
-              <div> Pages : 120</div>
-              <div> Product dimensions : 172 x 223 x 24mm</div>
-              <div className="text-lg font-bold mt-5">Peminjam</div>
-              <div
-                className="bg-gray-400 w-full mt-2 mb-2"
-                style={{
-                  height: 1,
-                }}
-              ></div>
-              <div>Peminjam : {ebooks.user ? ebooks.user.nama : 'Tidak Ada Peminjam'}</div>
-              {ebooks.user ? <div>Unit : {ebooks.user ? ebooks.user.unit : ''}</div> : null}
-              {ebooks.user ? <div>Alamat : {ebooks.user ? ebooks.user.alamat : ''}</div> : null}
-              <button
-                onClick={() => {
-                  if (!isUserLogged) {
-                    setShowModalDeletion(true);
-                  } else {
-                    props.history.push(`/order?id=${ebooks.ebook.id}&type=ebook`);
-                  }
-                }}
-                className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-              >
-                Pinjam Sekarang
-              </button>
-              <button
-                className={`w-full  ${
-                  isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
-                }  rounded-lg my-1 py-2 px-10 border ${
-                  isWishlistClick ? 'border-red-600' : 'border-gray-600'
-                }`}
-                onClick={() => {
-                  if (!isUserLogged) {
-                    setShowModalDeletion(true);
-                  } else {
-                    onWishlistClick(ebooks);
-                  }
-                }}
-              >
-                {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
-              </button>
-            </div>
-          </div>
+          )
         )}
       </section>
       <Modal
@@ -197,6 +223,4 @@ function DetailEbooks(props) {
     </div>
   );
 }
-export default withRouter(
-  connect(null, { getEbookById, addEbookWishlist, removeEbookWishlist })(DetailEbooks)
-);
+export default withRouter(connect(null, { addEbookWishlist, removeEbookWishlist })(DetailEbooks));

@@ -5,9 +5,10 @@ import queryString from 'query-string';
 import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
-import { getBookById } from '../../../../redux/action/bookUser';
+import BookUserAPI from '../../../../api/BookUserApi';
 import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
 import { checkIsImageExist } from '../../component/helper';
+import Loader from '../../component/Loader';
 
 function DetailBooks(props) {
   const parsed = queryString.parse(props.location.search);
@@ -17,40 +18,42 @@ function DetailBooks(props) {
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [isWishlistClick, setIsWishlistClick] = React.useState(false);
   let [showMore, setShowMore] = React.useState(false);
+
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
-    props.getBookById(id).then((res) => {
+    BookUserAPI.getById(id).then(res => {
       setProcessing(false);
-      if (res.resp) {
+      if (res.data) {
         setBooks(res.data);
       }
     });
   }, []);
+
   function redirectToLogin() {
     props.history.push('/auth/login');
   }
+
   function onWishlistClick(book) {
     setIsWishlistClick(!isWishlistClick);
+    // let cloneBook = Object.assign({}, book);
+    book.type = 'BorrowBook';
     if (isWishlistClick) {
       props.removeBookWishlist(book);
-      //localStorage.removeItem('bni_ebook', book);
     } else {
       props.addBookWishlist(book);
-      // let data = [...book];
-      // localStorage.setItem('bni_book', JSON.stringify(data));
     }
   }
 
-  if (processing && books == null) return null;
+  // if (processing && books == null) return null;
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
 
   let img = '';
 
-  if (books !== null && books.book.image !== null && checkIsImageExist(books.book.image)) {
-    img = books.book.image;
-  } else if (books !== null && books.book.image !== null) {
-    img = books.book.image + '/preview';
+  if (books !== null && books.image !== null && checkIsImageExist(books.image)) {
+    img = books.image;
+  } else if (books !== null && books.image !== null) {
+    img = books.image + '/preview';
   } else {
     img = require('../../../../assets/NoImage.png');
   }
@@ -70,140 +73,164 @@ function DetailBooks(props) {
           {' '}
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
-        {books !== null && (
-          <div class="lg:flex  w-full">
-            <div class="lg:flex lg:w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
-              <div className="lg:w-2/5 ">
-                <div className=" rounded-lg  border-gray-300">
-                  <img
-                    // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
-                    //src={books.book.image}
-                    src={img}
-                    alt=""
+        {processing ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: '600px',
+              flex: '1 1 0',
+              alignItems: 'center',
+            }}
+          >
+            <Loader />
+          </div>
+        ) : (
+          books !== null && (
+            <div class="lg:flex  w-full">
+              <div class="lg:flex lg:w-4/6 text-gray-700 bg-white px-10 py-10  m-2">
+                <div className="lg:w-2/5 ">
+                  <div className=" rounded-lg  border-gray-300">
+                    <img
+                      // src={`http://localhost:2000/img/images/${books.image.split('/').pop()}`}
+                      //src={books.book.image}
+                      src={img}
+                      alt=""
+                      style={{
+                        height: 400,
+                        width: 350,
+                      }}
+                    />
+                  </div>
+                </div>
+                <div className="lg:w-3/5 px-5">
+                  <div className="text-lg font-bold">{books.judul}</div>
+                  <div
+                    className="bg-gray-400 w-full mt-2"
                     style={{
-                      height: 400,
-                      width: 350,
+                      height: 1,
                     }}
-                  />
+                  ></div>
+                  <div className="flex mt-3 ">
+                    <div className="flex items-center justify-between">
+                      {books.countRating !== null && (
+                        <>
+                          <Rating
+                            defaultRating={books.countRating}
+                            maxRating={6}
+                            icon="star"
+                            disabled
+                          />
+                          <span className="ml-3">
+                            {' '}
+                            {books.totalRead ? books.totalRead : 0} Views
+                          </span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div> Paperback | {books.bahasa}</div>
+                  <div>{`By (author) ${books.pengarang}`}</div>
+                  <div className="py-1 font-bold">Deskripsi:</div>
+                  <div style={{ textAlign: 'justify' }}>
+                    {books.description !== null && books.description.length > 400
+                      ? books.description.slice(0, showMore ? books.description.length : 400)
+                      : null}
+                  </div>
+
+                  {books.description !== null && books.description.length > 400 && (
+                    <div
+                      onClick={() => setShowMore(!showMore)}
+                      className="text-blue-400 underline cursor-pointer"
+                    >
+                      {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
+                    </div>
+                  )}
                 </div>
               </div>
-              <div className="lg:w-3/5 px-5">
-                <div className="text-lg font-bold">{books.book.judul}</div>
+              <div class="lg:w-2/6  bg-white px-10 py-10 m-2 relative">
+                <div className="text-lg font-bold">Detail Buku</div>
                 <div
-                  className="bg-gray-400 w-full mt-2"
+                  className={`font-bold absolute  ${
+                    books.stockBuku == 0 ? 'bg-red-600' : 'bg-orange-500'
+                  } text-white py-1 px-3 rounded`}
+                  style={{
+                    right: '2em',
+                    top: '2em',
+                  }}
+                >
+                  {books.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
+                </div>
+                <div
+                  className="bg-gray-400 w-full mt-2 mb-2"
                   style={{
                     height: 1,
                   }}
                 ></div>
-                <div className="flex mt-3 ">
-                  <div className="flex items-center justify-between">
-                    <Rating
-                      defaultRating={books.book.countRating}
-                      maxRating={6}
-                      icon="star"
-                      disabled
-                    />
-                    <span className="ml-3">
-                      {' '}
-                      {books.book.totalRead ? books.book.totalRead : 0} Views
-                    </span>
-                  </div>
-                </div>
-                <div> Paperback | {books.book.bahasa}</div>
-                <div>{`By (author) ${books.book.pengarang}`}</div>
-                <div className="py-1 font-bold">Deskripsi:</div>
-                <div>
-                  {books.book.description !== null && books.book.description.length > 505
-                    ? books.book.description.slice(
-                        0,
-                        showMore ? books.book.description.length : 500
-                      )
-                    : null}
-                </div>
 
-                {books.book.description !== null && books.book.description.length > 505 && (
-                  <div
-                    onClick={() => setShowMore(!showMore)}
-                    className="text-blue-400 underline cursor-pointer"
-                  >
-                    {showMore ? 'Lebih sedikit..' : 'Selengkapnya..'}
-                  </div>
+                <div> Author : {books.pengarang}</div>
+                <div> ISBN : {books.isbn}</div>
+                <div> Publishers : {books.penerbit}</div>
+                <div> Tahun Terbit: {books.tahunTerbit}</div>
+                <div>
+                  {' '}
+                  Stock Buku :{' '}
+                  {books.stockBuku == null || books.stockBuku == 0 ? '-' : books.stockBuku}
+                </div>
+                <div>
+                  {' '}
+                  Lokasi perpustakaan :{' '}
+                  {books.lokasiPerpustakaan == null || books.lokasiPerpustakaan == 0
+                    ? '-'
+                    : books.lokasiPerpustakaan}
+                </div>
+                {/* <div className="text-lg font-bold pt-5">Peminjam</div>
+                <div
+                  className="bg-gray-400 w-full mt-2 mb-2"
+                  style={{
+                    height: 1,
+                  }}
+                ></div>
+                <div>Peminjam : {books.user ? books.user.nama : 'Tidak Ada Peminjam'}</div>
+                {books.user ? <div>Unit : {books.user ? books.user.unit : ''}</div> : null}
+                {books.user ? <div>Alamat : {books.user ? books.user.alamat : ''}</div> : null} */}
+
+                {books.stockBuku != 0 && (
+                  <>
+                    <button
+                      onClick={() => {
+                        if (!isUserLogged) {
+                          setShowModalDeletion(true);
+                        } else {
+                          props.history.push(`/order?id=${books.id}&type=book`);
+                        }
+                      }}
+                      className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
+                    >
+                      Pinjam Sekarang
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (!isUserLogged) {
+                          setShowModalDeletion(true);
+                        } else {
+                          onWishlistClick(books);
+                        }
+                      }}
+                      className={`w-full  ${
+                        isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
+                      }  rounded-lg my-1 py-2 px-10 border ${
+                        isWishlistClick ? 'border-red-600' : 'border-gray-600'
+                      }`}
+                    >
+                      {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
+                    </button>
+                  </>
                 )}
               </div>
             </div>
-            <div class="lg:w-2/6  bg-white px-10 py-10 m-2 relative">
-              <div className="text-lg font-bold">Detail Buku</div>
-              <div
-                className={`font-bold absolute  ${
-                  books.book.stockBuku == 0 ? 'bg-red-600' : 'bg-orange-500'
-                } text-white py-1 px-3 rounded`}
-                style={{
-                  right: '2em',
-                  top: '2em',
-                }}
-              >
-                {books.book.stockBuku == 0 ? 'Tidak Tersedia' : 'Tersedia'}
-              </div>
-              <div
-                className="bg-gray-400 w-full mt-2 mb-2"
-                style={{
-                  height: 1,
-                }}
-              ></div>
-
-              <div> Author : {books.book.pengarang}</div>
-              <div> ISBN : {books.book.isbn}</div>
-              <div> Format : Hardback</div>
-              <div> Publishers : {books.book.penerbit}</div>
-              <div> Publication date : {books.book.tahunTerbit}</div>
-              <div> Pages : 120</div>
-              <div> Product dimensions : 172 x 223 x 24mm</div>
-              <div> Condition : {books.book.condition}</div>
-              <div className="text-lg font-bold pt-5">Peminjam</div>
-              <div
-                className="bg-gray-400 w-full mt-2 mb-2"
-                style={{
-                  height: 1,
-                }}
-              ></div>
-              <div>Peminjam : {books.user ? books.user.nama : 'Tidak Ada Peminjam'}</div>
-              {books.user ? <div>Unit : {books.user ? books.user.unit : ''}</div> : null}
-              {books.user ? <div>Alamat : {books.user ? books.user.alamat : ''}</div> : null}
-
-              {books.book.stockBuku != 0 && (
-                <>
-                  <button
-                    onClick={() => {
-                      if (!isUserLogged) {
-                        setShowModalDeletion(true);
-                      } else {
-                        props.history.push(`/order?id=${books.book.id}&type=book`);
-                      }
-                    }}
-                    className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg"
-                  >
-                    Pinjam Sekarang
-                  </button>
-                  <button
-                    onClick={() => {
-                      if (!isUserLogged) {
-                        setShowModalDeletion(true);
-                      } else {
-                        onWishlistClick(books.book);
-                      }
-                    }}
-                    className={`w-full  ${
-                      isWishlistClick ? 'bg-red-700 text-white' : 'text-gray-800'
-                    }  rounded-lg my-1 py-2 px-10 border ${
-                      isWishlistClick ? 'border-red-600' : 'border-gray-600'
-                    }`}
-                  >
-                    {isWishlistClick ? 'Hapus Wishlist' : 'Tambah ke Wishlist'}
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+          )
         )}
       </section>
       <Modal
@@ -220,6 +247,4 @@ function DetailBooks(props) {
     </div>
   );
 }
-export default withRouter(
-  connect(null, { getBookById, addBookWishlist, removeBookWishlist })(DetailBooks)
-);
+export default withRouter(connect(null, { addBookWishlist, removeBookWishlist })(DetailBooks));

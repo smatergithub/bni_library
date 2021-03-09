@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-// import { Tooltip, Button } from 'antd';
-import { getBooks, DeleteBookAction } from '../../../../redux/action/books';
-import { IsEmptyObject } from '../../component/IsEmptyObject';
+import BookAPI from '../../../../api/BookApi';
+import { UploadBookFIle } from '../../../../redux/action/books';
+import { Button } from 'antd';
+import swal from 'sweetalert';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
-import { ToastError, ToastSuccess } from '../../../../component';
+import Loader from '../../component/Loader';
 
-const Books = (props) => {
+const Books = props => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-
   const [totalCount, setTotalCount] = useState(0);
   const [pageSize, setPageSize] = useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
+  const [books, setBooks] = useState([]);
+  let exportFile = React.useRef(null);
 
   const mappingDataSourceBookList = () => {
     setLoading(true);
@@ -26,39 +28,39 @@ const Books = (props) => {
       page: currentPage,
       limit: pageSize,
     };
-    props
-      .getBooks(pagination)
-      .then((res) => {
+    BookAPI.list(pagination)
+      .then(res => {
         // setTotalCount(props.books.count);
+        setBooks(res.data);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log('error', err);
       });
   };
 
-  const getDetailDataBook = (data) => {
+  const getDetailDataBook = data => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getDetailDataDeleteBook = (data) => {
+  const getDetailDataDeleteBook = data => {
     setDetailData(data);
     setShowModalDeletion(true);
   };
 
   const handleActionDeleteBook = () => {
     setLoading(true);
-    props
-      .DeleteBookAction(detailData.id)
-      .then((response) => {
+    BookAPI.delete(detailData.id)
+      .then(response => {
+        swal('Message!', 'Buku Berhasil di hapus', 'success');
         mappingDataSourceBookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch((res) => {
+      .catch(err => {
+        swal('Error!', 'Buku Gagal di hapus', 'error');
         setLoading(false);
-        ToastError('buku ini sedang dipakai di transaksi lainnya');
       });
   };
 
@@ -70,17 +72,34 @@ const Books = (props) => {
     mappingDataSourceBookList();
   }, []);
 
-  const adjustIntegrationTable = (dataSource) => {
-    return dataSource.map((rowData) => {
+  const ExportExampleBook = () => {
+    setLoading(true);
+    BookAPI.getExampleBookFormat()
+      .then(response => {
+        var reader = new FileReader();
+        reader.readAsDataURL(response.data);
+        reader.onload = function() {
+          window.open(reader.result, '_blank');
+        };
+        reader.onerror = function(error) {
+          console.log('Error: ', error);
+        };
+        setLoading(false);
+      })
+      .catch(err => {
+        swal('Error!', 'Gagal Download Example File', 'error');
+      });
+  };
+
+  const adjustIntegrationTable = dataSource => {
+    return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.book.judul,
-        pengarang: rowData.book && rowData.book.pengarang,
-        tahunTerbit: rowData.book && rowData.book.tahunTerbit,
-        status: rowData.book && rowData.book.status,
-        stockBuku: rowData.book && rowData.book.stockBuku,
-        namaPeminjam: rowData.user ? rowData.user.nama : '-',
-        npp: rowData.user ? (rowData.user.npp ? rowData.user.npp : '-') : '-',
+        judul: rowData.judul,
+        pengarang: rowData.pengarang,
+        tahunTerbit: rowData.tahunTerbit,
+        status: rowData.status,
+        stockBuku: rowData.stockBuku,
         actions: (
           <React.Fragment>
             <React.Fragment>
@@ -92,7 +111,7 @@ const Books = (props) => {
               >
                 Detail
               </button>
-              <Link to={`/admin/edit-book?id=${rowData.book.id}`}>
+              <Link to={`/admin/edit-book?id=${rowData.id}`}>
                 <button
                   className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                   type="button"
@@ -104,7 +123,7 @@ const Books = (props) => {
               <button
                 className="bg-red-600 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
-                onClick={() => getDetailDataDeleteBook(rowData.book)}
+                onClick={() => getDetailDataDeleteBook(rowData)}
               >
                 Delete
               </button>
@@ -115,29 +134,104 @@ const Books = (props) => {
     });
   };
 
-  if (loading) return null;
-  const { books } = props;
+  const uploadPdf = e => {
+    // e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let request = {
+      file: file,
+    };
+    setLoading(true);
+    reader.onloadend = () => {
+      props.UploadBookFIle(request).then(res => {
+        if (res) {
+          swal('Message!', 'Buku Berhasil di import', 'success');
+          mappingDataSourceBookList();
+          setLoading(false);
+        } else {
+          swal('Error!', 'Buku Gagal Import', 'error');
+        }
+      });
+      // setSourceLink(file);
+    };
+
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
         <div
-          style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
           className="mb-10"
         >
-          <h1 className="w-full text-3xl text-black pb-6">Daftar Buku</h1>
-          <div className="w-2/12  ">
+          <div>
+            <p style={{ fontSize: '26px' }} className="text-black">
+              Daftar Buku
+            </p>
+          </div>
+          <div>
             <Link to="/admin/add-new-book">
-              <button
-                type="button"
-                className="w-full bg-orange-500 text-white font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-700 flex items-center justify-center"
+              <Button
+                type="primary"
+                size={'large'}
+                disabled={loading}
+                style={{ borderRadius: '8px', marginRight: '24px' }}
               >
-                <i className="fas fa-plus mr-3" /> Buku Baru
-              </button>
+                Buat Buku Baru
+              </Button>
             </Link>
+            <Button
+              onClick={() => exportFile.current.click()}
+              disabled={loading}
+              size={'large'}
+              style={{ borderRadius: '8px', marginRight: '24px' }}
+            >
+              Import Buku
+            </Button>
+
+            <Button
+              onClick={() => ExportExampleBook()}
+              type="link"
+              disabled={loading}
+              size={'large'}
+              style={{ color: '#ED8935' }}
+            >
+              Contoh Import Buku
+            </Button>
+
+            <input
+              onChange={e => uploadPdf(e)}
+              type="file"
+              style={{
+                display: 'none',
+              }}
+              ref={exportFile}
+              className=""
+              // accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              aria-label="Email"
+            />
           </div>
         </div>
-        {!IsEmptyObject(books) && books.data !== undefined && books.data.length !== 0 ? (
+        {loading ? (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'center',
+              height: '600px',
+              flex: '1 1 0',
+              alignItems: 'center',
+            }}
+          >
+            <Loader />
+          </div>
+        ) : books.data !== undefined && books.data.length > 0 ? (
           <React.Fragment>
             <TableDevExtreme
               columns={[
@@ -145,47 +239,35 @@ const Books = (props) => {
                 { name: 'pengarang', title: 'Pengarang' },
                 { name: 'tahunTerbit', title: 'Tahun Terbit' },
                 { name: 'stockBuku', title: 'Stock Buku' },
-                { name: 'npp', title: 'NPP' },
-                { name: 'namaPeminjam', title: 'Nama Peminjam' },
                 { name: 'actions', title: 'Action' },
               ]}
-              columnExtensions={[
-                {
-                  columnName: 'judul',
-                  width: 320,
-                  wordWrapEnabled: true,
-                },
-                {
-                  columnName: 'pengarang',
-                  width: 200,
-                  wordWrapEnabled: false,
-                },
-                {
-                  columnName: 'tahunTerbit',
-                  width: 150,
-                  wordWrapEnabled: true,
-                },
-                {
-                  columnName: 'stockBuku',
-                  width: 150,
-                  wordWrapEnabled: true,
-                },
-                {
-                  columnName: 'namaPeminjam',
-                  width: 200,
-                  wordWrapEnabled: true,
-                },
-                {
-                  columnName: 'npp',
-                  width: 100,
-                  wordWrapEnabled: true,
-                },
-                {
-                  columnName: 'actions',
-                  width: 300,
-                  wordWrapEnabled: true,
-                },
-              ]}
+              // columnExtensions={[
+              //   {
+              //     columnName: 'judul',
+              //     width: 320,
+              //     wordWrapEnabled: true,
+              //   },
+              //   {
+              //     columnName: 'pengarang',
+              //     width: 200,
+              //     wordWrapEnabled: false,
+              //   },
+              //   {
+              //     columnName: 'tahunTerbit',
+              //     width: 150,
+              //     wordWrapEnabled: true,
+              //   },
+              //   {
+              //     columnName: 'stockBuku',
+              //     width: 150,
+              //     wordWrapEnabled: true,
+              //   },
+              //   {
+              //     columnName: 'actions',
+              //     width: 300,
+              //     wordWrapEnabled: true,
+              //   },
+              // ]}
               rows={adjustIntegrationTable(books.data)}
               // currentPage={currentPage}
               // onCurrentPageChange={setCurrentPage}
@@ -221,10 +303,8 @@ const Books = (props) => {
   );
 };
 
-let mapStateToProps = (state) => {
-  return {
-    books: state.books.books,
-  };
+let mapStateToProps = state => {
+  return {};
 };
 
-export default connect(mapStateToProps, { getBooks, DeleteBookAction })(Books);
+export default connect(mapStateToProps, { UploadBookFIle })(Books);

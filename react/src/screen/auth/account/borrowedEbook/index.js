@@ -4,7 +4,8 @@ import { Rating } from 'semantic-ui-react';
 import { Helmet } from 'react-helmet';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
-import { getBorrowedEbookItem, getMe } from '../../../../redux/action/user';
+// import { getBorrowedEbookItem, getMe } from '../../../../redux/action/user';
+import UsersApi from '../../../../api/UserApi';
 import { checkIsImageExist } from '../../helper';
 import LoadingPreview from './Loader';
 
@@ -15,10 +16,10 @@ function BorrowedEbook(props) {
   let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
-    props.getMe().then((res) => {
-      if (res.resp) {
-        props.getBorrowedEbookItem(res.data.id, 'borrowed=true').then((res) => {
-          if (res.resp) {
+    UsersApi.getMe().then(res => {
+      if (res.data) {
+        UsersApi.getBorrowedEbookItem(res.data.id, 'borrowed=true').then(res => {
+          if (res.data) {
             setBorrowItem(res.data);
           }
         });
@@ -60,10 +61,12 @@ function BorrowedEbook(props) {
         <meta charSet="utf-8" />
         <title>Ebook | E-BNI</title>
       </Helmet>
-      <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">PINJAMAN</div>
+      <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+        PINJAMAN EBOOK
+      </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {borrowItem &&
-          borrowItem.data.map((borrow) => {
+          borrowItem.data.map(borrow => {
             return (
               <>
                 <Card
@@ -249,4 +252,4 @@ function BorrowedEbook(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedEbookItem, getMe })(BorrowedEbook);
+export default connect(null)(BorrowedEbook);

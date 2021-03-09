@@ -27,16 +27,20 @@ module.exports = {
   login: async (req, res) => {
     let url = `https://digihc.bnicorpu.co.id/login_user/${req.body.npp}/${req.body.password}`;
     fetch(url)
-      .then((res) => res.json())
-      .then((response) => {
+      .then(res => res.json())
+      .then(response => {
         if (response.status === 200) {
           checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
         if (response.status === 401) {
+          // checkIfUserAlreadyCreateOnDb({
+          //   npp: 'D000001'
+          // }, 'password');
           res.status(402).send({ message: response.message });
         }
+        console.log(response);
       })
-      .catch((err) => {
+      .catch(err => {
         res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
       });
 
@@ -47,7 +51,7 @@ module.exports = {
             npp: userObj.npp,
           },
         })
-        .then(async (user) => {
+        .then(async user => {
           if (!user) {
             // res.status(200).send({ message: 'sukses' });
             return await Users.create({
@@ -69,10 +73,10 @@ module.exports = {
               superAdmin: false,
               isRepoAdmin: false,
             })
-              .then((res_user) => {
+              .then(res_user => {
                 return res.status(200).send({ message: 'firstLogin' });
               })
-              .catch((err) => {
+              .catch(err => {
                 res.status(500).send({ message: err.message });
               });
           } else {
@@ -83,7 +87,7 @@ module.exports = {
                   password: bcrypt.hashSync(password, 8),
                 })
 
-                .then(async (user) => {
+                .then(async user => {
                   if (!user) {
                     // res.status(200).send({ message: 'sukses' });
                     return await Users.create({
@@ -105,10 +109,10 @@ module.exports = {
                       superAdmin: false,
                       isRepoAdmin: false,
                     })
-                      .then((res_user) => {
+                      .then(res_user => {
                         return res.status(200).send({ message: 'firstLogin' });
                       })
-                      .catch((err) => {
+                      .catch(err => {
                         res.status(500).send({ message: err.message });
                       });
                   } else {
@@ -121,7 +125,7 @@ module.exports = {
                         .then(() => {
                           return res.status(200).send({ message: 'firstLogin' });
                         })
-                        .catch((err) => {
+                        .catch(err => {
                           res.status(500).send({ message: err.message });
                         });
                     } else {
@@ -145,7 +149,7 @@ module.exports = {
                         .then(() => {
                           return res.status(200).send({ message: 'firstLogin' });
                         })
-                        .catch((err) => {
+                        .catch(err => {
                           res.status(500).send({ message: err.message });
                         });
                     }
@@ -170,7 +174,7 @@ module.exports = {
                     });
                   }
                 })
-                .catch((err) => {
+                .catch(err => {
                   res.status(500).send({ message: err.message });
                 });
             } else {
@@ -194,7 +198,7 @@ module.exports = {
                 .then(() => {
                   return res.status(200).send({ message: 'firstLogin' });
                 })
-                .catch((err) => {
+                .catch(err => {
                   res.status(500).send({ message: err.message });
                 });
             }
@@ -219,7 +223,7 @@ module.exports = {
             });
           }
         })
-        .catch((err) => {
+        .catch(err => {
           res.status(500).send({ message: err.message });
         });
     }

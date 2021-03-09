@@ -5,7 +5,9 @@ import { Helmet } from 'react-helmet';
 import { Rating } from 'semantic-ui-react';
 import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
-import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
+// import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
+import UsersApi from '../../../../api/UserApi';
+
 import { checkIsImageExist } from '../../helper';
 import LoadingPreview from './Loader';
 
@@ -16,21 +18,23 @@ function Borrowed(props) {
   let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
-    props.getMe().then((res) => {
-      if (res.resp) {
-        props.getBorrowedBookItem(res.data.id, 'borrowed=true').then((res) => {
-          if (res.resp) {
+    UsersApi.getMe().then(res => {
+      if (res.data) {
+        UsersApi.getBorrowedBookItem(res.data.id, 'borrowed=true').then(res => {
+          if (res.data) {
             setBorrowItem(res.data);
           }
         });
       }
     });
   }, []);
+
   function onDetailClick(data) {
     setShowModal(true);
     setBookBorrowSelected(data);
   }
-  if (borrowItem === null)
+
+  if (borrowItem === null) {
     return (
       <div
         style={{
@@ -43,6 +47,8 @@ function Borrowed(props) {
         <LoadingPreview />
       </div>
     );
+  }
+
   let books = bookBorrowSelected ? bookBorrowSelected.book : null;
 
   let img = '';
@@ -54,16 +60,19 @@ function Borrowed(props) {
   } else {
     img = require('../../../../assets/NoImage.png');
   }
+
   return (
     <React.Fragment>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Buku | E-BNI</title>
       </Helmet>
-      <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">PINJAMAN</div>
+      <div className=" uppercase text-gray-900 text-base font-semibold py-4 pl-6">
+        PINJAMAN BUKU
+      </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {borrowItem &&
-          borrowItem.data.map((borrow) => {
+          borrowItem.data.map(borrow => {
             return (
               <>
                 <Card
@@ -166,4 +175,4 @@ function Borrowed(props) {
     </React.Fragment>
   );
 }
-export default connect(null, { getBorrowedBookItem, getMe })(Borrowed);
+export default connect(null)(Borrowed);

@@ -18,6 +18,20 @@ const routes = [
     notif: true,
   },
   {
+    path: '/admin/daftar-pinjam',
+    name: 'Daftar Pinjam',
+    icon: 'fas fa-align-left',
+    params: 'peminjam',
+    notif: false,
+  },
+  // {
+  //   path: '/admin/history',
+  //   name: 'History Pinjam',
+  //   icon: 'fas fa-align-left',
+  //   params: 'history',
+  //   notif: false,
+  // },
+  {
     path: '/admin/books',
     name: 'Daftar Buku',
     icon: 'fas fa-table',
@@ -38,13 +52,13 @@ const routes = [
     params: 'repository',
     notif: false,
   },
-  {
-    path: '/admin/wilayah',
-    name: 'Daftar Wilayah',
-    icon: 'fas fa-id-badge',
-    params: 'wilayah',
-    notif: false,
-  },
+  // {
+  //   path: '/admin/wilayah',
+  //   name: 'Daftar Wilayah',
+  //   icon: 'fas fa-id-badge',
+  //   params: 'wilayah',
+  //   notif: false,
+  // },
   {
     path: '/admin/users',
     name: 'Daftar Pengguna',
@@ -53,10 +67,10 @@ const routes = [
     notif: false,
   },
   {
-    path: '/admin/history',
-    name: 'History',
-    icon: 'fas fa-align-left',
-    params: 'history',
+    path: '/admin/laporan',
+    name: 'Laporan',
+    icon: 'fas fa-id-badge',
+    params: 'laporan',
     notif: false,
   },
 ];
@@ -65,7 +79,7 @@ function Sidebar({ url, createNewBook, user }) {
   const [selectedMenu, setSelectedMenu] = useState(url);
 
   return (
-    <div className="relative bg-sidebar  w-64 hidden sm:block shadow-xl">
+    <div className="relative bg-sidebar  w-64 hidden sm:block shadow-xl" style={{ height: '100%' }}>
       <div className="p-6">
         <a className="text-white text-3xl font-semibold uppercase hover:text-gray-300">Admin</a>
 
@@ -78,7 +92,7 @@ function Sidebar({ url, createNewBook, user }) {
         </button> */}
       </div>
       <nav className="text-white text-base font-semibold pt-3">
-        {routes.map((rt) => {
+        {routes.map(rt => {
           return (
             <Link to={`${rt.path}`} onClick={() => setSelectedMenu(rt.params)}>
               <div

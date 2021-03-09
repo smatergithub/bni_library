@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Modal from '../../../../component/Modal';
 
-const ModalDetailBook = (props) => {
-  const IsEmptyObject = (object) =>
+const ModalDetailBook = props => {
+  const IsEmptyObject = object =>
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
@@ -23,12 +23,10 @@ const ModalDetailBook = (props) => {
               Judul Buku
             </label>
             <input
-              name="pengarang"
-              defaultValue={detailData.book ? detailData.book.judul : ''}
+              defaultValue={detailData ? detailData.judul : ''}
               disabled={true}
-              className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
               type="text"
-              aria-label="Email"
             />
           </div>
           <div className="mt-2">
@@ -36,12 +34,10 @@ const ModalDetailBook = (props) => {
               Pengarang
             </label>
             <input
-              name="pengarang"
               disabled={true}
-              defaultValue={detailData.book ? detailData.book.pengarang : ''}
-              className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              defaultValue={detailData ? detailData.pengarang : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
               type="text"
-              aria-label="Email"
             />
           </div>
           <div className="mt-2">
@@ -49,12 +45,10 @@ const ModalDetailBook = (props) => {
               Tahun Terbit
             </label>
             <input
-              name="pengarang"
               disabled={true}
-              defaultValue={detailData.book ? detailData.book.tahunTerbit : ''}
-              className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              defaultValue={detailData ? detailData.tahunTerbit : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
               type="text"
-              aria-label="Email"
             />
           </div>
           <div className="mt-2">
@@ -62,40 +56,68 @@ const ModalDetailBook = (props) => {
               stockBuku
             </label>
             <input
-              name="pengarang"
               disabled={true}
-              defaultValue={detailData.book ? detailData.book.stockBuku : ''}
-              className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              defaultValue={detailData ? detailData.stockBuku : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
               type="text"
-              aria-label="Email"
+            />
+          </div>
+
+          <div className="mt-2">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
+              Lokasi Perpustakaan
+            </label>
+            <input
+              disabled={true}
+              defaultValue={detailData ? detailData.lokasiPerpustakaan : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              type="text"
             />
           </div>
           <div className="mt-2">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
+              Nomor Lemari
+            </label>
+            <input
+              disabled={true}
+              defaultValue={detailData ? detailData.nomorLemari : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              type="text"
+            />
+          </div>
+          <div className="mt-2">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
+              Jumlah Peminjam
+            </label>
+            <input
+              disabled={true}
+              defaultValue={detailData ? detailData.jumlahPeminjam : ''}
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              type="text"
+            />
+          </div>
+          {/* <div className="mt-2">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Peminjam
             </label>
             <input
-              name="pengarang"
               disabled={true}
               defaultValue={detailData.user ? detailData.user.nama : 'Tidak Ada Peminjam'}
-              className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+              className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
               type="text"
-              aria-label="Email"
             />
-          </div>
-          {detailData.user ? (
+          </div> */}
+          {/* {detailData.user ? (
             <React.Fragment>
               <div className="mt-2">
                 <label className="block text-sm text-gray-600" htmlFor="cus_email">
                   NPP
                 </label>
                 <input
-                  name="pengarang"
                   disabled={true}
                   defaultValue={detailData.user ? detailData.user.npp : 'Tidak Ada Peminjam'}
-                  className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                  className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                   type="text"
-                  aria-label="Email"
                 />
               </div>
               <div className="mt-2">
@@ -103,12 +125,10 @@ const ModalDetailBook = (props) => {
                   Email
                 </label>
                 <input
-                  name="pengarang"
                   disabled={true}
                   defaultValue={detailData.user ? detailData.user.email : 'Tidak Ada Peminjam'}
-                  className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                  className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                   type="text"
-                  aria-label="Email"
                 />
               </div>
               <div className="mt-2">
@@ -116,14 +136,12 @@ const ModalDetailBook = (props) => {
                   No Handphone
                 </label>
                 <input
-                  name="pengarang"
                   disabled={true}
                   defaultValue={
                     detailData.user ? detailData.user.phoneNumber : 'Tidak Ada Peminjam'
                   }
-                  className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                  className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                   type="text"
-                  aria-label="Email"
                 />
               </div>
               <div className="mt-2">
@@ -131,16 +149,14 @@ const ModalDetailBook = (props) => {
                   Tanggal Peminjam
                 </label>
                 <input
-                  name="pengarang"
                   disabled={true}
                   defaultValue={
                     detailData
                       ? moment(detailData.startDate).format('DD MMMM YYYY')
                       : 'Tidak Ada Peminjam'
                   }
-                  className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                  className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                   type="text"
-                  aria-label="Email"
                 />
               </div>
               <div className="mt-2">
@@ -148,20 +164,18 @@ const ModalDetailBook = (props) => {
                   Tanggal Pengembalian
                 </label>
                 <input
-                  name="pengarang"
                   disabled={true}
                   defaultValue={
                     detailData
                       ? moment(detailData.endDate).format('DD MMMM YYYY')
                       : 'Tidak Ada Peminjam'
                   }
-                  className="w-full px-5  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
+                  className="w-full px-1  py-1 text-gray-700 bg-gray-100 rounded outline-none focus:shadow-outline "
                   type="text"
-                  aria-label="Email"
                 />
               </div>
             </React.Fragment>
-          ) : null}
+          ) : null} */}
         </div>
       </Modal>
     </>
