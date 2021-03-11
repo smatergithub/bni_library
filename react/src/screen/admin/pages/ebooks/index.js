@@ -72,10 +72,10 @@ const Ebooks = props => {
     return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.judul,
-        pengarang: rowData.pengarang,
-        tahunTerbit: rowData.tahunTerbit,
-        status: rowData.status,
+        // judul: rowData.judul,
+        // pengarang: rowData.pengarang,
+        // tahunTerbit: rowData.tahunTerbit,
+        // status: rowData.status,
         actions: (
           <React.Fragment>
             <button

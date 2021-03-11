@@ -105,11 +105,11 @@ const Books = props => {
     return dataSource.map(rowData => {
       return {
         ...rowData,
-        judul: rowData.judul,
-        pengarang: rowData.pengarang,
-        tahunTerbit: rowData.tahunTerbit,
-        status: rowData.status,
-        stockBuku: rowData.stockBuku,
+        // judul: rowData.judul,
+        // pengarang: rowData.pengarang,
+        // tahunTerbit: rowData.tahunTerbit,
+        // status: rowData.status,
+        // stockBuku: rowData.stockBuku,
         actions: (
           <React.Fragment>
             <React.Fragment>
