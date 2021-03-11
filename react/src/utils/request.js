@@ -18,12 +18,19 @@ const makeAxiosRequest = async requestOptions => {
     } else if (res.status === 401) {
       localStorage.removeItem('access_token_ebni');
       localStorage.removeItem('bni_UserRole');
-      window.location.replace('/auth/login');
+      // window.location.replace('/auth/login');
       window.location.reload();
     } else if (res.status === 404) {
       window.location.replace('/not-found');
     }
   } catch (error) {
+    console.log('err', { error });
+    if (error.response.status === 401) {
+      localStorage.removeItem('access_token_ebni');
+      localStorage.removeItem('bni_UserRole');
+      // window.location.replace('/auth/login');
+      window.location.reload();
+    }
     throw error;
   }
 };

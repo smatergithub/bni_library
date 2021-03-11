@@ -233,7 +233,7 @@ module.exports = {
 
     let location = req.body.image
       ? req.body.image
-      : `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
+      : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
     return Ebooks.create({
       kategori: req.body.kategori,
@@ -332,7 +332,7 @@ module.exports = {
 
         let location = req.body.image
           ? req.body.image
-          : `${process.env.PUBLIC_URL}/img/images/${req.file.filename}`;
+          : `${process.env.SERVER_BACKEND}/img/images/${req.file.filename}`;
 
         return ebook
           .update({

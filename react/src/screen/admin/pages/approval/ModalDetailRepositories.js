@@ -92,6 +92,21 @@ const ModalDetailBook = props => {
               aria-label="Email"
             />
           </div>
+          <div className="mt-2">
+            <label className="block text-sm text-gray-600" htmlFor="cus_email">
+              List file document :
+            </label>
+          </div>
+          <div className="mt-4">
+            <a href={detailData.abstrack} target="__blank">
+              Document Abstrack
+            </a>
+          </div>
+          <div className="mt-2">
+            <a href={detailData.document} target="__blank">
+              Document Riset
+            </a>
+          </div>
         </div>
       </Modal>
     </>

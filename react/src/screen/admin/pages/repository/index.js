@@ -54,6 +54,11 @@ const Repository = props => {
 
   const { repositorys } = props;
 
+  let repoDataSource =
+    repositorys.data !== undefined && repositorys.data.length > 0
+      ? repositorys.data.filter(item => item.isApproved === true)
+      : [];
+
   const adjustIntegrationTable = dataSource => {
     return dataSource.map(rowData => {
       return {
@@ -147,7 +152,7 @@ const Repository = props => {
                 { name: 'strata', title: 'Strata' },
                 { name: 'actions', title: 'Action' },
               ]}
-              rows={adjustIntegrationTable(repositorys.data)}
+              rows={adjustIntegrationTable(repoDataSource)}
             />
           </React.Fragment>
         ) : (

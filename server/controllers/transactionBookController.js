@@ -326,7 +326,7 @@ module.exports = {
       const endDate = req.query.endDate;
 
       if (!startDate || !endDate) {
-        return res.status(400).json({ message: 'Missing date from or to on query params' });
+        return res.status(400).json({ message: 'tidak ditemukan tanggal awal dan tanggal akhir' });
       }
 
       const transactions = await TransactionBook.findAll({
@@ -335,19 +335,19 @@ module.exports = {
           status: 'Dikembalikan',
           [Op.or]: {
             startDate: {
-              [Op.between]: [startDate, endDate]
+              [Op.between]: [startDate, endDate],
             },
             endDate: {
-              [Op.between]: [startDate, endDate]
-            }
-          }
+              [Op.between]: [startDate, endDate],
+            },
+          },
         },
         include: ['book', 'user'],
       });
 
       if (transactions.length < 1) {
         return res.status(404).json({
-          message: 'Transaction history not found'
+          message: 'data transaksi tidak ditemukan',
         });
       }
 

@@ -4,9 +4,10 @@ const Sequelize = require('sequelize');
 const fetch = require('node-fetch');
 const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const Op = Sequelize.Op;
+require('dotenv').config();
 
 function generateFileLocation(file) {
-  return `${process.env.PUBLIC_URL}/img/documentRepository/${file}`;
+  return `${process.env.SERVER_BACKEND}/img/documentRepository/${file}`;
 }
 var LINK = function() {
   return (

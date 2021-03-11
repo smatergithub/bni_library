@@ -8,7 +8,7 @@ import ModalDetailRepository from './ModalDetailRepositories';
 import ModalRepoAction from './ModalRepoAction';
 import Loader from '../../component/Loader';
 
-function BookList(props) {
+function RisetList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
@@ -235,4 +235,4 @@ let mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getRepositoryApprovalList })(BookList);
+export default connect(mapStateToProps, { getRepositoryApprovalList })(RisetList);
