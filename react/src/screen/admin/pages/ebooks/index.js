@@ -64,6 +64,34 @@ const Ebooks = props => {
       });
   };
 
+  let uploadDocument = e => {
+    // e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let request = {
+      file: file,
+    };
+    setLoading(true);
+    reader.onloadend = () => {
+      props.UploadEbookFIle(request).then(res => {
+        if (res.resp) {
+          mappingDataSourceEbookList();
+          setLoading(false);
+          swal('Message!', 'Ebook Berhasil di import', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          swal('Error!', 'Buku Gagal Import', 'error');
+        }
+      });
+      // setSourceLink(file);
+    };
+
+    reader.readAsDataURL(file);
+  };
+
   React.useEffect(() => {
     mappingDataSourceEbookList();
   }, []);
@@ -108,31 +136,6 @@ const Ebooks = props => {
     });
   };
 
-  let uploadDocument = e => {
-    // e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    let request = {
-      file: file,
-    };
-    setLoading(true);
-    reader.onloadend = () => {
-      props.UploadEbookFIle(request).then(res => {
-        if (res.resp) {
-          swal('Message!', 'Buku Berhasil di import', 'success');
-          setLoading(false);
-          mappingDataSourceEbookList();
-        } else {
-          swal('Error!', 'Buku Gagal Import', 'error');
-        }
-      });
-      // setSourceLink(file);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
   const ExportExampleEbook = () => {
     setLoading(true);
     EbookAPI.getExampleEbookFormat()
@@ -156,6 +159,7 @@ const Ebooks = props => {
           console.log('Error: ', error);
         };
         setLoading(false);
+        mappingDataSourceEbookList();
       })
       .catch(err => {
         let msg = err.message || 'Something Wrong, request failed !';

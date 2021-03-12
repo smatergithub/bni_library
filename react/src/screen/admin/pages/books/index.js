@@ -64,6 +64,37 @@ const Books = props => {
       });
   };
 
+  const uploadPdf = e => {
+    // e.preventDefault();
+    let reader = new FileReader();
+    let file = e.target.files[0];
+    let request = {
+      file: file,
+    };
+    setLoading(true);
+    var formdata = new FormData();
+    for (var key in request) {
+      formdata.append(key, request[key]);
+    }
+    reader.onloadend = () => {
+      BookAPI.uploadbookFile(formdata)
+        .then(res => {
+          mappingDataSourceBookList();
+          setLoading(false);
+          swal('Message!', 'Buku Berhasil di import', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        })
+        .catch(err => {
+          swal('Error!', 'Buku Gagal Import', 'error');
+        });
+
+      // setSourceLink(file);
+    };
+    reader.readAsDataURL(file);
+  };
+
   // useEffect(() => {
   //   mappingDataSourceBookList();
   // }, [currentPage, totalCount, pageSize]);
@@ -142,31 +173,6 @@ const Books = props => {
         ),
       };
     });
-  };
-
-  const uploadPdf = e => {
-    // e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-    let request = {
-      file: file,
-    };
-    setLoading(true);
-    reader.onloadend = () => {
-      props.UploadBookFIle(request).then(res => {
-        if (res) {
-          swal('Message!', 'Buku Berhasil di import', 'success');
-          mappingDataSourceBookList();
-          setLoading(false);
-        } else {
-          swal('Error!', 'Buku Gagal Import', 'error');
-        }
-      });
-      // setSourceLink(file);
-    };
-
-    reader.readAsDataURL(file);
   };
 
   return (

@@ -5,7 +5,7 @@ export default class BookApi {
     const url = '/api/admin/book/create';
     return Request.postWithAuth(url, body, false, true);
   }
-  static uploadEbookFile(body) {
+  static uploadbookFile(body) {
     const url = '/api/admin/book/upload';
     return Request.postWithAuth(url, body, false, true);
   }

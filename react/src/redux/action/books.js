@@ -27,18 +27,15 @@ export const UploadBookFIle = book => () => {
     formdata.append(key, book[key]);
   }
 
-  return BookApi.uploadEbookFile(formdata)
+  return BookApi.uploadbookFile(formdata)
     .then(res => {
-      if (res) {
-        return {
-          resp: true,
-          msg: 'Buku Berhasil di tambahkan',
-        };
-      }
+      return {
+        msg: 'Buku Berhasil di tambahkan',
+      };
     })
     .catch(err => {
       let msg = err.message || 'Something Wrong, request failed !';
-      return { resp: false, msg: msg };
+      return { msg: msg };
     });
 };
 

@@ -58,10 +58,10 @@ function EbookList(props) {
       }
       return {
         ...rowData,
-        judul: rowData.ebook.judul,
+        judul: rowData.ebook ? rowData.ebook.judul : '',
         nama: rowData.user ? rowData.user.nama : '',
         npp: rowData.user ? rowData.user.npp : '',
-        tahunTerbit: rowData.ebook.tahunTerbit,
+        tahunTerbit: rowData.ebook ? rowData.ebook.tahunTerbit : '',
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
         duration: duration,
