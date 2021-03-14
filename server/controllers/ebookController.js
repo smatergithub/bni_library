@@ -268,6 +268,16 @@ module.exports = {
       return Object.values(arr.reduce((acc, cur) => Object.assign(acc, { [cur.judul]: cur }), {}));
     }
 
+    function hasDupsObjects(array) {
+      return array
+        .map(function(value) {
+          return value.judul;
+        })
+        .some(function(value, index, array) {
+          return array.indexOf(value) !== array.lastIndexOf(value);
+        });
+    }
+
     try {
       if (req.file == undefined) {
         return res.status(500).send('Tolong import data dengan format excel!');
@@ -308,12 +318,8 @@ module.exports = {
         });
         const arr1 = getUniqueListBy(Databooks);
         Ebooks.findAndCountAll({}).then(response => {
-          // console.log('response', response.rows);
           let concatData = response.rows.concat(arr1);
-
-          const uniqueValues = new Set(concatData.map(v => v.judul));
-
-          if (uniqueValues.size < concatData.length) {
+          if (hasDupsObjects(concatData)) {
             console.log('duplicates found');
             res.status(500).json({
               message: 'Check Kembali File , terdapat data yang sama di system !',
