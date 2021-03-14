@@ -3,7 +3,6 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const xl = require('excel4node');
 
-
 module.exports = {
   list: async (req, res) => {
     // queryStrings
@@ -144,61 +143,69 @@ module.exports = {
   },
 
   exportListUser: async (req, res) => {
-
     try {
       const from = req.query.from;
       const to = req.query.to;
 
       if (!from || !to) {
-        return res.status(400).json({ message: 'Missing date from or to on query params' });
+        return res.status(400).json({ message: 'Tolong Input Tanggal Terlebih Dahulu' });
       }
 
       const users = await Users.findAll({
         where: {
           createdAt: {
-            [Op.between]: [from, to]
+            [Op.between]: [from, to],
           },
-        }
+        },
       });
 
       const wb = new xl.Workbook();
       const ws = wb.addWorksheet('Sheet 1');
 
       let userDisplay = [];
-      users.forEach(item => {
-        const userData = {
-          ...item.dataValues,
-        };
-        userDisplay.push(userData);
-      });
 
-      // header
-      let headingColumnIndex = 1;
-      Object.keys(userDisplay[0]).forEach(key => {
-        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
-          ws.cell(1, headingColumnIndex++).string(key);
-        }
-      });
+      if (users.length == 0) {
+        return res.status(500).json({ message: 'Data Laporan Tidak Ditemukan' });
+      } else {
+        users.forEach(item => {
+          const userData = {
+            ...item.dataValues,
+          };
+          userDisplay.push(userData);
+        });
 
-      //Write Data in Excel file
-      let rowIndex = 2;
-      userDisplay.forEach(record => {
-        let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
-          if (columnName != 'isAdmin' && columnName != 'superAdmin' && columnName != 'isRepoAdmin') {
-            ws.cell(rowIndex, columnIndex++).string(
-              record[columnName] == null ? '' : record[columnName].toString()
-            );
+        // header
+        let headingColumnIndex = 1;
+        Object.keys(userDisplay[0]).forEach(key => {
+          if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
+            ws.cell(1, headingColumnIndex++).string(key);
           }
         });
-        rowIndex++;
-      });
 
-      wb.write(`Report User - ${new Date().getTime() / 1000}.xlsx`, res);
-      // res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
-      // wb.writeToBuffer('Excel.xlsx').then((buffer) => {
-      //   res.end(new Buffer(buffer, 'base64'));
-      // });
+        //Write Data in Excel file
+        let rowIndex = 2;
+        userDisplay.forEach(record => {
+          let columnIndex = 1;
+          Object.keys(record).forEach(columnName => {
+            if (
+              columnName != 'isAdmin' &&
+              columnName != 'superAdmin' &&
+              columnName != 'isRepoAdmin'
+            ) {
+              ws.cell(rowIndex, columnIndex++).string(
+                record[columnName] == null ? '' : record[columnName].toString()
+              );
+            }
+          });
+          rowIndex++;
+        });
+
+        wb.write(`Report User - ${new Date().getTime() / 1000}.xlsx`, res);
+        // res.writeHead(200, [['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']]);
+        // wb.writeToBuffer('Excel.xlsx').then((buffer) => {
+        //   res.end(new Buffer(buffer, 'base64'));
+        // });
+      }
     } catch (error) {
       console.log(error);
     }

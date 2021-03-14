@@ -346,8 +346,8 @@ module.exports = {
       });
 
       if (transactions.length < 1) {
-        return res.status(404).json({
-          message: 'data transaksi tidak ditemukan',
+        return res.status(500).json({
+          message: 'data laporan transaksi buku tidak ditemukan',
         });
       }
 
@@ -392,61 +392,5 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-
-    // return TransactionBook.findAll({
-    //   order: [['createdAt', 'DESC']],
-    //   where: { status: 'Dikembalikan' },
-    //   include: ['book', 'user'],
-    // })
-    //   .then(user => {
-    //     let userDisplay = [];
-    //     user.forEach(item => {
-    //       const userData = {
-    //         code: item.dataValues.code,
-    //         transDate: item.dataValues.transDate,
-    //         status: item.dataValues.status,
-    //         note: item.dataValues.note,
-    //         quantity: item.dataValues.quantity,
-    //         startDate: item.dataValues.startDate,
-    //         kategori: item.dataValues.book && item.dataValues.book.dataValues.kategori,
-    //         judul: item.dataValues.book && item.dataValues.book.dataValues.judul,
-    //         stockBuku: item.dataValues.book && item.dataValues.book.dataValues.stockBuku,
-    //         countRating: item.dataValues.book && item.dataValues.book.dataValues.countRating,
-    //         npp: item.dataValues.user && item.dataValues.user.dataValues.npp,
-    //         nama: item.dataValues.user && item.dataValues.user.dataValues.nama,
-    //         phoneNumber: item.dataValues.user && item.dataValues.user.dataValues.phoneNumber,
-    //         tanggalLahir: item.dataValues.user && item.dataValues.user.dataValues.tanggalLahir,
-    //         wilayah: item.dataValues.user && item.dataValues.user.dataValues.wilayah,
-    //         singkatan: item.dataValues.user && item.dataValues.user.dataValues.singkatan,
-    //         jabatan: item.dataValues.user && item.dataValues.user.dataValues.jabatan,
-    //         alamat: item.dataValues.user && item.dataValues.user.dataValues.alamat,
-    //         email: item.dataValues.user && item.dataValues.user.dataValues.email,
-    //       };
-    //       userDisplay.push(userData);
-    //     });
-
-    //     // header
-    //     let headingColumnIndex = 1;
-    //     Object.keys(userDisplay[0]).forEach(key => {
-    //       ws.cell(1, headingColumnIndex++).string(key);
-    //     });
-
-    //     //Write Data in Excel file
-    //     let rowIndex = 2;
-    //     userDisplay.forEach(record => {
-    //       let columnIndex = 1;
-    //       Object.keys(record).forEach(columnName => {
-    //         ws.cell(rowIndex, columnIndex++).string(
-    //           record[columnName] == null ? '' : record[columnName].toString()
-    //         );
-    //       });
-    //       rowIndex++;
-    //     });
-
-    //     wb.write('list_history_book.xlsx', res);
-    //   })
-    //   .catch(err => {
-    //     res.status(500).json({ message: err });
-    //   });
   },
 };

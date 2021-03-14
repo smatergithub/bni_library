@@ -34,7 +34,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
+        swal('Error!', 'data laporan  pengguna tidak ditemukan', 'error');
       });
   };
 
@@ -54,7 +54,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
+        swal('Error!', 'data laporan transaksi buku tidak ditemukan', 'error');
       });
   };
 
@@ -74,7 +74,7 @@ const UsersList = props => {
       })
       .catch(err => {
         setIsLoading(false);
-        swal('Error!', 'Data Laporan Tidak Ditemukan', 'error');
+        swal('Error!', 'data laporan transaksi ebook tidak ditemukan', 'error');
       });
   };
 
@@ -83,34 +83,33 @@ const UsersList = props => {
     setEndDate(dateString[1] + ' 12:17:55');
   }
 
-  // function onChangeExportBorrowBook(date, dateString) {
-  //   setStartDate(dateString[0] + ' 12:17:55');
-  //   setEndDate(dateString[1] + ' 12:17:55');
-  // }
-
-  // function onChangeExportBorrowEbook(date, dateString) {
-  //   setStartDate(dateString[0] + ' 12:17:55');
-  //   setEndDate(dateString[1] + ' 12:17:55');
-  // }
-
   function handleChangeSelect(value) {
     setType(value);
   }
 
   function onFilter() {
-    switch (type) {
-      case 'pengguna':
-        ExportUser(startDate, endDate);
-        break;
-      case 'book':
-        ExportBorrowBook(startDate, endDate);
-        break;
-      case 'ebook':
-        ExportBorrowEbook(startDate, endDate);
-        break;
-      default:
-        return null;
+    if (type === '') {
+      swal('Error!', 'Pilih laporan yang ingin di export', 'error');
+    } else {
+      if (type == 'buku') {
+        return ExportBorrowBook(startDate, endDate);
+      } else if (type == 'pengguna') {
+        return ExportUser(startDate, endDate);
+      } else if (type == 'ebook') {
+        return ExportBorrowEbook(startDate, endDate);
+      }
     }
+
+    // switch (type) {
+    //   case 'pengguna':
+    //     return ExportUser(startDate, endDate);
+    //   case 'book':
+    //     return ExportBorrowBook(startDate, endDate);
+    //   case 'ebook':
+    //     return ExportBorrowEbook(startDate, endDate);
+    //   default:
+    //     return null;
+    // }
   }
 
   let getDate = startDate == null ? true : false;
@@ -186,7 +185,13 @@ const UsersList = props => {
                       <Option value="buku">Daftar Peminjam Buku</Option>
                       <Option value="ebook">Daftar Peminjam Ebook</Option>
                     </Select>
-                    <Button disabled={isLoading || getDate} type="primary" onClick={onFilter}>
+                    <Button
+                      disabled={isLoading || getDate}
+                      type="primary"
+                      onClick={() => {
+                        onFilter();
+                      }}
+                    >
                       Export
                     </Button>
                   </Space>

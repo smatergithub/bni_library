@@ -233,7 +233,7 @@ module.exports = {
             userId: createTransaction.userId,
           });
         })
-        .catch(err => { });
+        .catch(err => {});
 
       return res.status(201).json({
         message: 'Process Succesfully create Transaction Borrow Ebook',
@@ -336,19 +336,19 @@ module.exports = {
           status: 'Dikembalikan',
           [Op.or]: {
             startDate: {
-              [Op.between]: [startDate, endDate]
+              [Op.between]: [startDate, endDate],
             },
             endDate: {
-              [Op.between]: [startDate, endDate]
-            }
-          }
+              [Op.between]: [startDate, endDate],
+            },
+          },
         },
         include: ['book', 'user'],
       });
 
       if (transactions.length < 1) {
         return res.status(404).json({
-          message: 'Transaction history not found'
+          message: 'data laporan transaksi ebook tidak ditemukan',
         });
       }
 
