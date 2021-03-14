@@ -264,9 +264,13 @@ module.exports = {
   },
 
   uploadEbook: async (req, res) => {
+    function getUniqueListBy(arr) {
+      return Object.values(arr.reduce((acc, cur) => Object.assign(acc, { [cur.judul]: cur }), {}));
+    }
+
     try {
       if (req.file == undefined) {
-        return res.status(400).send('Please upload an excel file!');
+        return res.status(500).send('Tolong import data dengan format excel!');
       }
 
       let path = __basedir + '/server/public/document/' + req.file.filename;
@@ -302,19 +306,33 @@ module.exports = {
 
           Databooks.push(rowBook);
         });
+        const arr1 = getUniqueListBy(Databooks);
+        Ebooks.findAndCountAll({}).then(response => {
+          // console.log('response', response.rows);
+          let concatData = response.rows.concat(arr1);
 
-        Ebooks.bulkCreate(Databooks)
-          .then(response => {
-            return res.status(200).json({
-              message: 'Uploaded the file successfully: ' + req.file.originalname,
-            });
-          })
-          .catch(error => {
+          const uniqueValues = new Set(concatData.map(v => v.judul));
+
+          if (uniqueValues.size < concatData.length) {
+            console.log('duplicates found');
             res.status(500).json({
-              message: 'Fail to import data into database!',
-              error: error.message,
+              message: 'Check Kembali File , terdapat data yang sama di system !',
             });
-          });
+          } else {
+            Ebooks.bulkCreate(arr1)
+              .then(response => {
+                return res.status(200).json({
+                  message: 'Uploaded the file successfully: ' + req.file.originalname,
+                });
+              })
+              .catch(error => {
+                res.status(500).json({
+                  message: 'Gagal import kedalam system!',
+                  error: error.message,
+                });
+              });
+          }
+        });
       });
     } catch (error) {
       res.status(500).json({

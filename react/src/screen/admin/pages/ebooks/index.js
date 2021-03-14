@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import EbookAPI from '../../../../api/EbookApi';
-import { UploadEbookFIle } from '../../../../redux/action/ebooks';
+
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailEbook from './ModalDetailEBook';
@@ -73,20 +73,27 @@ const Ebooks = props => {
       file: file,
     };
     setLoading(true);
+    var formdata = new FormData();
+    for (var key in request) {
+      formdata.append(key, request[key]);
+    }
     reader.onloadend = () => {
-      props.UploadEbookFIle(request).then(res => {
-        if (res.resp) {
+      EbookAPI.uploadEbookFile(formdata)
+        .then(res => {
           mappingDataSourceEbookList();
           setLoading(false);
           swal('Message!', 'Ebook Berhasil di import', 'success');
           setTimeout(() => {
             window.location.reload();
           }, 1500);
-        } else {
-          swal('Error!', 'Buku Gagal Import', 'error');
-        }
-      });
-      // setSourceLink(file);
+        })
+        .catch(err => {
+          setLoading(false);
+          swal('Error!', err.response.data.message, 'error');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        });
     };
 
     reader.readAsDataURL(file);
@@ -308,4 +315,4 @@ let mapStateToProps = state => {
   return {};
 };
 
-export default connect(mapStateToProps, { UploadEbookFIle })(Ebooks);
+export default connect(mapStateToProps)(Ebooks);

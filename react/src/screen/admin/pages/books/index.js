@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import BookAPI from '../../../../api/BookApi';
-import { UploadBookFIle } from '../../../../redux/action/books';
+
 import { Button } from 'antd';
 import swal from 'sweetalert';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
@@ -87,7 +87,11 @@ const Books = props => {
           }, 1500);
         })
         .catch(err => {
-          swal('Error!', 'Buku Gagal Import', 'error');
+          setLoading(false);
+          swal('Error!', err.response.data.message, 'error');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         });
 
       // setSourceLink(file);
@@ -323,4 +327,4 @@ let mapStateToProps = state => {
   return {};
 };
 
-export default connect(mapStateToProps, { UploadBookFIle })(Books);
+export default connect(mapStateToProps)(Books);
