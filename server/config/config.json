@@ -1,9 +1,9 @@
 {
   "development": {
     "username": "root",
-    "password": "",
-    "database": "db_library_beta",
-    "host": "127.0.0.1",
+    "password": "123123",
+    "database": "db_library",
+    "host": "34.230.179.169",
     "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
