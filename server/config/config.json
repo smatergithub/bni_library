@@ -9,11 +9,11 @@
     "logging": false
   },
   "production": {
-    "username": "appsmarter",
-    "password": "bn1appsm4rter/",
+    "username": "root",
+    "password": "123123",
     "database": "db_library",
-    "host": "172.16.0.27",
-    "dialect": "mysql",
+    "host": "34.230.179.169",
+    "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
   }
