@@ -3,7 +3,7 @@
     "username": "root",
     "password": "123123",
     "database": "db_library",
-    "host": "34.230.179.169",
+    "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
@@ -12,7 +12,7 @@
     "username": "root",
     "password": "123123",
     "database": "db_library",
-    "host": "34.230.179.169",
+    "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
