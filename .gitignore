@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 /react/node_modules
-/react/build
+# /react/build
 /server/public
 # testing
 /coverage
