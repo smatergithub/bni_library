@@ -9,10 +9,10 @@
     "logging": false
   },
   "production": {
-    "username": "root",
-    "password": "123123",
-    "database": "db_library",
-    "host": "34.230.179.169",
+    "username": "elibrary",
+    "password": "L1Br4r1BCV2020",
+    "database": "db_library_beta",
+    "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
