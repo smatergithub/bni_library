@@ -2,25 +2,22 @@ import React from 'react';
 import UserAPI from '../../api/UserApi';
 import ReactStars from 'react-rating-stars-component';
 import { Form, Input, Button, Select } from 'antd';
+
 const { Option } = Select;
 const { TextArea } = Input;
 
 export default function Modal(props) {
-  const { open, title, handleSubmit, userId } = props;
+  const { open, title, handleSubmit, userId, type } = props;
   let [rating, setRating] = React.useState(null);
   let [loading, setLoading] = React.useState(false);
-  let [listBorrowBook, setListBorrowBook] = React.useState(false);
-  let [listborrowEbook, setListBorrowEbook] = React.useState(false);
+  let [listBorrowBook, setListBorrowBook] = React.useState([]);
+  let [listborrowEbook, setListBorrowEbook] = React.useState([]);
 
   const ratingChanged = newRating => {
     setRating(newRating);
   };
 
   const [form] = Form.useForm();
-
-  const onBookList = value => {
-    console.log('value', value);
-  };
 
   const getLisDropdownListBorrowBook = () => {
     setLoading(true);
@@ -58,15 +55,16 @@ export default function Modal(props) {
 
   const RenderListDropdown = () => {
     let dropdownList;
-    if (listBorrowBook.length > 0) {
+    if (type.type === 'book') {
       dropdownList = listBorrowBook.map(item => {
         return <Option value={item.label}>{item.label}</Option>;
       });
-    } else if (listborrowEbook.length > 0) {
+    } else if (type.type === 'ebook') {
       dropdownList = listborrowEbook.map(item => {
         return <Option value={item.label}>{item.label}</Option>;
       });
     }
+
     return dropdownList;
   };
 
@@ -97,7 +95,7 @@ export default function Modal(props) {
                 <Form layout="vertical" form={form} name="control-hooks" onFinish={onFinish}>
                   <Form.Item
                     name="ratingBorrow"
-                    label={`Daftar Pinjam ${listBorrowBook.length > 0 ? 'Buku' : 'Ebook'}`}
+                    label={`Daftar Pinjam `}
                     rules={[
                       {
                         required: true,

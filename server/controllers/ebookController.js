@@ -289,8 +289,6 @@ module.exports = {
         // skip header
         rows.shift();
 
-        console.log('rows', rows);
-
         let Databooks = [];
 
         rows.forEach(row => {

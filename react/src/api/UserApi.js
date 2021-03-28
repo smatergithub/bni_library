@@ -73,7 +73,7 @@ export default class UsersApi {
     return Request.getWithAuth(url);
   }
   static getBorrowedEbookItemNoRated(id, params) {
-    const url = `/api/profile/book/no-rated/${id}?${params}`;
+    const url = `/api/profile/ebook/no-rated/${id}?${params}`;
     return Request.getWithAuth(url);
   }
 

@@ -44,9 +44,9 @@ module.exports = {
                   message: 'Process Succesfully input rating',
                 });
               })
-              .catch(err => { });
+              .catch(err => {});
           })
-          .catch(err => { });
+          .catch(err => {});
 
         await Books.findByPk(dataTransactionRating[0].bookId)
           .then(book => {
@@ -60,10 +60,9 @@ module.exports = {
                   message: 'Process Succesfully input rating',
                 });
               })
-              .catch(err => { });
+              .catch(err => {});
           })
-          .catch(err => { });
-
+          .catch(err => {});
       })
       .catch(err => {
         return res.status(200).json({
@@ -78,8 +77,7 @@ module.exports = {
       order: [['countRating', 'DESC']],
     };
     const RatingList = await Books.findAndCountAll(paramQuerySQL).then(response => {
-      let list = response.rows.filter(x => x.countRating !== null)
-      console.log("rating List", list)
+      let list = response.rows.filter(x => x.countRating !== null);
       return {
         count: response.count,
         data: list,

@@ -6,8 +6,11 @@ import moment from 'moment';
 import swal from 'sweetalert';
 import { checkIsImageExist } from '../../component/helper';
 import { Rating } from 'semantic-ui-react';
+import { Loader } from 'semantic-ui-react';
 
-function FormOrder({ data, type, onOrderItem, user }) {
+const LoadingPreview = () => <Loader active inline="centered"></Loader>;
+
+function FormOrder({ data, type, onOrderItem, user, loading }) {
   const parsed = queryString.parse(window.location.search);
   const { handleSubmit, register, errors } = useForm();
   let [startDate, setStartDate] = React.useState(null);
@@ -139,6 +142,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
                     Jumlah Buku
                   </label>
                   <input
+                    disabled={loading}
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
@@ -162,7 +166,11 @@ function FormOrder({ data, type, onOrderItem, user }) {
                 Dari Tanggal
               </label>
               <Space direction="vertical">
-                <DatePicker onChange={onChangeStartDate} disabledDate={date => date < moment()} />
+                <DatePicker
+                  onChange={onChangeStartDate}
+                  disabledDate={date => date < moment()}
+                  disabled={loading}
+                />
               </Space>
             </div>
             <div className="mt-2">
@@ -171,6 +179,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
               </label>
               <Space direction="vertical">
                 <DatePicker
+                  disabled={loading}
                   onChange={onChangeEndDate}
                   // disabledDate={date =>
                   //   date < moment(startDate).add(1, 'days') ||
@@ -186,6 +195,7 @@ function FormOrder({ data, type, onOrderItem, user }) {
             <div className="relative w-full mb-3 mt-8">
               <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Note</label>
               <input
+                disabled={loading}
                 ref={register({
                   required: 'Field tidak boleh kosong',
                 })}
@@ -202,10 +212,11 @@ function FormOrder({ data, type, onOrderItem, user }) {
             </div>
             <div className="mt-6">
               <button
+                disabled={loading}
                 className="mobile:w-full xs:w-full md:w-full sm:w-full lg:w-64  px-14 py-2 text-white font-light tracking-wider bg-orange-500 rounded"
                 type="submit"
               >
-                ORDER
+                {loading ? LoadingPreview() : 'ORDER'}
               </button>
             </div>
           </form>

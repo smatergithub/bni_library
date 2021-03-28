@@ -134,37 +134,22 @@ function EditUser(props) {
                   }}
                 />
               </div>
-
               <div className="relative w-full mb-3">
-                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Nama</label>
+                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">nama</label>
                 <input
                   ref={register()}
                   defaultValue={user.nama}
                   type="text"
                   disabled={true}
-                  name="nama"
+                  name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Nama"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
                 />
               </div>
-
               {/* <div className="relative w-full mb-3">
-              <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Email</label>
-              <input
-                defaultValue={user.email}
-                type="email"
-                disabled
-                className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
-                placeholder="Email"
-                style={{
-                  transition: 'all 0.15s ease 0s',
-                }}
-              />
-            </div> */}
-              <div className="relative w-full mb-3">
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                   Tanggal Lahir
                 </label>
@@ -179,18 +164,36 @@ function EditUser(props) {
                   // format={dateFormat}
                   onChange={handleDate}
                 />
+              </div> */}
+              <div className="relative w-full mb-3">
+                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
+                  Tanggal Lahir
+                </label>
+                <input
+                  ref={register()}
+                  defaultValue={moment(user.tgl_lahir).format('YYYY-MM-DD')}
+                  type="text"
+                  disabled={true}
+                  name="npp"
+                  className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
+                  style={{
+                    transition: 'all 0.15s ease 0s',
+                  }}
+                />
               </div>
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                   Wilayah
                 </label>
                 <input
-                  defaultValue={user.wilayah}
                   ref={register()}
+                  defaultValue={user.wilayah}
+                  type="text"
                   disabled={true}
-                  name="wilayah"
-                  className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Wilayah"
+                  name="npp"
+                  className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -200,14 +203,14 @@ function EditUser(props) {
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                   Singkatan
                 </label>
-
                 <input
-                  defaultValue={user.singkatan}
                   ref={register()}
+                  defaultValue={user.singkatan}
+                  type="text"
                   disabled={true}
-                  name="singkatan"
-                  className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-gray-100 rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Wilayah"
+                  name="npp"
+                  className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -216,12 +219,13 @@ function EditUser(props) {
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Unit</label>
                 <input
-                  defaultValue={user.unit}
                   ref={register()}
-                  disabled={true}
-                  name="unit"
+                  defaultValue={user.unit}
                   type="text"
+                  disabled={true}
+                  name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -232,12 +236,13 @@ function EditUser(props) {
                   Kode Unit
                 </label>
                 <input
-                  defaultValue={user.kdunit}
                   ref={register()}
-                  disabled={true}
-                  name="kdunit"
+                  defaultValue={user.kdunit}
                   type="text"
+                  disabled={true}
+                  name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -250,11 +255,11 @@ function EditUser(props) {
                 <input
                   ref={register()}
                   defaultValue={user.jenjang}
-                  disabled={true}
                   type="text"
-                  name="jenjang"
+                  disabled={true}
+                  name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Jenjang"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -265,19 +270,19 @@ function EditUser(props) {
                   Jabatan
                 </label>
                 <input
-                  defaultValue={user.jabatan}
-                  disabled={true}
                   ref={register()}
-                  name="jabatan"
+                  defaultValue={user.jabatan}
                   type="text"
+                  disabled={true}
+                  name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
+                  placeholder="Npp"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
                 />
               </div>
-
-              {selectedLinkMap ? (
+              {/* {selectedLinkMap ? (
                 <div className="relative w-full mb-3">
                   <div
                     style={{ width: '100% !important' }}
@@ -291,7 +296,7 @@ function EditUser(props) {
                     dangerouslySetInnerHTML={ParserHTML(user.mapUrl)}
                   ></div>
                 </div>
-              ) : null}
+              ) : null} */}
 
               {/* <div className="mt-10">
                 <button

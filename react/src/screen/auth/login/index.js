@@ -5,10 +5,18 @@ import { Input } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { signIn, getMe } from '../../../redux/action/user';
 import { ToastError } from '../../../component';
+import { Loader } from 'semantic-ui-react';
+
+const LoadingPreview = () => (
+  <Loader active inline="centered">
+    Loading
+  </Loader>
+);
 
 function Login(props) {
   let { history } = props;
   let [user, setUser] = useState({ npp: '', password: '' });
+  let [loading, setLoading] = useState(false);
 
   function onLogin(e) {
     e.preventDefault();
@@ -20,7 +28,7 @@ function Login(props) {
         npp: user.npp,
         password: user.password,
       };
-
+      setLoading(true);
       props
         .signIn(data)
         .then(res => {
@@ -67,13 +75,17 @@ function Login(props) {
           } else {
             ToastError(res.msg);
           }
+          setLoading(false);
         })
         .catch(err => {
           let msg = err.message || 'Something wrong';
           ToastError(msg);
+          setLoading(false);
         });
     }
   }
+
+  console.log('loading', loading);
 
   return (
     <main>
@@ -104,6 +116,7 @@ function Login(props) {
                         NPP
                       </label>
                       <input
+                        disabled={loading}
                         onChange={e => setUser({ ...user, npp: e.target.value })}
                         type="text"
                         className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
@@ -127,6 +140,7 @@ function Login(props) {
                         Password
                       </label>
                       <Input.Password
+                        disabled={loading}
                         style={{
                           height: 45,
                         }}
@@ -147,17 +161,21 @@ function Login(props) {
                         </span>
                       </label>
                     </div> */}
-                    <div className="text-center mt-6">
-                      <button
-                        className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
-                        type="submit"
-                        style={{
-                          transition: 'all 0.15s ease 0s',
-                        }}
-                      >
-                        Masuk
-                      </button>
-                    </div>
+                    {loading ? (
+                      LoadingPreview()
+                    ) : (
+                      <div className="text-center mt-6">
+                        <button
+                          className="bg-green-500 text-white active:bg-gray-700 text-sm font-bold uppercase px-6 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 w-full"
+                          type="submit"
+                          style={{
+                            transition: 'all 0.15s ease 0s',
+                          }}
+                        >
+                          Masuk
+                        </button>
+                      </div>
+                    )}
 
                     {/* <div
                       className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer "
@@ -165,12 +183,14 @@ function Login(props) {
                     >
                       Daftar
                     </div> */}
-                    <div
-                      className="mt-5 text-center text-orange-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
-                      onClick={() => history.push('/home')}
-                    >
-                      Beranda
-                    </div>
+                    {loading ? null : (
+                      <div
+                        className="mt-5 text-center text-orange-500 outline-none focus:outline-none hover:text-red-800 cursor-pointer "
+                        onClick={() => history.push('/home')}
+                      >
+                        Beranda
+                      </div>
+                    )}
                   </form>
                 </div>
               </div>

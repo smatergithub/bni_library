@@ -38,7 +38,6 @@ module.exports = {
           // }, 'password');
           res.status(402).send({ message: response.message });
         }
-        console.log(response);
       })
       .catch(err => {
         res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });

@@ -123,13 +123,13 @@ module.exports = {
           isGiveRating: false,
           userId: userId,
         },
-        include: 'book',
+        include: 'ebook',
       };
 
       const transactionEbook = await TransactionEbook.findAll(paramQuerySQL);
       if (transactionEbook.length < 1) {
         return res.status(404).send({
-          message: 'book Not Found',
+          message: 'ebook Not Found',
         });
       }
       let data = transactionEbook.map(item => {

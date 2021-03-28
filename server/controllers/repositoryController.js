@@ -173,7 +173,6 @@ module.exports = {
           });
         } else {
           if (repository[type]) {
-            console.log('aaa', repository[type]);
             async function copyPages() {
               // Fetch first existing PDF document
 

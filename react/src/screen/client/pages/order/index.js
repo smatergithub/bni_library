@@ -115,6 +115,7 @@ function OrderBook(props) {
   }
 
   function onOrderItem(formData) {
+    setProcessing(true);
     if (moment(formData.startDate).valueOf() > moment(formData.endDate).valueOf()) {
       swal('Error!', 'Tanggal Pengembalian harus lebih besar daripada tanggal pinjam', 'error');
     } else {
@@ -132,6 +133,7 @@ function OrderBook(props) {
             setShowModalDeletion(false);
             swal('Error!', res.msg, 'error');
           }
+          setProcessing(false);
         });
         // if (isUserhaveActiveBook) {
         //   ToastError(
@@ -157,6 +159,7 @@ function OrderBook(props) {
             setShowModalDeletion(false);
             swal('Error!', res.msg, 'error');
           }
+          setProcessing(false);
         });
       }
     }
@@ -198,10 +201,10 @@ function OrderBook(props) {
         {books === null && type === 'book' && <NoData msg="Buku tidak di temukan" />}
         {ebooks === null && type === 'ebook' && <NoData msg="Ebook tidak di temukan" />}
         {type === 'ebook' && ebooks !== null && (
-          <Form type="ebook" data={ebooks} onOrderItem={onOrderItem} />
+          <Form type="ebook" data={ebooks} onOrderItem={onOrderItem} loading={processing} />
         )}
         {type === 'book' && books !== null && (
-          <Form type="book" data={books} onOrderItem={onOrderItem} />
+          <Form type="book" data={books} onOrderItem={onOrderItem} loading={processing} />
         )}
       </section>
       <Modal
@@ -220,6 +223,7 @@ function OrderBook(props) {
       </Modal>
       {isBorrowReview && (
         <FeedbackModal
+          type={parsed}
           title="Action required"
           open={isBorrowReview}
           handleSubmit={formData => onFeedbackSubmit(formData)}

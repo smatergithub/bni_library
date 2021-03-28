@@ -3,17 +3,20 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { checkIsImageExist } from '../../helper';
 const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) => {
+  let img = '';
+  if (data !== null && data.image !== null && checkIsImageExist(data.image)) {
+    img = data.image;
+  } else if (data !== null && data.image !== null) {
+    img = data.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">
         <img
-          src={
-            data.image
-              ? checkIsImageExist(data.image)
-                ? data.image
-                : data.image + '/preview'
-              : require('../../../../assets/NoImage.png')
-          }
+          src={img}
           style={{
             height: 120,
             width: 140,
@@ -25,10 +28,10 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
 
       <div className="w-4/6 h-48  lg:flex  items-center justify-start ">
         <div className="ml-6">
-          <h4 className="text-xl font-bold leading-tight">{data.judul}</h4>
-          <div className="mt-2 leading-relaxed">Pengarang : {data.pengarang}</div>
-          <div className="mt-1 leading-relaxed"> Penerbit : {data.penerbit} </div>
-          <div className="mt-1 leading-relaxed"> Cover ISBN : {data.isbn} </div>
+          <h4 className="text-xl font-bold leading-tight">{data && data.judul}</h4>
+          <div className="mt-2 leading-relaxed">Pengarang : {data && data.pengarang}</div>
+          <div className="mt-1 leading-relaxed"> Penerbit : {data && data.penerbit} </div>
+          <div className="mt-1 leading-relaxed"> Cover ISBN : {data && data.isbn} </div>
         </div>
       </div>
       <div className="w-2/6 h-48 flex flex-col items-start justify-start ">
