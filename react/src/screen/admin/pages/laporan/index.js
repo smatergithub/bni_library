@@ -33,6 +33,7 @@ const UsersList = props => {
         setIsLoading(false);
       })
       .catch(err => {
+        setStartDate(null);
         setIsLoading(false);
         swal('Error!', 'data laporan  pengguna tidak ditemukan', 'error');
       });
@@ -53,6 +54,7 @@ const UsersList = props => {
         setIsLoading(false);
       })
       .catch(err => {
+        setStartDate(null);
         setIsLoading(false);
         swal('Error!', 'data laporan transaksi buku tidak ditemukan', 'error');
       });
@@ -73,6 +75,7 @@ const UsersList = props => {
         setIsLoading(false);
       })
       .catch(err => {
+        setStartDate(null);
         setIsLoading(false);
         swal('Error!', 'data laporan transaksi ebook tidak ditemukan', 'error');
       });
@@ -113,6 +116,8 @@ const UsersList = props => {
   }
 
   let getDate = startDate == null ? true : false;
+
+  console.log('aaa', startDate);
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
