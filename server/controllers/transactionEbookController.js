@@ -3,7 +3,9 @@ const TransactionEbook = require('../models').transactionEbook;
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 const moment = require('moment');
-
+const xl = require('excel4node');
+const wb = new xl.Workbook();
+const ws = wb.addWorksheet('Worksheet Name');
 module.exports = {
   list: async (req, res) => {
     let { code, status, startDate, endDate, userId, limit, page, order, sort } = req.body;
@@ -329,7 +331,7 @@ module.exports = {
             },
           },
         },
-        include: ['book', 'user'],
+        include: ['ebook', 'user'],
       });
 
       if (transactions.length < 1) {
