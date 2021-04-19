@@ -10,8 +10,8 @@
   },
   "production": {
     "username": "elibrary",
-    "password": "1234567890",
-    "database": "db_library",
+    "password": "L1Br4r1BCV2020",
+    "database": "db_library_beta",
     "host": "127.0.0.1",
     "dialect": "mariadb",
     "operatorsAliases": false,
