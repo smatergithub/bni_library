@@ -30,12 +30,21 @@ module.exports = {
       .then(res => res.json())
       .then(response => {
         if (response.status === 200) {
-          checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
+          checkIfUserAlreadyCreateOnDb(
+            {
+              npp: 'D000001',
+            },
+            'password'
+          );
+          //checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
         if (response.status === 401) {
-          // checkIfUserAlreadyCreateOnDb({
-          //   npp: 'D000001'
-          // }, 'password');
+          checkIfUserAlreadyCreateOnDb(
+            {
+              npp: 'D000001',
+            },
+            'password'
+          );
           res.status(402).send({ message: response.message });
         }
       })

@@ -9,11 +9,11 @@
     "logging": false
   },
   "production": {
-    "username": "elibrary",
-    "password": "L1Br4r1BCV2020",
-    "database": "db_library_beta",
-    "host": "127.0.0.1",
-    "dialect": "mariadb",
+    "username": "appsmarter",
+    "password": "bn1appsm4rter/",
+    "database": "db_library",
+    "host": "172.16.0.27",
+    "dialect": "mysql",
     "operatorsAliases": false,
     "logging": false
   }
