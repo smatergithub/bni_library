@@ -66,7 +66,7 @@ export const getfavorite = () => dispatch => {
         return {
           resp: true,
           msg: '',
-          data: res,
+          data: res.data,
         };
       }
     })

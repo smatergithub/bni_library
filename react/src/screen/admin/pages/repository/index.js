@@ -7,6 +7,7 @@ import { NoData, Modal } from '../../../../component';
 import TableDevExtreme from '../../../../component/TableDevExtreme';
 import moment from 'moment';
 import Loader from '../../component/Loader';
+import { Button } from 'antd';
 
 const Repository = props => {
   const [loading, setLoading] = React.useState(false);
@@ -97,6 +98,32 @@ const Repository = props => {
         <div
           style={{
             display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+          className="mb-10"
+        >
+          <div>
+            <p style={{ fontSize: '26px' }} className="text-black">
+              Daftar Repository
+            </p>
+          </div>
+          <div>
+            <Link to="/admin/new-repository">
+              <Button
+                type="primary"
+                size={'large'}
+                style={{ borderRadius: '8px', marginRight: '24px' }}
+                disabled={loading}
+              >
+                Repository Baru
+              </Button>
+            </Link>
+          </div>
+        </div>
+        {/* <div
+          style={{
+            display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
             marginBottom: '14px',
@@ -116,7 +143,7 @@ const Repository = props => {
               </p>
             </div>
           </div>
-          {/* <Link to="/admin/new-repository">
+          <Link to="/admin/new-repository">
             <button
               style={{ width: '380px', height: '34px' }}
               type="button"
@@ -124,8 +151,8 @@ const Repository = props => {
             >
               <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Repository Baru
             </button>
-          </Link> */}
-        </div>
+          </Link>
+        </div> */}
         {loading ? (
           <div
             style={{

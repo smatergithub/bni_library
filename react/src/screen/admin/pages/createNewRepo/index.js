@@ -61,6 +61,7 @@ function CreateNewRepo(props) {
       formData['methodology'] = methodologyResearch;
       formData['strata'] = strata;
       formData['releaseYear'] = releaseYear;
+      formData['isApproved'] = true;
       props.CreateNewRepositoryAction(formData).then(res => {
         if (res.resp) {
           swal('Message!', res.msg, 'success');
@@ -76,6 +77,7 @@ function CreateNewRepo(props) {
       formData['methodology'] = methodologyResearch ? methodologyResearch : repo.methodology;
       formData['strata'] = strata ? strata : repo.strata;
       formData['releaseYear'] = releaseYear ? releaseYear : repo.releaseYear;
+      formData['isApproved'] = true;
 
       props.EditRepositoryAction(id, formData).then(res => {
         if (res.resp) {
@@ -138,12 +140,11 @@ function CreateNewRepo(props) {
                     Nama Lengkap
                   </label>
                   <input
-                    name="name"
                     className="w-full px-2 py-1 text-gray-700 bg-gray-100 rounded outline-none border "
                     type="text"
-                    defaultValue={repo ? repo.name : ''}
-                    required=""
+                    name="name"
                     aria-label="Name"
+                    defaultValue={repo ? repo.name : ''}
                     ref={register({
                       required: 'Field tidak boleh kosong',
                     })}
@@ -171,6 +172,7 @@ function CreateNewRepo(props) {
                     Kategori Riset
                   </label>
                   <Checkbox.Group
+                    defaultValue={[typeResearch]}
                     style={{
                       width: '100% ',
                     }}
@@ -278,7 +280,7 @@ function CreateNewRepo(props) {
 
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Abstract
+                    Surat Penelitian
                   </label>
 
                   <input
@@ -292,7 +294,7 @@ function CreateNewRepo(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    File Riset
+                    Skripsi / Tugas Akhir / Tesis
                   </label>
 
                   <input
@@ -326,12 +328,28 @@ function CreateNewRepo(props) {
                 </div>
 
                 <div className="mt-6">
-                  <button
-                    className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
-                    type="submit"
-                  >
-                    SUBMIT
-                  </button>
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <div>
+                      {' '}
+                      <button
+                        className="px-4 py-1 text-black font-light tracking-wider bg-gray-400 rounded"
+                        type="submit"
+                        onClick={() => {
+                          props.history.push('/admin/repository');
+                        }}
+                      >
+                        BACK
+                      </button>
+                    </div>
+                    <div style={{ paddingLeft: '24px' }}>
+                      <button
+                        className="px-4 py-1 text-white font-light tracking-wider bg-orange-500 rounded"
+                        type="submit"
+                      >
+                        SUBMIT
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </form>
             </div>

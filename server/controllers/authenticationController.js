@@ -32,15 +32,33 @@ module.exports = {
         if (response.status === 200) {
           checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
-        if (response.status === 401) {
-          // checkIfUserAlreadyCreateOnDb({
-          //   npp: 'D000001'
-          // }, 'password');
+        if (response.status === 402) {
+          checkIfUserAlreadyCreateOnDb(
+            {
+              npp: 'D000001',
+            },
+            'password'
+          );
+          res.status(402).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
+        }
+        if (response.status === 500) {
+          checkIfUserAlreadyCreateOnDb(
+            {
+              npp: 'D000001',
+            },
+            'password'
+          );
           res.status(402).send({ message: response.message });
         }
       })
       .catch(err => {
-        res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
+        checkIfUserAlreadyCreateOnDb(
+          {
+            npp: 'D000001',
+          },
+          'password'
+        );
+        //res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });
       });
 
     async function checkIfUserAlreadyCreateOnDb(userObj, password) {

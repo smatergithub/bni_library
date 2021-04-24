@@ -23,6 +23,8 @@ function FavoriteBooks(props) {
     });
   }, []);
 
+  console.log('books', books);
+
   return (
     <React.Fragment>
       <div className="pt-24">

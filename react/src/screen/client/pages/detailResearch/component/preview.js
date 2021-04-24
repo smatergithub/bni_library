@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { Document, Page, pdfjs } from 'react-pdf';
 import { getPreviewResearchByUser } from '../../../../../redux/action/repositorys';
 import LoadingPreview from './LoadingPreview';
+import swal from 'sweetalert';
 
 function EbookPreview(props) {
   const parsed = queryString.parse(props.location.search);
@@ -22,13 +23,17 @@ function EbookPreview(props) {
     let { id, type } = props;
     props
       .getPreviewResearchByUser(id, type)
-      .then(res => {
+      .then((res) => {
         if (res.resp) {
           setEbook(res.data);
           setIsLoading(false);
+        } else {
+          swal('Error!', 'Dokumen tidak di temukan', 'error');
         }
       })
-      .catch(err => {})
+      .catch((err) => {
+        swal('Error!', 'Dokumen tidak di temukan', 'error');
+      })
       .finally(() => {
         setIsLoading(false);
       });
@@ -37,7 +42,6 @@ function EbookPreview(props) {
     retrievePreviewPDF();
   }, []);
 
-  console.log('data ebook', ebook);
   return (
     <div className="w-full">
       {isLoading ? (
@@ -53,7 +57,7 @@ function EbookPreview(props) {
             >
               {Array.apply(null, Array(totalPages))
                 .map((x, i) => i)
-                .map(page => (
+                .map((page) => (
                   <Page pageNumber={page} wrap={false} />
                 ))}
             </Document>

@@ -15,26 +15,13 @@
     "dev-react": "cd react && npm run start",
     "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
     "prod-server": "cross-env NODE_ENV=production nodemon --watch server server/index.js",
-    "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
-    "lint:fix": "eslint react/src/ --fix"
+    "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\""
   },
   "keywords": [
     "bni"
   ],
   "author": "nagacoder",
   "license": "ISC",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "react.{js,jsx}": [
-      "pretty-quick --staged",
-      "eslint react/src/ --fix",
-      "git add"
-    ]
-  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -45,23 +32,13 @@
     "cross-env": "^7.0.2",
     "crypto-random-string": "^3.2.0",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb": "18.0.1",
-    "eslint-config-prettier": "6.10.0",
-    "eslint-plugin-import": "2.18.2",
-    "eslint-plugin-jsx-a11y": "^6.2.3",
-    "eslint-plugin-prettier": "3.1.2",
-    "eslint-plugin-react": "7.16.0",
-    "eslint-plugin-react-hooks": "1.7.0",
     "excel4node": "^1.7.2",
     "express": "^4.17.1",
-    "faker": "^4.1.0",
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
     "https": "^1.0.0",
     "husky": "2.2.0",
     "jsonwebtoken": "^8.5.1",
-    "lint-staged": "8.1.6",
     "mariadb": "^2.5.2",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
@@ -76,13 +53,13 @@
     "nodemon": "^2.0.3",
     "path": "^0.12.7",
     "pdf-lib": "^1.11.1",
-    "prettier": "1.19.1",
     "pretty-quick": "^2.0.1",
     "prop-types": "^15.7.2",
     "read-excel-file": "^4.0.6",
     "sequelize": "^5.21.7",
     "sweetalert": "^2.1.2",
-    "uuid": "^8.0.0"
+    "uuid": "^8.0.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "eslint-plugin-flowtype": "^4.7.0"

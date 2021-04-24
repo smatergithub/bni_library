@@ -176,7 +176,6 @@ function Login(props) {
                         </button>
                       </div>
                     )}
-
                     {/* <div
                       className="mt-5 text-center outline-none focus:outline-none hover:text-gray-800 cursor-pointer "
                       onClick={() => history.push('/auth/register')}

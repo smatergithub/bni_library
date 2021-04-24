@@ -247,7 +247,7 @@ function CreateNewRepo(props) {
 
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Abstract
+                    Surat Penelitian
                   </label>
 
                   <input
@@ -260,7 +260,7 @@ function CreateNewRepo(props) {
                 </div>
                 <div className="mt-2">
                   <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    File Riset
+                    Skripsi / Tugas Akhir / Tesis
                   </label>
 
                   <input

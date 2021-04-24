@@ -4,14 +4,14 @@ const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const httpLogger = require('./middelwares/httpLogger');
+const logger = require('./utils/logger');
+
 // const cookieParser = require('cookie-parser');
 const cors = require('cors');
 require('dotenv').config();
 
-//update  08:12
-
 global.__basedir = __dirname + '/..';
-
 global.__locationdir = __dirname;
 
 var UserRoute = require('./routes/UserRoute');
@@ -24,10 +24,10 @@ const app = express();
 
 // app.use(cookieParser());
 app.use(cors());
+app.use(httpLogger);
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use('/api/', UserRoute);
 app.use('/api/admin/', AdminRoute);
 app.use('/img/', express.static(path.join(__dirname, 'public')));
@@ -39,7 +39,7 @@ app.get('*', (req, res) =>
 
 const port = process.env.PORT_BACKEND;
 var db = require('./models');
-db.sequelize.sync().then(function() {
+db.sequelize.sync().then(function () {
   // console.log('database connection success');
 });
 if (process.env.NODE_ENV === 'production') {
@@ -51,10 +51,16 @@ if (process.env.NODE_ENV === 'production') {
       fs.readFileSync('./security/ssl/AAA_Certificate_Services.crt', 'utf8'),
     ],
   };
-  https.createServer(https_options, app).listen(port);
-} else
-  app.listen(port, function() {
-    console.log(`Server running in PORT: ${port}`);
+  let srvr = https.createServer(https_options, app);
+  srvr.listen(port);
+  srvr.timeout = 0;
+  console.log('Server TimeOut', srvr.timeout);
+  //https.createServer(https_options, app).listen(port);
+} else {
+  // let srvr = app.listen(port);
+  // srvr.timeout = 0;
+  // console.log(srvr.timeout);
+  app.listen(port, function (req) {
+    logger.info(`Server listening on port ${port}`);
   });
-{
 }

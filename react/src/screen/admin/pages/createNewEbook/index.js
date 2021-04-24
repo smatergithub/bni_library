@@ -22,7 +22,6 @@ function CreateNewEBook(props) {
   let [ebooks, setEbooks] = React.useState(null);
   let [ebookFile, setEbookFile] = React.useState(null);
   let [isLoading, setIsLoading] = React.useState(false);
-  let exportFile = React.useRef(null);
 
   function onSubmit(formData) {
     if (!id) {
