@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/logs
 /.pnp
 .pnp.js
 /react/node_modules
@@ -9,6 +10,7 @@
 /server/public
 # testing
 /coverage
+
 
 # production
 /build
