@@ -15,7 +15,8 @@
     "dev-react": "cd react && npm run start",
     "dev-server": "cross-env NODE_ENV=development nodemon --watch server server/index.js",
     "prod-server": "cross-env NODE_ENV=production nodemon --watch server server/index.js",
-    "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\""
+    "dev": "concurrently \"npm:dev-server \" \"npm:dev-react\"",
+    "bni-library": "concurrently \"npm:dev-server \" \"npm:dev-react\""
   },
   "keywords": [
     "bni"
