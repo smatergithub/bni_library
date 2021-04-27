@@ -7,7 +7,7 @@ import { DatePicker } from 'antd';
 import swal from 'sweetalert';
 import { withRouter } from 'react-router-dom';
 import { Select } from 'antd';
-import { updateMe, getWilayah } from '../../../../../redux/action/user';
+import { updateMe } from '../../../../../redux/action/user';
 const { Option } = Select;
 
 function EditUser(props) {
@@ -29,7 +29,7 @@ function EditUser(props) {
     setIsLoading(true);
     props
       .updateMe(formData)
-      .then(res => {
+      .then((res) => {
         setIsLoading(true);
         if (res.resp) {
           swal('Message!', res.msg, 'success');
@@ -43,7 +43,7 @@ function EditUser(props) {
           swal('Error!', res.msg, 'error');
         }
       })
-      .catch(err => {
+      .catch((err) => {
         setIsLoading(false);
         console.log('err', err);
       });
@@ -57,40 +57,40 @@ function EditUser(props) {
     }
   }, []);
 
-  const getWilayah = () => {
-    props.getWilayah().then(response => {
-      let data = response.data.data.map(item => {
-        return { label: item.wilayah, value: item.id };
-      });
-      setDataWilayah(data);
-    });
-  };
-  const getCodeWilayahAndAlamat = () => {
-    props.getWilayah().then(response => {
-      let data = response.data.data.map(item => {
-        return { label: item.codeWilayah, value: item.id };
-      });
-      let alamat = response.data.data.map(item => {
-        return { label: item.alamat, value: item.id };
-      });
-      let linkMap = response.data.data.map(item => {
-        return { label: item.linkGoogleMap, value: item.id };
-      });
+  // cons = () => {
+  //   prop().then(response => {
+  //     let data = response.data.data.map(item => {
+  //       return { label: item.wilayah, value: item.id };
+  //     });
+  //     setDataWilayah(data);
+  //   });
+  // };
+  // const getCodeWilayahAndAlamat = () => {
+  //   prop().then(response => {
+  //     let data = response.data.data.map(item => {
+  //       return { label: item.codeWilayah, value: item.id };
+  //     });
+  //     let alamat = response.data.data.map(item => {
+  //       return { label: item.alamat, value: item.id };
+  //     });
+  //     let linkMap = response.data.data.map(item => {
+  //       return { label: item.linkGoogleMap, value: item.id };
+  //     });
 
-      setAlamat(alamat);
-      setCodeWilayah(data);
-      setLinkMap(linkMap);
-    });
-  };
+  //     setAlamat(alamat);
+  //     setCodeWilayah(data);
+  //     setLinkMap(linkMap);
+  //   });
+  // };
 
-  React.useEffect(() => {
-    getWilayah();
-    getCodeWilayahAndAlamat();
-  }, []);
+  // React.useEffect(() => {
+  // ();
+  //   getCodeWilayahAndAlamat();
+  // }, []);
 
   function handleChange(value) {
-    let data = alamat.filter(item => item.value === value);
-    let lokasiMap = linkMap.filter(item => item.value === value);
+    let data = alamat.filter((item) => item.value === value);
+    let lokasiMap = linkMap.filter((item) => item.value === value);
     setSelectedLinkMap(lokasiMap[0]);
     setSelectedAlamat(data[0]);
     setTimeout(() => {
@@ -99,7 +99,7 @@ function EditUser(props) {
     }, 3000);
   }
 
-  const ParserHTML = htmlDocument => {
+  const ParserHTML = (htmlDocument) => {
     return {
       __html: htmlDocument,
     };
@@ -143,7 +143,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Nama"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -176,7 +176,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Tanggal Lahir"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -193,7 +193,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Wilayah"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -210,7 +210,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Singkatan"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -225,7 +225,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Unit"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -240,9 +240,9 @@ function EditUser(props) {
                   defaultValue={user.kdunit}
                   type="text"
                   disabled={true}
-                  name="npp"
+                  name="kdunit"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Kode Unit"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -257,9 +257,9 @@ function EditUser(props) {
                   defaultValue={user.jenjang}
                   type="text"
                   disabled={true}
-                  name="npp"
+                  name="jenjang"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Jenjang"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -276,7 +276,7 @@ function EditUser(props) {
                   disabled={true}
                   name="npp"
                   className="px-3 py-3 placeholder-gray-400 text-gray-700 bg-white rounded text-sm  focus:outline-none border w-full"
-                  placeholder="Npp"
+                  placeholder="Jabatan"
                   style={{
                     transition: 'all 0.15s ease 0s',
                   }}
@@ -328,9 +328,9 @@ function EditUser(props) {
     </div>
   );
 }
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     user: state.users.me,
   };
 };
-export default connect(mapStateToProps, { updateMe, getWilayah })(withRouter(EditUser));
+export default connect(mapStateToProps, { updateMe })(withRouter(EditUser));

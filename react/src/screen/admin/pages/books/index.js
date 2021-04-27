@@ -11,7 +11,7 @@ import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
 import Loader from '../../component/Loader';
 
-const Books = props => {
+const Books = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
@@ -29,22 +29,22 @@ const Books = props => {
       limit: pageSize,
     };
     BookAPI.list(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(props.books.count);
         setBooks(res.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getDetailDataDeleteBook = data => {
+  const getDetailDataDeleteBook = (data) => {
     setDetailData(data);
     setShowModalDeletion(true);
   };
@@ -52,20 +52,20 @@ const Books = props => {
   const handleActionDeleteBook = () => {
     setLoading(true);
     BookAPI.delete(detailData.id)
-      .then(response => {
+      .then((response) => {
         swal('Message!', 'Buku Berhasil di hapus', 'success');
         mappingDataSourceBookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => {
+      .catch((err) => {
         swal('Error!', 'Buku Gagal di hapus', 'error');
         setLoading(false);
       });
   };
 
-  const uploadPdf = e => {
-    // e.preventDefault();
+  const uploadPdf = (e) => {
+    e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
     let request = {
@@ -76,27 +76,24 @@ const Books = props => {
     for (var key in request) {
       formdata.append(key, request[key]);
     }
-    reader.onloadend = () => {
-      BookAPI.uploadbookFile(formdata)
-        .then(res => {
-          mappingDataSourceBookList();
-          setLoading(false);
-          swal('Message!', 'Buku Berhasil di import', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        })
-        .catch(err => {
-          setLoading(false);
-          swal('Error!', err.response.data.message, 'error');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        });
+    BookAPI.uploadbookFile(formdata)
+      .then((res) => {
+        setLoading(false);
+        swal('Message!', 'Buku Berhasil di import', 'success');
+        mappingDataSourceBookList();
+      })
+      .catch((err) => {
+        setLoading(false);
+        swal('Error!', err.response.data.message, 'error');
+        mappingDataSourceBookList();
+        // setTimeout(() => {
+        //   window.location.reload();
+        // }, 1500);
+      });
 
-      // setSourceLink(file);
-    };
-    reader.readAsDataURL(file);
+    // reader.onloadend = () => {
+    // };
+    //reader.readAsDataURL(file);
   };
 
   // useEffect(() => {
@@ -110,10 +107,10 @@ const Books = props => {
   const ExportExampleBook = () => {
     setLoading(true);
     BookAPI.getExampleBookFormat()
-      .then(response => {
+      .then((response) => {
         var reader = new FileReader();
         reader.readAsDataURL(response.data);
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           // window.open(reader.result, '_blank');
           const filename = 'example_book_export';
           if (navigator.msSaveBlob) {
@@ -126,18 +123,19 @@ const Books = props => {
             a.click();
           }
         };
-        reader.onerror = function(error) {
+        reader.onerror = function (error) {
           console.log('Error: ', error);
         };
+        mappingDataSourceBookList();
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         swal('Error!', 'Gagal Download Example File', 'error');
       });
   };
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         // judul: rowData.judul,
@@ -226,7 +224,7 @@ const Books = props => {
             </Button>
 
             <input
-              onChange={e => uploadPdf(e)}
+              onChange={(e) => uploadPdf(e)}
               type="file"
               style={{
                 display: 'none',
@@ -323,7 +321,7 @@ const Books = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {};
 };
 

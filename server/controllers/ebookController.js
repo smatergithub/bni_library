@@ -61,7 +61,7 @@ module.exports = {
     }
 
     return await Ebooks.findAndCountAll(paramQuerySQL)
-      .then(ebook => {
+      .then((ebook) => {
         let activePage = Math.ceil(ebook.count / req.body.limit);
         let page = req.body.page;
         res.status(200).json({
@@ -71,13 +71,13 @@ module.exports = {
           data: ebook.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
   getEbookPreviewById: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
-      .then(ebook => {
+      .then((ebook) => {
         if (!ebook) {
           return res.status(404).send({
             message: 'Ebook Not Found',
@@ -86,7 +86,7 @@ module.exports = {
           res.status(200).send({ file: ebook.sourceLink });
         }
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
   getEbookById: async (req, res) => {
     try {
@@ -186,7 +186,7 @@ module.exports = {
     }
 
     return await Ebooks.findAndCountAll(paramQuerySQL)
-      .then(ebook => {
+      .then((ebook) => {
         let activePage = Math.ceil(ebook.count / req.body.limit);
         let page = req.body.page;
         res.status(200).json({
@@ -196,7 +196,7 @@ module.exports = {
           data: ebook.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -253,14 +253,14 @@ module.exports = {
       status: req.body.status,
       image: req.file ? location : req.file,
     })
-      .then(response => {
+      .then((response) => {
         return res.status(201).json({
           message: 'Process Succesfully create Ebook',
           data: response,
         });
       })
 
-      .catch(err => res.status(500).send(err));
+      .catch((err) => res.status(500).send(err));
   },
 
   uploadEbook: async (req, res) => {
@@ -270,10 +270,10 @@ module.exports = {
 
     function hasDupsObjects(array) {
       return array
-        .map(function(value) {
+        .map(function (value) {
           return value.judul;
         })
-        .some(function(value, index, array) {
+        .some(function (value, index, array) {
           return array.indexOf(value) !== array.lastIndexOf(value);
         });
     }
@@ -285,13 +285,13 @@ module.exports = {
 
       let path = __basedir + '/server/public/document/' + req.file.filename;
 
-      readXlsxFile(path).then(rows => {
+      readXlsxFile(path).then((rows) => {
         // skip header
         rows.shift();
 
         let Databooks = [];
 
-        rows.forEach(row => {
+        rows.forEach((row) => {
           let rowBook = {
             kategori: row[1],
             judul: row[2],
@@ -315,23 +315,22 @@ module.exports = {
           Databooks.push(rowBook);
         });
         const arr1 = getUniqueListBy(Databooks);
-        Ebooks.findAndCountAll({}).then(response => {
+        Ebooks.findAndCountAll({}).then((response) => {
           let concatData = response.rows.concat(arr1);
           if (hasDupsObjects(concatData)) {
-            console.log('duplicates found');
             res.status(500).json({
               message: 'Check Kembali File , terdapat data yang sama di system !',
             });
           } else {
             Ebooks.bulkCreate(arr1)
-              .then(response => {
+              .then((response) => {
                 return res.status(200).json({
                   message: 'Uploaded the file successfully: ' + req.file.originalname,
                 });
               })
-              .catch(error => {
+              .catch((error) => {
                 res.status(500).json({
-                  message: 'Gagal import kedalam system!',
+                  message: 'Gagal import kedalam system, Check kembali File Import!',
                   error: error.message,
                 });
               });
@@ -347,7 +346,7 @@ module.exports = {
 
   update: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
-      .then(ebook => {
+      .then((ebook) => {
         if (!ebook) {
           return res.status(400).send({ message: 'Ebook not found' });
         }
@@ -375,26 +374,26 @@ module.exports = {
             status: req.body.status,
             image: req.file ? location : req.file,
           })
-          .then(response =>
+          .then((response) =>
             res.status(200).json({ message: 'successfully update Ebook', data: response })
           )
-          .catch(err => res.status(404).send(err));
+          .catch((err) => res.status(404).send(err));
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   delete: async (req, res) => {
     return Ebooks.findByPk(req.params.id)
-      .then(ebook => {
+      .then((ebook) => {
         if (!ebook) {
           return res.status(404).send({ message: 'Ebook not found' });
         }
         return ebook
           .destroy()
           .then(() => res.status(200).send({ message: 'succesfully delete' }))
-          .catch(error => res.status(404).send(error));
+          .catch((error) => res.status(404).send(error));
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   downloadSampleExcel: async (req, res) => {

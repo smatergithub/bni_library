@@ -11,7 +11,7 @@ import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import Loader from '../../component/Loader';
 import { Button } from 'antd';
 
-const Ebooks = props => {
+const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
@@ -29,22 +29,22 @@ const Ebooks = props => {
       limit: pageSize,
     };
     EbookAPI.list(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(props.ebooks.count);
         setEbooks(res.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
 
-  const getDetailDataEbook = data => {
+  const getDetailDataEbook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const getDetailDataDeleteEbook = data => {
+  const getDetailDataDeleteEbook = (data) => {
     setDetailData(data);
     setShowModalDeletion(true);
   };
@@ -52,21 +52,20 @@ const Ebooks = props => {
   const handleActionDeleteEbook = () => {
     setLoading(true);
     EbookAPI.delete(detailData.id)
-      .then(response => {
+      .then((response) => {
         swal('Message!', 'Ebook Berhasil di hapus', 'success');
         mappingDataSourceEbookList();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => {
+      .catch((err) => {
         swal('Error!', 'Ebook Gagal di hapus', 'error');
         setLoading(true);
       });
   };
 
-  let uploadDocument = e => {
-    // e.preventDefault();
-
+  let uploadDocument = (e) => {
+    e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
     let request = {
@@ -77,34 +76,30 @@ const Ebooks = props => {
     for (var key in request) {
       formdata.append(key, request[key]);
     }
-    reader.onloadend = () => {
-      EbookAPI.uploadEbookFile(formdata)
-        .then(res => {
-          mappingDataSourceEbookList();
-          setLoading(false);
-          swal('Message!', 'Ebook Berhasil di import', 'success');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        })
-        .catch(err => {
-          setLoading(false);
-          swal('Error!', err.response.data.message, 'error');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-        });
-    };
+    EbookAPI.uploadEbookFile(formdata)
+      .then((res) => {
+        mappingDataSourceEbookList();
+        setLoading(false);
+        swal('Message!', 'Ebook Berhasil di import', 'success');
+      })
+      .catch((err) => {
+        setLoading(false);
+        swal('Error!', err.response.data.message, 'error');
+        mappingDataSourceEbookList();
+      });
+    // reader.onloadend = () => {
 
-    reader.readAsDataURL(file);
+    // };
+
+    // reader.readAsDataURL(file);
   };
 
   React.useEffect(() => {
     mappingDataSourceEbookList();
   }, []);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         // judul: rowData.judul,
@@ -146,10 +141,10 @@ const Ebooks = props => {
   const ExportExampleEbook = () => {
     setLoading(true);
     EbookAPI.getExampleEbookFormat()
-      .then(response => {
+      .then((response) => {
         var reader = new FileReader();
         reader.readAsDataURL(response.data);
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           // window.open(reader.result, '_blank');
           const filename = 'example_ebook_export';
           if (navigator.msSaveBlob) {
@@ -162,13 +157,13 @@ const Ebooks = props => {
             a.click();
           }
         };
-        reader.onerror = function(error) {
+        reader.onerror = function (error) {
           console.log('Error: ', error);
         };
         setLoading(false);
         mappingDataSourceEbookList();
       })
-      .catch(err => {
+      .catch((err) => {
         let msg = err.message || 'Something Wrong, request failed !';
         return { resp: false, msg: msg };
       });
@@ -219,7 +214,7 @@ const Ebooks = props => {
               Contoh Import Ebook
             </Button>
             <input
-              onChange={e => uploadDocument(e)}
+              onChange={(e) => uploadDocument(e)}
               type="file"
               style={{
                 display: 'none',
@@ -311,7 +306,7 @@ const Ebooks = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {};
 };
 
