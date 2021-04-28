@@ -61,6 +61,6 @@ if (process.env.NODE_ENV === 'production') {
   // srvr.timeout = 0;
   // console.log(srvr.timeout);
   app.listen(port, function (req) {
-    logger.info(`Server listening on port ${port}`);
+    console.log(`Server listening on port ${port}`);
   });
 }
