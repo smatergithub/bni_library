@@ -331,10 +331,10 @@ module.exports = {
             penerbit: row[11],
             lokasiPerpustakaan: row[12],
             status: row[13],
-            nomorLemari: row[20],
-            rakLemari: row[21],
-            keterangan: row[22],
-            image: row[23],
+            nomorLemari: row[14],
+            rakLemari: row[15],
+            keterangan: row[16],
+            image: row[17],
           };
 
           Databooks.push(rowBook);

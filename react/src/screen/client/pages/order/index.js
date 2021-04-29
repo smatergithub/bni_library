@@ -24,8 +24,6 @@ function OrderBook(props) {
   let [ebooks, setEbooks] = React.useState(null);
   let [isBorrowReview, setIsBorrowReview] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
-  let [isUserhaveActiveBook, setIsUserHaveActiveBook] = React.useState(false);
-  let [isUserhaveActiveEbook, setIsUserHaveActiveEbook] = React.useState(false);
   let [getIdUser, setGetIdUser] = React.useState('');
   let localBook = JSON.parse(localStorage.getItem('bni_book'));
   let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
@@ -35,12 +33,12 @@ function OrderBook(props) {
 
   function getBorrowInfo() {
     let { id } = parsed;
-    props.getMe().then(res => {
+    props.getMe().then((res) => {
       if (res.data) {
         let userId = res.data.id;
         setGetIdUser(userId);
         if (type === 'book') {
-          BookUserAPI.getById(id).then(res => {
+          BookUserAPI.getById(id).then((res) => {
             setProcessing(false);
             if (res.data) {
               setBooks(res.data);
@@ -49,14 +47,10 @@ function OrderBook(props) {
             }
           });
           UserAPI.getBorrowedBookItem(userId, 'rating=true')
-            .then(res => {
+            .then((res) => {
               if (res.data.length !== 0) {
-                // if (res.data.data.length > 1) {
-                //   setIsUserHaveActiveBook(true);
-                // }
-
                 let checkIsBorrowed = res.data.data.some(
-                  book => book.status === 'Dikembalikan' && !book.isGiveRating
+                  (book) => book.status === 'Dikembalikan' && !book.isGiveRating
                 );
 
                 setIsBorrowReview(checkIsBorrowed);
@@ -64,11 +58,11 @@ function OrderBook(props) {
                 setIsBorrowReview(false);
               }
             })
-            .catch(err => {
+            .catch((err) => {
               // setIsUserHaveActiveBook(true);
             });
         } else {
-          EbookUserAPI.getById(id).then(res => {
+          EbookUserAPI.getById(id).then((res) => {
             setProcessing(false);
             if (res.data) {
               setEbooks(res.data);
@@ -76,14 +70,10 @@ function OrderBook(props) {
               setEbooks(null);
             }
           });
-          UserAPI.getBorrowedEbookItem(userId, 'rating=true').then(res => {
+          UserAPI.getBorrowedEbookItem(userId, 'rating=true').then((res) => {
             if (res.data.length !== 0) {
-              // if (res.data.data.length > 1) {
-              //   setIsUserHaveActiveEbook(true);
-              // }
-
               let checkIsBorrowed = res.data.data.some(
-                ebook => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+                (ebook) => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
               );
               setIsBorrowReview(checkIsBorrowed);
             } else {
@@ -122,12 +112,12 @@ function OrderBook(props) {
       let { type } = parsed;
 
       if (type === 'book') {
-        props.orderBook(formData).then(res => {
+        props.orderBook(formData).then((res) => {
           if (res.data) {
-            if (wishlist.length > 1) {
-              let dataCart = wishlist.filter(item => item.id === books.id);
-              removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-            }
+            let dataCart = wishlist.filter((item) => item.id === books.id);
+            console.log('data cart', dataCart);
+            //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+            removeWishlist(dataCart[0], 'book');
             setShowModalDeletion(true);
           } else {
             setShowModalDeletion(false);
@@ -135,25 +125,12 @@ function OrderBook(props) {
           }
           setProcessing(false);
         });
-        // if (isUserhaveActiveBook) {
-        //   ToastError(
-        //     'Maksimal peminjaman hanya 2 Buku ya..!,Tolong kembalikan buku sekarang atau hubungin Admin'
-        //   );
-        // } else {
-        // }
       } else if (type === 'ebook') {
-        // if (isUserhaveActiveEbook) {
-        //   ToastError(
-        //     'Maksimal peminjaman hanya 2 Ebook ya..!,Tolong kembalikan Ebook sekarang atau hubungin Admin'
-        //   );
-        // } else {
-        // }
-        props.orderEbook(formData).then(res => {
+        props.orderEbook(formData).then((res) => {
           if (res.data) {
-            if (wishlist.length > 1) {
-              let dataCart = wishlist.filter(item => item.id === books.id);
-              removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-            }
+            let dataCart = wishlist.filter((item) => item.id === books.id);
+            //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+            removeWishlist(dataCart[0], 'ebook');
             setShowModalDeletion(true);
           } else {
             setShowModalDeletion(false);
@@ -166,14 +143,14 @@ function OrderBook(props) {
   }
   function onFeedbackSubmit(formData) {
     if (type == 'book') {
-      props.createBookFeeback(formData).then(res => {
+      props.createBookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
         }
       });
     } else {
-      props.createEbookFeeback(formData).then(res => {
+      props.createEbookFeeback(formData).then((res) => {
         if (res.resp) {
           setIsBorrowReview(false);
           getBorrowInfo();
@@ -226,7 +203,7 @@ function OrderBook(props) {
           type={parsed}
           title="Action required"
           open={isBorrowReview}
-          handleSubmit={formData => onFeedbackSubmit(formData)}
+          handleSubmit={(formData) => onFeedbackSubmit(formData)}
           labelSubmitButton="Masuk"
           userId={getIdUser}
         >
@@ -237,7 +214,7 @@ function OrderBook(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     // cartBook: state.wishlist.books,
     // cartEbook: state.wishlist.ebooks,

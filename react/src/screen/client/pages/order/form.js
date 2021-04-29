@@ -7,6 +7,9 @@ import swal from 'sweetalert';
 import { checkIsImageExist } from '../../component/helper';
 import { Rating } from 'semantic-ui-react';
 import { Loader } from 'semantic-ui-react';
+import { removeBookWishlist, removeEbookWishlist } from 'redux/action/wishlist';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 const LoadingPreview = () => <Loader active inline="centered"></Loader>;
 
@@ -22,6 +25,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
   function onChangeEndDate(date, dateString) {
     setEndDate(dateString);
   }
+
   function onSubmit(formData) {
     if (moment(startDate).valueOf() > moment(endDate).valueOf()) {
       swal('Error!', 'Tanggal Pengembalian harus lebih besar daripada tanggal pinjam', 'error');
@@ -168,7 +172,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={onChangeStartDate}
-                  disabledDate={date => date < moment()}
+                  disabledDate={(date) => date < moment()}
                   disabled={loading}
                 />
               </Space>
@@ -188,7 +192,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
                   //       .add(14, 'days')
                   //       .endOf('days')
                   // }
-                  disabledDate={date => date < moment()}
+                  disabledDate={(date) => date < moment()}
                 />
               </Space>
             </div>
@@ -225,4 +229,17 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
     </div>
   );
 }
-export default FormOrder;
+
+let mapStateToProps = (state) => {
+  return {
+    // cartBook: state.wishlist.books,
+    // cartEbook: state.wishlist.ebooks,
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps, {
+    removeEbookWishlist,
+    removeBookWishlist,
+  })(FormOrder)
+);
