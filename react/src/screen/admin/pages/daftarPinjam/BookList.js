@@ -24,11 +24,11 @@ function BookList(props) {
     };
     props
       .ListTransactionBook(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(props.transactionBooks.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -37,13 +37,13 @@ function BookList(props) {
     mappingDataSourceTransactionBookList();
   }, []);
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       let duration = '';
 
       if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
@@ -53,7 +53,7 @@ function BookList(props) {
       }
       return {
         ...rowData,
-        judul: rowData.book && rowData.book.judul,
+        judul: rowData.book ? rowData.book.judul : '',
         nama: rowData.user ? rowData.user.nama : '',
         npp: rowData.user ? rowData.user.npp : '',
         tahunTerbit: rowData.book && rowData.book.tahunTerbit,
@@ -191,7 +191,7 @@ function BookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     transactionBooks: state.transactions.transactionBooks,
   };
