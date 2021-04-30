@@ -76,7 +76,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -86,7 +86,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -159,7 +159,7 @@ module.exports = {
       sort = 'DESC';
     }
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -169,7 +169,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -178,16 +178,16 @@ module.exports = {
   borrowBook: async (req, res) => {
     const { books } = req.body;
     var userId = req.userId;
-    const checkTransaction = await TransactionBook.findAll({
-      where: { userId: userId },
-      where: { status: 'Dipinjam' },
-    });
+    // const checkTransaction = await TransactionBook.findAll({
+    //   where: { userId: userId },
+    //   where: { status: 'Dipinjam' },
+    // });
 
-    if (checkTransaction.length >= 2) {
-      return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
-    }
+    // if (checkTransaction.length >= 2) {
+    //   return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
+    // }
 
-    books.forEach(async bookData => {
+    books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);
 
       if (!book) {
@@ -203,18 +203,18 @@ module.exports = {
       }
 
       await Books.findByPk(bookData.bookId)
-        .then(book => {
+        .then((book) => {
           book
             .update({
               stockBuku: book.stockBuku - bookData.quantity,
               status: book.stockBuku < 0 ? 'Ada' : 'Kosong',
               jumlahDipinjam: book.quantity + bookData.quantity,
             })
-            .catch(err => {
+            .catch((err) => {
               return res.status(400).send(err);
             });
         })
-        .catch(err => {
+        .catch((err) => {
           return res.status(500).send(err);
         });
 
@@ -256,17 +256,17 @@ module.exports = {
     const { transactionId } = req.params;
 
     TransactionBook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             startDate: req.body.startDate,
             endDate: req.body.endDate,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
     return res.status(200).json({
@@ -286,32 +286,32 @@ module.exports = {
     }
 
     TransactionBook.findByPk(transactionId)
-      .then(transaction => {
+      .then((transaction) => {
         transaction
           .update({
             status: 'Dikembalikan',
             isGiveRating: false,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
     Books.findByPk(transactionBook.bookId)
-      .then(book => {
+      .then((book) => {
         book
           .update({
             stockBuku: book.stockBuku + transactionBook.quantity,
             jumlahDipinjam: book.quantity - transactionBook.quantity,
           })
-          .catch(err => {
+          .catch((err) => {
             res.status(400).send(err);
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
 
@@ -355,7 +355,7 @@ module.exports = {
       // const ws = wb.addWorksheet('Sheet 1');
 
       let transactionDisplay = [];
-      transactions.forEach(item => {
+      transactions.forEach((item) => {
         const transactionData = {
           ...item.dataValues,
         };
@@ -364,7 +364,7 @@ module.exports = {
 
       // header
       let headingColumnIndex = 1;
-      Object.keys(transactionDisplay[0]).forEach(key => {
+      Object.keys(transactionDisplay[0]).forEach((key) => {
         if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
           ws.cell(1, headingColumnIndex++).string(key);
         }
@@ -372,9 +372,9 @@ module.exports = {
 
       //Write Data in Excel file
       let rowIndex = 2;
-      transactionDisplay.forEach(record => {
+      transactionDisplay.forEach((record) => {
         let columnIndex = 1;
-        Object.keys(record).forEach(columnName => {
+        Object.keys(record).forEach((columnName) => {
           if (columnName != 'user' && columnName != 'book') {
             ws.cell(rowIndex, columnIndex++).string(
               record[columnName] == null ? '' : record[columnName].toString()
