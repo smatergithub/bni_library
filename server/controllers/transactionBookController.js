@@ -177,15 +177,6 @@ module.exports = {
   // pinjam buku
   borrowBook: async (req, res) => {
     const { books } = req.body;
-    var userId = req.userId;
-    // const checkTransaction = await TransactionBook.findAll({
-    //   where: { userId: userId },
-    //   where: { status: 'Dipinjam' },
-    // });
-
-    // if (checkTransaction.length >= 2) {
-    //   return res.status(400).json({ message: 'Anda Sudah Meminjam 2 Buku Sebelumnya' });
-    // }
 
     books.forEach(async (bookData) => {
       let book = await Books.findByPk(bookData.bookId);

@@ -149,29 +149,13 @@ function EditUser(props) {
                   }}
                 />
               </div>
-              {/* <div className="relative w-full mb-3">
-                <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
-                  Tanggal Lahir
-                </label>
-                <DatePicker
-                  style={{
-                    height: 45,
-                  }}
-                  disabled={true}
-                  // defaultValue={moment('15/01/2010', dateFormat)}
-                  // value={moment().format(dateFormat)}
-                  placeholder={moment(user.tgl_lahir).format('YYYY-MM-DD')}
-                  // format={dateFormat}
-                  onChange={handleDate}
-                />
-              </div> */}
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                   Tanggal Lahir
                 </label>
                 <input
                   ref={register()}
-                  defaultValue={moment(user.tgl_lahir).format('YYYY-MM-DD')}
+                  defaultValue={user.tgl_lahir}
                   type="text"
                   disabled={true}
                   name="npp"

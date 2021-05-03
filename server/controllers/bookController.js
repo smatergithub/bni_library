@@ -316,25 +316,29 @@ module.exports = {
 
         let Databooks = [];
 
-        rows.forEach((row) => {
+        rows.forEach((row, index) => {
+          if (row[index] === undefined || row[index] === null) {
+            return res
+              .status(500)
+              .send('Tolong Check Kembali File Import, Semua Field Harus Ter isi!');
+          }
           let rowBook = {
             kategori: row[1],
             judul: row[2],
             pengarang: row[3],
             tahunTerbit: row[4],
-            jumlahPeminjam: row[5],
-            description: row[6],
-            stockBuku: row[7],
-            tanggalTerbit: row[8],
-            isbn: row[9],
-            bahasa: row[10],
-            penerbit: row[11],
-            lokasiPerpustakaan: row[12],
-            status: row[13],
-            nomorLemari: row[14],
-            rakLemari: row[15],
-            keterangan: row[16],
-            image: row[17],
+            description: row[5],
+            stockBuku: row[6],
+            tanggalTerbit: row[7],
+            isbn: row[8],
+            bahasa: row[9],
+            penerbit: row[10],
+            lokasiPerpustakaan: row[11],
+            status: row[12],
+            nomorLemari: row[13],
+            rakLemari: row[14],
+            keterangan: row[15],
+            image: row[16],
           };
 
           Databooks.push(rowBook);

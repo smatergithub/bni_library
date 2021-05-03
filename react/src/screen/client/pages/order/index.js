@@ -20,6 +20,8 @@ function OrderBook(props) {
 
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
+  let [borrowBookCount, setBorrowBookCount] = React.useState(null);
+  let [borrowEbookCount, setBorrowEbookCount] = React.useState(null);
   let [books, setBooks] = React.useState(null);
   let [ebooks, setEbooks] = React.useState(null);
   let [isBorrowReview, setIsBorrowReview] = React.useState(false);
@@ -36,6 +38,7 @@ function OrderBook(props) {
     props.getMe().then((res) => {
       if (res.data) {
         let userId = res.data.id;
+        checkBorrowBookOrEbook(userId);
         setGetIdUser(userId);
         if (type === 'book') {
           BookUserAPI.getById(id).then((res) => {
@@ -52,15 +55,12 @@ function OrderBook(props) {
                 let checkIsBorrowed = res.data.data.some(
                   (book) => book.status === 'Dikembalikan' && !book.isGiveRating
                 );
-
                 setIsBorrowReview(checkIsBorrowed);
               } else {
                 setIsBorrowReview(false);
               }
             })
-            .catch((err) => {
-              // setIsUserHaveActiveBook(true);
-            });
+            .catch((err) => {});
         } else {
           EbookUserAPI.getById(id).then((res) => {
             setProcessing(false);
@@ -84,10 +84,25 @@ function OrderBook(props) {
       }
     });
   }
+
+  function checkBorrowBookOrEbook(idUser, type) {
+    UserAPI.getBorrowedBookItem(idUser, 'borrowed=true').then((res) => {
+      if (res.data) {
+        setBorrowBookCount(res.data.count);
+      }
+    });
+    UserAPI.getBorrowedEbookItem(idUser, 'borrowed=true').then((res) => {
+      if (res.data) {
+        setBorrowEbookCount(res.data.count);
+      }
+    });
+  }
+
   React.useEffect(() => {
     setProcessing(true);
     getBorrowInfo();
   }, []);
+
   function redirectProfile() {
     if (type === 'book') {
       props.history.push('/profile/books');
@@ -104,6 +119,8 @@ function OrderBook(props) {
     }
   }
 
+  console.log('aaa', borrowBookCount);
+
   function onOrderItem(formData) {
     setProcessing(true);
     if (moment(formData.startDate).valueOf() > moment(formData.endDate).valueOf()) {
@@ -112,35 +129,45 @@ function OrderBook(props) {
       let { type } = parsed;
 
       if (type === 'book') {
-        props.orderBook(formData).then((res) => {
-          if (res.data) {
-            let dataCart = wishlist.filter((item) => item.id === books.id);
-            console.log('data cart', dataCart);
-            //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-            removeWishlist(dataCart[0], 'book');
-            setShowModalDeletion(true);
-          } else {
-            setShowModalDeletion(false);
-            swal('Error!', res.msg, 'error');
-          }
+        if (borrowBookCount === 2) {
+          swal('Error!', 'Anda Sudah Meminjam 2 Buku Sebelumnya', 'error');
           setProcessing(false);
-        });
+        } else {
+          props.orderBook(formData).then((res) => {
+            if (res.data) {
+              let dataCart = wishlist.filter((item) => item.id === books.id);
+              //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+              removeWishlist(dataCart[0], 'book');
+              setShowModalDeletion(true);
+            } else {
+              setShowModalDeletion(false);
+              swal('Error!', res.msg, 'error');
+            }
+            setProcessing(false);
+          });
+        }
       } else if (type === 'ebook') {
-        props.orderEbook(formData).then((res) => {
-          if (res.data) {
-            let dataCart = wishlist.filter((item) => item.id === books.id);
-            //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-            removeWishlist(dataCart[0], 'ebook');
-            setShowModalDeletion(true);
-          } else {
-            setShowModalDeletion(false);
-            swal('Error!', res.msg, 'error');
-          }
+        if (borrowEbookCount === 2) {
+          swal('Error!', 'Anda Sudah Meminjam 2 Ebook Sebelumnya', 'error');
           setProcessing(false);
-        });
+        } else {
+          props.orderEbook(formData).then((res) => {
+            if (res.data) {
+              let dataCart = wishlist.filter((item) => item.id === books.id);
+              //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
+              removeWishlist(dataCart[0], 'ebook');
+              setShowModalDeletion(true);
+            } else {
+              setShowModalDeletion(false);
+              swal('Error!', res.msg, 'error');
+            }
+            setProcessing(false);
+          });
+        }
       }
     }
   }
+
   function onFeedbackSubmit(formData) {
     if (type == 'book') {
       props.createBookFeeback(formData).then((res) => {

@@ -291,7 +291,12 @@ module.exports = {
 
         let Databooks = [];
 
-        rows.forEach((row) => {
+        rows.forEach((row, index) => {
+          if (row[index] === undefined || row[index] === null) {
+            return res
+              .status(500)
+              .send('Tolong Check Kembali File Import, Semua Field Harus Ter isi!');
+          }
           let rowBook = {
             kategori: row[1],
             judul: row[2],
