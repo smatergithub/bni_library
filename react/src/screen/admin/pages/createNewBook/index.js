@@ -24,7 +24,7 @@ function CreateNewBook(props) {
       formData['tahunTerbit'] = publishDate;
       formData['tanggalTerbit'] = publishDate;
       formData['status'] = statusValue == 'Ada' ? 'Ada' : 'Kosong';
-      props.CreateNewBookAction(formData).then(res => {
+      props.CreateNewBookAction(formData).then((res) => {
         if (res.resp) {
           swal('Message!', res.msg, 'success');
           props.history.push('/admin/books');
@@ -39,7 +39,7 @@ function CreateNewBook(props) {
       formData['status'] =
         statusValue !== null ? (statusValue === 'Ada' ? 'Ada' : 'Kosong') : book.status;
 
-      props.EditBookAction(id, formData).then(res => {
+      props.EditBookAction(id, formData).then((res) => {
         if (res.resp) {
           props.history.push('/admin/books');
           swal('Message!', res.msg, 'success');
@@ -50,7 +50,7 @@ function CreateNewBook(props) {
     }
   }
 
-  let uploadImage = e => {
+  let uploadImage = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -65,7 +65,7 @@ function CreateNewBook(props) {
 
   React.useEffect(() => {
     if (id) {
-      BookAPI.detail(id).then(res => {
+      BookAPI.detail(id).then((res) => {
         if (res.data) {
           setBooks(res.data);
           setStatusValue(res.data.status);
@@ -163,7 +163,7 @@ function CreateNewBook(props) {
                   </div>
                   <div className="mt-2">
                     <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Stock
+                      Stock Buku
                     </label>
                     <input
                       name="stockBuku"
@@ -316,7 +316,7 @@ function CreateNewBook(props) {
                     </label>
 
                     <input
-                      onChange={e => uploadImage(e)}
+                      onChange={(e) => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"

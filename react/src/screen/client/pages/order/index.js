@@ -222,7 +222,7 @@ function OrderBook(props) {
         // handleSubmit={redirectProfile}
       >
         <div className="my-5">
-          Peminjaman Berhasil, Silahkan Tunjukan Invoice Untuk Pengambilan Pinjaman{' '}
+          Peminjaman Berhasil, Silahkan Tunjukan Booking Detail Untuk Pengambilan Pinjaman{' '}
         </div>
       </Modal>
       {isBorrowReview && (

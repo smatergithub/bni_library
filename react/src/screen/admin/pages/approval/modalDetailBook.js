@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Modal from '../../../../component/Modal';
 
-const ModalDetailBook = props => {
-  const IsEmptyObject = object =>
+const ModalDetailBook = (props) => {
+  const IsEmptyObject = (object) =>
     !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
 
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
@@ -59,7 +59,7 @@ const ModalDetailBook = props => {
           </div>
           <div className="mt-2">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
-              stockBuku
+              Stock Buku
             </label>
             <input
               name="pengarang"

@@ -59,7 +59,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
             right: '2em',
           }}
         >
-          {type === 'wishlist' ? 'PESAN' : type === 'borrow' ? 'DETAIL INVOICE' : 'DETAIL'}
+          {type === 'wishlist' ? 'PESAN' : type === 'borrow' ? 'Booking Detail' : 'DETAIL'}
         </button>
         {type === 'borrow' && data.sourceLink && (
           <Link to={`/profile/read-ebooks?ebookId=${data.id}`}>
