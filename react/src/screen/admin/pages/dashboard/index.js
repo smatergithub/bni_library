@@ -33,8 +33,6 @@ const Dashboard = (props) => {
     mappingDataSourceDashboardSummary();
   }, []);
 
-  if (loading) return null;
-
   const { dashboardSummary } = props;
 
   const dataSourceBook =
@@ -54,7 +52,7 @@ const Dashboard = (props) => {
       ? null
       : dashboardSummary.ratingEbook.map((item) => {
           return {
-            title: item.ebook ? item.book.judul : '',
+            title: item.ebook ? item.ebook.judul : '',
             tahunTerbit: item.ebook ? item.ebook.tahunTerbit : '',
             pengarang: item.ebook ? item.ebook.pengarang : '',
             rating: item.ebook ? item.totalRating : '',

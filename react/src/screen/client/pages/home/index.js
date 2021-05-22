@@ -31,7 +31,7 @@ function Home() {
                         Ada beberapa pilihan buku yang dapat kamu pinjam dan diantar gratis.
                       </p>
                       <Link to="/books">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-6 shadow-lg ">
                           Buku
                           <span>
                             <i className={`fas fa-arrow-right ml-3`} />
@@ -39,7 +39,7 @@ function Home() {
                         </button>
                       </Link>
                       <Link to="/ebooks">
-                        <button className="ml-4  hover:underline bg-orange-500 text-white  rounded-lg  py-2 px-6 shadow-lg">
+                        <button className="ml-4  hover:underline bg-orange-500 text-white  rounded-lg  py-2 px-6 shadow-lg ">
                           Ebook
                           <span>
                             <i className={`fas fa-arrow-right ml-3`} />
@@ -47,7 +47,7 @@ function Home() {
                         </button>
                       </Link>
                     </div>
-                    <img src={require('../../../../assets/katalog.png')} className="w-64  h-64" />
+                    {/* <img src={require('../../../../assets/katalog.png')} className="w-64  h-64" /> */}
                   </div>
                 </div>
               </div>
@@ -67,7 +67,7 @@ function Home() {
                         ya!
                       </p>
                       <Link to="/riset">
-                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                        <button className="mx-auto lg:mx-0 hover:underline bg-green-600 text-white  rounded-lg my-2 py-2 px-5 shadow-lg ">
                           Selengkapnya..
                           <span>
                             <i className={`fas fa-arrow-right ml-3`} />
@@ -75,7 +75,7 @@ function Home() {
                         </button>
                       </Link>
                     </div>
-                    <img src={require('../../../../assets/riset.png')} className="w-64  h-64" />
+                    {/* <img src={require('../../../../assets/riset.png')} className="w-64  h-64" /> */}
                   </div>
                 </div>
               </div>
@@ -85,12 +85,12 @@ function Home() {
       </section>
 
       <div class="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-5">
-        <section class="bg-gray-100 py-12">
+        <section class="py-12 " style={{ marginTop: '96px' }}>
           <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold leading-tight text-center lg:text-3xl">Jalan Pintas</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-2 text-center mt-8">
-              <div class="bg-white rounded-lg shadow-lg">
+              <div class="bg-white ">
                 <div class="px-4 py-8">
                   <div class="h-24">
                     <img
@@ -109,7 +109,7 @@ function Home() {
                     meningkatkan kompetensi dan kemampuan.
                   </div>
                   <Link to="/favorite-book">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg ">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -119,7 +119,7 @@ function Home() {
                 </div>
               </div>
 
-              <div class="bg-white rounded-lg shadow-lg">
+              <div class="bg-white ">
                 <div class="px-4 py-8">
                   <div class="h-24">
                     <img
@@ -139,7 +139,7 @@ function Home() {
                     {/* Mohon maaf, saat ini sistem masih dalam pengembangan. */}
                   </div>
                   <Link to="/favorite-ebook">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg ">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />
@@ -149,7 +149,7 @@ function Home() {
                 </div>
               </div>
 
-              <div class="bg-white rounded-lg shadow-lg">
+              <div class="bg-white ">
                 <div class="px-4 py-8">
                   <div class="h-24">
                     <img
@@ -168,7 +168,7 @@ function Home() {
                     sampai dengan S3 seputar BNI.
                   </div>
                   <Link to="/riset">
-                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg">
+                    <button className="mx-auto lg:mx-0 hover:underline bg-orange-500 text-white  rounded-lg my-2 py-2 px-5 shadow-lg ">
                       Selengkapnya{' '}
                       <span>
                         <i className={`fas fa-arrow-right ml-3`} />

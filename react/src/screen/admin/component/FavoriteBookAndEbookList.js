@@ -55,7 +55,7 @@ function FavoriteBookAndEbookList({
                   {isLoading
                     ? null
                     : mockBookFavorite !== null
-                    ? mockBookFavorite.map(book => {
+                    ? mockBookFavorite.map((book) => {
                         return (
                           <tr>
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4 text-left">
@@ -119,44 +119,23 @@ function FavoriteBookAndEbookList({
                     <th className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left">
                       Author
                     </th>
-                    {/* <th
-                    className="px-6 bg-gray-100 text-gray-600 align-middle border border-solid border-gray-200 py-3 text-xs uppercase border-l-0 border-r-0 whitespace-no-wrap font-semibold text-left"
-                    style={{
-                      minWidth: '140px',
-                    }}
-                  /> */}
                   </tr>
                 </thead>
                 <tbody>
                   {isLoading
                     ? null
                     : mockEbook && mockEbook !== undefined
-                    ? mockEbook.map(ebook => {
+                    ? mockEbook.map((ebook) => {
                         return (
                           <tr className="p-4">
                             <th className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 whitespace-no-wrap p-2 ">
-                              {ebook.judul.length > 15
-                                ? ebook.judul.substring(0, 15) + '...'
-                                : ebook.judul}
+                              {ebook && ebook.title.length > 15
+                                ? ebook.title.substring(0, 15) + '...'
+                                : ebook.title}
                             </th>
                             <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs p-4 whitespace-no-wrap p-2">
                               {ebook.pengarang}
                             </td>
-                            {/* <td className="border-t-0 px-6 align-middle border-l-0 border-r-0 text-xs whitespace-no-wrap p-4">
-                        <div className="flex items-center">
-                          <span className="mr-2">60%</span>
-                          <div className="relative w-full">
-                            <div className="overflow-hidden h-2 text-xs flex rounded bg-red-200">
-                              <div
-                                style={{
-                                  width: '60%',
-                                }}
-                                className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-red-500"
-                              />
-                            </div>
-                          </div>
-                        </div>
-                      </td> */}
                           </tr>
                         );
                       })
