@@ -119,8 +119,6 @@ function OrderBook(props) {
     }
   }
 
-  console.log('aaa', borrowBookCount);
-
   function onOrderItem(formData) {
     setProcessing(true);
     if (moment(formData.startDate).valueOf() > moment(formData.endDate).valueOf()) {
@@ -129,7 +127,10 @@ function OrderBook(props) {
       let { type } = parsed;
 
       if (type === 'book') {
-        if (borrowBookCount === 2) {
+        if (formData['quantity'] >= 2) {
+          swal('Error!', 'Maksimal jumlah Peminjaman Buku Hanya 2 !', 'error');
+          setProcessing(false);
+        } else if (borrowBookCount === 2) {
           swal('Error!', 'Anda Sudah Meminjam 2 Buku Sebelumnya', 'error');
           setProcessing(false);
         } else {

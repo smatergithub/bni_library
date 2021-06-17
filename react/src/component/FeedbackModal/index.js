@@ -13,7 +13,7 @@ export default function Modal(props) {
   let [listBorrowBook, setListBorrowBook] = React.useState([]);
   let [listborrowEbook, setListBorrowEbook] = React.useState([]);
 
-  const ratingChanged = newRating => {
+  const ratingChanged = (newRating) => {
     setRating(newRating);
   };
 
@@ -22,20 +22,20 @@ export default function Modal(props) {
   const getLisDropdownListBorrowBook = () => {
     setLoading(true);
     UserAPI.getBorrowedBookItemNoRated(userId)
-      .then(res => {
+      .then((res) => {
         setListBorrowBook(res.data);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   };
 
   const getLisDropdownListBorrowEbook = () => {
     setLoading(true);
     UserAPI.getBorrowedEbookItemNoRated(userId)
-      .then(res => {
+      .then((res) => {
         setListBorrowEbook(res.data);
       })
-      .catch(err => console.log(err))
+      .catch((err) => console.log(err))
       .finally(() => setLoading(false));
   };
 
@@ -44,7 +44,7 @@ export default function Modal(props) {
     getLisDropdownListBorrowEbook();
   }, [userId]);
 
-  const onFinish = values => {
+  const onFinish = (values) => {
     console.log(values);
     let formData = {};
     formData['note'] = values.note;
@@ -56,11 +56,11 @@ export default function Modal(props) {
   const RenderListDropdown = () => {
     let dropdownList;
     if (type.type === 'book') {
-      dropdownList = listBorrowBook.map(item => {
+      dropdownList = listBorrowBook.map((item) => {
         return <Option value={item.label}>{item.label}</Option>;
       });
     } else if (type.type === 'ebook') {
-      dropdownList = listborrowEbook.map(item => {
+      dropdownList = listborrowEbook.map((item) => {
         return <Option value={item.label}>{item.label}</Option>;
       });
     }
@@ -90,7 +90,7 @@ export default function Modal(props) {
                     fontSize: '14px',
                   }}
                 >
-                  Silahkan isi rating terlebih dahulu untuk dapat memesan buku selanjutnya
+                  Silahkan isi rating terlebih dahulu untuk dapat memesan selanjutnya
                 </div>
                 <Form layout="vertical" form={form} name="control-hooks" onFinish={onFinish}>
                   <Form.Item

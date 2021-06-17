@@ -30,11 +30,16 @@ module.exports = {
       .then((res) => res.json())
       .then((response) => {
         if (response.status === 200) {
+          console.log('response', response);
           checkIfUserAlreadyCreateOnDb(response.message[0], req.body.password);
         }
         if (response.status === 401) {
+          // checkIfUserAlreadyCreateOnDb({
+          //   npp: 'D000001'
+          // }, 'password');
           res.status(402).send({ message: response.message });
         }
+        console.log(response);
       })
       .catch((err) => {
         res.status(500).send({ message: 'Terjadi kesalahan Sistem Internal digihc server' });

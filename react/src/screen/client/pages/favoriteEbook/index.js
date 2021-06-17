@@ -14,7 +14,7 @@ function FavoriteEBooks(props) {
     history.push('/auth/login');
   }
   React.useEffect(() => {
-    props.getfavorite().then(res => {
+    props.getfavorite().then((res) => {
       if (res.resp) {
         setBooks(res.data);
       } else {
@@ -73,7 +73,7 @@ function FavoriteEBooks(props) {
                             {book.totalRead ? book.totalRead : 0}
                           </span>
                         </div>
-                        <Link to={`/detail-book?id=${book.id}`}>
+                        <Link to={`/detail-ebook?id=${book.id}`}>
                           <button className="w-full bg-orange-500 text-white  rounded-lg my-6 py-2 px-10 shadow-lg">
                             Detail
                           </button>

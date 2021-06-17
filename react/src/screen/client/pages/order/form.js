@@ -33,8 +33,10 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
       swal('Error!', 'Tanggal Peminjaman harus di lengkapi!', 'error');
     } else {
       let { id, type } = parsed;
+
       formData['startDate'] = startDate;
       formData['endDate'] = endDate;
+
       if (type === 'book') {
         if (Number(formData.quantity) > data.stockBuku) {
           swal('Error!', 'Stock buku tidak cukup!', 'error');
