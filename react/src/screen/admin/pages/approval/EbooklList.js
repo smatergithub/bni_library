@@ -8,30 +8,27 @@ import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import ModalEditApproval from './ModalEditApproval';
 import moment from 'moment';
 import Loader from '../../component/Loader';
+import Modal from '../../../../component/Modal';
 
 function EbookList(props) {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
-
-  const [totalCount, setTotalCount] = useState(0);
-  const [pageSize, setPageSize] = React.useState(999999999);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [showModalConfirmation, setShowModalConfirmation] = useState(false);
 
   const mappingDataSourceTransactionEbookList = () => {
     setLoading(true);
     const pagination = {
-      page: currentPage,
-      limit: pageSize,
+      page: 1,
+      limit: 999999999,
     };
     props
       .ListTransactionEbook(pagination)
-      .then(res => {
-        // setTotalCount(props.transactionEbooks.count);
+      .then((res) => {
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -40,12 +37,12 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList();
   }, []);
 
-  const getEditTransactionEBook = data => {
+  const getEditTransactionEBook = (data) => {
     setDetailData(data);
     setShowModalEdit(true);
   };
 
-  const getDetailDataEbook = data => {
+  const getDetailDataEbook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -58,8 +55,13 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList();
   }, [showModalEdit]);
 
-  function returnEbook(id) {
-    props.MakeReturnEbook(id).then(res => {
+  const getDetailDataConfirmationEbook = (data) => {
+    setDetailData(data);
+    setShowModalConfirmation(true);
+  };
+
+  function returnEbook() {
+    props.MakeReturnEbook(detailData.id).then((res) => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceTransactionEbookList();
@@ -71,8 +73,8 @@ function EbookList(props) {
     });
   }
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       let duration = '';
 
       if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
@@ -112,10 +114,12 @@ function EbookList(props) {
                 className="bg-green-400 text-white active:bg-indigo-600 text-xs   px-3 py-1 rounded outline-none focus:outline-none "
                 type="button"
                 style={{ marginRight: '5px' }}
-                onClick={() => returnEbook(rowData.id)}
+                onClick={() => {
+                  getDetailDataConfirmationEbook(rowData);
+                }}
                 disabled={rowData.status === 'Dikembalikan' ? true : false}
               >
-                Return Ebook
+                Kembalikan Ebook
               </button>
             ) : (
               '-'
@@ -210,11 +214,6 @@ function EbookList(props) {
             },
           ]}
           rows={adjustIntegrationTable(transactionEbooks.data)}
-          // currentPage={currentPage}
-          // onCurrentPageChange={setCurrentPage}
-          // pageSize={pageSize}
-          // onPageSizeChange={setPageSize}
-          // totalCount={totalCount}
         />
       ) : (
         <NoData />
@@ -239,11 +238,22 @@ function EbookList(props) {
           }}
         />
       )}
+      <Modal
+        title="Konfirmasi"
+        open={showModalConfirmation}
+        onCLose={() => {
+          setDetailData({});
+          setShowModalConfirmation(false);
+        }}
+        handleSubmit={returnEbook}
+      >
+        <div className="my-5">Anda yakin untuk melakukan tindakan ini?</div>
+      </Modal>
     </React.Fragment>
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     transactionEbooks: state.transactions.transactionEbooks,
   };

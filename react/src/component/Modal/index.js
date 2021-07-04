@@ -12,6 +12,7 @@ export default function Modal({
   usingAnotherButton,
   labelSubmitButton,
   hideCloseBtn,
+  width,
 }) {
   return (
     <>
@@ -20,10 +21,10 @@ export default function Modal({
           <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div
               className={`modal-container bg-white ${
-                large ? 'w-11/12 max-w-5xl' : 'w-11/12 md:max-w-md'
+                large ? 'w-11/12 ' : 'w-11/12 md:max-w-md'
               } rounded shadow-lg  overflow-y-auto`}
               style={{
-                width: '90% !important',
+                width: width ? width : '90%',
               }}
             >
               <div

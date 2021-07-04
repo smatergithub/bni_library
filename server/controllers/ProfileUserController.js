@@ -12,7 +12,7 @@ module.exports = {
       },
       includes: ['book'],
     })
-      .then(user => {
+      .then((user) => {
         if (!user) {
           return res.status(404).send({ message: 'Profile Not found.' });
         }
@@ -37,7 +37,7 @@ module.exports = {
         };
         res.status(200).send(dataUser);
       })
-      .catch(error => res.status(500).send(error));
+      .catch((error) => res.status(500).send(error));
   },
 
   updateProfile: async (req, res) => {
@@ -47,7 +47,7 @@ module.exports = {
         id: userId,
       },
     })
-      .then(user => {
+      .then((user) => {
         if (!user) {
           res.status(404).json({ message: 'User Not Found ' });
         }
@@ -72,15 +72,15 @@ module.exports = {
         };
         user
           .update(dataUser)
-          .then(response => {
+          .then((response) => {
             res.status(200).json({ message: 'Succesfully Update' });
           })
-          .catch(err => {
+          .catch((err) => {
             console.log(err);
             res.status(404).json({ message: 'failed Update' });
           });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -102,7 +102,7 @@ module.exports = {
           message: 'book Not Found',
         });
       }
-      let data = transactionBook.map(item => {
+      let data = transactionBook.map((item) => {
         return {
           label: item.book.judul,
           id: item.book.id,
@@ -132,7 +132,7 @@ module.exports = {
           message: 'ebook Not Found',
         });
       }
-      let data = transactionEbook.map(item => {
+      let data = transactionEbook.map((item) => {
         return {
           label: item.ebook.judul,
           id: item.ebook.id,
@@ -178,7 +178,7 @@ module.exports = {
         },
       };
     }
-    paramQuerySQL.include = ['book'];
+    paramQuerySQL.include = ['book', 'user'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -199,7 +199,7 @@ module.exports = {
     }
 
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -209,7 +209,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -247,7 +247,7 @@ module.exports = {
         },
       };
     }
-    paramQuerySQL.include = ['ebook'];
+    paramQuerySQL.include = ['ebook', 'user'];
 
     //limit
     if (limit != '' && typeof limit !== 'undefined' && limit > 0) {
@@ -268,7 +268,7 @@ module.exports = {
     }
 
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -278,7 +278,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -311,7 +311,7 @@ module.exports = {
     }
 
     TransactionBook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -321,7 +321,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -355,7 +355,7 @@ module.exports = {
     }
 
     TransactionEbook.findAndCountAll(paramQuerySQL)
-      .then(result => {
+      .then((result) => {
         let activePage = Math.ceil(result.count / paramQuerySQL.limit);
         let page = paramQuerySQL.page;
         res.status(200).json({
@@ -365,7 +365,7 @@ module.exports = {
           data: result.rows,
         });
       })
-      .catch(err => {
+      .catch((err) => {
         res.status(500).send(err);
       });
   },
@@ -376,14 +376,14 @@ module.exports = {
       where: { userId: userId },
       where: { status: 'Dipinjam' },
     };
-    let approvedBorrowBook = TransactionBook.findAndCountAll(paramQuerySQL).then(response => {
+    let approvedBorrowBook = TransactionBook.findAndCountAll(paramQuerySQL).then((response) => {
       res.status(200).json({
         status: true,
         message: 'Ada Buku Yang Sukses Di approve Oleh Admin',
       });
     });
 
-    let approvedBorrowEBook = TransactionEbook.findAndCountAll(paramQuerySQL).then(response => {
+    let approvedBorrowEBook = TransactionEbook.findAndCountAll(paramQuerySQL).then((response) => {
       res.status(200).json({
         status: true,
         message: 'Ada Ebook Yang Sukes Di approve Oleh Admin',

@@ -7,7 +7,7 @@ import Card from '../component/card';
 import { Modal, NoData } from '../../../../component';
 // import { getBorrowedBookItem, getMe } from '../../../../redux/action/user';
 import UsersApi from '../../../../api/UserApi';
-
+import moment from 'moment';
 import { checkIsImageExist } from '../../helper';
 import LoadingPreview from './Loader';
 
@@ -18,9 +18,9 @@ function Borrowed(props) {
   let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
-    UsersApi.getMe().then(res => {
+    UsersApi.getMe().then((res) => {
       if (res.data) {
-        UsersApi.getBorrowedBookItem(res.data.id, 'borrowed=true').then(res => {
+        UsersApi.getBorrowedBookItem(res.data.id, 'borrowed=true').then((res) => {
           if (res.data) {
             setBorrowItem(res.data);
           }
@@ -50,6 +50,7 @@ function Borrowed(props) {
   }
 
   let books = bookBorrowSelected ? bookBorrowSelected.book : null;
+  let users = bookBorrowSelected ? bookBorrowSelected.user : null;
 
   let img = '';
 
@@ -72,7 +73,7 @@ function Borrowed(props) {
       </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {borrowItem &&
-          borrowItem.data.map(borrow => {
+          borrowItem.data.map((borrow) => {
             return (
               <>
                 <Card
@@ -103,6 +104,7 @@ function Borrowed(props) {
             setShowModal(false);
           }}
           large
+          width={'1200px'}
           hideCloseBtn={true}
           handleSubmit={() => setShowModal(false)}
         >
@@ -151,7 +153,7 @@ function Borrowed(props) {
                 )}
               </div>
               <div class="lg:w-2/6  bg-white">
-                <div className="text-lg font-bold">Book Details</div>
+                <div className="text-lg font-bold">Detail Buku</div>
                 <div
                   className="bg-gray-400 w-full mt-2 mb-2"
                   style={{
@@ -164,9 +166,28 @@ function Borrowed(props) {
                 <div> Format : Hardback</div>
                 <div> Publishers : {books.penerbit}</div>
                 <div> Publication date : {books.tahunTerbit}</div>
-                <div> Pages : 120</div>
-                <div> Product dimensions : 172 x 223 x 24mm</div>
-                <div> Condition : New</div>
+              </div>
+              <div class="lg:w-2/6  bg-white">
+                <div className="text-lg font-bold">Detail Pengguna</div>
+                <div
+                  className="bg-gray-400 w-full mt-2 mb-2"
+                  style={{
+                    height: 1,
+                  }}
+                ></div>
+
+                <div> Nama : {users.nama}</div>
+                <div> Npp : {users.npp}</div>
+                <div> Unit : {users.unit}</div>
+                {/* <div> No Handphone : {users.penerbit}</div> */}
+                <div>
+                  {' '}
+                  Tanggal Pinjam : {moment(bookBorrowSelected.startDate).format('DD MMMM YYYY')}
+                </div>
+                <div>
+                  {' '}
+                  Tanggal Kembali : {moment(bookBorrowSelected.endDate).format('DD MMMM YYYY')}
+                </div>
               </div>
             </div>
           </div>

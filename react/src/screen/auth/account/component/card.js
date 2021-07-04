@@ -12,6 +12,11 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
     img = require('../../../../assets/NoImage.png');
   }
 
+  let createdAt = moment(startdate).format('YYYY-MM-DD');
+  let dateNow = moment().format('YYYY-MM-DD');
+  let diffDate = moment(createdAt).diff(dateNow, 'days');
+  let isActiveDate = diffDate > 1 ? true : false;
+
   return (
     <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">
@@ -52,27 +57,33 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
             </div>
           </React.Fragment>
         )}
-        <button
-          onClick={() => onDetailClick()}
-          className="lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
-          style={{
-            right: '2em',
-          }}
-        >
-          {type === 'wishlist' ? 'PESAN' : type === 'borrow' ? 'Booking Detail' : 'DETAIL'}
-        </button>
+        {type === 'borrow' && data.sourceLink ? null : (
+          <button
+            onClick={() => onDetailClick()}
+            className="lg:mx-0 hover:underline bg-orange-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
+            style={{
+              right: '2em',
+            }}
+          >
+            {type === 'wishlist' ? 'PESAN' : type === 'borrow' ? 'Booking Detail' : 'DETAIL'}
+          </button>
+        )}
         {type === 'borrow' && data.sourceLink && (
-          <Link to={`/profile/read-ebooks?ebookId=${data.id}`}>
-            <button
-              className="lg:mx-0 hover:underline  bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
-              style={{
-                right: '2em',
-                width: '189px',
-              }}
-            >
-              BACA
-            </button>
-          </Link>
+          <>
+            {!isActiveDate && (
+              <Link to={`/profile/read-ebooks?ebookId=${data.id}`}>
+                <button
+                  className="lg:mx-0 hover:underline  bg-green-500 text-white  rounded-sm  h-10  px-5 mt-2 py-2"
+                  style={{
+                    right: '2em',
+                    width: '189px',
+                  }}
+                >
+                  BACA
+                </button>
+              </Link>
+            )}
+          </>
         )}
 
         {type === 'wishlist' && (

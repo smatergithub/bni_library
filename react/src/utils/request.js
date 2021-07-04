@@ -1,10 +1,10 @@
 import axios from 'axios';
 function formatUrl(url) {
-  let checkIsParamsExit = url.split('').find(text => text === '?');
+  let checkIsParamsExit = url.split('').find((text) => text === '?');
   return url + `${checkIsParamsExit ? '&' : '?'}token=${localStorage.getItem('access_token_ebni')}`;
 }
 
-const makeAxiosRequest = async requestOptions => {
+const makeAxiosRequest = async (requestOptions) => {
   const request = {
     ...requestOptions,
     'Cache-Control': 'no-cache',
@@ -19,19 +19,18 @@ const makeAxiosRequest = async requestOptions => {
       localStorage.removeItem('access_token_ebni');
       localStorage.removeItem('bni_UserRole');
       // window.location.replace('/auth/login');
-      window.location.reload();
+      // window.location.reload();
     } else if (res.status === 404) {
       window.location.replace('/not-found');
     }
   } catch (error) {
-    console.log('err', { error });
-    if (error.response.status === 401) {
-      localStorage.removeItem('access_token_ebni');
-      localStorage.removeItem('bni_UserRole');
-      // window.location.replace('/auth/login');
-      window.location.reload();
-    }
-    throw error;
+    // if (error.response.status === 401) {
+    //   localStorage.removeItem('access_token_ebni');
+    //   localStorage.removeItem('bni_UserRole');
+    //   // window.location.replace('/auth/login');
+    //   window.location.reload();
+    // }
+    window.location.replace('/');
   }
 };
 
