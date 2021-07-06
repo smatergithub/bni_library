@@ -39,34 +39,37 @@ app.get('*', (req, res) =>
 
 const port = process.env.PORT_BACKEND;
 
-app.listen(port, function (req) {
+/* app.listen(port, function (req) {
   console.log(`Server listening on port ${port}`);
-});
+}); */
 
 // var db = require('./models');
 // db.sequelize.sync().then(function () {
 //   // console.log('database connection success');
 // });
 
-// if (process.env.NODE_ENV === 'production') {
-//   var https_options = {
-//     key: fs.readFileSync('./security/ssl/bnicorpu.key', 'utf8'),
-//     cert: fs.readFileSync('./security/ssl/bnicorpu.crt', 'utf8'),
-//     ca: [
-//       fs.readFileSync('./security/ssl/bnicorpu.ca', 'utf8'),
-//       fs.readFileSync('./security/ssl/AAA_Certificate_Services.crt', 'utf8'),
-//     ],
-//   };
-//   let srvr = https.createServer(https_options, app);
-//   srvr.listen(port);
-//   srvr.timeout = 0;
-//   console.log('Server TimeOut', srvr.timeout);
-//   //https.createServer(https_options, app).listen(port);
-// } else {
-//   // let srvr = app.listen(port);
-//   // srvr.timeout = 0;
-//   // console.log(srvr.timeout);
-//   app.listen(port, function (req) {
-//     console.log(`Server listening on port ${port}`);
-//   });
-// }
+const urlCertificate = '../../../cert_ssl/'
+
+if (process.env.NODE_ENV === 'production') {
+	var https_options = {
+    key: fs.readFileSync(`${urlCertificate}bnicorpu.key`, 'utf8'),
+    cert: fs.readFileSync(`${urlCertificate}bnicorpu.crt`, 'utf8'),
+    ca: [
+      fs.readFileSync(`${urlCertificate}bnicorpu.ca`, 'utf8'),
+      fs.readFileSync(`${urlCertificate}AAA_Certificate_Services.crt`, 'utf8'),
+    ],
+  };
+  let srvr = https.createServer(https_options, app);
+  srvr.listen(port);
+  srvr.timeout = 0;
+  console.log(`Server listening on port ${port}`);
+  //console.log('Server TimeOut', srvr.timeout);
+  //https.createServer(https_options, app).listen(port);
+} else {
+  // let srvr = app.listen(port);
+  // srvr.timeout = 0;
+  // console.log(srvr.timeout);
+  app.listen(port, function (req) {
+    console.log(`Server listening on port ${port}`);
+  });
+}
