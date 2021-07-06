@@ -13,7 +13,32 @@ const WilayahController = require('../controllers/wilayahController');
 const DashboardController = require('../controllers/dashboardController');
 
 router.get('/auto-login', (req, res) => {
-	res.send('test')
+  let cfmPassword = `s4fr1Bn1C0Rpu!#`
+  let key = req.query.keyToken
+
+  let buff = Buffer.from(key, 'base64')  
+  let text = buff.toString('utf-8')
+
+  let splitText = text.split("_")
+
+  let password = splitText[1]
+
+	// res.send(password)
+
+  if(password == cfmPassword) {
+    // generate token
+      res.json({
+        'status': true,
+        'message': 'Success login',
+        'data': {}
+      })
+  } else {
+    res.status(400).json({
+      'status': false,
+      'message': 'Opps authentication failed !!'
+    })
+  }
+
 })
 
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
