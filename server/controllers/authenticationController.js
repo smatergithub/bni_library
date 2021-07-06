@@ -25,7 +25,10 @@ module.exports = {
   //         });
 
   login: async (req, res) => {
-    let url = `https://digihc.bnicorpu.co.id/login_user/${req.body.npp}/${req.body.password}`;
+    //let url = `https://digihc.bnicorpu.co.id/login_user/${req.body.npp}/${req.body.password}`;
+    let url =
+      `https://digihc.bnicorpu.co.id/login_user/${req.body.npp}/` +
+      encodeURIComponent(`${req.body.password}`);
     fetch(url)
       .then((res) => res.json())
       .then((response) => {
