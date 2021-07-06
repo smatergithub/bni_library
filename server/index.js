@@ -24,7 +24,7 @@ const app = express();
 
 // app.use(cookieParser());
 app.use(cors());
-app.use(httpLogger);
+// app.use(httpLogger);
 app.use(morgan('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
