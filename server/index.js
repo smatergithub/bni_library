@@ -39,29 +39,10 @@ app.get('*', (req, res) =>
 
 const port = process.env.PORT_BACKEND;
 
-<<<<<<< HEAD
-/* app.listen(port, function (req) {
-  console.log(`Server listening on port ${port}`);
-}); */
-
-=======
->>>>>>> 41875d6041bfe02dc2e416eebbe687dad5c5d01a
-// var db = require('./models');
-// db.sequelize.sync().then(function () {
-//   // console.log('database connection success');
-// });
-
-<<<<<<< HEAD
 const urlCertificate = '../../../cert_ssl/'
 
 if (process.env.NODE_ENV === 'production') {
-	var https_options = {
-=======
-const urlCertificate = '../../../cert_ssl/';
-
-if (process.env.NODE_ENV === 'production') {
   var https_options = {
->>>>>>> 41875d6041bfe02dc2e416eebbe687dad5c5d01a
     key: fs.readFileSync(`${urlCertificate}bnicorpu.key`, 'utf8'),
     cert: fs.readFileSync(`${urlCertificate}bnicorpu.crt`, 'utf8'),
     ca: [

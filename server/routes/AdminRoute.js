@@ -12,6 +12,10 @@ const TransactionEbookController = require('../controllers/transactionEbookContr
 const WilayahController = require('../controllers/wilayahController');
 const DashboardController = require('../controllers/dashboardController');
 
+router.get('/auto-login', (req, res) => {
+	res.send('test')
+})
+
 router.get('/manage-user', [AuthJWT.isAdmin], UserManageController.list);
 router.post(
   '/manage-user/userIntoAdmin/:id',
