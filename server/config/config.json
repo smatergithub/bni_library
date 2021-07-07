@@ -1,0 +1,20 @@
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "db_library_beta",
+    "host": "127.0.0.1",
+    "dialect": "mariadb",
+    "operatorsAliases": false,
+    "logging": false
+  },
+  "production": {
+    "username": "appsmarter",
+    "password": "bn1appsm4rter/",
+    "database": "db_library",
+    "host": "172.16.0.27",
+    "dialect": "mysql",
+    "operatorsAliases": false,
+    "logging": false
+  }
+}
