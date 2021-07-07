@@ -77,11 +77,8 @@ function EbookList(props) {
     return dataSource.map((rowData) => {
       let duration = '';
 
-      if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
-        duration = 'Lewat masa peminjaman';
-      } else {
-        duration = rowData && moment(rowData.endDate).diff(moment(), 'days') + 'hari';
-      }
+      duration =
+        rowData && moment(rowData.endDate).diff(moment(rowData.startDate), 'days') + 'hari';
       return {
         ...rowData,
         judul: rowData.ebook ? rowData.ebook.judul : '',

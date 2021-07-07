@@ -12,7 +12,7 @@ const routes = [
   },
   {
     path: '/admin/aproval',
-    name: 'Butuh Tindakan',
+    name: 'Administrasi Peminjaman',
     icon: 'fas fa-check-circle',
     params: 'aproval',
     notif: true,
@@ -92,7 +92,7 @@ function Sidebar({ url, createNewBook, user }) {
         </button> */}
       </div>
       <nav className="text-white text-base font-semibold pt-3">
-        {routes.map(rt => {
+        {routes.map((rt) => {
           return (
             <Link to={`${rt.path}`} onClick={() => setSelectedMenu(rt.params)}>
               <div

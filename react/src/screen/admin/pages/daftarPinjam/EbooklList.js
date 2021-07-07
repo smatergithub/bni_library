@@ -25,11 +25,11 @@ function EbookList(props) {
     };
     props
       .ListTransactionEbook(pagination)
-      .then(res => {
+      .then((res) => {
         setTotalCount(props.transactionEbooks.count);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('error', err);
       });
   };
@@ -38,7 +38,7 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList();
   }, []);
 
-  const getDetailDataEbook = data => {
+  const getDetailDataEbook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -47,15 +47,12 @@ function EbookList(props) {
     mappingDataSourceTransactionEbookList();
   }, []);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       let duration = '';
 
-      if (rowData && moment(rowData.endDate).diff(moment(), 'days') < -1) {
-        duration = 'Lewat masa peminjaman';
-      } else {
-        duration = rowData && moment(rowData.endDate).diff(moment(), 'days') + 'hari';
-      }
+      duration =
+        rowData && moment(rowData.endDate).diff(moment(rowData.startDate), 'days') + 'hari';
       return {
         ...rowData,
         judul: rowData.ebook ? rowData.ebook.judul : '',
@@ -187,7 +184,7 @@ function EbookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     transactionEbooks: state.transactions.transactionEbooks,
   };

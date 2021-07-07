@@ -127,7 +127,7 @@ function OrderBook(props) {
       let { type } = parsed;
 
       if (type === 'book') {
-        if (formData['quantity'] >= 2) {
+        if (formData['quantity'] >= 3) {
           swal('Error!', 'Maksimal jumlah Peminjaman Buku Hanya 2 !', 'error');
           setProcessing(false);
         } else if (borrowBookCount === 2) {
