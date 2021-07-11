@@ -33,7 +33,7 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'add');
       } else {
-        props.CreateNewEbookAction(formData).then(res => {
+        props.CreateNewEbookAction(formData).then((res) => {
           if (res.resp) {
             swal('Message!', res.msg, 'success');
             props.history.push('/admin/ebooks');
@@ -51,7 +51,7 @@ function CreateNewEBook(props) {
       if (ebookFile) {
         uploadPdfAndGetLink(formData, 'edit', id);
       } else {
-        props.EditEbookAction(id, formData).then(res => {
+        props.EditEbookAction(id, formData).then((res) => {
           if (res.resp) {
             swal('Message!', res.msg, 'success');
             props.history.push('/admin/ebooks');
@@ -62,7 +62,7 @@ function CreateNewEBook(props) {
       }
     }
   }
-  let uploadImage = e => {
+  let uploadImage = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -77,11 +77,11 @@ function CreateNewEBook(props) {
 
   function uploadPdfAndGetLink(formData, type, id) {
     if (ebookFile) {
-      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then(res => {
+      return props.UploadSingleEbookFIle({ locationFile: ebookFile }).then((res) => {
         if (res) {
           if (type === 'add') {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.CreateNewEbookAction(formData).then(res => {
+            props.CreateNewEbookAction(formData).then((res) => {
               if (res.resp) {
                 swal('Message!', res.msg, 'success');
                 props.history.push('/admin/ebooks');
@@ -91,7 +91,7 @@ function CreateNewEBook(props) {
             });
           } else {
             formData['sourceLink'] = res.data.data.locationFile;
-            props.EditEbookAction(id, formData).then(res => {
+            props.EditEbookAction(id, formData).then((res) => {
               if (res.resp) {
                 swal('Message!', res.msg, 'success');
                 props.history.push('/admin/ebooks');
@@ -109,7 +109,7 @@ function CreateNewEBook(props) {
 
   React.useEffect(() => {
     if (id) {
-      EbookAPI.detail(id).then(res => {
+      EbookAPI.detail(id).then((res) => {
         if (res.data) {
           setEbooks(res.data);
           setStatusValue(res.data.status);
@@ -125,6 +125,10 @@ function CreateNewEBook(props) {
     setPublishDate(dateString);
   }
 
+  function checkIsImageExist(str) {
+    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(str);
+  }
+
   function onChangeStatus(value) {
     setStatusValue(value[0]);
   }
@@ -134,6 +138,15 @@ function CreateNewEBook(props) {
   ];
   if (id && !ebooks) return null;
   let ebook = id ? ebooks : ebooks;
+
+  let img;
+  if (ebook.image !== null && checkIsImageExist(ebook.image)) {
+    img = ebook.image;
+  } else if (ebook.image !== null) {
+    img = ebook.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
 
   let titleFormat = id ? 'Ubah Ebook' : 'Ebook Baru';
   return (
@@ -328,12 +341,19 @@ function CreateNewEBook(props) {
                       <DatePicker onChange={onChange} placeholder={publishDate} picker="year" />
                     </Space>
                   </div>
-
+                  {image !== null ? null : (
+                    <div className="mt-2">
+                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                        Gambar Sebelumnya
+                      </label>
+                      <img src={img} style={{ width: '200px', height: '200px' }} />
+                    </div>
+                  )}
                   <div className="mt-2">
-                    <label className="block text-sm text-gray-600">Image</label>
+                    <label className="block text-sm text-gray-600">Gambar</label>
 
                     <input
-                      onChange={e => uploadImage(e)}
+                      onChange={(e) => uploadImage(e)}
                       type="file"
                       className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                       accept="image/png, image/jpeg"

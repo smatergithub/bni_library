@@ -174,7 +174,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={onChangeStartDate}
-                  disabledDate={(date) => date < moment()}
+                  // disabledDate={(date) => date <= moment().subtract(1)}
                   disabled={loading}
                 />
               </Space>
@@ -194,7 +194,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
                   //       .add(14, 'days')
                   //       .endOf('days')
                   // }
-                  disabledDate={(date) => date < moment()}
+                  // disabledDate={(date) => date < moment()}
                 />
               </Space>
             </div>

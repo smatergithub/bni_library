@@ -47,6 +47,7 @@ function BookList(props) {
         setLoading(false);
         mappingDataSourceTransactionBookList();
         swal('Message!', res.msg, 'success');
+        setShowModalConfirmation(false);
       } else {
         setLoading(false);
         swal('Error!', res.msg, 'error');
@@ -248,6 +249,7 @@ function BookList(props) {
           setShowModalConfirmation(false);
         }}
         handleSubmit={returnBook}
+        labelSubmitButton="submit"
       >
         <div className="my-5">Anda yakin untuk melakukan tindakan ini?</div>
       </Modal>

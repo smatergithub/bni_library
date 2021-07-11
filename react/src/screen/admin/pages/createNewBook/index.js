@@ -7,6 +7,7 @@ import BookAPI from '../../../../api/BookApi';
 import { CreateNewBookAction, EditBookAction } from '../../../../redux/action/books';
 import swal from 'sweetalert';
 import Loader from '../../component/Loader';
+
 function CreateNewBook(props) {
   const parsed = queryString.parse(props.location.search);
   let { id } = parsed;
@@ -89,9 +90,23 @@ function CreateNewBook(props) {
     { label: 'Kosong', value: 'Kosong' },
   ];
 
+  function checkIsImageExist(str) {
+    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(str);
+  }
+
   if (!books && id) return null;
   let book = id ? books : books;
   let titleFormat = id ? 'Ubah Buku' : 'Buku Baru';
+
+  let img;
+  if (book.image !== null && checkIsImageExist(book.image)) {
+    img = book.image;
+  } else if (book.image !== null) {
+    img = book.image + '/preview';
+  } else {
+    img = require('../../../../assets/NoImage.png');
+  }
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6 mb-20">
@@ -309,10 +324,18 @@ function CreateNewBook(props) {
                       <DatePicker onChange={onChange} placeholder={publishDate} picker="year" />
                     </Space>
                   </div>
+                  {image !== null ? null : (
+                    <div className="mt-2">
+                      <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                        Gambar Sebelumnya
+                      </label>
+                      <img src={img} style={{ width: '200px', height: '200px' }} />
+                    </div>
+                  )}
 
                   <div className="mt-2">
                     <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                      Foto
+                      Gambar
                     </label>
 
                     <input

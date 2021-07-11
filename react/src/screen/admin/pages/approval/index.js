@@ -13,7 +13,7 @@ function Approval(props) {
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
-        <h1 className="w-full text-3xl text-black pb-6">Butuh Tindakan</h1>
+        <h1 className="w-full text-3xl text-black pb-6">Administrasi Peminjaman</h1>
         <div className="flex flex-wrap mt-5 px-1">
           <div className="w-full xl:w-12/12 mb-12 xl:mb-0">
             <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded">
@@ -82,7 +82,7 @@ function Approval(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {};
 };
 
