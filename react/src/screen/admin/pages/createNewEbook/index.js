@@ -140,12 +140,15 @@ function CreateNewEBook(props) {
   let ebook = id ? ebooks : ebooks;
 
   let img;
-  if (ebook.image !== null && checkIsImageExist(ebook.image)) {
-    img = ebook.image;
-  } else if (ebook.image !== null) {
-    img = ebook.image + '/preview';
-  } else {
-    img = require('../../../../assets/NoImage.png');
+
+  if (id) {
+    if (ebook.image !== null && checkIsImageExist(ebook.image)) {
+      img = ebook.image;
+    } else if (ebook.image !== null) {
+      img = ebook.image + '/preview';
+    } else {
+      img = require('../../../../assets/NoImage.png');
+    }
   }
 
   let titleFormat = id ? 'Ubah Ebook' : 'Ebook Baru';

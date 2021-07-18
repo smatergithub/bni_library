@@ -22,7 +22,7 @@ function DetailEbooks(props) {
   React.useEffect(() => {
     let { id } = parsed;
     setProcessing(true);
-    EbookUserAPI.getById(id).then(res => {
+    EbookUserAPI.getById(id).then((res) => {
       setProcessing(false);
       if (res.data) {
         setEbooks(res.data);
@@ -114,8 +114,8 @@ function DetailEbooks(props) {
                       {ebooks.countRating !== null && (
                         <>
                           <Rating
-                            defaultRating={ebooks.countRating}
-                            maxRating={6}
+                            defaultRating={Math.round(ebooks.countRating / ebooks.totalRead)}
+                            maxRating={5}
                             icon="star"
                             disabled
                           />

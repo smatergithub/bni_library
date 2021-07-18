@@ -26,6 +26,12 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
     setEndDate(dateString);
   }
 
+  function disabledDate(current) {
+    // Can not select days before today and today
+    let date = moment().subtract(1, 'day');
+    return current && current < date;
+  }
+
   function onSubmit(formData) {
     if (moment(startDate).valueOf() > moment(endDate).valueOf()) {
       swal('Error!', 'Tanggal Pengembalian harus lebih besar daripada tanggal pinjam', 'error');
@@ -100,7 +106,12 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
             <div className="flex mt-3 ">
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 <div>
-                  <Rating defaultRating={data.countRating} maxRating={6} icon="star" disabled />
+                  <Rating
+                    defaultRating={Math.round(data.countRating / data.totalRead)}
+                    maxRating={5}
+                    icon="star"
+                    disabled
+                  />
                 </div>
                 <span style={{ paddingLeft: '12px' }}>{data.totalRead} Views</span>
               </div>
@@ -174,7 +185,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
               <Space direction="vertical">
                 <DatePicker
                   onChange={onChangeStartDate}
-                  // disabledDate={(date) => date <= moment().subtract(1)}
+                  disabledDate={disabledDate}
                   disabled={loading}
                 />
               </Space>
@@ -187,14 +198,7 @@ function FormOrder({ data, type, onOrderItem, user, loading }) {
                 <DatePicker
                   disabled={loading}
                   onChange={onChangeEndDate}
-                  // disabledDate={date =>
-                  //   date < moment(startDate).add(1, 'days') ||
-                  //   date >
-                  //     moment(startDate)
-                  //       .add(14, 'days')
-                  //       .endOf('days')
-                  // }
-                  // disabledDate={(date) => date < moment()}
+                  disabledDate={disabledDate}
                 />
               </Space>
             </div>

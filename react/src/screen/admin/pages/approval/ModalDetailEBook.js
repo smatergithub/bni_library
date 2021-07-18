@@ -2,11 +2,25 @@ import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import Modal from '../../../../component/Modal';
 
-const ModalDetailBook = props => {
-  const IsEmptyObject = object =>
-    !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
-
+const ModalDetailBook = (props) => {
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
+
+  function checkIsImageExist(str) {
+    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(str);
+  }
+
+  let img;
+  if (detailData.ebook !== undefined) {
+    if (detailData.ebook.image !== null && checkIsImageExist(detailData.ebook.image)) {
+      img = detailData.ebook.image;
+    } else if (detailData.ebook.image !== undefined) {
+      img = detailData.ebook.image + '/preview';
+    } else if (detailData.ebook.image !== null) {
+      img = detailData.ebook.image + '/preview';
+    } else {
+      img = require('../../../../assets/NoImage.png');
+    }
+  }
 
   return (
     <>
@@ -18,6 +32,17 @@ const ModalDetailBook = props => {
         usingForDetail={true}
       >
         <div style={{ height: '500px', overflow: 'auto' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+
+              marginBottom: '12px',
+            }}
+          >
+            <img src={img} style={{ width: '230px', height: '230px' }} />
+          </div>
           <div className="mt-2">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Judul Ebook

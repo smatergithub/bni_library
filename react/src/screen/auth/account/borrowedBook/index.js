@@ -131,7 +131,12 @@ function Borrowed(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <Rating defaultRating={books.countRating} maxRating={6} icon="star" disabled />
+                    <Rating
+                      defaultRating={Math.round(books.countRating / books.totalRead)}
+                      maxRating={5}
+                      icon="star"
+                      disabled
+                    />
                     <span className="ml-3"> {books.totalRead ? books.totalRead : 0} Views</span>
                   </div>
                 </div>

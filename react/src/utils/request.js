@@ -24,13 +24,13 @@ const makeAxiosRequest = async (requestOptions) => {
       window.location.replace('/not-found');
     }
   } catch (error) {
-    // if (error.response.status === 401) {
-    //   localStorage.removeItem('access_token_ebni');
-    //   localStorage.removeItem('bni_UserRole');
-    //   // window.location.replace('/auth/login');
-    //   window.location.reload();
-    // }
-    window.location.replace('/');
+    if (error.response.status === 401) {
+      localStorage.removeItem('access_token_ebni');
+      localStorage.removeItem('bni_UserRole');
+      // // window.location.replace('/auth/login');
+      // window.location.reload();
+      window.location.replace('/');
+    }
   }
 };
 

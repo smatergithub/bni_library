@@ -3,13 +3,24 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import swal from 'sweetalert';
 import EbookAPI from '../../../../api/EbookApi';
-
+import Button from '@material-ui/core/Button';
 import { NoData } from '../../../../component';
 import Modal from '../../../../component/Modal';
 import ModalDetailEbook from './ModalDetailEBook';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import Loader from '../../component/Loader';
-import { Button } from 'antd';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: 'none',
+  },
+}));
 
 const Ebooks = (props) => {
   const [loading, setLoading] = React.useState(false);
@@ -17,10 +28,8 @@ const Ebooks = (props) => {
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
   const [ebooks, setEbooks] = useState([]);
-  const [totalCount, setTotalCount] = useState(0);
   const [pageSize, setPageSize] = useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
-  let exportFile = React.useRef(null);
 
   const mappingDataSourceEbookList = () => {
     setLoading(true);
@@ -30,7 +39,6 @@ const Ebooks = (props) => {
     };
     EbookAPI.list(pagination)
       .then((res) => {
-        // setTotalCount(props.ebooks.count);
         setEbooks(res.data);
         setLoading(false);
       })
@@ -64,7 +72,7 @@ const Ebooks = (props) => {
       });
   };
 
-  let uploadDocument = (e) => {
+  const uploadDocument = (e) => {
     e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -169,6 +177,8 @@ const Ebooks = (props) => {
       });
   };
 
+  const classes = useStyles();
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -188,22 +198,38 @@ const Ebooks = (props) => {
           <div>
             <Link to="/admin/add-new-ebook">
               <Button
-                type="primary"
-                size={'large'}
-                style={{ borderRadius: '8px', marginRight: '24px' }}
+                color="primary"
+                variant="contained"
                 disabled={loading}
+                style={{ borderRadius: '8px', marginRight: '24px', backgroundColor: '#ED8936' }}
               >
                 Buat Ebook Baru
               </Button>
             </Link>
-            <Button
-              onClick={() => exportFile.current.click()}
-              disabled={loading}
-              size={'large'}
-              style={{ borderRadius: '8px', marginRight: '24px' }}
-            >
-              Import Ebook
-            </Button>
+            <input
+              // accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"'
+              onChange={(e) => {
+                uploadDocument(e);
+              }}
+              className={classes.input}
+              id="contained-button-file"
+              type="file"
+            />
+            <label htmlFor="contained-button-file">
+              <Button
+                variant="outlined"
+                color="primary"
+                component="span"
+                style={{
+                  borderRadius: '8px',
+                  marginRight: '24px',
+                  borderColor: '#ED8936',
+                  color: '#ED8936',
+                }}
+              >
+                Import Ebook
+              </Button>
+            </label>
             <Button
               type="link"
               disabled={loading}
@@ -213,17 +239,6 @@ const Ebooks = (props) => {
             >
               Contoh Import Ebook
             </Button>
-            <input
-              onChange={(e) => uploadDocument(e)}
-              type="file"
-              style={{
-                display: 'none',
-              }}
-              ref={exportFile}
-              className=""
-              accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              aria-label="Email"
-            />
           </div>
         </div>
 
@@ -287,7 +302,7 @@ const Ebooks = (props) => {
         title="Konfirmasi"
         open={showModalDeletion}
         onCLose={() => {
-          setDetailData(null);
+          setDetailData({});
           setShowModalDeletion(false);
         }}
         handleSubmit={handleActionDeleteEbook}

@@ -31,11 +31,11 @@ function Books(props) {
   function getAllBook(params) {
     setProcessing(true);
     BookUserAPI.get(params)
-      .then(response => {
+      .then((response) => {
         setProcessing(false);
         setBooks(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       })
       .finally(() => {
@@ -44,15 +44,15 @@ function Books(props) {
   }
 
   function getCategory() {
-    BookUserAPI.getCategory().then(res => {
+    BookUserAPI.getCategory().then((res) => {
       if (res.data) {
         if (res.data.length > 0) {
           let filterCategories = res.data
-            .map(e => e['label'])
+            .map((e) => e['label'])
             .map((e, i, final) => final.indexOf(e) === i && i)
-            .filter(e => res.data[e])
-            .map(e => res.data[e]);
-          let categories = filterCategories.map(e => ({ text: e.label, value: e.label }));
+            .filter((e) => res.data[e])
+            .map((e) => res.data[e]);
+          let categories = filterCategories.map((e) => ({ text: e.label, value: e.label }));
           setCategory(categories);
         }
       }
@@ -145,7 +145,7 @@ function Books(props) {
                       type="text"
                       placeholder="Search..."
                       value={pagination.judul}
-                      onChange={value => handleSearch(value.target.value)}
+                      onChange={(value) => handleSearch(value.target.value)}
                     />
                     <i
                       onClick={() => {
@@ -205,7 +205,7 @@ function Books(props) {
               } else {
                 img = require('../../../../assets/NoImage.png');
               }
-              let isAdd = wishlist.some(ws => ws.id === book.id);
+              let isAdd = wishlist.some((ws) => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -247,7 +247,12 @@ function Books(props) {
                     {book.pengarang}
                   </div>
                   <div className="flex items-center justify-between">
-                    <Rating defaultRating={book.countRating} maxRating={6} icon="star" disabled />
+                    <Rating
+                      defaultRating={Math.round(book.countRating / book.totalRead)}
+                      maxRating={5}
+                      icon="star"
+                      disabled
+                    />
                     <span>
                       <i className="fas fa-heart text-yellow-700" />{' '}
                       {book.totalRead ? book.totalRead : 0}
@@ -320,7 +325,7 @@ function Books(props) {
     </main>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     // books: state.userBooks.books,
     wishlist: state.wishlist.books,

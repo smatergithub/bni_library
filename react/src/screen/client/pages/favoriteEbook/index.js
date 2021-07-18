@@ -63,8 +63,8 @@ function FavoriteEBooks(props) {
                         <div className="pt-1 text-gray-900">{book.pengarang}</div>
                         <div className="flex items-center justify-between">
                           <Rating
-                            defaultRating={book.countRating}
-                            maxRating={6}
+                            defaultRating={Math.round(book.countRating / book.totalRead)}
+                            maxRating={5}
                             icon="star"
                             disabled
                           />

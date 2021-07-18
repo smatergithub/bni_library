@@ -3,10 +3,22 @@ import moment from 'moment';
 import Modal from '../../../../component/Modal';
 
 const ModalDetailBook = (props) => {
-  const IsEmptyObject = (object) =>
-    !Object.getOwnPropertySymbols(object).length && !Object.getOwnPropertyNames(object).length;
-
   const { detailData, showModalDetail, handleSubmitModal, onCloseModal } = props;
+
+  function checkIsImageExist(str) {
+    return /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i.test(str);
+  }
+
+  let img;
+  if (detailData.image !== undefined) {
+    if (detailData.image !== null && checkIsImageExist(detailData.image)) {
+      img = detailData.image;
+    } else if (detailData.image !== null) {
+      img = detailData.image + '/preview';
+    } else {
+      img = require('../../../../assets/NoImage.png');
+    }
+  }
 
   return (
     <>
@@ -18,6 +30,17 @@ const ModalDetailBook = (props) => {
         usingForDetail={true}
       >
         <div style={{ height: '500px', overflow: 'auto' }}>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+
+              marginBottom: '12px',
+            }}
+          >
+            <img src={img} style={{ width: '230px', height: '230px' }} />
+          </div>
           <div className="mt-2">
             <label className="block text-sm text-gray-600" htmlFor="cus_email">
               Judul Buku

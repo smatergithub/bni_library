@@ -72,10 +72,20 @@ function BookList(props) {
 
   const adjustIntegrationTable = (dataSource) => {
     return dataSource.map((rowData) => {
-      let duration = '';
+      let dateNow = moment().format('YYYY-MM-DD');
+      let startDate = moment(rowData.startDate).format('YYYY-MM-DD');
+      let endDate = moment(rowData.endDate);
 
-      duration =
-        rowData && moment(rowData.endDate).diff(moment(rowData.startDate), 'days') + 'hari';
+      let period = rowData && endDate.diff(startDate, 'days') + ' hari';
+
+      let duration;
+
+      if (rowData && endDate.diff(dateNow, 'days') >= 1) {
+        duration = rowData && endDate.diff(startDate, 'days') + ' hari';
+      } else {
+        duration = rowData && endDate.diff(dateNow, 'days') + ' hari';
+      }
+
       return {
         ...rowData,
         judul: rowData.book && rowData.book.judul,
@@ -85,6 +95,7 @@ function BookList(props) {
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
         quantity: rowData.quantity,
+        period: period,
         duration: duration,
         actions: (
           <React.Fragment>
@@ -154,6 +165,7 @@ function BookList(props) {
               { name: 'npp', title: 'NPP' },
               { name: 'startDate', title: 'Tanggal Pinjam' },
               { name: 'endDate', title: 'Tanggal Kembali' },
+              { name: 'period', title: 'Jangka Pinjam' },
               { name: 'duration', title: 'Sisa Durasi' },
               { name: 'status', title: 'Status' },
               { name: 'actions', title: 'Action' },
@@ -191,6 +203,11 @@ function BookList(props) {
               },
               {
                 columnName: 'endDate',
+                width: 150,
+                wordWrapEnabled: true,
+              },
+              {
+                columnName: 'period',
                 width: 150,
                 wordWrapEnabled: true,
               },

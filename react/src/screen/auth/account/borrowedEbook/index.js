@@ -16,9 +16,9 @@ function BorrowedEbook(props) {
   let [showMore, setShowMore] = React.useState(false);
 
   React.useEffect(() => {
-    UsersApi.getMe().then(res => {
+    UsersApi.getMe().then((res) => {
       if (res.data) {
-        UsersApi.getBorrowedEbookItem(res.data.id, 'borrowed=true').then(res => {
+        UsersApi.getBorrowedEbookItem(res.data.id, 'borrowed=true').then((res) => {
           if (res.data) {
             setBorrowItem(res.data);
           }
@@ -66,7 +66,7 @@ function BorrowedEbook(props) {
       </div>
       <div class="bg-white rounded-lg shadow-lg pl-10 relative">
         {borrowItem &&
-          borrowItem.data.map(borrow => {
+          borrowItem.data.map((borrow) => {
             return (
               <>
                 <Card
@@ -122,7 +122,12 @@ function BorrowedEbook(props) {
                 ></div>
                 <div className="flex mt-3 ">
                   <div className="flex items-center justify-between">
-                    <Rating defaultRating={ebooks.countRating} maxRating={6} icon="star" disabled />
+                    <Rating
+                      defaultRating={Math.round(ebooks.countRating / ebooks.totalRead)}
+                      maxRating={5}
+                      icon="star"
+                      disabled
+                    />
                     <span className="ml-3"> {ebooks.totalRead ? ebooks.totalRead : 0} Views</span>
                   </div>
                 </div>
@@ -206,7 +211,7 @@ function BorrowedEbook(props) {
         //         ></div>
         //         <div className="flex mt-3 ">
         //           <div className="flex items-center justify-between">
-        //             <Rating defaultRating={ebooks.countRating} maxRating={6} icon="star" disabled />
+        //             <Rating defaultRating={ebooks.countRating} maxRating={5} icon="star" disabled />
         //             <span className="ml-3"> {ebooks.totalRead ? ebooks.totalRead : 0} Views</span>
         //           </div>
         //         </div>

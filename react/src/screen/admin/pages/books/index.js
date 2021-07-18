@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import BookAPI from '../../../../api/BookApi';
-
-import { Button } from 'antd';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import swal from 'sweetalert';
 import TableDevExtreme from '../../../../component/TableDevExtreme/tableClient';
 import { NoData } from '../../../../component';
@@ -11,16 +11,25 @@ import Modal from '../../../../component/Modal';
 import ModalDetailBook from './modalDetailBook';
 import Loader from '../../component/Loader';
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+    },
+  },
+  input: {
+    display: 'none',
+  },
+}));
+
 const Books = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [detailData, setDetailData] = useState({});
   const [showModalDeletion, setShowModalDeletion] = useState(false);
   const [showModalDetail, setShowModalDetail] = useState(false);
-  const [totalCount, setTotalCount] = useState(0);
   const [pageSize, setPageSize] = useState(99999999);
   const [currentPage, setCurrentPage] = useState(0);
   const [books, setBooks] = useState([]);
-  let exportFile = React.useRef(null);
 
   const mappingDataSourceBookList = () => {
     setLoading(true);
@@ -30,7 +39,6 @@ const Books = (props) => {
     };
     BookAPI.list(pagination)
       .then((res) => {
-        // setTotalCount(props.books.count);
         setBooks(res.data);
         setLoading(false);
       })
@@ -64,8 +72,8 @@ const Books = (props) => {
       });
   };
 
-  const uploadPdf = (e) => {
-    e.preventDefault();
+  const uploadDocument = (e) => {
+    // e.preventDefault();
     let reader = new FileReader();
     let file = e.target.files[0];
     let request = {
@@ -81,24 +89,23 @@ const Books = (props) => {
         setLoading(false);
         swal('Message!', 'Buku Berhasil di import', 'success');
         mappingDataSourceBookList();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((err) => {
         setLoading(false);
         swal('Error!', err.response.data.message, 'error');
         mappingDataSourceBookList();
-        // setTimeout(() => {
-        //   window.location.reload();
-        // }, 1500);
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       });
 
     // reader.onloadend = () => {
     // };
     //reader.readAsDataURL(file);
   };
-
-  // useEffect(() => {
-  //   mappingDataSourceBookList();
-  // }, [currentPage, totalCount, pageSize]);
 
   useEffect(() => {
     mappingDataSourceBookList();
@@ -172,6 +179,8 @@ const Books = (props) => {
     });
   };
 
+  const classes = useStyles();
+
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
       <main className="w-full flex-grow p-6">
@@ -191,22 +200,38 @@ const Books = (props) => {
           <div>
             <Link to="/admin/add-new-book">
               <Button
-                type="primary"
-                size={'large'}
+                color="primary"
+                variant="contained"
                 disabled={loading}
-                style={{ borderRadius: '8px', marginRight: '24px' }}
+                style={{ borderRadius: '8px', marginRight: '24px', backgroundColor: '#ED8936' }}
               >
                 Buat Buku Baru
               </Button>
             </Link>
-            <Button
-              onClick={() => exportFile.current.click()}
-              disabled={loading}
-              size={'large'}
-              style={{ borderRadius: '8px', marginRight: '24px' }}
-            >
-              Import Buku
-            </Button>
+            <input
+              // accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"'
+              onChange={(e) => {
+                uploadDocument(e);
+              }}
+              className={classes.input}
+              id="contained-button-file"
+              type="file"
+            />
+            <label htmlFor="contained-button-file">
+              <Button
+                variant="outlined"
+                color="primary"
+                component="span"
+                style={{
+                  borderRadius: '8px',
+                  marginRight: '24px',
+                  borderColor: '#ED8936',
+                  color: '#ED8936',
+                }}
+              >
+                Import Buku
+              </Button>
+            </label>
 
             <Button
               onClick={() => ExportExampleBook()}
@@ -217,18 +242,6 @@ const Books = (props) => {
             >
               Contoh Import Buku
             </Button>
-
-            <input
-              onChange={(e) => uploadPdf(e)}
-              type="file"
-              style={{
-                display: 'none',
-              }}
-              ref={exportFile}
-              className=""
-              // accept=" application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-              aria-label="Email"
-            />
           </div>
         </div>
         {loading ? (

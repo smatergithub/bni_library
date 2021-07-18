@@ -99,12 +99,14 @@ function CreateNewBook(props) {
   let titleFormat = id ? 'Ubah Buku' : 'Buku Baru';
 
   let img;
-  if (book.image !== null && checkIsImageExist(book.image)) {
-    img = book.image;
-  } else if (book.image !== null) {
-    img = book.image + '/preview';
-  } else {
-    img = require('../../../../assets/NoImage.png');
+  if (id) {
+    if (book.image !== null && checkIsImageExist(book.image)) {
+      img = book.image;
+    } else if (book.image !== null) {
+      img = book.image + '/preview';
+    } else {
+      img = require('../../../../assets/NoImage.png');
+    }
   }
 
   return (

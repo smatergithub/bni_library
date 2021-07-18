@@ -13,7 +13,6 @@ function EbookList(props) {
   const [detailData, setDetailData] = useState({});
   const [showModalDetail, setShowModalDetail] = useState(false);
 
-  const [totalCount, setTotalCount] = useState(0);
   const [pageSize, setPageSize] = React.useState(999999999);
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -26,7 +25,6 @@ function EbookList(props) {
     props
       .ListTransactionEbook(pagination)
       .then((res) => {
-        setTotalCount(props.transactionEbooks.count);
         setLoading(false);
       })
       .catch((err) => {
@@ -49,10 +47,19 @@ function EbookList(props) {
 
   const adjustIntegrationTable = (dataSource) => {
     return dataSource.map((rowData) => {
-      let duration = '';
+      let dateNow = moment().format('YYYY-MM-DD');
+      let startDate = moment(rowData.startDate).format('YYYY-MM-DD');
+      let endDate = moment(rowData.endDate);
 
-      duration =
-        rowData && moment(rowData.endDate).diff(moment(rowData.startDate), 'days') + 'hari';
+      let period = rowData && endDate.diff(startDate, 'days') + ' hari';
+
+      let duration;
+
+      if (rowData && endDate.diff(dateNow, 'days') >= 1) {
+        duration = rowData && endDate.diff(startDate, 'days') + ' hari';
+      } else {
+        duration = rowData && endDate.diff(dateNow, 'days') + ' hari';
+      }
       return {
         ...rowData,
         judul: rowData.ebook ? rowData.ebook.judul : '',
@@ -61,6 +68,7 @@ function EbookList(props) {
         tahunTerbit: rowData.ebook ? rowData.ebook.tahunTerbit : '',
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
+        period: period,
         duration: duration,
         actions: (
           <React.Fragment>
@@ -105,6 +113,7 @@ function EbookList(props) {
             { name: 'npp', title: 'NPP' },
             { name: 'startDate', title: 'Tanggal Pinjam' },
             { name: 'endDate', title: 'Tanggal Kembali' },
+            { name: 'period', title: 'Jangka Pinjam' },
             { name: 'duration', title: 'Sisa Durasi' },
             { name: 'status', title: 'Status' },
             { name: 'actions', title: 'Action' },
@@ -146,8 +155,13 @@ function EbookList(props) {
               wordWrapEnabled: true,
             },
             {
+              columnName: 'period',
+              width: 150,
+              wordWrapEnabled: true,
+            },
+            {
               columnName: 'duration',
-              width: 200,
+              width: 150,
               wordWrapEnabled: true,
             },
             {
@@ -162,11 +176,6 @@ function EbookList(props) {
             },
           ]}
           rows={adjustIntegrationTable(transactionEbooks.data)}
-          // currentPage={currentPage}
-          // onCurrentPageChange={setCurrentPage}
-          // pageSize={pageSize}
-          // onPageSizeChange={setPageSize}
-          // totalCount={totalCount}
         />
       ) : (
         <NoData />

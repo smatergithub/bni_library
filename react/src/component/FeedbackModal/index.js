@@ -117,7 +117,7 @@ export default function Modal(props) {
                       Rating
                     </label>
                     <ReactStars
-                      count={6}
+                      count={5}
                       onChange={ratingChanged}
                       size={40}
                       activeColor="#ffd700"

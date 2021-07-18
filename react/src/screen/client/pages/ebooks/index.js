@@ -34,11 +34,11 @@ function Ebooks(props) {
   function getAllEbook(params) {
     setProcessing(true);
     EbookUserAPI.get(params)
-      .then(response => {
+      .then((response) => {
         setProcessing(false);
         setEbooks(response.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       })
       .finally(() => {
@@ -47,15 +47,15 @@ function Ebooks(props) {
   }
 
   function getCategory() {
-    EbookUserAPI.getCategory().then(res => {
+    EbookUserAPI.getCategory().then((res) => {
       if (res.data) {
         if (res.data.length > 0) {
           let filterCategories = res.data
-            .map(e => e['label'])
+            .map((e) => e['label'])
             .map((e, i, final) => final.indexOf(e) === i && i)
-            .filter(e => res.data[e])
-            .map(e => res.data[e]);
-          let categories = filterCategories.map(e => ({ text: e.label, value: e.label }));
+            .filter((e) => res.data[e])
+            .map((e) => res.data[e]);
+          let categories = filterCategories.map((e) => ({ text: e.label, value: e.label }));
           setCategory(categories);
         }
       }
@@ -146,7 +146,7 @@ function Ebooks(props) {
                       type="text"
                       placeholder="Search..."
                       value={pagination.judul}
-                      onChange={value => handleSearch(value.target.value)}
+                      onChange={(value) => handleSearch(value.target.value)}
                     />
                     <i
                       onClick={() => {
@@ -207,7 +207,7 @@ function Ebooks(props) {
                 img = require('../../../../assets/NoImage.png');
               }
 
-              let isAdd = wishlist.some(ws => ws.id === ebook.id);
+              let isAdd = wishlist.some((ws) => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -249,7 +249,12 @@ function Ebooks(props) {
                     {ebook.pengarang}
                   </div>
                   <div className="flex items-center justify-between">
-                    <Rating defaultRating={ebook.countRating} maxRating={6} icon="star" disabled />
+                    <Rating
+                      defaultRating={Math.round(ebook.countRating / ebook.totalRead)}
+                      maxRating={6}
+                      icon="star"
+                      disabled
+                    />
                     <span>
                       <i className="fas fa-heart text-yellow-700" />{' '}
                       {ebook.totalRead ? ebook.totalRead : 0}
@@ -336,7 +341,7 @@ function Ebooks(props) {
     </main>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     wishlist: state.wishlist.ebooks,
   };
