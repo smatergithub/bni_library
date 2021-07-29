@@ -290,13 +290,9 @@ module.exports = {
         rows.shift();
 
         let Databooks = [];
-
         rows.forEach((row, index) => {
-          if (row[index] === undefined || row[index] === null) {
-            res.status(500).json({
-              message: 'Tolong Check Kembali File Import, Semua Field Harus Ter isi!',
-              error: error.message,
-            });
+          if (row[14] !== undefined || row[14] === null) {
+            row[14] = "Tidak ada keterangan";
           }
           let rowBook = {
             kategori: row[1],
@@ -316,31 +312,21 @@ module.exports = {
             image: row[15],
             sourceLink: row[16],
           };
-
           Databooks.push(rowBook);
         });
         const arr1 = getUniqueListBy(Databooks);
-        Ebooks.findAndCountAll({}).then((response) => {
-          let concatData = response.rows.concat(arr1);
-          if (hasDupsObjects(concatData)) {
-            res.status(500).json({
-              message: 'Check Kembali File , terdapat data yang sama di system !',
+        Ebooks.bulkCreate(arr1)
+          .then((response) => {
+            return res.status(200).json({
+              message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
-          } else {
-            Ebooks.bulkCreate(arr1)
-              .then((response) => {
-                return res.status(200).json({
-                  message: 'Uploaded the file successfully: ' + req.file.originalname,
-                });
-              })
-              .catch((error) => {
-                res.status(500).json({
-                  message: 'Gagal import kedalam system, Check kembali File Import!',
-                  error: error.message,
-                });
-              });
-          }
-        });
+          })
+          .catch((error) => {
+            res.status(500).json({
+              message: 'Gagal import kedalam system, Check kembali File Import!',
+              error: error.message,
+            });
+          });
       });
     } catch (error) {
       res.status(500).json({

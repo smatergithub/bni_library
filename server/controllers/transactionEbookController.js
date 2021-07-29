@@ -300,6 +300,48 @@ module.exports = {
     });
   },
 
+  checkExpiredTransaction: async (req, res) => {
+    const transactionEBook = await TransactionEbook.findAll({
+      where: {
+        userId: req.params.userId,
+        status: 'Dipinjam',
+      },
+    });
+
+    if (!transactionEBook) {
+      return res.json({
+        message: 'transaction not found',
+      });
+    }
+
+    const now = Date.now();
+
+    transactionEBook.forEach(async (item) => {
+      let transDate = new Date(item.endDate).getTime();
+      if (now > transDate) {
+        console.log('Found ', item.code);
+        await TransactionEbook.findByPk(item.id)
+          .then((transaction) => {
+            transaction
+              .update({
+                status: 'Dikembalikan',
+                isGiveRating: false,
+              })
+              .catch((err) => {
+                res.status(400).send(err);
+              });
+          })
+          .catch((err) => {
+            res.status(500).send(err);
+          });
+      }
+    });
+
+    return res.json({
+      message: 'oke',
+    });
+  },
+
   exportListHistoryEbook: async (req, res) => {
     try {
       const startDate = req.query.startDate;
