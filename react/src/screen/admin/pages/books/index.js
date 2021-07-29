@@ -91,7 +91,7 @@ const Books = (props) => {
         mappingDataSourceBookList();
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1500);
       })
       .catch((err) => {
         setLoading(false);
@@ -99,7 +99,7 @@ const Books = (props) => {
         mappingDataSourceBookList();
         setTimeout(() => {
           window.location.reload();
-        }, 3000);
+        }, 1500);
       });
 
     // reader.onloadend = () => {

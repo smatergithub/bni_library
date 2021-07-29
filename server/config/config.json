@@ -1,10 +1,10 @@
 {
   "development": {
-    "username": "fahri",
-    "password": "123456",
-    "database": "bni",
+    "username": "root",
+    "password": "",
+    "database": "db_library_beta",
     "host": "127.0.0.1",
-    "dialect": "mysql",
+    "dialect": "mariadb",
     "operatorsAliases": false,
     "logging": false
   },

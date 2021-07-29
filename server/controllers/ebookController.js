@@ -268,15 +268,15 @@ module.exports = {
       return Object.values(arr.reduce((acc, cur) => Object.assign(acc, { [cur.judul]: cur }), {}));
     }
 
-    function hasDupsObjects(array) {
-      return array
-        .map(function (value) {
-          return value.judul;
-        })
-        .some(function (value, index, array) {
-          return array.indexOf(value) !== array.lastIndexOf(value);
-        });
-    }
+    // function hasDupsObjects(array) {
+    //   return array
+    //     .map(function (value) {
+    //       return value.judul;
+    //     })
+    //     .some(function (value, index, array) {
+    //       return array.indexOf(value) !== array.lastIndexOf(value);
+    //     });
+    // }
 
     try {
       if (req.file == undefined) {
@@ -292,7 +292,7 @@ module.exports = {
         let Databooks = [];
         rows.forEach((row, index) => {
           if (row[14] !== undefined || row[14] === null) {
-            row[14] = "Tidak ada keterangan";
+            row[14] = 'Tidak ada keterangan';
           }
           let rowBook = {
             kategori: row[1],

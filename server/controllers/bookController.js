@@ -292,16 +292,15 @@ module.exports = {
     function getUniqueListBy(arr) {
       return Object.values(arr.reduce((acc, cur) => Object.assign(acc, { [cur.judul]: cur }), {}));
     }
-
-    function hasDupsObjects(array) {
-      return array
-        .map(function (value) {
-          return value.judul;
-        })
-        .some(function (value, index, array) {
-          return array.indexOf(value) !== array.lastIndexOf(value);
-        });
-    }
+    // function hasDupsObjects(array) {
+    //   return array
+    //     .map(function (value) {
+    //       return value.judul;
+    //     })
+    //     .some(function (value, index, array) {
+    //       return array.indexOf(value) !== array.lastIndexOf(value);
+    //     });
+    // }
 
     try {
       if (req.file == undefined) {
@@ -317,10 +316,8 @@ module.exports = {
         let Databooks = [];
 
         rows.forEach((row, index) => {
-          if (row[index] === undefined || row[index] === null) {
-            return res
-              .status(500)
-              .send('Tolong Check Kembali File Import, Semua Field Harus Ter isi!');
+          if (row[15] !== undefined || row[15] === null) {
+            row[15] = 'Tidak ada keterangan';
           }
           let rowBook = {
             kategori: row[1],
@@ -343,35 +340,54 @@ module.exports = {
 
           Databooks.push(rowBook);
         });
-
         const arr1 = getUniqueListBy(Databooks);
-        Books.findAndCountAll({}).then((response) => {
-          let concatData = response.rows.concat(arr1);
-          if (hasDupsObjects(concatData)) {
-            // console.log('duplicates found', concatData);
-            res.status(500).json({
-              message: 'Check Kembali File , terdapat data yang sama di system !',
+
+        Books.bulkCreate(arr1)
+          .then((response) => {
+            return res.status(200).json({
+              message: 'Uploaded the file successfully: ' + req.file.originalname,
             });
-          } else {
-            Books.bulkCreate(arr1)
-              .then((response) => {
-                return res.status(200).json({
-                  message: 'Uploaded the file successfully: ' + req.file.originalname,
-                });
-              })
-              .catch((error) => {
-                res.status(500).json({
-                  message: 'Gagal import kedalam system, Check kembali File Import!',
-                  error: error.message,
-                });
-              });
-          }
-        });
+          })
+          .catch((error) => {
+            res.status(500).json({
+              message: 'Gagal import kedalam system, Check kembali File Import!',
+              error: error.message,
+            });
+          });
       });
     } catch (error) {
       res.status(500).json({
         message: 'Could not upload the file: ' + req.file.originalname,
       });
+
+      //     const arr1 = getUniqueListBy(Databooks);
+      //     Books.findAndCountAll({}).then((response) => {
+      //       let concatData = response.rows.concat(arr1);
+      //       if (hasDupsObjects(concatData)) {
+      //         // console.log('duplicates found', concatData);
+      //         res.status(500).json({
+      //           message: 'Check Kembali File , terdapat data yang sama di system !',
+      //         });
+      //       } else {
+      //         Books.bulkCreate(arr1)
+      //           .then((response) => {
+      //             return res.status(200).json({
+      //               message: 'Uploaded the file successfully: ' + req.file.originalname,
+      //             });
+      //           })
+      //           .catch((error) => {
+      //             res.status(500).json({
+      //               message: 'Gagal import kedalam system, Check kembali File Import!',
+      //               error: error.message,
+      //             });
+      //           });
+      //       }
+      //     });
+      //   });
+      // } catch (error) {
+      //   res.status(500).json({
+      //     message: 'Could not upload the file: ' + req.file.originalname,
+      //   });
     }
   },
 

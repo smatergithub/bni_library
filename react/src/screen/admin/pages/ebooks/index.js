@@ -89,11 +89,17 @@ const Ebooks = (props) => {
         mappingDataSourceEbookList();
         setLoading(false);
         swal('Message!', 'Ebook Berhasil di import', 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
         setLoading(false);
         swal('Error!', err.response.data.message, 'error');
         mappingDataSourceEbookList();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       });
     // reader.onloadend = () => {
 
