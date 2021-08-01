@@ -12,19 +12,38 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
     img = require('../../../../assets/NoImage.png');
   }
 
-  let createdAt = moment(startdate).format('YYYY-MM-DD');
+  let startDate = moment(startdate).format('YYYY-MM-DD');
+  let endDate = moment(enddate).format('YYYY-MM-DD');
   let dateNow = moment().format('YYYY-MM-DD');
-  let diffDate = moment(createdAt).diff(dateNow, 'days');
-  let isActiveDate = diffDate > 1 ? true : false;
-  let checkStartandDateNow = createdAt === dateNow;
+  // let diffDate = moment(createdAt).diff(dateNow, 'days');
+  // let isActiveDate = diffDate > 1 ? true : false;
+  // let checkStartandDateNow = createdAt === dateNow;
 
-  // console.log('aaa', checkStartandDateNow);
+  // // console.log('aaa', checkStartandDateNow);
 
-  if (diffDate >= -1 && checkStartandDateNow) {
+  // if (diffDate >= -1 && checkStartandDateNow) {
+  //   isActiveDate = true;
+  // } else {
+  //   isActiveDate = false;
+  // }
+
+  let isActiveDate;
+  const now = new Date();
+  const nowDate = parseInt(`${now.getYear()}${now.getMonth()}${now.getDay()}`);
+
+  const startBorrow = new Date(startdate);
+  const dataDate = parseInt(
+    `${startBorrow.getYear()}${startBorrow.getMonth()}${startBorrow.getDay()}`
+  );
+
+  if (nowDate == dataDate) {
+    isActiveDate = true;
+  } else if (dateNow <= endDate) {
     isActiveDate = true;
   } else {
     isActiveDate = false;
   }
+
   return (
     <div className="w-full mb-5 py-2 lg:flex">
       <div className="lg:w-1/6 h-48 flex items-center justify-center">

@@ -31,28 +31,29 @@ function Login(props) {
       setLoading(true);
       props
         .signIn(data)
-        .then(res => {
+        .then((res) => {
           if (res.resp) {
             if (res.data.message === 'firstLogin') {
               props
                 .signIn(data)
-                .then(res => {
+                .then((res) => {
                   localStorage.setItem('access_token_ebni', res.data.accessToken);
 
                   if (res.resp) {
                     // history.push('/admin/dashboard');
-                    props.getMe().then(res => {
+                    props.getMe().then((res) => {
                       if (res.data.isAdmin || res.data.superAdmin) {
                         history.push('/admin/dashboard');
                       } else {
-                        history.push('/profile/home?edit=true');
+                        // history.push('/profile/home?edit=true');
+                        history.push('/home');
                       }
                     });
                   } else {
                     ToastError(res.msg);
                   }
                 })
-                .catch(err => {
+                .catch((err) => {
                   let msg = err.message || 'Something wrong';
                   if (msg === 'Terjadi Kesalahan Koneksi Ke Database Servers') {
                     ToastError('Username atau password salah.');
@@ -63,7 +64,7 @@ function Login(props) {
             } else {
               localStorage.setItem('access_token_ebni', res.data.accessToken);
 
-              props.getMe().then(res => {
+              props.getMe().then((res) => {
                 console.log('res', res);
                 if (res.data.isAdmin || res.data.superAdmin) {
                   history.push('/admin/dashboard');
@@ -77,7 +78,7 @@ function Login(props) {
           }
           setLoading(false);
         })
-        .catch(err => {
+        .catch((err) => {
           let msg = err.message || 'Something wrong';
           ToastError(msg);
           setLoading(false);
@@ -110,14 +111,14 @@ function Login(props) {
                   <hr className="mt-6 border-b-1 border-gray-400" />
                 </div>
                 <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-                  <form onSubmit={e => onLogin(e)}>
+                  <form onSubmit={(e) => onLogin(e)}>
                     <div className="relative w-full mb-3">
                       <label className="block uppercase text-gray-700 text-xs font-bold mb-2">
                         NPP
                       </label>
                       <input
                         disabled={loading}
-                        onChange={e => setUser({ ...user, npp: e.target.value })}
+                        onChange={(e) => setUser({ ...user, npp: e.target.value })}
                         type="text"
                         className="px-3 py-2 placeholder-gray-400 text-gray-700 bg-white rounded text-sm border focus:outline-none  w-full"
                         placeholder="NPP"
@@ -144,9 +145,9 @@ function Login(props) {
                         style={{
                           height: 45,
                         }}
-                        onChange={e => setUser({ ...user, password: e.target.value })}
+                        onChange={(e) => setUser({ ...user, password: e.target.value })}
                         placeholder="Password"
-                        iconRender={visible =>
+                        iconRender={(visible) =>
                           visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
                         }
                       />
