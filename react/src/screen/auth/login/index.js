@@ -69,7 +69,8 @@ function Login(props) {
                 if (res.data.isAdmin || res.data.superAdmin) {
                   history.push('/admin/dashboard');
                 } else {
-                  history.push('/profile/home?edit=true');
+                  // history.push('/profile/home?edit=true');
+                  history.push('/home');
                 }
               });
             }

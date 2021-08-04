@@ -62,7 +62,7 @@ function CreateNewRepo(props) {
       formData['strata'] = strata;
       formData['releaseYear'] = releaseYear;
       formData['isApproved'] = true;
-      props.CreateNewRepositoryAction(formData).then(res => {
+      props.CreateNewRepositoryAction(formData).then((res) => {
         if (res.resp) {
           swal('Message!', res.msg, 'success');
           props.history.push('/admin/repository');
@@ -79,7 +79,7 @@ function CreateNewRepo(props) {
       formData['releaseYear'] = releaseYear ? releaseYear : repo.releaseYear;
       formData['isApproved'] = true;
 
-      props.EditRepositoryAction(id, formData).then(res => {
+      props.EditRepositoryAction(id, formData).then((res) => {
         if (res.resp) {
           swal('Message!', res.msg, 'success');
           props.history.push('/admin/repository');
@@ -117,7 +117,7 @@ function CreateNewRepo(props) {
 
   React.useEffect(() => {
     if (id) {
-      RepoAPI.detail(id).then(res => {
+      RepoAPI.detail(id).then((res) => {
         if (res.data) {
           setRepo(res.data);
         } else {
@@ -126,6 +126,8 @@ function CreateNewRepo(props) {
       });
     }
   }, []);
+
+  console.log('aa', repo);
 
   return (
     <div className="w-full h-screen overflow-x-hidden border-t flex flex-col">
@@ -168,9 +170,15 @@ function CreateNewRepo(props) {
                   />
                 </div>
                 <div className="mt-2">
-                  <label className="block text-sm text-gray-600" htmlFor="cus_email">
-                    Kategori Riset
-                  </label>
+                  {repo ? (
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Kategori Riset Sebelumnya : {repo && repo.category}
+                    </label>
+                  ) : (
+                    <label className="block text-sm text-gray-600" htmlFor="cus_email">
+                      Kategori Riset
+                    </label>
+                  )}
                   <Checkbox.Group
                     defaultValue={[typeResearch]}
                     style={{
@@ -237,14 +245,14 @@ function CreateNewRepo(props) {
                     Metodologi Riset
                   </label>
                   <Select
+                    placeholder={repo ? repo.methodology : ''}
                     style={{ width: '100%' }}
-                    ref={register()}
+                    ref={register('methodology')}
                     className="wilayah"
-                    name="wilayah"
-                    value={repo ? repo.methodology : ''}
-                    onSelect={e => setMethodoloyResearch(e)}
+                    name="methodology"
+                    onSelect={(e) => setMethodoloyResearch(e)}
                   >
-                    {methodology.map(op => {
+                    {methodology.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -254,13 +262,14 @@ function CreateNewRepo(props) {
                     Strata
                   </label>
                   <Select
+                    placeholder={repo ? repo.strata : ''}
                     style={{ width: '100%' }}
-                    value={repo ? repo.strata : ''}
                     className="wilayah"
-                    name="wilayah"
-                    onSelect={e => setStrata(e)}
+                    ref={register('strata')}
+                    name="strata"
+                    onSelect={(e) => setStrata(e)}
                   >
-                    {strataOpt.map(op => {
+                    {strataOpt.map((op) => {
                       return <Option value={op.label}>{op.label}</Option>;
                     })}
                   </Select>
@@ -284,7 +293,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'abstrack')}
+                    onChange={(e) => uploadImage(e, 'abstrack')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
@@ -298,7 +307,7 @@ function CreateNewRepo(props) {
                   </label>
 
                   <input
-                    onChange={e => uploadImage(e, 'document')}
+                    onChange={(e) => uploadImage(e, 'document')}
                     type="file"
                     className="px-2  text-white font-light tracking-wider bg-gray-700 rounded"
                     accept="application/pdf"
