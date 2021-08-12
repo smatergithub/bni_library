@@ -387,7 +387,7 @@ module.exports = {
       // header
       let headingColumnIndex = 1;
       Object.keys(transactionDisplay[0]).forEach((key) => {
-        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin') {
+        if (key != 'isAdmin' && key != 'superAdmin' && key != 'isRepoAdmin' && key != 'userId' && key != 'ebookId') {
           ws.cell(1, headingColumnIndex++).string(key);
         }
       });
@@ -397,10 +397,16 @@ module.exports = {
       transactionDisplay.forEach((record) => {
         let columnIndex = 1;
         Object.keys(record).forEach((columnName) => {
-          if (columnName != 'user' && columnName != 'book') {
-            ws.cell(rowIndex, columnIndex++).string(
-              record[columnName] == null ? '' : record[columnName].toString()
-            );
+          if (columnName != 'userId' && columnName != 'ebookId') {
+            if (columnName == 'ebook'){
+              ws.cell(rowIndex, columnIndex++).string(
+                record[columnName] == null ? '' : record[columnName].judul.toString()
+              );
+            }else{
+              ws.cell(rowIndex, columnIndex++).string(
+                record[columnName] == null ? '' : record[columnName].toString()
+              );
+            }
           }
         });
         rowIndex++;
