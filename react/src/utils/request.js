@@ -1,7 +1,14 @@
 import axios from 'axios';
+
+let baseUrl = 'http://localhost:2001';
+
 function formatUrl(url) {
   let checkIsParamsExit = url.split('').find((text) => text === '?');
-  return url + `${checkIsParamsExit ? '&' : '?'}token=${localStorage.getItem('access_token_ebni')}`;
+  return (
+    baseUrl +
+    url +
+    `${checkIsParamsExit ? '&' : '?'}token=${localStorage.getItem('access_token_ebni')}`
+  );
 }
 
 const makeAxiosRequest = async (requestOptions) => {
@@ -29,7 +36,7 @@ const makeAxiosRequest = async (requestOptions) => {
       localStorage.removeItem('bni_UserRole');
       // // window.location.replace('/auth/login');
       // window.location.reload();
-      window.location.replace('/');
+      // window.location.replace('/');
     }
   }
 };

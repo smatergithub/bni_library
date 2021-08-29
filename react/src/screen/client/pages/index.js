@@ -2,8 +2,7 @@ import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
-import { logout, isValidToken } from '../../../redux/action/user';
+import { logout, isValidToken, getMe } from '../../../redux/action/user';
 import NavBar from '../component/Navbar';
 import LandingPages from './landingPages';
 import Books from './books';
@@ -124,27 +123,39 @@ const routes = [
 ];
 
 function HomeUser(props) {
-  let { user } = props;
+  const [profile, setProfile] = React.useState({});
   const { match } = props;
   function logoutUser() {
-    props.logout().then(res => {
+    props.logout().then((res) => {
       if (res.resp) {
         localStorage.removeItem('access_token_ebni');
-        localStorage.removeItem('bni_repoAdmin')
+        localStorage.removeItem('bni_repoAdmin');
         localStorage.removeItem('bni_UserRole');
         window.location.replace('/auth/login');
       }
     });
   }
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
+
   React.useEffect(() => {
-    props.isValidToken().then(res => {
+    if (isUserLogged && isUserLogged !== null) {
+      props.getMe().then((res) => {
+        if (res !== undefined) {
+          setProfile(res.data);
+        }
+      });
+    }
+  }, [isUserLogged]);
+
+  React.useEffect(() => {
+    props.isValidToken().then((res) => {
       if (res.msg === '0') {
         localStorage.removeItem('access_token_ebni');
         localStorage.removeItem('bni_UserRole');
       }
     });
   }, []);
+
   return (
     <div>
       <NavBar url={match.params.id} props={props} isAuth={isUserLogged} logout={logoutUser} />
@@ -159,7 +170,7 @@ HomeUser.propTypes = {
   history: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
 };
-let mapState = state => {
-  return { user: state.user };
+let mapStateToProps = (state) => {
+  return { user: state.users.user, me: state.users.profile };
 };
-export default connect(mapState, { logout, isValidToken })(HomeUser);
+export default connect(mapStateToProps, { logout, isValidToken, getMe })(HomeUser);

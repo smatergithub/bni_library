@@ -22,18 +22,16 @@ function RisetList(props) {
     limit: 5,
   });
 
-  const mappingDataSourceRepoApproval = filterOptions => {
+  const mappingDataSourceRepoApproval = (filterOptions) => {
     setLoading(true);
     props
       .getRepositoryApprovalList(filterOptions)
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   React.useEffect(() => {
@@ -48,7 +46,7 @@ function RisetList(props) {
   // };
 
   function returnBook(id) {
-    props.MakeReturnBook(id).then(res => {
+    props.MakeReturnBook(id).then((res) => {
       if (res.resp) {
         setLoading(false);
         mappingDataSourceRepoApproval(filterOptions);
@@ -60,7 +58,7 @@ function RisetList(props) {
     });
   }
 
-  const getDetailDataBook = data => {
+  const getDetailDataBook = (data) => {
     setDetailData(data);
     setShowModalDetail(true);
   };
@@ -69,8 +67,8 @@ function RisetList(props) {
     mappingDataSourceRepoApproval(filterOptions);
   }, [filterOptions]);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         title: rowData.title,
@@ -229,7 +227,7 @@ function RisetList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     repositories: state.repositorys.approval,
   };

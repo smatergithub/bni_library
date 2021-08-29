@@ -14,7 +14,7 @@ import CreateEditWilayahModal from './createEditWilayahModal';
 import Loader from '../../component/Loader';
 import swal from 'sweetalert';
 
-const Wilayah = props => {
+const Wilayah = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
@@ -38,15 +38,13 @@ const Wilayah = props => {
     };
     props
       .getWilayah(pagination)
-      .then(res => {
+      .then((res) => {
         if (res) {
           // setTotalCount(props.wilayah.count);
           setLoading(false);
         }
       })
-      .catch(err => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   // const retrieveSearchDataWilayah = () => {
@@ -65,7 +63,7 @@ const Wilayah = props => {
   //       }
   //     })
   //     .catch(err => {
-  //       console.log('error', err);
+  //
   //     });
   // };
 
@@ -77,14 +75,14 @@ const Wilayah = props => {
   //   retrieveSearchDataWilayah();
   // }, [searchValue]);
 
-  const uploadExcel = e => {
+  const uploadExcel = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
     let file = e.target.files[0];
     setIsLoading(true);
     reader.onloadend = () => {
-      props.UploadWilayahFile({ file }).then(res => {
+      props.UploadWilayahFile({ file }).then((res) => {
         if (res) {
           swal('Message!', res.msg, 'success');
           setIsLoading(false);
@@ -101,7 +99,7 @@ const Wilayah = props => {
 
   const getDetailWilayah = (id, MakeAdmin) => {
     const { wilayah } = props;
-    let detailData = wilayah.data.filter(item => item.id === id);
+    let detailData = wilayah.data.filter((item) => item.id === id);
     setDetailData(detailData[0]);
     if (MakeAdmin === 'edit') {
       setShowModalDetail(true);
@@ -114,12 +112,12 @@ const Wilayah = props => {
     setLoading(true);
     props
       .DeleteWilayahAction(detailData.id)
-      .then(response => {
+      .then((response) => {
         retrieveDataWilayah();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
 
         swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
@@ -129,8 +127,8 @@ const Wilayah = props => {
   if (loading) return null;
   const { wilayah } = props;
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         actions: (
@@ -181,7 +179,7 @@ const Wilayah = props => {
             <i className="fas fa-plus mr-3" style={{ fontSize: '18px' }} /> Tambah Wilayah
           </button>
           <input
-            onChange={e => uploadExcel(e)}
+            onChange={(e) => uploadExcel(e)}
             type="file"
             style={{
               display: 'none',
@@ -252,7 +250,7 @@ const Wilayah = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     wilayah: state.wilayah.wilayah,
   };

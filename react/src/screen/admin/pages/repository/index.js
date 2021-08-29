@@ -9,7 +9,7 @@ import moment from 'moment';
 import Loader from '../../component/Loader';
 import { Button } from 'antd';
 
-const Repository = props => {
+const Repository = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [selectedRepo, setSelectedRepo] = React.useState(null);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
@@ -19,18 +19,16 @@ const Repository = props => {
     judul: '',
   });
 
-  const retrieveDataRepository = filterOptions => {
+  const retrieveDataRepository = (filterOptions) => {
     setLoading(true);
     props
       .getRepositorys(filterOptions)
-      .then(res => {
+      .then((res) => {
         if (res) {
           setLoading(false);
         }
       })
-      .catch(err => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   React.useEffect(() => {
@@ -40,7 +38,7 @@ const Repository = props => {
   const handleActionDeleteRepo = () => {
     props
       .DeleteRepositoryAction(selectedRepo)
-      .then(response => {
+      .then((response) => {
         if (response.resp) {
           swal('Message!', response.msg, 'success');
         } else {
@@ -50,18 +48,18 @@ const Repository = props => {
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => console.log('err', err));
+      .catch((err) => console.log('err', err));
   };
 
   const { repositorys } = props;
 
   let repoDataSource =
     repositorys.data !== undefined && repositorys.data.length > 0
-      ? repositorys.data.filter(item => item.isApproved === true)
+      ? repositorys.data.filter((item) => item.isApproved === true)
       : [];
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         createdAt: moment(rowData.createdAt).format('DD MMM YYYY'),
@@ -201,7 +199,7 @@ const Repository = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     repositorys: state.repositorys.repositorys,
   };

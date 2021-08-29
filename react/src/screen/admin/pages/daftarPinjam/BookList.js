@@ -26,9 +26,7 @@ function BookList(props) {
       .then((res) => {
         setLoading(false);
       })
-      .catch((err) => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   React.useEffect(() => {
@@ -46,15 +44,15 @@ function BookList(props) {
       let startDate = moment(rowData.startDate).format('YYYY-MM-DD');
       let endDate = moment(rowData.endDate);
 
-      let period = rowData && endDate.diff(startDate, 'days') + ' hari';
+      // let period = rowData && endDate.diff(startDate, 'days') + ' hari';
 
-      let duration;
+      // let duration;
 
-      if (rowData && endDate.diff(dateNow, 'days') >= 1) {
-        duration = rowData && endDate.diff(startDate, 'days') + ' hari';
-      } else {
-        duration = rowData && endDate.diff(dateNow, 'days') + ' hari';
-      }
+      // if (rowData && endDate.diff(dateNow, 'days') >= 1) {
+      //   duration = rowData && endDate.diff(startDate, 'days') + ' hari';
+      // } else {
+      //   duration = rowData && endDate.diff(dateNow, 'days') + ' hari';
+      // }
       return {
         ...rowData,
         judul: rowData.book ? rowData.book.judul : '',
@@ -64,8 +62,8 @@ function BookList(props) {
         startDate: rowData && moment(rowData.startDate).format('YYYY-MM-DD'),
         endDate: rowData && moment(rowData.endDate).format('YYYY-MM-DD'),
         quantity: rowData.quantity,
-        period: period,
-        duration: duration,
+        // period: period,
+        // duration: duration,
         actions: (
           <React.Fragment>
             <button
@@ -111,8 +109,8 @@ function BookList(props) {
               { name: 'npp', title: 'NPP' },
               { name: 'startDate', title: 'Tanggal Pinjam' },
               { name: 'endDate', title: 'Tanggal Kembali' },
-              { name: 'period', title: 'Jangka Pinjam' },
-              { name: 'duration', title: 'Sisa Durasi' },
+              // { name: 'period', title: 'Jangka Pinjam' },
+              // { name: 'duration', title: 'Sisa Durasi' },
               { name: 'status', title: 'Status' },
               { name: 'actions', title: 'Action' },
             ]}
@@ -152,16 +150,16 @@ function BookList(props) {
                 width: 150,
                 wordWrapEnabled: true,
               },
-              {
-                columnName: 'period',
-                width: 150,
-                wordWrapEnabled: true,
-              },
-              {
-                columnName: 'duration',
-                width: 150,
-                wordWrapEnabled: true,
-              },
+              // {
+              //   columnName: 'period',
+              //   width: 150,
+              //   wordWrapEnabled: true,
+              // },
+              // {
+              //   columnName: 'duration',
+              //   width: 150,
+              //   wordWrapEnabled: true,
+              // },
               {
                 columnName: 'quantity',
                 width: 100,

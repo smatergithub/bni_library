@@ -3,9 +3,7 @@ const https = require('https');
 const path = require('path');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const morgan = require('morgan');
-const httpLogger = require('./middelwares/httpLogger');
-const logger = require('./utils/logger');
+// const morgan = require('morgan');
 
 // const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -16,6 +14,7 @@ global.__locationdir = __dirname;
 
 var UserRoute = require('./routes/UserRoute');
 var AdminRoute = require('./routes/AdminRoute');
+
 // var corsOptions = {
 //   origin: 'http://localhost:3001',
 // };
@@ -23,23 +22,17 @@ var AdminRoute = require('./routes/AdminRoute');
 const app = express();
 
 // app.use(cookieParser());
+// app.use(morgan('combined'));
 app.use(cors());
-// app.use(httpLogger);
-app.use(morgan('combined'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api/', UserRoute);
 app.use('/api/admin/', AdminRoute);
 app.use('/img/', express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
-
-app.get('*', (req, res) =>
-  res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
-);
 
 const port = process.env.PORT_BACKEND;
 
-const urlCertificate = '../../../cert_ssl/'
+const urlCertificate = '../../../cert_ssl/';
 
 if (process.env.NODE_ENV === 'production') {
   var https_options = {
@@ -50,6 +43,13 @@ if (process.env.NODE_ENV === 'production') {
       fs.readFileSync(`${urlCertificate}AAA_Certificate_Services.crt`, 'utf8'),
     ],
   };
+
+  app.use(express.static(path.join(__dirname, '..', 'react', 'build')));
+
+  app.get('*', (req, res) =>
+    res.status(200).sendFile(path.join(__dirname, '..', 'react', 'build', 'index.html'))
+  );
+
   let srvr = https.createServer(https_options, app);
   srvr.listen(port);
   srvr.timeout = 0;

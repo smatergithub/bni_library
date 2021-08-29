@@ -13,6 +13,7 @@ const TransactionBookController = require('../controllers/transactionBookControl
 const TransactionEbookController = require('../controllers/transactionEbookController');
 const RatingBookController = require('../controllers/ratingBookController');
 const RatingEbookController = require('../controllers/ratingEbookController');
+const CartController = require('../controllers/cartController');
 const Repository = require('../controllers/repositoryController');
 
 router.post('/book/list', BookController.getBookList);
@@ -88,10 +89,19 @@ router.post(
 router.post('/ratingBook', [AuthJWT.verifyToken], RatingBookController.inputRatingBook);
 router.post('/ratingEbook', [AuthJWT.verifyToken], RatingEbookController.inputRatingEbook);
 
+router.get('/ratingBook/list', [AuthJWT.verifyToken], RatingBookController.listRating);
+router.get('/ratingEbook/list', [AuthJWT.verifyToken], RatingEbookController.listRating);
+
 router.post('/repository', [AuthJWT.isRepoAdmin], Repository.add);
 router.get('/repository', [AuthJWT.verifyToken], Repository.list);
 router.get('/repository/:id', [AuthJWT.verifyToken], Repository.getById);
 router.get('/repository/preview/:id', [AuthJWT.verifyToken], Repository.getPreviewById);
 router.get('/ratingBook/list', RatingBookController.listBookbyRating);
 router.get('/ratingEbook/list', RatingEbookController.listEbookbyRating);
+
+router.get('/cart/list', [AuthJWT.verifyToken], CartController.list);
+router.post('/cart/create', [AuthJWT.verifyToken], CartController.add);
+router.delete('/cart/delete/:id', [AuthJWT.verifyToken], CartController.delete);
+router.delete('/cart/deletebook/:id', [AuthJWT.verifyToken], CartController.deleteByBookId);
+router.delete('/cart/deleteebook/:id', [AuthJWT.verifyToken], CartController.deleteByEbookId);
 module.exports = router;

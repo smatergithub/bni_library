@@ -8,11 +8,9 @@ import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import { checkIsImageExist } from '../../component/helper';
 import Loader from '../../component/Loader';
-
+import swal from 'sweetalert';
 import BookUserAPI from '../../../../api/BookUserApi';
-import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
-// const { Search } = Input;
-// const { Option } = Select;
+import CartUserAPI from '../../../../api/CartUserApi';
 
 function Books(props) {
   let { history } = props;
@@ -20,7 +18,7 @@ function Books(props) {
   let [category, setCategory] = React.useState([]);
   let [books, setBooks] = React.useState([]);
 
-  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let [userLogged, setUserLogged] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     limit: 8,
     page: 1,
@@ -42,6 +40,36 @@ function Books(props) {
         setProcessing(false);
       });
   }
+
+  function addBookToCart(bookId) {
+    let payload = {
+      userId: props.profile.id,
+      bookId: bookId,
+    };
+    CartUserAPI.create(payload)
+      .then((response) => {
+        swal('Message!', 'Berhasil simpan Buku ke wishlist', 'success');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
+  }
+
+  // function deleteBookToCart(bookId) {
+  //   CartUserAPI.deleteBook(bookId)
+  //     .then((response) => {
+  //
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setProcessing(false);
+  //     });
+  // }
 
   function getCategory() {
     BookUserAPI.getCategory().then((res) => {
@@ -106,8 +134,6 @@ function Books(props) {
     props.history.push('/auth/login');
   }
   if (processing && books === null) return null;
-
-  const { wishlist } = props;
 
   let isUserLogged = localStorage.getItem('bni_UserRole') === '1';
 
@@ -205,7 +231,7 @@ function Books(props) {
               } else {
                 img = require('../../../../assets/NoImage.png');
               }
-              let isAdd = wishlist.some((ws) => ws.id === book.id);
+              // let isAdd = wishlist.some((ws) => ws.id === book.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -221,26 +247,43 @@ function Books(props) {
                       </h2>
                     </Tooltip>
 
-                    {!isAdd && (
+                    {/* {!isAdd && (
                       <div
                         onClick={() => {
                           // let cloneBook = Object.assign({}, book);
                           book.type = 'BorrowBook';
                           if (!isUserLogged) {
-                            setShowModalDeletion(true);
+                            setUserLogged(true);
                           } else {
-                            props.addBookWishlist(book);
+                            addBookToCart(book.id);
+                            // props.addBookWishlist(book);
                           }
                         }}
                       >
                         <i className="fas fa-cart-plus text-3xl cursor-pointer"></i>
                       </div>
-                    )}
-                    {isAdd && (
-                      <div onClick={() => props.removeBookWishlist(book)}>
+                    )} */}
+                    <div
+                      onClick={() => {
+                        if (!isUserLogged) {
+                          setUserLogged(true);
+                        } else {
+                          addBookToCart(book.id);
+                        }
+                      }}
+                    >
+                      <i className="fas fa-cart-plus text-3xl cursor-pointer"></i>
+                    </div>
+                    {/* {isAdd && (
+                      <div
+                        onClick={() => {
+                          // props.removeBookWishlist(book);
+                          deleteBookToCart(book.id);
+                        }}
+                      >
                         <i className="fas fa-cart-plus text-3xl text-green-500"></i>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   <div className="pt-1 text-gray-900" style={{ fontSize: '11px' }}>
@@ -254,7 +297,7 @@ function Books(props) {
                       disabled
                     />
                     <span>
-                      <i className="fas fa-heart text-yellow-700" />{' '}
+                      <i className="fas fa-book-reader text-yellow-700" />{' '}
                       {book.totalRead ? book.totalRead : 0}
                     </span>
                   </div>
@@ -313,9 +356,9 @@ function Books(props) {
       </section>
       <Modal
         title="Otentikasi diperlukan"
-        open={showModalDeletion}
+        open={userLogged}
         onCLose={() => {
-          setShowModalDeletion(false);
+          setUserLogged(false);
         }}
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
@@ -327,9 +370,8 @@ function Books(props) {
 }
 let mapStateToProps = (state) => {
   return {
-    // books: state.userBooks.books,
-    wishlist: state.wishlist.books,
+    profile: state.users.profile,
   };
 };
 
-export default withRouter(connect(mapStateToProps, { addBookWishlist, removeBookWishlist })(Books));
+export default withRouter(connect(mapStateToProps)(Books));

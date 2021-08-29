@@ -6,10 +6,11 @@ import { Rating } from 'semantic-ui-react';
 import { Select, Tooltip } from 'antd';
 import { NoData, Modal } from '../../../../component';
 import EbookUserAPI from '../../../../api/EbookUserApi';
-import { addEbookWishlist, removeEbookWishlist } from '../../../../redux/action/wishlist';
+import CartUserAPI from '../../../../api/CartUserApi';
 // import Preview from './component/preview';
 // import Maintenance from './component/maintenance';
 import Loader from '../../component/Loader';
+import swal from 'sweetalert';
 import { Dropdown } from 'semantic-ui-react';
 import { checkIsImageExist } from '../../component/helper';
 
@@ -23,7 +24,7 @@ function Ebooks(props) {
     file: null,
   });
 
-  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let [userLogged, setUserLogged] = React.useState(false);
   const [pagination, setPagination] = React.useState({
     limit: 8,
     page: 1,
@@ -45,6 +46,36 @@ function Ebooks(props) {
         setProcessing(false);
       });
   }
+
+  function addEbookToCart(ebookId) {
+    let payload = {
+      userId: props.profile.id,
+      ebookId: ebookId,
+    };
+    CartUserAPI.create(payload)
+      .then((response) => {
+        swal('Message!', 'Berhasil simpan ebook ke wishlist', 'success');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
+  }
+
+  // function deleteEbookToCart(bookId) {
+  //   CartUserAPI.deleteEbook(bookId)
+  //     .then((response) => {
+  //
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     })
+  //     .finally(() => {
+  //       setProcessing(false);
+  //     });
+  // }
 
   function getCategory() {
     EbookUserAPI.getCategory().then((res) => {
@@ -207,7 +238,7 @@ function Ebooks(props) {
                 img = require('../../../../assets/NoImage.png');
               }
 
-              let isAdd = wishlist.some((ws) => ws.id === ebook.id);
+              // let isAdd = wishlist.some((ws) => ws.id === ebook.id);
               return (
                 <div key={key} className="w-full md:w-1/3 xl:w-1/4 p-6 flex flex-col">
                   <img className="hover:grow hover:shadow-lg h-64" src={img} />
@@ -223,13 +254,13 @@ function Ebooks(props) {
                       </h2>
                     </Tooltip>
 
-                    {!isAdd && (
+                    {/* {!isAdd && (
                       <div
                         onClick={() => {
                           // let cloneEbook = Object.assign({}, ebook);
                           ebook.type = 'BorrowEbook';
                           if (!isUserLogged) {
-                            setShowModalDeletion(true);
+                            setUserLogged(true);
                           } else {
                             props.addEbookWishlist(ebook);
                           }
@@ -237,12 +268,23 @@ function Ebooks(props) {
                       >
                         <i className="fas fa-cart-plus text-3xl cursor-pointer"></i>
                       </div>
-                    )}
-                    {isAdd && (
-                      <div onClick={() => props.removeEbookWishlist(ebook)}>
+                    )} */}
+                    <div
+                      onClick={() => {
+                        if (!isUserLogged) {
+                          setUserLogged(true);
+                        } else {
+                          addEbookToCart(ebook.id);
+                        }
+                      }}
+                    >
+                      <i className="fas fa-cart-plus text-3xl cursor-pointer"></i>
+                    </div>
+                    {/* {isAdd && (
+                      <div onClick={() => deleteEbookToCart(ebook.id)}>
                         <i className="fas fa-cart-plus text-3xl text-green-500"></i>
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                   <div className="pt-1 text-gray-900" style={{ fontSize: '11px' }}>
@@ -329,9 +371,9 @@ function Ebooks(props) {
       </section>
       <Modal
         title="Otentikasi diperlukan"
-        open={showModalDeletion}
+        open={userLogged}
         onCLose={() => {
-          setShowModalDeletion(false);
+          setUserLogged(false);
         }}
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
@@ -343,13 +385,8 @@ function Ebooks(props) {
 }
 let mapStateToProps = (state) => {
   return {
-    wishlist: state.wishlist.ebooks,
+    profile: state.users.profile,
   };
 };
 
-export default withRouter(
-  connect(mapStateToProps, {
-    addEbookWishlist,
-    removeEbookWishlist,
-  })(Ebooks)
-);
+export default withRouter(connect(mapStateToProps)(Ebooks));

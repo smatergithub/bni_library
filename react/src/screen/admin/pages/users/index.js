@@ -15,7 +15,7 @@ import swal from 'sweetalert';
 import { Button } from 'antd';
 import Loader from '../../component/Loader';
 
-const UsersList = props => {
+const UsersList = (props) => {
   const [loading, setLoading] = React.useState(false);
   const [showModalDeletion, setShowModalDeletion] = React.useState(false);
   const [showModalMakeAdmin, setShowModalMakeAdmin] = React.useState(false);
@@ -32,14 +32,12 @@ const UsersList = props => {
       limit: pageSize,
     };
     UserAPI.listUserAdmin(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(res.data.count);
         setLoading(false);
         setUsers(res.data);
       })
-      .catch(err => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   React.useEffect(() => {
@@ -55,7 +53,7 @@ const UsersList = props => {
   // }
 
   const getDetailUser = (id, MakeAdmin) => {
-    let detailData = users.data.filter(item => item.id === id);
+    let detailData = users.data.filter((item) => item.id === id);
     if (MakeAdmin === 'makeRisetAdmin') {
       let updateDetailData = {
         makeRisetAdmin: 1,
@@ -83,13 +81,13 @@ const UsersList = props => {
     setLoading(true);
     props
       .toggleUserIntoAdmin(detailData.id)
-      .then(response => {
+      .then((response) => {
         setShowModalMakeAdmin(false);
         setLoading(false);
         swal('Message!', 'Update Berhasil', 'success');
         retrieveDataUser();
       })
-      .catch(err => {
+      .catch((err) => {
         swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
   };
@@ -98,25 +96,25 @@ const UsersList = props => {
     if (detailData && detailData.makeRisetAdmin === 1) {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: true })
-        .then(response => {
+        .then((response) => {
           setShowModalMakeAdmin(false);
           setLoading(false);
           swal('Message!', 'Update Berhasil', 'success');
           retrieveDataUser();
         })
-        .catch(err => {
+        .catch((err) => {
           swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
         });
     } else {
       props
         .toggleUserIntoRepoAdmin(detailData.id, { isRepoAdmin: false })
-        .then(response => {
+        .then((response) => {
           swal('Message!', 'Update Berhasil', 'success');
           retrieveDataUser();
           setLoading(false);
           setShowModalMakeAdmin(false);
         })
-        .catch(err => {
+        .catch((err) => {
           swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
         });
     }
@@ -126,11 +124,11 @@ const UsersList = props => {
     setLoading(true);
     props
       .exportDataUser()
-      .then(response => {
+      .then((response) => {
         swal('Message!', 'Update Berhasil', 'success');
         window.location.reload();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
@@ -140,19 +138,19 @@ const UsersList = props => {
     setLoading(true);
     props
       .deleteUser(detailData.id)
-      .then(response => {
+      .then((response) => {
         retrieveDataUser();
         setLoading(false);
         setShowModalDeletion(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log('err', err);
         swal('Error!', 'Tidak Bisa Akses Fitur Ini', 'error');
       });
   };
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       console.log('aa', rowData);
       return {
         ...rowData,
@@ -309,7 +307,7 @@ const UsersList = props => {
   );
 };
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     role: state.users.role,
     me: state.users.me,

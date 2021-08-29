@@ -14,7 +14,7 @@ export default class EbookApi {
     return Request.get(url);
   }
   static getCategory() {
-    const url = `api/categoryEbook`;
+    const url = `/api/categoryEbook`;
     return Request.getWithAuth(url);
   }
 }

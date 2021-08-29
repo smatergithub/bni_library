@@ -4,7 +4,7 @@ const initialState = {
   isAuth: false,
   role: '',
   users: [],
-  me: null,
+  profile: null,
 };
 
 const user = (state = initialState, action) => {
@@ -26,7 +26,7 @@ const user = (state = initialState, action) => {
     case ME:
       return {
         ...state,
-        me: action.payload,
+        profile: action.payload,
       };
     default:
       return state;

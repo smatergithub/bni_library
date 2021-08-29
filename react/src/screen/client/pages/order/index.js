@@ -27,63 +27,67 @@ function OrderBook(props) {
   let [isBorrowReview, setIsBorrowReview] = React.useState(false);
   let [showModalDeletion, setShowModalDeletion] = React.useState(false);
   let [getIdUser, setGetIdUser] = React.useState('');
-  let localBook = JSON.parse(localStorage.getItem('bni_book'));
-  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
-  let book = localBook !== null ? localBook : [];
-  let ebook = localEbook !== null ? localEbook : [];
-  let wishlist = book.concat(ebook);
+
+  // let localBook = JSON.parse(localStorage.getItem('bni_book'));
+  // let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
+  // let book = localBook !== null ? localBook : [];
+  // let ebook = localEbook !== null ? localEbook : [];
+  // let wishlist = book.concat(ebook);
 
   function getBorrowInfo() {
+    setProcessing(true);
     let { id } = parsed;
-    props.getMe().then((res) => {
-      if (res.data) {
-        let userId = res.data.id;
-        checkBorrowBookOrEbook(userId);
-        setGetIdUser(userId);
-        if (type === 'book') {
-          BookUserAPI.getById(id).then((res) => {
-            setProcessing(false);
-            if (res.data) {
-              setBooks(res.data);
-            } else {
-              setBooks(null);
-            }
-          });
-          UserAPI.getBorrowedBookItem(userId, 'rating=true')
-            .then((res) => {
-              if (res.data.length !== 0) {
-                let checkIsBorrowed = res.data.data.some(
-                  (book) => book.status === 'Dikembalikan' && !book.isGiveRating
-                );
-                setIsBorrowReview(checkIsBorrowed);
-              } else {
-                setIsBorrowReview(false);
-              }
-            })
-            .catch((err) => {});
+    let userId = props.profile.id;
+    checkBorrowBookOrEbook(userId);
+    setGetIdUser(userId);
+    if (type === 'book') {
+      BookUserAPI.getById(id).then((res) => {
+        setProcessing(false);
+        if (res.data) {
+          setBooks(res.data);
         } else {
-          EbookUserAPI.getById(id).then((res) => {
-            setProcessing(false);
-            if (res.data) {
-              setEbooks(res.data);
-            } else {
-              setEbooks(null);
-            }
-          });
-          UserAPI.getBorrowedEbookItem(userId, 'rating=true').then((res) => {
-            if (res.data.length !== 0) {
-              let checkIsBorrowed = res.data.data.some(
-                (ebook) => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
-              );
-              setIsBorrowReview(checkIsBorrowed);
-            } else {
-              setIsBorrowReview(false);
-            }
-          });
+          setBooks(null);
         }
-      }
-    });
+      });
+      UserAPI.getBorrowedBookItem(userId, 'rating=true')
+        .then((res) => {
+          if (res.data.length !== 0) {
+            let checkIsBorrowed = res.data.data.some(
+              (book) => book.status === 'Dikembalikan' && !book.isGiveRating
+            );
+            setIsBorrowReview(checkIsBorrowed);
+          } else {
+            setIsBorrowReview(false);
+          }
+        })
+        .catch((err) => {});
+    } else {
+      EbookUserAPI.getById(id).then((res) => {
+        setProcessing(false);
+        if (res.data) {
+          setEbooks(res.data);
+        } else {
+          setEbooks(null);
+        }
+      });
+      UserAPI.getBorrowedEbookItem(userId, 'rating=true').then((res) => {
+        if (res.data.length !== 0) {
+          let checkIsBorrowed = res.data.data.some(
+            (ebook) => ebook.status === 'Dikembalikan' && !ebook.isGiveRating
+          );
+          setIsBorrowReview(checkIsBorrowed);
+        } else {
+          setIsBorrowReview(false);
+        }
+      });
+    }
   }
+
+  React.useEffect(() => {
+    if (props.profile) {
+      getBorrowInfo();
+    }
+  }, [props.profile]);
 
   function checkBorrowBookOrEbook(idUser, type) {
     UserAPI.getBorrowedBookItem(idUser, 'borrowed=true').then((res) => {
@@ -98,10 +102,8 @@ function OrderBook(props) {
     });
   }
 
-  React.useEffect(() => {
-    setProcessing(true);
-    getBorrowInfo();
-  }, []);
+  // console.log('books', books);
+  // console.log('ebooks', ebooks);
 
   function redirectProfile() {
     if (type === 'book') {
@@ -136,9 +138,9 @@ function OrderBook(props) {
         } else {
           props.orderBook(formData).then((res) => {
             if (res.data) {
-              let dataCart = wishlist.filter((item) => item.id === books.id);
+              // let dataCart = wishlist.filter((item) => item.id === books.id);
               //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-              removeWishlist(dataCart[0], 'book');
+              // removeWishlist(dataCart[0], 'book');
               setShowModalDeletion(true);
             } else {
               setShowModalDeletion(false);
@@ -154,9 +156,9 @@ function OrderBook(props) {
         } else {
           props.orderEbook(formData).then((res) => {
             if (res.data) {
-              let dataCart = wishlist.filter((item) => item.id === books.id);
+              // let dataCart = wishlist.filter((item) => item.id === books.id);
               //removeWishlist(dataCart[0], dataCart[0].type === 'BorrowBook' ? 'book' : 'ebook');
-              removeWishlist(dataCart[0], 'ebook');
+              // removeWishlist(dataCart[0], 'ebook');
               setShowModalDeletion(true);
             } else {
               setShowModalDeletion(false);
@@ -187,7 +189,6 @@ function OrderBook(props) {
     }
   }
 
-  if (processing && books == null) return null;
   return (
     <div className="container mx-auto flex items-center flex-wrap pt-4 pb-12 mt-10 bg-gray-100">
       <Helmet>
@@ -197,14 +198,24 @@ function OrderBook(props) {
       <section className="py-16 lg:py-24 w-full">
         <div
           className="px-10 mb-5 cursor-pointer hover:text-gray-800 text-lg"
-          onClick={() => history.push('/books')}
+          onClick={() => {
+            if (books !== null) {
+              history.push('/books');
+            } else if (ebooks !== null) {
+              history.push('/ebooks');
+            }
+          }}
           style={{ width: '10em' }}
         >
           {' '}
           <i className="fas fa-arrow-left"></i> Kembali
         </div>
-        {books === null && type === 'book' && <NoData msg="Buku tidak di temukan" />}
-        {ebooks === null && type === 'ebook' && <NoData msg="Ebook tidak di temukan" />}
+        {processing === false && books === null && type === 'book' && (
+          <NoData msg="Buku tidak di temukan" />
+        )}
+        {processing === false && ebooks === null && type === 'ebook' && (
+          <NoData msg="Ebook tidak di temukan" />
+        )}
         {type === 'ebook' && ebooks !== null && (
           <Form type="ebook" data={ebooks} onOrderItem={onOrderItem} loading={processing} />
         )}
@@ -244,7 +255,7 @@ function OrderBook(props) {
 
 let mapStateToProps = (state) => {
   return {
-    // cartBook: state.wishlist.books,
+    profile: state.users.profile,
     // cartEbook: state.wishlist.ebooks,
   };
 };
@@ -257,7 +268,7 @@ export default withRouter(
     createBookFeeback,
     createEbookFeeback,
     getMe,
-    removeEbookWishlist,
-    removeBookWishlist,
+    // removeEbookWishlist,
+    // removeBookWishlist,
   })(OrderBook)
 );

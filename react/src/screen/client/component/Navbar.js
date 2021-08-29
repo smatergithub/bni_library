@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import CartUserAPI from '../../../api/CartUserApi';
+import { withRouter } from 'react-router-dom';
 
 let dropdown = (
   <React.Fragment>
@@ -74,9 +76,10 @@ function NavBar(props) {
   const [selectedMenu, setSelectedMenu] = useState(props.url);
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [cart, setCart] = useState([]);
   const ref = React.useRef(null);
 
-  const handleClick = e => {
+  const handleClick = (e) => {
     if (ref.current && !ref.current.contains(e.target)) {
       setShowMobileMenu(false);
     }
@@ -89,13 +92,21 @@ function NavBar(props) {
     };
   });
 
-  let localBook = JSON.parse(localStorage.getItem('bni_book'));
-  let localEbook = JSON.parse(localStorage.getItem('bni_ebook'));
-  let book = localBook !== null ? localBook : [];
-  let ebook = localEbook !== null ? localEbook : [];
+  React.useEffect(() => {
+    if (props.profile) {
+      setInterval(function () {
+        CartUserAPI.getList()
+          .then((response) => {
+            let data = response.data.filter((item) => item.userId === props.profile.id);
+            setCart(data);
+          })
+          .catch((err) => {});
+      }, 3000);
+    }
+  }, [props.profile]);
 
   let badge =
-    book.length + ebook.length !== 0 ? (
+    cart.length > 0 ? (
       <div
         style={{
           width: 20,
@@ -111,7 +122,7 @@ function NavBar(props) {
           alignItems: 'center',
         }}
       >
-        {ebook.length + book.length}
+        {cart.length}
       </div>
     ) : (
       ''
@@ -152,11 +163,11 @@ function NavBar(props) {
         </div>
         {showMobileMenu && (
           <div className="bg-white w-full text-right lg:hidden">
-            {routes.map(rt => {
+            {routes.map((rt) => {
               return (
                 <li className="mr-3">
                   <Link
-                    to={rt.params === 'katalog' ? '' : `${rt.path}`}
+                    to={rt.params === 'katalog' ? '/home' : `${rt.path}`}
                     onClick={() => setSelectedMenu(rt.params)}
                   >
                     <div
@@ -164,7 +175,7 @@ function NavBar(props) {
                         selectedMenu === rt.params ? 'text-orange-500' : 'text-gray-900'
                       } no-underline hover:text-gray-500  py-2 px-4 ${
                         selectedMenu === rt.params ? 'border-b-2 border-orange-500' : ''
-                      } ${rt.params === 'katalog' ? 'katalog-hover' : ''}`}
+                      } ${rt.params === 'katalog' ? 'katalog-hover' : '/home'}`}
                     >
                       <div className="relative">
                         {rt.name}{' '}
@@ -211,7 +222,7 @@ function NavBar(props) {
           id="nav-content"
         >
           <ul className="list-reset lg:flex justify-end flex-1 items-center">
-            {routes.map(rt => {
+            {routes.map((rt) => {
               return (
                 <li className="mr-3">
                   <Link
@@ -307,11 +318,10 @@ function NavBar(props) {
     </nav>
   );
 }
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
-    books: state.wishlist.books,
-    ebooks: state.wishlist.ebooks,
+    profile: state.users.profile,
   };
 };
 
-export default connect(mapStateToProps, null)(NavBar);
+export default withRouter(connect(mapStateToProps)(NavBar));

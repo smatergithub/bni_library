@@ -1,14 +1,20 @@
 'use strict';
 module.exports = {
-  up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('uploadFiles', {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('carts', {
       id: {
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        type: Sequelize.INTEGER,
       },
-      locationFile: {
+      userId: {
+        type: Sequelize.STRING,
+      },
+      bookId: {
+        type: Sequelize.STRING,
+      },
+      ebookId: {
         type: Sequelize.STRING,
       },
       createdAt: {
@@ -24,7 +30,7 @@ module.exports = {
       },
     });
   },
-  down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('uploadFiles');
+  down: async (queryInterface, Sequelize) => {
+    await queryInterface.dropTable('carts');
   },
 };

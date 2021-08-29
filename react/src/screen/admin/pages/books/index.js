@@ -42,9 +42,7 @@ const Books = (props) => {
         setBooks(res.data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   const getDetailDataBook = (data) => {

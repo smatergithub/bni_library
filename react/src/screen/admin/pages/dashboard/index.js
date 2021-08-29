@@ -24,9 +24,7 @@ const Dashboard = (props) => {
           setLoading(false);
         }
       })
-      .catch((err) => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   React.useEffect(() => {

@@ -2,7 +2,6 @@
   "name": "bni_library",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:2001",
   "dependencies": {
     "@devexpress/dx-react-core": "^2.7.2",
     "@devexpress/dx-react-grid": "^2.7.2",

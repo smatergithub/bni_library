@@ -24,13 +24,11 @@ function BookList(props) {
     // };
     props
       .getAllBookHistory(pagination)
-      .then(res => {
+      .then((res) => {
         // setTotalCount(props.historyBooks.count);
         setLoading(false);
       })
-      .catch(err => {
-        console.log('error', err);
-      });
+      .catch((err) => {});
   };
 
   // React.useEffect(() => {
@@ -41,8 +39,8 @@ function BookList(props) {
     getAllHistoryBook();
   }, []);
 
-  const adjustIntegrationTable = dataSource => {
-    return dataSource.map(rowData => {
+  const adjustIntegrationTable = (dataSource) => {
+    return dataSource.map((rowData) => {
       return {
         ...rowData,
         judul: rowData.book && rowData.book.judul,
@@ -135,7 +133,7 @@ function BookList(props) {
   );
 }
 
-let mapStateToProps = state => {
+let mapStateToProps = (state) => {
   return {
     historyBooks: state.historys.historyBooks,
   };

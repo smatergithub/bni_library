@@ -36,7 +36,7 @@ const Card = ({ type, data, onDetailClick, onRemoveItem, startdate, enddate }) =
     `${startBorrow.getYear()}${startBorrow.getMonth()}${startBorrow.getDay()}`
   );
 
-  if (nowDate == dataDate) {
+  if (dateNow == startDate) {
     isActiveDate = true;
   } else if (dateNow <= endDate) {
     isActiveDate = true;

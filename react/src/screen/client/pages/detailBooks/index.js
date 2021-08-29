@@ -6,18 +6,25 @@ import { Rating } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { Modal } from '../../../../component';
 import BookUserAPI from '../../../../api/BookUserApi';
-import { addBookWishlist, removeBookWishlist } from '../../../../redux/action/wishlist';
+import CartUserAPI from '../../../../api/CartUserApi';
+import RatingUserAPI from '../../../../api/RatingUserApi';
 import { checkIsImageExist } from '../../component/helper';
 import Loader from '../../component/Loader';
+import swal from 'sweetalert';
+import ListUlasan from '../../../../component/ListUlasan';
 
 function DetailBooks(props) {
   const parsed = queryString.parse(props.location.search);
   let { history } = props;
   let [processing, setProcessing] = React.useState(false);
   let [books, setBooks] = React.useState(null);
-  let [showModalDeletion, setShowModalDeletion] = React.useState(false);
+  let [userLogged, setUserLogged] = React.useState(false);
+  let [ulasanOpen, setUlasanOpen] = React.useState(false);
   let [isWishlistClick, setIsWishlistClick] = React.useState(false);
   let [showMore, setShowMore] = React.useState(false);
+  let [ratings, setRatings] = React.useState([]);
+
+  let { id } = parsed;
 
   React.useEffect(() => {
     let { id } = parsed;
@@ -34,14 +41,64 @@ function DetailBooks(props) {
     props.history.push('/auth/login');
   }
 
+  function getRating() {
+    let { id } = parsed;
+    RatingUserAPI.getListRatingBook()
+      .then((response) => {
+        let data = response.data.filter((item) => item.bookId === id);
+        setRatings(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
+  }
+
+  React.useEffect(() => {
+    if (id) {
+      getRating();
+    }
+  }, [id]);
+
+  function addBookToCart(bookId) {
+    let payload = {
+      userId: props.profile.id,
+      bookId: bookId,
+    };
+    CartUserAPI.create(payload)
+      .then((response) => {
+        swal('Message!', 'Berhasil simpan buku ke wishlist', 'success');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
+  }
+
+  function deleteBookToCart(bookId) {
+    CartUserAPI.deleteBook(bookId)
+      .then((response) => {
+        swal('Message!', 'Berhasil hapus buku dari wishlist', 'success');
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setProcessing(false);
+      });
+  }
+
   function onWishlistClick(book) {
     setIsWishlistClick(!isWishlistClick);
-    // let cloneBook = Object.assign({}, book);
-    book.type = 'BorrowBook';
+
     if (isWishlistClick) {
-      props.removeBookWishlist(book);
+      deleteBookToCart(book.id);
     } else {
-      props.addBookWishlist(book);
+      addBookToCart(book.id);
     }
   }
 
@@ -185,23 +242,28 @@ function DetailBooks(props) {
                     ? '-'
                     : books.lokasiPerpustakaan}
                 </div>
-                {/* <div className="text-lg font-bold pt-5">Peminjam</div>
-                <div
-                  className="bg-gray-400 w-full mt-2 mb-2"
-                  style={{
-                    height: 1,
-                  }}
-                ></div>
-                <div>Peminjam : {books.user ? books.user.nama : 'Tidak Ada Peminjam'}</div>
-                {books.user ? <div>Unit : {books.user ? books.user.unit : ''}</div> : null}
-                {books.user ? <div>Alamat : {books.user ? books.user.alamat : ''}</div> : null} */}
+                <div>
+                  <button
+                    onClick={() => {
+                      setUlasanOpen(true);
+                      // if (!isUserLogged) {
+                      //   setUserLogged(true);
+                      // } else {
+                      //   onWishlistClick(books);
+                      // }
+                    }}
+                    className={`font-bold  border-orange-500 text-gray-800 py-1  rounded  `}
+                  >
+                    Check Ulasan
+                  </button>
+                </div>
 
                 {books.stockBuku != 0 && (
                   <>
                     <button
                       onClick={() => {
                         if (!isUserLogged) {
-                          setShowModalDeletion(true);
+                          setUserLogged(true);
                         } else {
                           props.history.push(`/order?id=${books.id}&type=book`);
                         }
@@ -213,7 +275,7 @@ function DetailBooks(props) {
                     <button
                       onClick={() => {
                         if (!isUserLogged) {
-                          setShowModalDeletion(true);
+                          setUserLogged(true);
                         } else {
                           onWishlistClick(books);
                         }
@@ -235,16 +297,33 @@ function DetailBooks(props) {
       </section>
       <Modal
         title="Otentikasi diperlukan"
-        open={showModalDeletion}
+        open={userLogged}
         onCLose={() => {
-          setShowModalDeletion(false);
+          setUserLogged(false);
         }}
         handleSubmit={redirectToLogin}
         labelSubmitButton="Masuk"
       >
         <div className="my-5">Silahkan Masuk terlebih dahulu</div>
       </Modal>
+      <Modal
+        title="Ulasan"
+        open={ulasanOpen}
+        onCLose={() => {
+          setUlasanOpen(false);
+        }}
+        usingAnotherButton={true}
+      >
+        <ListUlasan data={ratings} />
+      </Modal>
     </div>
   );
 }
-export default withRouter(connect(null, { addBookWishlist, removeBookWishlist })(DetailBooks));
+
+let mapStateToProps = (state) => {
+  return {
+    profile: state.users.profile,
+  };
+};
+
+export default withRouter(connect(mapStateToProps)(DetailBooks));

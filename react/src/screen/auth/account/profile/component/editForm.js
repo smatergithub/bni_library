@@ -11,51 +11,52 @@ import { updateMe } from '../../../../../redux/action/user';
 const { Option } = Select;
 
 function EditUser(props) {
-  const [dataWilayah, setDataWilayah] = React.useState([]);
-  const [codeWilayah, setCodeWilayah] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [alamat, setAlamat] = React.useState([]);
-  const [linkMap, setLinkMap] = React.useState([]);
-  const [selectedAlamat, setSelectedAlamat] = React.useState({});
-  const [selectedLinkMap, setSelectedLinkMap] = React.useState(null);
+  // const [selectedAlamat, setSelectedAlamat] = React.useState({});
+  //  const [alamat, setAlamat] = React.useState([]);
+  //  const [linkMap, setLinkMap] = React.useState([]);
+  // const [selectedLinkMap, setSelectedLinkMap] = React.useState(null);
+  //   const [dataWilayah, setDataWilayah] = React.useState([]);
+  //   const [codeWilayah, setCodeWilayah] = React.useState([]);
   let isAdmin = localStorage.getItem('bni_UserRole') !== '1';
   const { handleSubmit, register, errors } = useForm();
   let [dateBorn, setDateBorn] = React.useState(null);
 
-  function onSubmit(formData) {
-    formData.tanggalLahir = dateBorn ? dateBorn : moment(props.user.tgl_lahir).format();
-    formData.alamat = selectedAlamat.label;
-    formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
-    setIsLoading(true);
-    props
-      .updateMe(formData)
-      .then((res) => {
-        setIsLoading(true);
-        if (res.resp) {
-          swal('Message!', res.msg, 'success');
-          if (isAdmin) {
-            // window.location.replace('/admin/dashboard');
-            props.history.push('/admin/dashboard');
-          } else {
-            props.changePages(false);
-          }
-        } else {
-          swal('Error!', res.msg, 'error');
-        }
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        console.log('err', err);
-      });
-  }
-  React.useEffect(() => {
-    if (props.user.mapUrl) {
-      setTimeout(() => {
-        document.getElementsByTagName('iframe')[0].style.width = '100%';
-        document.getElementsByTagName('iframe')[0].style.height = '150';
-      }, 3000);
-    }
-  }, []);
+  // function onSubmit(formData) {
+  //   formData.tanggalLahir = dateBorn ? dateBorn : moment(props.user.tgl_lahir).format();
+  //   formData.alamat = selectedAlamat.label;
+  //   // formData.mapUrl = selectedLinkMap ? selectedLinkMap.label : props.user.mapUrl;
+  //   setIsLoading(true);
+  //   props
+  //     .updateMe(formData)
+  //     .then((res) => {
+  //       setIsLoading(true);
+  //       if (res.resp) {
+  //         swal('Message!', res.msg, 'success');
+  //         if (isAdmin) {
+  //           // window.location.replace('/admin/dashboard');
+  //           props.history.push('/admin/dashboard');
+  //         } else {
+  //           props.changePages(false);
+  //         }
+  //       } else {
+  //         swal('Error!', res.msg, 'error');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       setIsLoading(false);
+  //       console.log('err', err);
+  //     });
+  // }
+
+  // React.useEffect(() => {
+  //   if (props.user.mapUrl) {
+  //     setTimeout(() => {
+  //       document.getElementsByTagName('iframe')[0].style.width = '100%';
+  //       document.getElementsByTagName('iframe')[0].style.height = '150';
+  //     }, 3000);
+  //   }
+  // }, []);
 
   // cons = () => {
   //   prop().then(response => {
@@ -88,25 +89,26 @@ function EditUser(props) {
   //   getCodeWilayahAndAlamat();
   // }, []);
 
-  function handleChange(value) {
-    let data = alamat.filter((item) => item.value === value);
-    let lokasiMap = linkMap.filter((item) => item.value === value);
-    setSelectedLinkMap(lokasiMap[0]);
-    setSelectedAlamat(data[0]);
-    setTimeout(() => {
-      document.getElementsByTagName('iframe')[0].style.width = '100%';
-      document.getElementsByTagName('iframe')[0].style.height = '150';
-    }, 3000);
-  }
+  // function handleChange(value) {
+  //   let data = alamat.filter((item) => item.value === value);
+  //   let lokasiMap = linkMap.filter((item) => item.value === value);
+  //   setSelectedLinkMap(lokasiMap[0]);
+  //   setSelectedAlamat(data[0]);
+  //   setTimeout(() => {
+  //     document.getElementsByTagName('iframe')[0].style.width = '100%';
+  //     document.getElementsByTagName('iframe')[0].style.height = '150';
+  //   }, 3000);
+  // }
 
-  const ParserHTML = (htmlDocument) => {
-    return {
-      __html: htmlDocument,
-    };
-  };
-  function handleDate(e, date) {
-    setDateBorn(date);
-  }
+  // const ParserHTML = (htmlDocument) => {
+  //   return {
+  //     __html: htmlDocument,
+  //   };
+  // };
+
+  // function handleDate(e, date) {
+  //   setDateBorn(date);
+  // }
 
   let { user } = props;
   if (!user) return null;
@@ -118,7 +120,7 @@ function EditUser(props) {
           {isLoading ? (
             <LoadingPreview />
           ) : (
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form>
               <div className="relative w-full mb-3">
                 <label className="block uppercase text-gray-700 text-xs font-bold mb-2">Npp</label>
                 <input
@@ -314,7 +316,7 @@ function EditUser(props) {
 }
 const mapStateToProps = (state) => {
   return {
-    user: state.users.me,
+    user: state.users.profile,
   };
 };
 export default connect(mapStateToProps, { updateMe })(withRouter(EditUser));
