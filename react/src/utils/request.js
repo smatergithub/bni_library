@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let baseUrl = 'http://localhost:2001';
+let baseUrl = `${process.env.REACT_APP_API_URL}`;
 
 function formatUrl(url) {
   let checkIsParamsExit = url.split('').find((text) => text === '?');
