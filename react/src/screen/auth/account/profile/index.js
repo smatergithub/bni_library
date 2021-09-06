@@ -13,20 +13,6 @@ function Profile(props) {
   let [processing, setProcessing] = React.useState(false);
   let [user, setUser] = React.useState(null);
 
-  React.useEffect(() => {
-    let { edit } = parsed;
-
-    props.getMe().then((res) => {
-      setProcessing(false);
-      if (res.resp) {
-        setUser(res.data);
-        if (edit && edit === 'true') {
-          setIsEditUser(true);
-        }
-      }
-    });
-  }, []);
-
   // React.useEffect(() => {
   //   let { edit } = parsed;
   //   props.checkApproveBorrow().then(res => {
@@ -41,16 +27,32 @@ function Profile(props) {
   //   });
   // }, []);
 
+  // React.useEffect(() => {
+  //   if (!isEditUser) {
+  //     props.getMe().then((res) => {
+  //       setProcessing(false);
+  //       if (res.resp) {
+  //         setUser(res.data);
+  //       }
+  //     });
+  //   }
+  // }, [isEditUser]);
+
   React.useEffect(() => {
-    if (!isEditUser) {
-      props.getMe().then((res) => {
-        setProcessing(false);
-        if (res.resp) {
-          setUser(res.data);
+    let { edit } = parsed;
+
+    props.getMe().then((res) => {
+      setProcessing(false);
+
+      if (res !== undefined) {
+        setUser(res.data);
+        if (edit && edit === 'true') {
+          setIsEditUser(true);
         }
-      });
-    }
-  }, [isEditUser]);
+      }
+    });
+  }, []);
+
   if (processing && user === null) return null;
   return (
     <React.Fragment>

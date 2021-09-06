@@ -408,9 +408,14 @@ module.exports = {
   downloadSampleExcel: async (req, res) => {
     try {
       const excel = fs.readFileSync(`${__dirname}/../file/example-book-format.xlsx`);
-      res.writeHead(200, [
-        ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
-      ]);
+      // res.writeHead(200, [
+      //   ['Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+      // ]);
+      res.setHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      );
+      res.setHeader('Content-Disposition', 'attachment; filename=' + 'example-book-format.xlsx');
       return res.end(new Buffer(excel, 'base64'));
     } catch (error) {
       console.log(error);

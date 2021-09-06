@@ -36,7 +36,7 @@ const makeAxiosRequest = async (requestOptions) => {
       localStorage.removeItem('bni_UserRole');
       // // window.location.replace('/auth/login');
       // window.location.reload();
-      // window.location.replace('/');
+      window.location.replace('/');
     }
   }
 };
