@@ -84,12 +84,21 @@ const Books = (props) => {
     }
     BookAPI.uploadbookFile(formdata)
       .then((res) => {
-        setLoading(false);
-        swal('Message!', 'Buku Berhasil di import', 'success');
-        mappingDataSourceBookList();
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
+        if (res !== undefined) {
+          mappingDataSourceBookList();
+          setLoading(false);
+          swal('Message!', 'Ebook Berhasil di import', 'success');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        } else {
+          setLoading(false);
+          swal('Error!', 'Gagal import kedalam system, Check kembali File Import!', 'error');
+          mappingDataSourceBookList();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
       })
       .catch((err) => {
         setLoading(false);

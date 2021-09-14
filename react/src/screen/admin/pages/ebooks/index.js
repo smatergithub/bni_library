@@ -84,21 +84,20 @@ const Ebooks = (props) => {
     }
     EbookAPI.uploadEbookFile(formdata)
       .then((res) => {
-        console.log('res', res);
         if (res !== undefined) {
           mappingDataSourceEbookList();
           setLoading(false);
           swal('Message!', 'Ebook Berhasil di import', 'success');
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         } else {
           setLoading(false);
           swal('Error!', 'Gagal import kedalam system, Check kembali File Import!', 'error');
           mappingDataSourceEbookList();
-          // setTimeout(() => {
-          //   window.location.reload();
-          // }, 1500);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
         }
       })
       .catch((err) => {
