@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       tahunTerbit: DataTypes.STRING,
       jumlahPeminjam: DataTypes.INTEGER,
       description: DataTypes.TEXT,
-      tanggalTerbit: DataTypes.STRING,
+      tanggalTerbit: DataTypes.TEXT,
       isbn: DataTypes.STRING,
       bahasa: DataTypes.STRING,
       penerbit: DataTypes.STRING,
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       paranoid: true,
     }
   );
-  ebooks.associate = function(models) {
+  ebooks.associate = function (models) {
     // associations can be defined here
   };
   return ebooks;

@@ -27,7 +27,7 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       tanggalTerbit: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
       },
       isbn: {
         type: Sequelize.STRING,

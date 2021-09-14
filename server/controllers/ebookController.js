@@ -294,6 +294,11 @@ module.exports = {
           if (row[14] !== undefined || row[14] === null) {
             row[14] = 'Tidak ada keterangan';
           }
+
+          if (row[6] !== undefined || row[6] === null) {
+            row[6] = 'Tidak ada keterangan';
+          }
+
           let rowBook = {
             kategori: row[1],
             judul: row[2],
